@@ -458,9 +458,9 @@ class UI {
   }
 
   renderRect(node, offsetX, offsetY, parent) {
-    if (node !== null && node !== undefined) {
+    if (!isUndefined(node)) {
       if (isArray(node)) {
-        node.forEach(node => this.renderRect(node, offsetX, offsetY, parent));
+        node.forEach(child => this.renderRect(child, offsetX, offsetY, parent));
       } else if (isPrimitive(node)) {
         this.renderPrimitive(node, offsetX, offsetY, parent);
       } else if (isFunc(node.tag)) {
@@ -630,6 +630,16 @@ function renderNode(next) {
 }
 
 function patchNode(pre, next) {
+  var _pre$tag;
+
+  if ((pre === null || pre === void 0 ? void 0 : (_pre$tag = pre.tag) === null || _pre$tag === void 0 ? void 0 : _pre$tag.name) === 'ShopList') {
+    var _pre$tag2;
+
+    if ((pre === null || pre === void 0 ? void 0 : (_pre$tag2 = pre.tag) === null || _pre$tag2 === void 0 ? void 0 : _pre$tag2.name) !== 'ShopList') {
+      debugger;
+    }
+  }
+
   if (isPrimitive(next) || isUndefined(next)) {
     destoryInstance(pre);
   } else if (isFunc(next.tag)) {
@@ -646,11 +656,24 @@ function patchNode(pre, next) {
       createInstance(next);
     }
   } else if (isArray(next.children)) {
-    const preChildren = (pre === null || pre === void 0 ? void 0 : pre.children) || [];
-    const nextChildren = next.children; // todo diff algorithm
+    if (!pre || !isArray(pre.children)) {
+      destoryInstance(pre);
 
-    for (let i = 0; i < next.children.length; i++) {
-      patchNode(preChildren[i], nextChildren[i]);
+      for (let i = 0; i < next.children.length; i++) {
+        patchNode(null, next.children[i]);
+      }
+    } else {
+      for (let i = 0; i < next.children.length; i++) {
+        patchNode(pre.children[i], next.children[i]);
+      }
+    }
+  } else if (isArray(next)) {
+    if (isArray(pre)) {
+      for (let i = 0; i < next.length; i++) {
+        patchNode(pre[i], next[i]);
+      }
+    } else {
+      destoryInstance(pre);
     }
   }
 
@@ -1508,6 +1531,10 @@ class ShopList extends Component {
     } = this.options[index];
     this.props.onConfirm(shopid);
   };
+
+  destroy() {
+    debugger;
+  }
 
   render() {
     return this.$c("div", {

@@ -23,6 +23,10 @@ export default class ShopList extends Component {
     this.props.onConfirm(shopid)
   }
 
+  destroy () {
+    debugger
+  }
+
   render () {
     return (
       <div style={this.style}>

@@ -39,6 +39,9 @@ function renderNode (next) {
 }
 
 export function patchNode (pre, next) {
+  if (pre?.tag?.name === 'ShopList') {
+    if (pre?.tag?.name !== 'ShopList') { debugger }
+  }
   if (isPrimitive(next) || isUndefined(next)) {
     destoryInstance(pre)
   } else if (isFunc(next.tag)) {
@@ -53,11 +56,23 @@ export function patchNode (pre, next) {
       createInstance(next)
     }
   } else if (isArray(next.children)) {
-    const preChildren = pre?.children || []
-    const nextChildren = next.children
-    // todo diff algorithm
-    for (let i = 0; i < next.children.length; i++) {
-      patchNode(preChildren[i], nextChildren[i])
+    if (!pre || !isArray(pre.children)) {
+      destoryInstance(pre)
+      for (let i = 0; i < next.children.length; i++) {
+        patchNode(null, next.children[i])
+      }
+    } else {
+      for (let i = 0; i < next.children.length; i++) {
+        patchNode(pre.children[i], next.children[i])
+      }
+    }
+  } else if (isArray(next)) {
+    if (isArray(pre)) {
+      for (let i = 0; i < next.length; i++) {
+        patchNode(pre[i], next[i])
+      }
+    } else {
+      destoryInstance(pre)
     }
   }
 

@@ -1,5 +1,5 @@
 import { baseStyle } from '../const/baseStyle'
-import { isPrimitive, isFunc, isArray } from '../utils/common'
+import { isPrimitive, isFunc, isArray, isUndefined } from '../utils/common'
 import { curFoucs } from './Component'
 const getImage = (src) => window.$res.images[src]
 
@@ -241,9 +241,9 @@ export default class UI {
   }
 
   renderRect (node, offsetX, offsetY, parent) {
-    if (node !== null && node !== undefined) {
+    if (!isUndefined(node)) {
       if (isArray(node)) {
-        node.forEach(node => this.renderRect(node, offsetX, offsetY, parent))
+        node.forEach(child => this.renderRect(child, offsetX, offsetY, parent))
       } else if (isPrimitive(node)) {
         this.renderPrimitive(node, offsetX, offsetY, parent)
       } else if (isFunc(node.tag)) {
