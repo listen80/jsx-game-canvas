@@ -1,0 +1,13 @@
+id,name
+ground,0,
+yellowWall,3,
+blueWall,5,
+downFloor,23,
+upFloor,24,
+yellowDoor,25
+blueDoor,26
+redDoor,27
+specialDoor,29,
+steelDoor,30,
+blueShop-left,31,
+blueShop-right,32

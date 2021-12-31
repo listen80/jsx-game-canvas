@@ -1,0 +1,28 @@
+const fontFamily = document.fonts.check('16px 黑体') ? '黑体' : '黑体-简'
+
+export const baseStyle = {
+  direction: 'ltr',
+  color: 'white',
+  // filter: "grayscale(.1)",
+  filter: 'none',
+  fontSize: 32,
+  font: '32px ' + fontFamily,
+  globalAlpha: 1,
+  globalCompositeOperation: 'source-over',
+  // imageSmoothingEnabled: true,
+  // imageSmoothingQuality: 'low',
+  imageSmoothingEnabled: false,
+  lineCap: 'butt',
+  lineDashOffset: 0,
+  lineJoin: 'miter',
+  lineWidth: 1,
+  miterLimit: 10,
+  shadowBlur: 0,
+  shadowColor: 'rgba(0, 0, 0, 0)',
+  shadowOffsetX: 0,
+  shadowOffsetY: 0,
+  strokeStyle: 'white',
+  textAlign: 'start',
+  // textBaseline: "alphabetic",
+  textBaseline: 'top',
+}

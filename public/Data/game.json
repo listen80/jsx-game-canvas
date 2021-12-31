@@ -1,0 +1,21 @@
+{
+  "title": "魔 塔",
+  "screen": {
+    "width": 416,
+    "height": 416
+  },
+  "control": {
+    "direction": {
+      "down": "ArrowDown",
+      "up": "ArrowUp",
+      "left": "ArrowLeft",
+      "right": "ArrowRight"
+    },
+    "confirm": "Space",
+    "cancel": "Escape"
+  },
+  "font": {
+    "name": "华文行楷",
+    "url": "Fonts/华文行楷.ttf"
+  }
+}
