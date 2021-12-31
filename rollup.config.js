@@ -40,7 +40,7 @@ export default {
     // })
     // postcss(),
     // vue(),
-    terser(),
+    // terser(),
     process.env.NODE_ENV === 'production'
       ? null
       : serve({

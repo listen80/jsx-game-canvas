@@ -1,2 +1,2426 @@
-function t(t,e,...s){return{tag:t,props:e,children:s}}let e=null;class s{constructor({props:t,children:e}){this.props=t,this.$children=e}$c=t;$destory(){}}class i extends s{constructor(...t){super(...t),e&&(e.$isFocus=!1),this.$isFocus=!0,this.$preFocus=e,e=this}destory(){this.$isFocus=!1,this.$preFocus&&(this.$preFocus.$isFocus=!0),e=this.$preFocus}}const n={direction:"ltr",color:"white",filter:"none",fontSize:32,font:"32px "+(document.fonts.check("16px 黑体")?"黑体":"黑体-简"),globalAlpha:1,globalCompositeOperation:"source-over",imageSmoothingEnabled:!1,lineCap:"butt",lineDashOffset:0,lineJoin:"miter",lineWidth:1,miterLimit:10,shadowBlur:0,shadowColor:"rgba(0, 0, 0, 0)",shadowOffsetX:0,shadowOffsetY:0,strokeStyle:"white",textAlign:"start",textBaseline:"top"},o=t=>{const e=typeof t;return"string"===e||"number"===e},h=t=>"function"==typeof t,a=t=>window.$res.images[t],r=["ContextMenu","Click","Wheel","MouseMove"],l=["KeyDown","KeyUp"];class p{constructor(t={}){const e=document.createElement("canvas");this.canvas=e,this.context=e.getContext("2d");const{el:s,width:i=576,height:o=416}=t;this.screen=t,this.canvas.width=i,this.canvas.height=o;const h=document.querySelector(s)||document.body;h&&h.appendChild(this.canvas),this.mergeStyle(n),this.mouseEvents=[],this.keyEvents=[],this.bind()}bind(){r.forEach((t=>{this.canvas.addEventListener(t.toLowerCase(),(e=>{e.name="on"+t,this.mouseEvents.push(e),e.preventDefault()}),{passive:!1})})),l.forEach((t=>{document.addEventListener(t.toLowerCase(),(e=>{e.name="on"+t,this.keyEvents=e}))}))}toDataURL(){return this.canvas.toDataURL()}mergeStyle=t=>{if(t){const{fontSize:e,fontFamily:s,font:i,textAlign:n,textBaseline:o,color:h,globalAlpha:a}=t;a&&(this.context.globalAlpha=a),n&&(this.context.textAlign=n),o&&(this.context.textBaseline=o),h&&(this.context.fillStyle=h),i&&(this.context.font=i),e&&(this.context.font=this.context.font.replace(/\d+/,e)),s&&(this.context.font=this.context.font.replace(/[\u4e00-\u9fa5]+/,s))}};clearRect(){const{context:t,canvas:e}=this;t.clearRect(0,0,e.width,e.height)}drawText(t,e,s){const{style:i,text:n}=t,{context:o}=this,{x:h=0,y:a=0}=i;o.fillText(n,e+h,s+a)}drawImage(t,e,s){const{props:i}=t;if(i){const{style:t}=i;if(t){const{sx:n=0,sy:o=0,width:h=32,height:r=32,swidth:l,sheight:p}=t,{context:c}=this;c.drawImage(a(i.src),n,o,l||h,p||r,e,s,h,r)}}}drawBack(t,e,s){const{context:i}=this,{backgroundImage:n,backgroundColor:o,height:h,width:r}=t.props.style;o&&(i.save(),i.beginPath(),i.rect(e,s,r,h),i.fillStyle=o,i.fill(),i.closePath(),i.restore()),n&&(i.save(),i.beginPath(),i.rect(e,s,r,h),i.fillStyle=i.createPattern(a(n),"repeat"),i.fill(),i.closePath(),i.restore())}drawBorder(t,e,s){const{context:i}=this,{borderWidth:n,borderColor:o,height:h,width:a}=t.props.style;n&&(i.save(),i.lineWidth=n,i.beginPath(),i.rect(e,s,a,h),o&&(i.strokeStyle=o),i.stroke(),i.closePath(),i.restore())}translate(t){const{context:e}=this,{style:s}=t,{x:i=0,y:n=0}=s;e.translate(i,n)}transform(t){const{context:e}=this,{rotate:s,scale:i}=t;if(s){const{angle:t=0,x:i=0,y:n=0}=s;e.translate(i,n),e.rotate(t*Math.PI/180),e.translate(-i,-n)}if(i){const{x:t=0,y:s=0,scaleX:n=1,scaleY:o=1}=i;e.translate(t,s),e.scale(n,o),e.translate(-t,-s)}}drawCircle(t,e,s){const{context:i}=this;i.save(),i.beginPath();const{cx:n,cy:o,r:h,sAngle:a,eAngle:r,counterclockwise:l=!1,stroke:p,strokeWidth:c}=t.props;i.arc(n+e,o+s,h,a/180*Math.PI,r/180*Math.PI,l),i.strokeStyle=p,i.lineWidth=c,i.stroke(),i.closePath(),i.restore()}drawLine(t){const{context:e}=this,{x1:s=0,y1:i=0,x2:n=200,y2:o=200}=t.props;e.beginPath(),e.moveTo(s,i),e.lineTo(n,o),e.stroke()}drawRect(t,e,s,i){const{context:n}=this;n.save();const{props:o,tag:h}=t;if(o){const{style:i}=o;this.mergeStyle(i),i&&(this.drawBack(t,e,s),this.drawBorder(t,e,s))}"img"===h?this.drawImage(t,e,s):"text"===h?this.drawText(t,e,s):"circle"===h?this.drawCircle(t,e,s):"line"===h&&this.drawLine(t,e,e),this.renderRect(t.children,e,s,t),n.restore()}renderPrimitive(t,e,s,i){var n;const{context:o}=this,{textAlign:h,textBaseline:a}=o,{width:r=0,height:l=0}=(null==i||null===(n=i.props)||void 0===n?void 0:n.style)||{};o.fillText(t,e+r*{start:0,left:0,center:.5,right:1,end:0}[h],s+l*{alphabetic:0,hanging:0,ideographic:0,top:0,middle:.5,bottom:1}[a])}renderRect(t,e,s,i){var n;null!=t&&(n=t,Array.isArray(n)?t.forEach((t=>this.renderRect(t,e,s,i))):o(t)?this.renderPrimitive(t,e,s,i):h(t.tag)?this.renderRect(t.node,e,s,i):this.renderNode(t,e,s,i))}renderNode(t,e,s,i){const{context:n}=this;n.save();const{props:o}=t;if(o){const{style:i}=o;if(i){const{x:n=0,y:o=0}=i;e+=n,s+=o,this.mouseEvents.forEach((n=>{const{name:o}=n;n.offsetX>=e&&n.offsetX<i.width+e&&n.offsetY>=s&&n.offsetY<i.height+s&&("onMouseMove"===o?this.onMouseMove={node:t,event:n}:"onClick"===o&&(this.onMouseClick={node:t,event:n}))}))}}this.drawRect(t,e,s,i),n.restore()}runEvent(){if(e&&this.keyEvents){const{name:t}=this.keyEvents;e[t]&&e[t](this.keyEvents)}if(this.keyEvents=null,this.onMouseClick){var t;const{node:e,event:s}=this.onMouseClick;null!=e&&null!==(t=e.props)&&void 0!==t&&t.onClick&&e.props.onClick(s),this.onMouseClick=null}this.mouseEvents=[],this.moveEvent=null,this.moveEventTarget=null}render(t){this.clearRect(),this.renderRect(t,0,0,this.canvas),this.runEvent(),self.$root=t}}class c{current=null;constructor(t){this.audioes=t||window.$res.sounds}play(t,e){this.audioes=window.$res.sounds,"bgm"===t&&this.current&&this.current.pause(),this.current=this.audioes[`${t}/${e}`],this.current.loop=!0,this.current.play()}}function d(t){const e=t.tag;t.instance=new e(t),t.instance.create&&t.instance.create(),y(t)}function m(t){if(!o(t)&&null!=t)if(h(t.tag))m(t.node),t.instance.destory&&t.instance.destory();else if(Array.isArray(t))for(;t.length;)m(t.pop());else m(t.children)}function y(t){const e=t.instance;t.node=v(t.node,e.render())}function v(t,e){var s,i;t?e?h(e.tag)&&(t.tag===e.tag&&(null===(s=t.props)||void 0===s?void 0:s.key)===(null===(i=e.props)||void 0===i?void 0:i.key)?function(t,e){e.instance=t.instance,e.node=t.node,e.instance.props=e.props,y(e)}(t,e):(m(t),d(e))):m(t):e&&h(e.tag)&&d(e);const n=(t||{}).children||[],o=(e||{}).children||[],a=Math.max(n.length,o.length);for(let t=0;t<a;t++)v(n[t],o[t]);return e}class g extends s{fps=60;styles={fps:{textAlign:"left",height:32,x:0}};timeStamp=+new Date;render(){const t=+new Date,e=1e3/(t-this.timeStamp),s=this.fps<30&&e<30;return this.fps=e,this.timeStamp=t,this.$c("div",{style:this.styles.fps},s?`${this.fps.toFixed()}fps`:null)}}class u extends s{step=1;angle=-this.step;render(){this.angle+=this.step,this.angle>180&&(this.angle=0);const t=2*this.angle-90,e=45*Math.sin(this.angle/180*Math.PI);return this.$c("div",{style:{x:0,y:0,width:576,height:416}},this.props.msg,this.$c("circle",{cx:288,cy:208,r:96,sAngle:t-e,eAngle:t+e,stroke:"#4e6ef2",strokeWidth:10}))}}class f extends i{styles={select:{fontSize:24,textAlign:"center",width:320}};create(){this.activeIndex=this.props.activeIndex||0;const{style:t}=this.props;t&&Object.assign(this.styles.select,t)}onKeyDown({code:t}){"ArrowDown"===t?(this.activeIndex++,this.activeIndex===this.props.options.length&&(this.activeIndex=0),this.props.onChange&&this.props.onChange(this.activeIndex,this.props.options[this.activeIndex])):"ArrowUp"===t?(this.activeIndex--,-1===this.activeIndex&&(this.activeIndex+=this.props.options.length),this.props.onChange&&this.props.onChange(this.activeIndex,this.props.options[this.activeIndex])):"Space"===t?this.props.onConfirm&&this.props.onConfirm(this.activeIndex,this.props.options[this.activeIndex]):"Escape"===t&&this.props.onClose&&this.props.onClose()}onClick(t){this.activeIndex=t,this.props.onConfirm&&this.props.onConfirm(this.activeIndex,this.props.options[this.activeIndex])}render(){const t=this.styles.select,{width:e}=t;return this.$c("div",{style:this.styles.select},this.props.options&&this.props.options.length?this.props.options.map(((t,s)=>{const{text:i}=t,n={y:32*s,height:32,width:e,borderWidth:this.activeIndex===s?2:0,borderColor:"#ccc"};return this.$c("div",{style:n,onClick:()=>this.onClick(s),onMouseLeave:t=>{this.activeIndex=-1},onMouseEnter:t=>{this.activeIndex=s}},i)})):"空空如也")}}function x(t){return e="game",s=t,localStorage.setItem(e,JSON.stringify(s));var e,s}function w(){return function(t){try{return JSON.parse(localStorage.getItem(t))}catch(t){return null}}("game")}class $ extends s{styles={title:{width:576,height:416},gameName:{y:40,width:576,height:128,font:"bold 128px 黑体"},select:{x:256,y:256,width:64}};create(){this.activeIndex=w()?1:0,this.options=[{text:"开始"},{text:"继续"}]}onConfirm=t=>{this.saveData=Object.assign(window.$res.save,t?w():null),this.props.onLoadMap()};render(){return this.$c("div",{style:this.styles.title},this.$c("div",{style:this.styles.gameName},"魔塔"),this.$c(f,{activeIndex:this.activeIndex,options:this.options,style:this.styles.select,onConfirm:this.onConfirm}))}}const k=[{text:"物品"},{text:"技能"},{text:"装备"},{text:"状态"}],C=[],b=[C,[],C,C,[{text:12233}],[{text:1},{text:2},{text:3},{text:4}]];class D extends s{activeIndex=-1;tick=0;create(){this.styles={menu:{width:576,height:416,backgroundColor:"rgba(0,0,0,.6)"},detail:{x:128,width:288,height:416,borderWidth:2},select:{width:128}}}onConfirm=t=>{this.activeIndex=t};render(){return this.$c("div",{style:this.styles.menu},this.$c(f,{options:k,style:this.styles.select,onConfirm:this.onConfirm,onClose:this.props.onClose}),-1===this.activeIndex?null:this.$c(f,{options:b[this.activeIndex],style:this.styles.detail,onConfirm:this.onConfirm,onClose:()=>{this.activeIndex=-1}}))}}class E extends s{styles={shop:{x:64,y:64,height:224,width:288,fontSize:24,borderWidth:4,borderColor:"#deb887",textAlign:"center",backgroundImage:"ground.png"},title:{x:144,y:16},text:{x:0,y:48,fontSize:14},select:{x:64,y:112,width:160,fontSize:16}};create(){this.shop=window.$res.shop[this.props.shopid]}onConfirm=t=>{const{need:e,effect:s}=this.shop.choices[t];this.props.onShopEvent(e,s)};render(){return this.$c("div",{style:this.styles.shop},this.$c("div",{style:this.styles.title},this.shop.title),this.$c("div",{style:this.styles.text},this.shop.text.split(/\n/).map(((t,e)=>this.$c("div",{style:{x:144,y:16*e}},t)))),this.$c(f,{options:this.shop.choices,onConfirm:this.onConfirm,style:this.styles.select,onClose:this.props.onClose}))}}class S extends i{tick=0;styles={battle:{x:48,y:48,width:480,height:320,fontSize:16,borderWidth:3,borderColor:"#deb887",font:"32px sans-serif",swidth:640,sheight:320},enemy:{x:32,y:32},hero:{x:320,y:32}};create(){this.enemy=JSON.parse(JSON.stringify(this.props.enemy)),this.hero=this.props.hero}onKeyDown(){this.battleMsg&&this.props.onClose&&this.props.onClose()}render(){const t=this.enemy,e=this.hero,s="localhost"===location.hostname?1:5;if(t.hp>0&&(this.tick++,this.tick===s)){if(this.turn){const s=t.atk-e.def;s>0&&(e.hp-=s)}else{const s=e.atk-t.def;if(s>0&&(t.hp-=s),t.hp<=0){t.hp=0;const{exp:s,money:i}=t;e.exp+=s,this.props.saveData.money+=i,this.battleMsg=`战斗胜利，获得${i}金币，${s}经验`}}this.turn=!this.turn,this.tick=0}const i=[{text:"名称",key:"name"},{text:"生命",key:"hp"},{text:"攻击",key:"atk"},{text:"防御",key:"def"}],n={x:32,y:144,swidth:32,sheight:32,width:64,height:64,sy:32*t.sy},o={font:"bold 64px sans-serif",x:208,y:64,height:64,width:64};return this.$c("img",{src:"Battlebacks/mota.jpg",style:this.styles.battle},this.battleMsg&&this.$c("div",{style:{fontSize:24,height:32,y:256,width:480}},this.battleMsg),this.$c("div",{style:this.styles.enemy},this.$c("img",{src:"enemys.png",style:n}),i.map(((e,s)=>this.$c("div",{style:{x:0,y:32*s}},this.$c("div",{style:{width:128,textAlign:"left",height:32}},e.text),this.$c("div",{style:{width:128,textAlign:"right",height:32}},t[e.key]))))),this.$c("div",{style:o},"VS"),this.$c("div",{style:this.styles.hero},this.$c("img",{src:"Characters/hero.png",style:{x:32,y:144,swidth:32,sheight:32,width:64,height:64,sy:0}}),i.map(((t,s)=>this.$c("div",{style:{x:0,y:32*s}},this.$c("div",{style:{width:128,textAlign:"left",height:32}},e[t.key]),this.$c("div",{style:{width:128,textAlign:"right",height:32}},t.text))))))}}class I extends i{width=7;styles={talk:{width:32*this.width,height:32,backgroundColor:"black",borderWidth:2,borderColor:"white",fontSize:16,textAlign:"left",textBaseline:"middle"}};index=0;onKeyDown({code:t}){"Space"===t&&(this.index++,this.index===this.props.talk.length?this.props.onConfirm():this.create())}create(){this.turn=!this.turn;const t=this.props.talk[this.index].split(/\n/);this.current=[],t.forEach((t=>{for(let e=0;e<t.length;e+=14)this.current.push(t.substr(e,14))}));const e={x:64,y:64,height:32*this.current.length},s={x:128,y:192,height:32*this.current.length};Object.assign(this.styles.talk,this.turn?e:s)}render(){return this.$c("div",{style:this.styles.talk},this.current.map(((t,e)=>this.$c("div",{style:{x:0,y:32*e,width:32*this.width,height:32}},t))))}}class M extends s{create(){this.props&&(this.tick=this.props.tick||120),this.length=function(t){let e=0;for(let s=0;s<t.length;s++)t.charCodeAt(s)>127?e+=2:e+=1;return e}(this.props.msg),this.msg=this.props.msg}render(){if(this.tick--,0===this.tick)return this.props.onMessageClose(),null;let t=1;this.tick<30&&(t=this.tick/30);const e={textAlign:"left",fontSize:18,backgroundColor:"rgba(0,0,0,.7)",globalAlpha:t,x:0,y:0,height:32,width:9*this.length+10};return this.$c("div",{style:e},this.$c("div",{style:{x:5,height:32}},this.msg))}}class A extends i{onKeyDown({code:t}){"KeyX"===t&&this.props.onClose()}render(){const t=Object.keys(this.props.enemys);return this.$c("div",{style:{textAlign:"left",fontSize:16,backgroundColor:"rgba(0,0,0,.8)",width:576,height:416}},this.$c("div",{style:{x:32,y:32}},this.$c("div",{style:{x:32,height:32}},"名字"),this.$c("div",{style:{x:128,height:32}},"生命"),this.$c("div",{style:{x:192,height:32}},"攻击"),this.$c("div",{style:{x:256,height:32}},"防御"),this.$c("div",{style:{x:320,height:32}},"损失"),t.map(((t,e)=>{const s={x:0,y:32*e+32,height:32},i=window.$res.enemys[t],n=this.props.saveData.hero;let o=0;if(n.atk>i.def)if(n.def>=i.atk||i.hp/(n.atk-i.def)<=n.hp/(i.atk-n.def))if(n.def>=i.atk)o=0;else{const t=Math.floor(i.hp/(n.atk-i.def));o=(i.atk-n.def)*t}else o="-";else o="-";return this.$c("div",{style:s},this.$c("img",{src:"enemys.png",alt:"",style:{height:32,width:32,sy:32*i.sy}}),this.$c("div",{style:{x:32,height:32}},i.name),this.$c("div",{style:{x:128,height:32}},i.hp),this.$c("div",{style:{x:192,height:32}},i.atk),this.$c("div",{style:{x:256,height:32}},i.def),this.$c("div",{style:{x:320,height:32}},o))}))))}}class L extends s{style={x:96,y:64,height:256,width:224,backgroundImage:"ground.png",borderWidth:4,borderColor:"#deb887"};create(){const t=this.props.saveData.shops||[];this.options=Object.entries(t).map((([t,e])=>({text:e,shopid:t})))}onConfirm=t=>{const{shopid:e}=this.options[t];this.props.onConfirm(e)};render(){return this.$c("div",{style:this.style},this.$c("div",{style:{height:32,width:224,fontSize:24}},"商店选择"),this.$c(f,{style:{x:32,y:48,width:160},options:this.options,onConfirm:this.onConfirm,onClose:this.props.onClose}))}}function P(t,e){return!(t.x>=e.x+e.width||t.x+t.width<=e.x||t.y>=e.y+e.height||t.y+t.height<=e.y)}function j(t,e){return Object.assign(t,e)}function O(t){const e=t.split(".");1===e.length&&e.unshift("");const[s,i]=e;return[s,i.split(";").map((t=>t.split(":")))]}const T={lv:"等级",money:"金币",hp:"生命",atk:"攻击",def:"防御",exp:"经验"};class K extends i{tick=0;create(){const t=Object.assign(this.props.saveData.position,{width:32,height:32});this.styles={hero:t}}isCoincidedTerrains(t){return this.props.mapTerrains.findIndex((e=>e&&e&&P(e.props.style,t)))}isCoincidedEvents(t){return this.props.mapEvents.findIndex((e=>e&&e&&P(e.props.style,t)))}onKeyDown(t){const{code:e}=t,s=this.styles.hero;let i=null;if("ArrowDown"===e?(i={y:32},s.sy=0):"ArrowUp"===e?(i={y:-32},s.sy=96):"ArrowLeft"===e?(i={x:-32},s.sy=32):"ArrowRight"===e?(i={x:32},s.sy=64):"KeyS"===e?(x(this.props.saveData),this.msg="存储成功"):"KeyL"===e?this.props.onLoadMap(w()):"KeyX"===e?this.showEnemyInfo=!this.showEnemyInfo:"KeyB"===e?this.buying=!0:("PageUp"===e||"PageUp"===e)&&console.log(this.props),i){const t=function(t,e){return t=Object.assign(Object.create(null),t),Object.entries(e).forEach((([e,s])=>{t[e]+=s})),t}(s,i);if(-1!==this.isCoincidedTerrains(t))return;const e=this.isCoincidedEvents(t);if(-1!==e)return void(this.handleEvents(this.props.map.mapEvents[e])&&j(s,t));j(s,t)}}onShopClose=()=>{this.shopid=null,this.setEvent()};handleEvents(t){if(!this.mapEvent)if(t[3])this.mapEvent=t,this.eventIndex=0,this.setEvent();else{const e=window.$res.mapping[t[2]],{name:s,type:i}=e;if("items"===i){const e=window.$res.items[s],{type:i}=e;if("1"===i)this.remove(t),this.updateSaveData("items",s),this.msg=`获得${e.name}`;else if("2"===i){this.remove(t),this.updateSaveData(...e.property);const[s,i]=e.property;this.msg=`获得${e.name}`,i.forEach((t=>{const[e,i]=t;let n=e;"hero"===s?n=T[e]:"items"===s?n=window.$res.items[e].name:"money"===e&&(n="金币"),this.msg+=` ${n}${i>0?"+":"-"}${i}`}))}return!0}if("enemys"===i)return t[3]=[{type:"enemy",data:s}],this.handleEvents(t),!1;if("terrains"===i&&["yellowDoor","redDoor","blueDoor","steelDoor","specialDoor"].includes(s)){const e=s.slice(0,-4)+"Key";if(this.props.saveData.items[e])return this.props.saveData.items[e]--,this.remove(t),!0}}}setEvent=()=>{if(this.eventIndex<this.mapEvent[3].length){const t=this.mapEvent[3][this.eventIndex++],{type:e,data:s}=t;if("talk"===e)return void(this.talk=s);if("mapLoad"===e)this.props.onLoadMap(s);else{if("openShop"===e)return this.shopid=t.id,this.props.saveData.shops=this.props.saveData.shops||{},void(this.props.saveData.shops[this.shopid]=window.$res.shop[this.shopid].title);if("getItems"===e)this.updateSaveData("items",s);else{if("removeSelf"===e)return void this.remove(this.mapEvent);if("moveBlock"===e)return console.log(this.mapEvent),void this.remove(this.mapEvent);if("enemy"===e){const t=window.$res.enemys[s],e=this.props.saveData.hero;return e.atk>t.def?e.def>=t.atk||t.hp/(e.atk-t.def)<=e.hp/(t.atk-e.def)?void(this.enemy=t):(this.mapEvent=null,this.eventIndex=0,void(this.msg=`你打不过${t.name}`)):(this.mapEvent=null,this.eventIndex=0,void(this.msg=`你的攻击比${t.name}的防御低`))}if("updateSaveData"===e)this.updateSaveData(...O(s));else if("removeBlock"===e)this.props.removeMapEvent(s);else if("title"===e)this.props.onTitle();else if("removeMapBlock"===e){const{mapId:t,position:e}=s,{x:i,y:n}=e;this.props.saveData.destroy[[t,i,n]]=!0}else if("if"===e){const{condition:e,true:s,false:i}=t;this.mapEvent=null,this.eventIndex=0,this.checkSaveData(...O(e))?this.mapEvent=[0,0,0,s]:this.mapEvent=[0,0,0,i]}else console.error(t)}}this.setEvent()}else this.mapEvent=null};remove(t){this.props.removeMapEvent(t),this.mapEvent=null}onBattleClose=()=>{this.enemy=null,this.props.removeMapEvent(this.mapEvent),this.setEvent()};onConfirm=()=>{this.talk=null,this.setEvent()};onMenuClose=()=>{this.showMenu=null};onMessageClose=()=>{this.msg=null};updateSaveData(t,e,s=1){if(Array.isArray(e))e.forEach((([e,s])=>this.updateSaveData(t,e,s)));else if("string"==typeof e){const i=t?this.props.saveData[t]:this.props.saveData;i[e]=i[e]||0,i[e]+=Number(s)}else"object"==typeof e?this.updateSaveData(t,Object.entries(e)):console.error(e,s)}checkSaveData(t,e,s=1){if(Array.isArray(e))return e.some((([e,s])=>this.checkSaveData(t,e,s)));if("string"==typeof e){const i=t?this.props.saveData[t]:this.props.saveData;return i[e]=i[e]||0,i[e]+Number(s)>=0}return"object"==typeof e&&this.checkSaveData(t,Object.entries(e),null,0)}onShopEvent=(t,e)=>{this.checkSaveData(...O(t))&&(this.updateSaveData(...O(t)),this.updateSaveData(...O(e)))};onShopListClose=()=>{this.buying=!1};onShopListConfirm=t=>{this.buying=!1,this.shopid=t,this.mapEvent=[0,0,0,[]]};render(){return this.$c("div",null,this.$c("img",{style:this.styles.hero,src:"Characters/hero.png"}),this.buying&&this.$c(L,{saveData:this.props.saveData,onClose:this.onShopListClose,onConfirm:this.onShopListConfirm}),this.shopid&&this.$c(E,{shopid:this.shopid,saveData:this.props.saveData,onClose:this.onShopClose,onShopEvent:this.onShopEvent}),this.enemy&&this.$c(S,{enemy:this.enemy,enemyId:this.enemyId,hero:this.props.saveData.hero,saveData:this.props.saveData,onClose:this.onBattleClose}),this.showMenu&&this.$c(D,{saveData:this.props.saveData,onClose:this.onMenuClose}),this.talk&&this.$c(I,{talk:this.talk,key:this.talk,onConfirm:this.onConfirm}),this.msg&&this.$c(M,{msg:this.msg,key:this.msg,onMessageClose:this.onMessageClose}),this.showEnemyInfo&&this.$c(A,{enemys:this.props.enemys,saveData:this.props.saveData,onClose:()=>this.showEnemyInfo=!1}))}}class B extends s{create(){this.walls=[];for(let t=0;t<5;t++)for(let e=0;e<13;e++)4!==t&&0!==e&&12!==e||this.walls.push(this.$c("img",{src:"terrains.png",style:{sx:0,sy:64,x:32*t,y:32*e,width:32,height:32}}))}render(){const t=["魔塔",this.props.map.name,this.props.saveData.hero.lv,this.props.saveData.hero.hp,this.props.saveData.hero.atk,this.props.saveData.hero.def,this.props.saveData.hero.exp,this.props.saveData.money,this.props.saveData.items.yellowKey,this.props.saveData.items.blueKey,this.props.saveData.items.redKey];return this.$c("div",{style:{fontSize:24}},this.walls,t.map(((t,e)=>this.$c("div",{style:{y:32*(e+1),wdith:32,height:32}},this.$c("img",{src:"icons.png",style:{x:0,y:0,sx:0,sy:32*e,wdith:32,height:32,swidth:32,sheight:32}}),this.$c("div",{style:{x:32,height:32,width:96}},t)))))}}class F extends i{styles={text:{fontSize:20,textAlign:"left",textBaseline:"top",x:32,y:160,width:576,height:416}};create(){const{text:t,bgm:e}=this.props.map;this.text=t.split("\n"),window.$audio.play("bgm",e)}onKeyDown({code:t}){if("Space"===t&&this.ready){const{type:t,data:e}=this.props.map.event;"mapLoad"===t?this.props.onClose(e):"title"===t&&this.props.onTitle(e)}}render(){const t=this.styles.text;if(t.y>-32*(this.text.length-2)){const e=1;t.y-=e}else this.ready=!0;return this.$c("div",{style:this.styles.text,onClick:this.onKeyDown},this.text.map(((t,e)=>{const s={y:32*e};return this.$c("div",{style:s},t)})))}}class z extends s{tick=0;interval=10;styles={map:{height:416,width:576,backgroundImage:"ground.png"}};create(){const t=this.props.map.bgm;window.$audio.play("bgm",t)}destroy(){const t=this.props.map.bgm;window.$audio.pause("bgm",t)}renderMapTerrains(t){const{mapTerrains:e}=this.props.map,s=this.tick,i=[];if(e)return e.forEach(((t,e)=>{t.forEach(((t,n)=>{if(!t)return null;{const o=window.$res.mapping[t],{type:h,name:a}=o,r=window.$res[h][a];let l=0;"animates"===o.type&&(l=s%4*32);const p={sy:32*r.sy,sx:l,x:32*n,y:32*e,height:32,width:32};i.push(this.$c("img",{src:h+".png",style:p}))}}))})),i}renderMapEvents(){const{mapId:t,destroy:e={}}=this.props.saveData,{mapEvents:s}=this.props.map,i=this.tick,n={};if(this.enemys=n,s)return s.map((s=>{const[o,h,a,r]=s;if(a){const s=window.$res.mapping[a];if(s){const{type:a,name:r}=s,l=window.$res[a][r];let p=0;return"npcs"!==a&&"enemys"!==a||(p=i%2*32),e[[t,o,h]]?null:("enemys"===a&&(n[r]=r),this.$c("div",{style:{x:32*o,y:32*h,height:32,width:32}},this.$c("img",{src:a+".png",style:{sy:32*l.sy,sx:p,height:32,width:32}})))}}return null}))}onRemoveMapEvent=t=>{const[e,s]=t,i=this.props.saveData.mapId;this.props.saveData.destroy=this.props.saveData.destroy||{},this.props.saveData.destroy[[i,e,s]]=1};onTitle=()=>{this.props.onTitle()};render(){this.interval--,0===this.interval&&(this.tick++,this.interval=10);const t=this.renderMapTerrains(),e=this.renderMapEvents();return this.$c("div",{style:this.styles.map},this.$c("div",{style:{x:416,y:0}},this.$c(B,{saveData:this.props.saveData,map:this.props.map})),t,e,this.$c(K,{mapTerrains:t,mapEvents:e,saveData:this.props.saveData,enemys:this.enemys,map:this.props.map,onLoadMap:this.props.onLoadMap,removeMapEvent:this.onRemoveMapEvent,onTitle:this.onTitle}))}}function R(t){return fetch(t).then((t=>t.json()))}function W(t){return fetch(t).then((t=>t.text())).then((t=>(t=>{const e=[],s=(t=t.split(/\r?\n/)).shift().split(",");return t.forEach(((i,n)=>{if(!i.trim())return;const o=i.split(","),[h]=o,a={sy:n};return s.forEach(((t,e)=>{const s=o[e];s&&("property"===t?a[t]=O(s):["id","name","type"].includes(t)?a[t]=s:(isNaN(s),a[t]=Number(s)))})),e[h]=a,e.push(a),t})),e})(t)))}function N({name:t,url:e}){if(function(t,e=16){return document.fonts.check(`${e}px ${t}`)}(t))return Promise.resolve();const s=new FontFace(t,`url("${e}")`);return document.fonts.add(s),s.load(),s.loaded}const U={images:{},sounds:{}};window.$res=U;const X=["enemys","items","animates","icons","npcs","terrains","boss"],J=[].concat(["game.json","save.json","shop.json","mapping.dat"].map((t=>`Data/${t}`)),X.map((t=>`Sprite/${t}.dat`))),G=()=>{const t=X.map((t=>`Sprite/${t}.png`)),e=["Characters/hero.png","ground.png","Battlebacks/mota.jpg"].map((t=>`Graph/${t}`));return Promise.all([...t,...e].map((t=>new Promise((e=>{(t=>new Promise((function(e,s){const i=new Image;i.addEventListener("load",(()=>e(i))),i.addEventListener("error",(()=>s(i))),i.src=t})))(`${t}`).then((s=>{(t=t.replace("Graph/","")).includes("Sprite")&&(t=t.split("/")[1]),U.images[t]=s,e()}))})))))},Y=["bgm/terror.mp3","bgm/prologue.mp3","bgm/area1.mp3","bgm/area2.mp3","bgm/area3.mp3","enemy/redWizard.mp3","enemy/brownWizard.mp3","enemy/whiteKing.mp3","enemy/blackMagician.mp3","se/attack.mp3","se/floor.mp3","se/door.mp3","se/buy.mp3","se/item.mp3","se/dialogue.mp3","se/unlockCtrl.mp3","se/step.mp3","se/constants.mp3","se/sell.mp3","se/load.mp3"],q=t=>Promise.all(t.map((t=>{return e=`Audio/${t}`,new Promise((function(t,s){const i=new Audio;i.addEventListener("canplay",(()=>t(i))),i.addEventListener("error",(()=>s(i))),i.src=e}));var e}))).then((e=>{e.forEach(((e,s)=>U.sounds[t[s]]=e))}));new class{constructor(e){this.check()&&(this.$resource=Object.create(null),this.$state=Object.create(null),this.Game=t(e,null),this.$foucs=null,this.$audio=new c,window.$audio=this.$audio,this.ui=new p,this.gameStart())}check(){if("file:"===location.protocol)alert("不能直接运行index.html");else{if(navigator.userAgent.match(/Chrome\/(\d+)/)&&!(RegExp.$1<88))return!0;alert("需要chrome最新浏览器")}}gameStop(){cancelAnimationFrame(this.ident),this.ident=-1}gameStart(){const t=()=>{this.keyFrame(),this.ident=requestAnimationFrame(t)};t()}keyFrame(){this.root=v(this.root,this.Game,this.ui),this.ui.render(this.root)}}(class extends s{styles={app:{height:416,width:576,textAlign:"center",textBaseline:"middle"}};async loadFont(){this.loading="加载字体";const t=window.$res.game.font;await(t=>N(t))(t),this.styles.app.fontFamily=t.name}async create(){this.loading="加载数据",await Promise.all(J.map((t=>t.endsWith(".dat")?W(`${t}`):R(`${t}`)))).then((([t,e,s,i,n,o,h,a,r,l,p])=>{Object.assign(U,{game:t,save:e,shop:s,mapping:i,enemys:n,items:o,animates:h,icons:a,npcs:r,terrains:l,boss:p})})),this.loading="加载图片",await Promise.all([G()]),this.loading="加载音乐",await Promise.all([q(Y)]),this.loading=!1,this.saveData=window.$res.save}onLoadMap=async t=>{var e;this.loading="加载地图",Object.assign(this.saveData,t),this.map=await(e=this.saveData.mapId,R(`Maps/${e}.json`)),this.loading=!1,this.randMapKey=`${this.saveData.mapId} ${new Date}`};onTitle=()=>{this.map=null};render(){return this.$c("div",{style:this.styles.app},this.loading?this.$c(u,{msg:this.loading}):this.map?this.map.text?this.$c(F,{map:this.map,onClose:this.onLoadMap,onTitle:this.onTitle}):this.$c(z,{map:this.map,key:this.randMapKey,onLoadMap:this.onLoadMap,saveData:this.saveData,onEvent:this.onEvent}):this.$c($,{onLoadMap:this.onLoadMap}),this.$c(g,null))}});
+function createNode(tag, props, ...children) {
+  return {
+    tag,
+    props,
+    children
+  };
+}
+
+let curFoucs = null;
+class Component {
+  constructor({
+    props,
+    children
+  }) {
+    this.props = props;
+    this.$children = children;
+  }
+
+  $c = createNode;
+
+  $destroy() {}
+
+}
+class KeyEventComponent extends Component {
+  constructor(...argu) {
+    super(...argu);
+
+    if (curFoucs) {
+      curFoucs.$isFocus = false;
+    }
+
+    this.$isFocus = true;
+    this.$preFocus = curFoucs;
+    curFoucs = this;
+  }
+
+  destroy() {
+    this.$isFocus = false;
+
+    if (this.$preFocus) {
+      this.$preFocus.$isFocus = true;
+    }
+
+    curFoucs = this.$preFocus;
+  }
+
+}
+
+const fontFamily = document.fonts.check('16px 黑体') ? '黑体' : '黑体-简';
+const baseStyle = {
+  direction: 'ltr',
+  color: 'white',
+  // filter: "grayscale(.1)",
+  filter: 'none',
+  fontSize: 32,
+  font: '32px ' + fontFamily,
+  globalAlpha: 1,
+  globalCompositeOperation: 'source-over',
+  // imageSmoothingEnabled: true,
+  // imageSmoothingQuality: 'low',
+  imageSmoothingEnabled: false,
+  lineCap: 'butt',
+  lineDashOffset: 0,
+  lineJoin: 'miter',
+  lineWidth: 1,
+  miterLimit: 10,
+  shadowBlur: 0,
+  shadowColor: 'rgba(0, 0, 0, 0)',
+  shadowOffsetX: 0,
+  shadowOffsetY: 0,
+  strokeStyle: 'white',
+  textAlign: 'start',
+  // textBaseline: "alphabetic",
+  textBaseline: 'top'
+};
+
+const isPrimitive = value => {
+  const type = typeof value;
+  return type === 'string' || type === 'number';
+};
+const isFunc = f => typeof f === 'function';
+const isArray = a => Array.isArray(a);
+const isUndefined = o => o === undefined || o === null;
+
+const getImage = src => window.$res.images[src];
+
+const moveEvent = 'MouseMove';
+const mouseEvents = ['ContextMenu', 'Click', 'Wheel', moveEvent];
+
+const keyEvents = ['KeyDown', 'KeyUp'];
+class UI {
+  constructor(screen = {}) {
+    const canvas = document.createElement('canvas');
+    this.canvas = canvas;
+    this.context = canvas.getContext('2d');
+    const {
+      el,
+      width = 32 * (13 + 5),
+      height = 32 * 13
+    } = screen;
+    this.screen = screen;
+    this.canvas.width = width;
+    this.canvas.height = height;
+    const dom = document.querySelector(el) || document.body;
+    dom && dom.appendChild(this.canvas);
+    this.mergeStyle(baseStyle);
+    this.mouseEvents = [];
+    this.keyEvents = [];
+    this.bind();
+  }
+
+  bind() {
+    mouseEvents.forEach(name => {
+      this.canvas.addEventListener(name.toLowerCase(), e => {
+        e.name = 'on' + name;
+        this.mouseEvents.push(e);
+        e.preventDefault();
+      }, {
+        passive: false
+      });
+    }); // const name = moveEvent
+    // this.canvas.addEventListener(name.toLowerCase(), (e) => {
+    //   e.name = 'on' + name
+    //   this.moveEvent = e
+    //   e.preventDefault()
+    // }, { passive: false })
+
+    keyEvents.forEach(name => {
+      document.addEventListener(name.toLowerCase(), e => {
+        e.name = 'on' + name;
+        this.keyEvents = e;
+      });
+    });
+  }
+
+  toDataURL() {
+    return this.canvas.toDataURL();
+  }
+
+  mergeStyle = style => {
+    if (style) {
+      const {
+        fontSize,
+        fontFamily,
+        font,
+        textAlign,
+        textBaseline,
+        color,
+        globalAlpha
+      } = style;
+
+      if (globalAlpha) {
+        this.context.globalAlpha = globalAlpha;
+      }
+
+      if (textAlign) {
+        this.context.textAlign = textAlign;
+      }
+
+      if (textBaseline) {
+        this.context.textBaseline = textBaseline;
+      }
+
+      if (color) {
+        this.context.fillStyle = color;
+      }
+
+      if (font) {
+        this.context.font = font;
+      }
+
+      if (fontSize) {
+        this.context.font = this.context.font.replace(/\d+/, fontSize);
+      }
+
+      if (fontFamily) {
+        this.context.font = this.context.font.replace(/[\u4e00-\u9fa5]+/, fontFamily);
+      }
+    }
+  };
+
+  clearRect() {
+    const {
+      context,
+      canvas
+    } = this;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  drawText(node, offsetX, offsetY) {
+    const {
+      style,
+      text
+    } = node;
+    const {
+      context
+    } = this;
+    const {
+      x = 0,
+      y = 0
+    } = style;
+    context.fillText(text, offsetX + x, offsetY + y);
+  }
+
+  drawImage(node, offsetX, offsetY) {
+    const {
+      props
+    } = node;
+
+    if (props) {
+      const {
+        style
+      } = props;
+
+      if (style) {
+        const {
+          sx = 0,
+          sy = 0,
+          width = 32,
+          height = 32,
+          swidth,
+          sheight
+        } = style;
+        const {
+          context
+        } = this;
+        context.drawImage(getImage(props.src), sx, sy, swidth || width, sheight || height, offsetX, offsetY, width, height);
+      }
+    }
+  }
+
+  drawBack(node, offsetX, offsetY) {
+    const {
+      context
+    } = this;
+    const {
+      backgroundImage,
+      backgroundColor,
+      height,
+      width
+    } = node.props.style;
+
+    if (backgroundColor) {
+      context.save();
+      context.beginPath();
+      context.rect(offsetX, offsetY, width, height);
+      context.fillStyle = backgroundColor;
+      context.fill();
+      context.closePath();
+      context.restore();
+    }
+
+    if (backgroundImage) {
+      context.save();
+      context.beginPath();
+      context.rect(offsetX, offsetY, width, height);
+      context.fillStyle = context.createPattern(getImage(backgroundImage), 'repeat');
+      context.fill();
+      context.closePath();
+      context.restore();
+    }
+  }
+
+  drawBorder(node, offsetX, offsetY) {
+    const {
+      context
+    } = this;
+    const {
+      borderWidth,
+      borderColor,
+      height,
+      width
+    } = node.props.style;
+
+    if (borderWidth) {
+      context.save();
+      context.lineWidth = borderWidth;
+      context.beginPath();
+      context.rect(offsetX, offsetY, width, height);
+
+      if (borderColor) {
+        context.strokeStyle = borderColor;
+      }
+
+      context.stroke();
+      context.closePath();
+      context.restore();
+    }
+  }
+
+  translate(box) {
+    const {
+      context
+    } = this;
+    const {
+      style
+    } = box;
+    const {
+      x = 0,
+      y = 0
+    } = style;
+    context.translate(x, y);
+  }
+
+  transform(box) {
+    const {
+      context
+    } = this;
+    const {
+      rotate,
+      scale
+    } = box;
+
+    if (rotate) {
+      const {
+        angle = 0,
+        x = 0,
+        y = 0
+      } = rotate;
+      context.translate(x, y);
+      context.rotate(angle * Math.PI / 180);
+      context.translate(-x, -y);
+    }
+
+    if (scale) {
+      const {
+        x = 0,
+        y = 0,
+        scaleX = 1,
+        scaleY = 1
+      } = scale;
+      context.translate(x, y);
+      context.scale(scaleX, scaleY);
+      context.translate(-x, -y);
+    }
+  }
+
+  drawCircle(node, offsetX, offsetY) {
+    const {
+      context
+    } = this;
+    context.save();
+    context.beginPath();
+    const {
+      cx,
+      cy,
+      r,
+      sAngle,
+      eAngle,
+      counterclockwise = false,
+      stroke,
+      strokeWidth
+    } = node.props;
+    context.arc(cx + offsetX, cy + offsetY, r, sAngle / 180 * Math.PI, eAngle / 180 * Math.PI, counterclockwise);
+    context.strokeStyle = stroke;
+    context.lineWidth = strokeWidth;
+    context.stroke();
+    context.closePath();
+    context.restore();
+  }
+
+  drawLine(node) {
+    const {
+      context
+    } = this;
+    const {
+      x1 = 0,
+      y1 = 0,
+      x2 = 200,
+      y2 = 200
+    } = node.props;
+    context.beginPath();
+    context.moveTo(x1, y1);
+    context.lineTo(x2, y2);
+    context.stroke();
+  }
+
+  drawRect(node, offsetX, offsetY, parent) {
+    const {
+      context
+    } = this;
+    context.save();
+    const {
+      props,
+      tag
+    } = node;
+
+    if (props) {
+      const {
+        style
+      } = props;
+      this.mergeStyle(style);
+
+      if (style) {
+        this.drawBack(node, offsetX, offsetY);
+        this.drawBorder(node, offsetX, offsetY);
+      }
+    }
+
+    if (tag === 'img') {
+      this.drawImage(node, offsetX, offsetY);
+    } else if (tag === 'text') {
+      this.drawText(node, offsetX, offsetY);
+    } else if (tag === 'circle') {
+      this.drawCircle(node, offsetX, offsetY);
+    } else if (tag === 'line') {
+      this.drawLine(node, offsetX, offsetX);
+    }
+
+    this.renderRect(node.children, offsetX, offsetY, node);
+    context.restore();
+  }
+
+  renderPrimitive(text, offsetX, offsetY, parent) {
+    var _parent$props;
+
+    const {
+      context
+    } = this;
+    const {
+      textAlign,
+      textBaseline
+    } = context;
+    const {
+      width = 0,
+      height = 0
+    } = (parent === null || parent === void 0 ? void 0 : (_parent$props = parent.props) === null || _parent$props === void 0 ? void 0 : _parent$props.style) || {};
+    const x = {
+      start: 0,
+      left: 0,
+      center: 0.5,
+      right: 1,
+      end: 0
+    };
+    const y = {
+      alphabetic: 0,
+      hanging: 0,
+      ideographic: 0,
+      top: 0,
+      middle: 0.5,
+      bottom: 1
+    }; // start 默认。文本在指定的位置开始。
+    // end 文本在指定的位置结束。
+    // center 文本的中心被放置在指定的位置。
+    // left 文本在指定的位置开始。
+    // right 文本在指定的位置结束。
+    // alphabetic 默认。文本基线是普通的字母基线。
+    // top 文本基线是 em 方框的顶端。
+    // hanging 文本基线是悬挂基线。
+    // middle 文本基线是 em 方框的正中。
+    // ideographic 文本基线是表意基线。
+    // bottom 文本基线是 em 方框的底端。
+
+    context.fillText(text, offsetX + width * x[textAlign], offsetY + height * y[textBaseline]);
+  }
+
+  renderRect(node, offsetX, offsetY, parent) {
+    if (node !== null && node !== undefined) {
+      if (isArray(node)) {
+        node.forEach(node => this.renderRect(node, offsetX, offsetY, parent));
+      } else if (isPrimitive(node)) {
+        this.renderPrimitive(node, offsetX, offsetY, parent);
+      } else if (isFunc(node.tag)) {
+        this.renderRect(node.node, offsetX, offsetY, parent);
+      } else {
+        this.renderNode(node, offsetX, offsetY, parent);
+      }
+    }
+  }
+
+  renderNode(node, offsetX, offsetY, parent) {
+    const {
+      context
+    } = this;
+    context.save();
+    const {
+      props
+    } = node;
+
+    if (props) {
+      const {
+        style
+      } = props;
+
+      if (style) {
+        const {
+          x = 0,
+          y = 0
+        } = style;
+        offsetX += x;
+        offsetY += y;
+        this.mouseEvents.forEach(event => {
+          const {
+            name
+          } = event;
+
+          if (event.offsetX >= offsetX && event.offsetX < style.width + offsetX && event.offsetY >= offsetY && event.offsetY < style.height + offsetY) {
+            if (name === 'onMouseMove') {
+              this.onMouseMove = {
+                node,
+                event
+              };
+            } else if (name === 'onClick') {
+              this.onMouseClick = {
+                node,
+                event
+              };
+            }
+          }
+        });
+      }
+    }
+
+    this.drawRect(node, offsetX, offsetY, parent);
+    context.restore();
+  }
+
+  runEvent() {
+    if (curFoucs && this.keyEvents) {
+      const {
+        name
+      } = this.keyEvents;
+      curFoucs[name] && curFoucs[name](this.keyEvents);
+    }
+
+    this.keyEvents = null; // if (this.moveEventTarget && this.moveEvent) {
+    //   if (moveEventTarget !== this.moveEventTarget) {
+    //     if (moveEventTarget) {
+    //       moveEventTarget.props.onMouseLeave && moveEventTarget.props.onMouseLeave()
+    //     }
+    //     moveEventTarget = this.moveEventTarget
+    //     moveEventTarget.props.onMouseEnter && moveEventTarget.props.onMouseEnter()
+    //   }
+    // }
+
+    if (this.onMouseClick) {
+      var _node$props;
+
+      const {
+        node,
+        event
+      } = this.onMouseClick;
+
+      if (node !== null && node !== void 0 && (_node$props = node.props) !== null && _node$props !== void 0 && _node$props.onClick) {
+        node.props.onClick(event);
+      }
+
+      this.onMouseClick = null;
+    }
+
+    this.mouseEvents = [];
+    this.moveEvent = null;
+    this.moveEventTarget = null;
+  }
+
+  render(root) {
+    this.clearRect();
+    this.renderRect(root, 0, 0, this.canvas);
+    this.runEvent();
+    self.$root = root;
+  }
+
+}
+
+class Audio$1 {
+  current = null;
+
+  constructor(audioes) {
+    this.audioes = audioes || window.$res.sounds;
+  }
+
+  control(type, name, control) {
+    this.audioes = window.$res.sounds;
+    this.current = this.audioes[`${type}/${name}`];
+    this.current.loop = true;
+    this.current[control]();
+  }
+
+  play(type, name) {
+    this.control(type, name, 'play');
+  }
+
+  pause(type, name) {
+    this.control(type, name, 'pause');
+  }
+
+}
+
+function createInstance(next) {
+  const Class = next.tag;
+  next.instance = new Class(next);
+  next.instance.create && next.instance.create();
+  renderNode(next);
+}
+
+function destoryInstance(pre) {
+  if (!isPrimitive(pre) && !isUndefined(pre)) {
+    if (isFunc(pre.tag)) {
+      destoryInstance(pre.node);
+      pre.instance.destroy && pre.instance.destroy();
+    } else if (Array.isArray(pre)) {
+      while (pre.length) {
+        destoryInstance(pre.pop());
+      }
+    } else {
+      destoryInstance(pre.children);
+    }
+  }
+}
+
+function updateInstance(pre, next) {
+  next.instance = pre.instance;
+
+  if (!next.instance) {
+    debugger;
+    return;
+  }
+
+  next.node = pre.node;
+  next.instance.props = next.props;
+  renderNode(next);
+}
+
+function renderNode(next) {
+  const instance = next.instance;
+  next.node = patchNode(next.node, instance.render());
+}
+
+function patchNode(pre, next) {
+  if (isPrimitive(next) || isUndefined(next)) {
+    destoryInstance(pre);
+  } else if (isFunc(next.tag)) {
+    if (pre) {
+      var _pre$props, _next$props;
+
+      if (pre.tag === next.tag && ((_pre$props = pre.props) === null || _pre$props === void 0 ? void 0 : _pre$props.key) === ((_next$props = next.props) === null || _next$props === void 0 ? void 0 : _next$props.key)) {
+        updateInstance(pre, next);
+      } else {
+        destoryInstance(pre);
+        createInstance(next);
+      }
+    } else {
+      createInstance(next);
+    }
+  } else if (isArray(next.children)) {
+    const preChildren = (pre === null || pre === void 0 ? void 0 : pre.children) || [];
+    const nextChildren = next.children; // todo diff algorithm
+
+    for (let i = 0; i < next.children.length; i++) {
+      patchNode(preChildren[i], nextChildren[i]);
+    }
+  }
+
+  return next;
+}
+
+class Engine {
+  constructor(Game) {
+    if (this.check()) {
+      this.$resource = Object.create(null);
+      this.$state = Object.create(null);
+      this.Game = createNode(Game, null);
+      this.$foucs = null;
+      this.$audio = new Audio$1();
+      window.$audio = this.$audio;
+      this.ui = new UI();
+      this.gameStart();
+    }
+  }
+
+  check() {
+    if (location.protocol === 'file:') {
+      alert('不能直接运行index.html');
+    } else if (!navigator.userAgent.match(/Chrome\/(\d+)/) || RegExp.$1 < 88) {
+      alert('需要chrome最新浏览器');
+    } else {
+      return true;
+    }
+  }
+
+  gameStop() {
+    cancelAnimationFrame(this.ident);
+    this.ident = -1;
+  }
+
+  gameStart() {
+    const frame = () => {
+      this.keyFrame();
+      this.ident = requestAnimationFrame(frame);
+    };
+
+    frame();
+  }
+
+  keyFrame() {
+    this.root = patchNode(this.root, this.Game, this.ui);
+    this.ui.render(this.root);
+  }
+
+}
+
+class FPS extends Component {
+  fps = 60;
+  styles = {
+    fps: {
+      textAlign: 'left',
+      height: 32,
+      x: 0
+    }
+  };
+  timeStamp = +new Date();
+
+  render() {
+    const timeStamp = +new Date();
+    const fps = 1000 / (timeStamp - this.timeStamp);
+    const min = 30;
+    const warn = this.fps < min && fps < min;
+    this.fps = fps;
+    this.timeStamp = timeStamp;
+    return this.$c("div", {
+      style: this.styles.fps
+    }, warn ? `${this.fps.toFixed()}fps` : null);
+  }
+
+}
+
+class Loading extends Component {
+  step = 1;
+  angle = -this.step;
+
+  render() {
+    this.angle += this.step;
+
+    if (this.angle > 180) {
+      this.angle = 0;
+    }
+
+    const sAngle = this.angle * 2 - 90;
+    const eAngle = Math.sin(this.angle / 180 * Math.PI) * 45;
+    const width = 32 * (13 + 5);
+    const height = 32 * 13;
+    return this.$c("div", {
+      style: {
+        x: 0,
+        y: 0,
+        width,
+        height
+      }
+    }, this.props.msg, this.$c("circle", {
+      cx: width / 2,
+      cy: height / 2,
+      r: 32 * 3,
+      sAngle: sAngle - eAngle,
+      eAngle: sAngle + eAngle,
+      stroke: "#4e6ef2",
+      strokeWidth: 10
+    }));
+  }
+
+}
+
+class Select extends KeyEventComponent {
+  styles = {
+    select: {
+      fontSize: 24,
+      textAlign: 'center',
+      width: 320
+    }
+  };
+
+  create() {
+    this.activeIndex = this.props.activeIndex || 0;
+    const {
+      style
+    } = this.props;
+
+    if (style) {
+      Object.assign(this.styles.select, style);
+    }
+  }
+
+  onKeyDown({
+    code
+  }) {
+    if (code === 'ArrowDown') {
+      this.activeIndex++;
+
+      if (this.activeIndex === this.props.options.length) {
+        this.activeIndex = 0;
+      }
+
+      this.props.onChange && this.props.onChange(this.activeIndex, this.props.options[this.activeIndex]);
+    } else if (code === 'ArrowUp') {
+      this.activeIndex--;
+
+      if (this.activeIndex === -1) {
+        this.activeIndex += this.props.options.length;
+      }
+
+      this.props.onChange && this.props.onChange(this.activeIndex, this.props.options[this.activeIndex]);
+    } else if (code === 'Space') {
+      this.props.onConfirm && this.props.onConfirm(this.activeIndex, this.props.options[this.activeIndex]);
+    } else if (code === 'Escape') {
+      this.props.onClose && this.props.onClose();
+    }
+  }
+
+  onClick(index) {
+    this.activeIndex = index;
+    this.props.onConfirm && this.props.onConfirm(this.activeIndex, this.props.options[this.activeIndex]);
+  }
+
+  render() {
+    const size = 32;
+    const borderWidth = 2;
+    const select = this.styles.select;
+    const {
+      width
+    } = select;
+    return this.$c("div", {
+      style: this.styles.select
+    }, this.props.options && this.props.options.length ? this.props.options.map((item, index) => {
+      const {
+        text
+      } = item;
+      const optionStyle = {
+        y: index * size,
+        height: size,
+        width: width,
+        borderWidth: this.activeIndex === index ? borderWidth : 0,
+        borderColor: '#ccc'
+      };
+      return this.$c("div", {
+        style: optionStyle,
+        onClick: () => this.onClick(index),
+        onMouseLeave: e => {
+          this.activeIndex = -1;
+        },
+        onMouseEnter: e => {
+          this.activeIndex = index;
+        }
+      }, text);
+    }) : '空空如也');
+  }
+
+}
+
+function setStorage(key, value) {
+  return localStorage.setItem(key, JSON.stringify(value));
+}
+function getStorage(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key));
+  } catch (e) {
+    return null;
+  }
+}
+
+function saveGame(saveData) {
+  return setStorage('game', saveData);
+}
+function loadGame() {
+  return getStorage('game');
+}
+
+class Title extends Component {
+  styles = {
+    title: {
+      width: 32 * (13 + 5),
+      height: 32 * 13
+    },
+    gameName: {
+      y: 40,
+      width: 32 * (13 + 5),
+      height: 128,
+      font: 'bold 128px 黑体'
+    },
+    select: {
+      x: 16 * 16,
+      y: 32 * 8,
+      width: 64
+    }
+  };
+
+  create() {
+    this.activeIndex = loadGame() ? 1 : 0;
+    this.options = [{
+      text: '开始'
+    }, {
+      text: '继续'
+    }];
+  }
+
+  onConfirm = isLoad => {
+    this.saveData = Object.assign(window.$res.save, isLoad ? loadGame() : null);
+    this.props.onLoadMap();
+  };
+
+  render() {
+    return this.$c("div", {
+      style: this.styles.title
+    }, this.$c("div", {
+      style: this.styles.gameName
+    }, "\u9B54\u5854"), this.$c(Select, {
+      activeIndex: this.activeIndex,
+      options: this.options,
+      style: this.styles.select,
+      onConfirm: this.onConfirm
+    }));
+  }
+
+}
+
+const options = [{
+  text: '物品'
+}, {
+  text: '技能'
+}, {
+  text: '装备'
+}, {
+  text: '状态'
+}];
+const itemOption = [];
+const statusOption = [];
+const loadGameOption = [{
+  text: 12233
+}];
+const saveGameOption = [{
+  text: 1
+}, {
+  text: 2
+}, {
+  text: 3
+}, {
+  text: 4
+}];
+const detailOption = [itemOption, statusOption, itemOption, itemOption, loadGameOption, saveGameOption];
+class Menu extends Component {
+  activeIndex = -1;
+  tick = 0;
+
+  create() {
+    this.styles = {
+      menu: {
+        width: 32 * 18,
+        height: 32 * 13,
+        backgroundColor: 'rgba(0,0,0,.6)'
+      },
+      detail: {
+        x: 32 * 4,
+        width: 32 * 9,
+        height: 32 * 13,
+        borderWidth: 2
+      },
+      select: {
+        width: 32 * 4
+      }
+    };
+  }
+
+  onConfirm = activeIndex => {
+    this.activeIndex = activeIndex;
+  };
+
+  render() {
+    return this.$c("div", {
+      style: this.styles.menu
+    }, this.$c(Select, {
+      options: options,
+      style: this.styles.select,
+      onConfirm: this.onConfirm,
+      onClose: this.props.onClose
+    }), this.activeIndex === -1 ? null : this.$c(Select, {
+      options: detailOption[this.activeIndex],
+      style: this.styles.detail,
+      onConfirm: this.onConfirm,
+      onClose: () => {
+        this.activeIndex = -1;
+      }
+    }));
+  }
+
+}
+
+class Shop extends Component {
+  styles = {
+    shop: {
+      x: 2 * 32,
+      y: 2 * 32,
+      height: 32 * 7,
+      width: 32 * 9,
+      fontSize: 24,
+      borderWidth: 4,
+      borderColor: '#deb887',
+      textAlign: 'center',
+      backgroundImage: 'ground.png'
+    },
+    title: {
+      x: 16 * 9,
+      y: 16
+    },
+    text: {
+      x: 0,
+      y: 48,
+      fontSize: 14
+    },
+    select: {
+      x: 32 * 2,
+      y: 112,
+      width: 32 * 5,
+      fontSize: 16
+    }
+  };
+
+  create() {
+    this.shop = window.$res.shop[this.props.shopid];
+  }
+
+  onConfirm = index => {
+    const {
+      need,
+      effect
+    } = this.shop.choices[index];
+    this.props.onShopEvent(need, effect);
+  };
+
+  render() {
+    return this.$c("div", {
+      style: this.styles.shop
+    }, this.$c("div", {
+      style: this.styles.title
+    }, this.shop.title), this.$c("div", {
+      style: this.styles.text
+    }, this.shop.text.split(/\n/).map((text, index) => this.$c("div", {
+      style: {
+        x: 16 * 9,
+        y: index * 16
+      }
+    }, text))), this.$c(Select, {
+      options: this.shop.choices,
+      onConfirm: this.onConfirm,
+      style: this.styles.select,
+      onClose: this.props.onClose
+    }));
+  }
+
+}
+
+class Battle extends KeyEventComponent {
+  tick = 0;
+  styles = {
+    battle: {
+      x: 48,
+      y: 48,
+      width: 32 * 15,
+      height: 32 * 10,
+      fontSize: 16,
+      borderWidth: 3,
+      borderColor: '#deb887',
+      font: '32px sans-serif',
+      swidth: 640,
+      sheight: 320
+    },
+    enemy: {
+      x: 32 * 1,
+      y: 32 * 1
+    },
+    hero: {
+      x: 32 * 10,
+      y: 32 * 1
+    }
+  };
+
+  create() {
+    this.enemy = JSON.parse(JSON.stringify(this.props.enemy));
+    this.hero = this.props.hero;
+  }
+
+  onKeyDown() {
+    if (this.battleMsg) {
+      this.props.onClose && this.props.onClose();
+    }
+  }
+
+  render() {
+    const enemy = this.enemy;
+    const hero = this.hero;
+    const tick = location.hostname === 'localhost' ? 1 : 5;
+
+    if (enemy.hp > 0) {
+      this.tick++;
+
+      if (this.tick === tick) {
+        if (this.turn) {
+          const atk = enemy.atk - hero.def;
+
+          if (atk > 0) {
+            hero.hp -= atk;
+          }
+        } else {
+          const atk = hero.atk - enemy.def;
+
+          if (atk > 0) {
+            enemy.hp -= atk;
+          }
+
+          if (enemy.hp <= 0) {
+            enemy.hp = 0;
+            const {
+              exp,
+              money
+            } = enemy;
+            hero.exp += exp;
+            this.props.saveData.money += money;
+            this.battleMsg = `战斗胜利，获得${money}金币，${exp}经验`;
+          }
+        }
+
+        this.turn = !this.turn;
+        this.tick = 0;
+      }
+    }
+
+    const proprety = [{
+      text: '名称',
+      key: 'name'
+    }, {
+      text: '生命',
+      key: 'hp'
+    }, {
+      text: '攻击',
+      key: 'atk'
+    }, {
+      text: '防御',
+      key: 'def'
+    }];
+    const heroImageStyle = {
+      x: 32,
+      y: 32 * 4.5,
+      swidth: 32,
+      sheight: 32,
+      width: 64,
+      height: 64,
+      sy: 0
+    };
+    const enemyImageStyle = {
+      x: 32,
+      y: 32 * 4.5,
+      swidth: 32,
+      sheight: 32,
+      width: 64,
+      height: 64,
+      sy: enemy.sy * 32
+    };
+    const size = 64;
+    const vsStyle = {
+      font: `bold ${size}px sans-serif`,
+      x: 32 * (5 + 1.5),
+      y: 32 * 2,
+      height: size,
+      width: size
+    };
+    const msgStyle = {
+      fontSize: 24,
+      height: 32,
+      y: 32 * 8,
+      width: 32 * 15
+    };
+    return this.$c("img", {
+      src: "Battlebacks/mota.jpg",
+      style: this.styles.battle
+    }, this.battleMsg && this.$c("div", {
+      style: msgStyle
+    }, this.battleMsg), this.$c("div", {
+      style: this.styles.enemy
+    }, this.$c("img", {
+      src: "enemys.png",
+      style: enemyImageStyle
+    }), proprety.map((item, index) => {
+      return this.$c("div", {
+        style: {
+          x: 0 * 32,
+          y: index * 32
+        }
+      }, this.$c("div", {
+        style: {
+          width: 32 * 4,
+          textAlign: 'left',
+          height: 32
+        }
+      }, item.text), this.$c("div", {
+        style: {
+          width: 32 * 4,
+          textAlign: 'right',
+          height: 32
+        }
+      }, enemy[item.key]));
+    })), this.$c("div", {
+      style: vsStyle
+    }, "VS"), this.$c("div", {
+      style: this.styles.hero
+    }, this.$c("img", {
+      src: "Characters/hero.png",
+      style: heroImageStyle
+    }), proprety.map((item, index) => {
+      return this.$c("div", {
+        style: {
+          x: 0 * 32,
+          y: index * 32
+        }
+      }, this.$c("div", {
+        style: {
+          width: 32 * 4,
+          textAlign: 'left',
+          height: 32
+        }
+      }, hero[item.key]), this.$c("div", {
+        style: {
+          width: 32 * 4,
+          textAlign: 'right',
+          height: 32
+        }
+      }, item.text));
+    })));
+  }
+
+}
+
+class Talk extends KeyEventComponent {
+  width = 7;
+  styles = {
+    talk: {
+      width: 32 * this.width,
+      height: 32 * 1,
+      backgroundColor: 'black',
+      borderWidth: 2,
+      borderColor: 'white',
+      fontSize: 16,
+      textAlign: 'left',
+      textBaseline: 'middle'
+    }
+  };
+  index = 0;
+
+  onKeyDown({
+    code
+  }) {
+    if (code === 'Space') {
+      this.index++;
+
+      if (this.index === this.props.talk.length) {
+        this.props.onConfirm();
+      } else {
+        this.create();
+      }
+    }
+  }
+
+  create() {
+    this.turn = !this.turn;
+    const talks = this.props.talk[this.index].split(/\n/);
+    this.current = [];
+    talks.forEach(talk => {
+      for (let i = 0; i < talk.length; i = i + 7 * 2) {
+        this.current.push(talk.substr(i, 7 * 2));
+      }
+    });
+    const leftStyle = {
+      x: 32 * 2,
+      y: 32 * 2,
+      height: 32 * this.current.length
+    };
+    const rightStyle = {
+      x: 32 * 4,
+      y: 32 * 6,
+      height: 32 * this.current.length
+    };
+    Object.assign(this.styles.talk, this.turn ? leftStyle : rightStyle);
+  }
+
+  render() {
+    return this.$c("div", {
+      style: this.styles.talk
+    }, this.current.map((talk, index) => {
+      return this.$c("div", {
+        style: {
+          x: 0,
+          y: 32 * index,
+          width: 32 * this.width,
+          height: 32
+        }
+      }, talk);
+    }));
+  }
+
+}
+
+function calcLength(str) {
+  let len = 0;
+
+  for (let i = 0; i < str.length; i++) {
+    if (str.charCodeAt(i) > 127) {
+      len += 2;
+    } else {
+      len += 1;
+    }
+  }
+
+  return len;
+}
+
+class Message extends Component {
+  create() {
+    if (this.props) {
+      this.tick = this.props.tick || 120;
+    }
+
+    this.length = calcLength(this.props.msg);
+    this.msg = this.props.msg;
+  }
+
+  render() {
+    this.tick--;
+
+    if (this.tick === 0) {
+      this.props.onMessageClose();
+      return null;
+    }
+
+    let globalAlpha = 1;
+
+    if (this.tick < 30) {
+      globalAlpha = this.tick / 30;
+    }
+
+    const fontSize = 18;
+    const style = {
+      textAlign: 'left',
+      fontSize,
+      backgroundColor: 'rgba(0,0,0,.7)',
+      globalAlpha,
+      x: 0,
+      y: 0,
+      height: 32,
+      width: fontSize / 2 * this.length + 10
+    };
+    return this.$c("div", {
+      style: style
+    }, this.$c("div", {
+      style: {
+        x: 5,
+        height: 32
+      }
+    }, this.msg));
+  }
+
+}
+
+class Hero$1 extends KeyEventComponent {
+  onKeyDown({
+    code
+  }) {
+    if (code === 'KeyX') {
+      this.props.onClose();
+    }
+  }
+
+  render() {
+    const enemys = Object.keys(this.props.enemys);
+    return this.$c("div", {
+      style: {
+        textAlign: 'left',
+        fontSize: 16,
+        backgroundColor: 'rgba(0,0,0,.8)',
+        width: 32 * 18,
+        height: 32 * 13
+      }
+    }, this.$c("div", {
+      style: {
+        x: 32,
+        y: 32
+      }
+    }, this.$c("div", {
+      style: {
+        x: 32 * 1,
+        height: 32
+      }
+    }, "\u540D\u5B57"), this.$c("div", {
+      style: {
+        x: 32 * 4,
+        height: 32
+      }
+    }, "\u751F\u547D"), this.$c("div", {
+      style: {
+        x: 32 * 6,
+        height: 32
+      }
+    }, "\u653B\u51FB"), this.$c("div", {
+      style: {
+        x: 32 * 8,
+        height: 32
+      }
+    }, "\u9632\u5FA1"), this.$c("div", {
+      style: {
+        x: 32 * 10,
+        height: 32
+      }
+    }, "\u635F\u5931"), enemys.map((enemyId, index) => {
+      const style = {
+        x: 0,
+        y: index * 32 + 32,
+        height: 32
+      };
+      const enemy = window.$res.enemys[enemyId];
+      const hero = this.props.saveData.hero;
+      let cost = 0;
+
+      if (hero.atk > enemy.def) {
+        if (hero.def >= enemy.atk || enemy.hp / (hero.atk - enemy.def) <= hero.hp / (enemy.atk - hero.def)) {
+          if (hero.def >= enemy.atk) {
+            cost = 0;
+          } else {
+            const atkCount = Math.floor(enemy.hp / (hero.atk - enemy.def));
+            cost = (enemy.atk - hero.def) * atkCount;
+          }
+        } else {
+          cost = '-';
+        }
+      } else {
+        cost = '-';
+      }
+
+      return this.$c("div", {
+        style: style
+      }, this.$c("img", {
+        src: "enemys.png",
+        alt: "",
+        style: {
+          height: 32,
+          width: 32,
+          sy: enemy.sy * 32
+        }
+      }), this.$c("div", {
+        style: {
+          x: 32 * 1,
+          height: 32
+        }
+      }, enemy.name), this.$c("div", {
+        style: {
+          x: 32 * 4,
+          height: 32
+        }
+      }, enemy.hp), this.$c("div", {
+        style: {
+          x: 32 * 6,
+          height: 32
+        }
+      }, enemy.atk), this.$c("div", {
+        style: {
+          x: 32 * 8,
+          height: 32
+        }
+      }, enemy.def), this.$c("div", {
+        style: {
+          x: 32 * 10,
+          height: 32
+        }
+      }, cost));
+    })));
+  }
+
+}
+
+class ShopList extends Component {
+  style = {
+    x: 32 * 3,
+    y: 32 * 2,
+    height: 32 * 8,
+    width: 32 * 7,
+    backgroundImage: 'ground.png',
+    borderWidth: 4,
+    borderColor: '#deb887'
+  };
+
+  create() {
+    const shops = this.props.saveData.shops || [];
+    this.options = Object.entries(shops).map(([shopid, text]) => {
+      return {
+        text,
+        shopid
+      };
+    });
+  }
+
+  onConfirm = index => {
+    const {
+      shopid
+    } = this.options[index];
+    this.props.onConfirm(shopid);
+  };
+
+  render() {
+    return this.$c("div", {
+      style: this.style
+    }, this.$c("div", {
+      style: {
+        height: 32,
+        width: 32 * 7,
+        fontSize: 24
+      }
+    }, "\u5546\u5E97\u9009\u62E9"), this.$c(Select, {
+      style: {
+        x: 32,
+        y: 48,
+        width: 160
+      },
+      options: this.options,
+      onConfirm: this.onConfirm,
+      onClose: this.props.onClose
+    }));
+  }
+
+}
+
+function isCoincided(A, B) {
+  if (A.x >= B.x + B.width || A.x + A.width <= B.x || A.y >= B.y + B.height || A.y + A.height <= B.y) {
+    return false;
+  }
+
+  return true;
+}
+function updateVector(vector, obj) {
+  vector = Object.assign(Object.create(null), vector);
+  Object.entries(obj).forEach(([key, value]) => {
+    vector[key] += value;
+  });
+  return vector;
+}
+function assignVector(vector, obj) {
+  return Object.assign(vector, obj);
+}
+
+function convertPropertyStr(str) {
+  const arr = str.split('.');
+
+  if (arr.length === 1) {
+    arr.unshift('');
+  }
+
+  const [key, propertyStr] = arr;
+  const properties = propertyStr.split(';').map(v => v.split(':'));
+  return [key, properties];
+}
+const formatText = data => {
+  const o = [];
+  data = data.split(/\r?\n/);
+  const keys = data.shift().split(',');
+  data.forEach((row, index) => {
+    if (!row.trim()) {
+      return;
+    }
+
+    const properties = row.split(',');
+    const [id] = properties;
+    const item = {
+      sy: index
+    };
+    keys.forEach((key, index) => {
+      const value = properties[index];
+
+      if (!value) {
+        return;
+      }
+
+      if (key === 'property') {
+        item[key] = convertPropertyStr(value);
+      } else if (['id', 'name', 'type'].includes(key)) {
+        item[key] = value;
+      } else {
+        if (isNaN(value)) {
+          debugger;
+        }
+
+        item[key] = Number(value);
+      }
+    });
+    o[id] = item;
+    o.push(item);
+    return data;
+  });
+  return o;
+};
+
+const propertyNames = {
+  lv: '等级',
+  money: '金币',
+  hp: '生命',
+  atk: '攻击',
+  def: '防御',
+  exp: '经验'
+};
+class Hero extends KeyEventComponent {
+  tick = 0;
+
+  create() {
+    const hero = Object.assign(this.props.saveData.position, {
+      width: 32,
+      height: 32
+    });
+    this.styles = {
+      hero
+    };
+  }
+
+  isCoincidedTerrains(heroStyle) {
+    return this.props.mapTerrains.findIndex(item => item && item && isCoincided(item.props.style, heroStyle));
+  }
+
+  isCoincidedEvents(heroStyle) {
+    return this.props.mapEvents.findIndex(item => item && item && isCoincided(item.props.style, heroStyle));
+  }
+
+  onKeyDown(e) {
+    const {
+      code
+    } = e;
+    const styleHero = this.styles.hero;
+    const step = 32;
+    let moveVector = null;
+
+    if (code === 'ArrowDown') {
+      moveVector = {
+        y: step
+      };
+      styleHero.sy = 0;
+    } else if (code === 'ArrowUp') {
+      moveVector = {
+        y: -step
+      };
+      styleHero.sy = 96;
+    } else if (code === 'ArrowLeft') {
+      moveVector = {
+        x: -step
+      };
+      styleHero.sy = 32;
+    } else if (code === 'ArrowRight') {
+      moveVector = {
+        x: step
+      };
+      styleHero.sy = 64;
+    } else if (code === 'KeyS') {
+      saveGame(this.props.saveData);
+      this.msg = '存储成功';
+    } else if (code === 'KeyL') {
+      this.props.onLoadMap(loadGame());
+    } else if (code === 'KeyX') {
+      this.showEnemyInfo = !this.showEnemyInfo;
+    } else if (code === 'KeyB') {
+      this.buying = true;
+    } else if (code === 'PageUp') {
+      console.log(this.props);
+    } else if (code === 'PageUp') {
+      console.log(this.props);
+    }
+
+    if (moveVector) {
+      const vector = updateVector(styleHero, moveVector);
+      const terrain = this.isCoincidedTerrains(vector);
+
+      if (terrain !== -1) {
+        return;
+      }
+
+      const eventIndex = this.isCoincidedEvents(vector);
+
+      if (eventIndex !== -1) {
+        if (this.handleEvents(this.props.map.mapEvents[eventIndex])) {
+          assignVector(styleHero, vector);
+        }
+
+        return;
+      }
+
+      assignVector(styleHero, vector);
+    }
+  }
+
+  onShopClose = () => {
+    this.shopid = null;
+    this.setEvent();
+  };
+
+  handleEvents(mapEvent) {
+    if (this.mapEvent) {
+      debugger;
+      return;
+    }
+
+    if (mapEvent[3]) {
+      this.mapEvent = mapEvent;
+      this.eventIndex = 0;
+      this.setEvent();
+    } else {
+      const info = window.$res.mapping[mapEvent[2]];
+      const {
+        name,
+        type
+      } = info;
+
+      if (type === 'items') {
+        const item = window.$res.items[name];
+        const {
+          type
+        } = item;
+
+        if (type === '1') {
+          this.remove(mapEvent);
+          this.updateSaveData('items', name);
+          this.msg = `获得${item.name}`;
+        } else if (type === '2') {
+          this.remove(mapEvent);
+          this.updateSaveData(...item.property);
+          const [name, property] = item.property;
+          this.msg = `获得${item.name}`;
+          property.forEach(property => {
+            const [key, value] = property;
+            let propertyName = key;
+
+            if (name === 'hero') {
+              propertyName = propertyNames[key];
+            } else if (name === 'items') {
+              propertyName = window.$res.items[key].name;
+            } else if (key === 'money') {
+              propertyName = '金币';
+            }
+
+            this.msg += ` ${propertyName}${value > 0 ? '+' : '-'}${value}`;
+          });
+        }
+
+        return true;
+      } else if (type === 'enemys') {
+        mapEvent[3] = [{
+          type: 'enemy',
+          data: name
+        }];
+        this.handleEvents(mapEvent);
+        return false;
+      } else if (type === 'terrains') {
+        if (['yellowDoor', 'redDoor', 'blueDoor', 'steelDoor', 'specialDoor'].includes(name)) {
+          const key = name.slice(0, -4) + 'Key';
+
+          if (this.props.saveData.items[key]) {
+            this.props.saveData.items[key]--;
+            this.remove(mapEvent);
+            return true;
+          }
+        }
+      }
+    }
+  }
+
+  setEvent = () => {
+    if (this.eventIndex < this.mapEvent[3].length) {
+      const event = this.mapEvent[3][this.eventIndex++];
+      const {
+        type,
+        data
+      } = event;
+
+      if (type === 'talk') {
+        this.talk = data;
+        return;
+      } else if (type === 'mapLoad') {
+        this.props.onLoadMap(data);
+      } else if (type === 'openShop') {
+        this.shopid = event.id;
+        this.props.saveData.shops = this.props.saveData.shops || {};
+        this.props.saveData.shops[this.shopid] = window.$res.shop[this.shopid].title;
+        return;
+      } else if (type === 'getItems') {
+        this.updateSaveData('items', data);
+      } else if (type === 'removeSelf') {
+        this.remove(this.mapEvent);
+        return;
+      } else if (type === 'moveBlock') {
+        console.log(this.mapEvent);
+        this.remove(this.mapEvent);
+        return;
+      } else if (type === 'enemy') {
+        const enemy = window.$res.enemys[data];
+        const hero = this.props.saveData.hero;
+
+        if (hero.atk > enemy.def) {
+          if (hero.def >= enemy.atk || enemy.hp / (hero.atk - enemy.def) <= hero.hp / (enemy.atk - hero.def)) {
+            this.enemy = enemy;
+            return;
+          } else {
+            this.mapEvent = null;
+            this.eventIndex = 0;
+            this.msg = `你打不过${enemy.name}`;
+            return;
+          }
+        } else {
+          this.mapEvent = null;
+          this.eventIndex = 0;
+          this.msg = `你的攻击比${enemy.name}的防御低`;
+          return;
+        }
+      } else if (type === 'updateSaveData') {
+        this.updateSaveData(...convertPropertyStr(data));
+      } else if (type === 'removeBlock') {
+        this.props.removeMapEvent(data);
+      } else if (type === 'title') {
+        this.props.onTitle();
+      } else if (type === 'removeMapBlock') {
+        const {
+          mapId,
+          position
+        } = data;
+        const {
+          x,
+          y
+        } = position;
+        this.props.saveData.destroy[[mapId, x, y]] = true;
+      } else if (type === 'if') {
+        const {
+          condition,
+          true: trueEvent,
+          false: falseEvent
+        } = event;
+        this.mapEvent = null;
+        this.eventIndex = 0;
+
+        if (this.checkSaveData(...convertPropertyStr(condition))) {
+          this.mapEvent = [0, 0, 0, trueEvent];
+        } else {
+          this.mapEvent = [0, 0, 0, falseEvent];
+        }
+      } else {
+        console.error(event);
+      }
+
+      this.setEvent();
+    } else {
+      this.mapEvent = null;
+    }
+  };
+
+  remove(mapEvent) {
+    this.props.removeMapEvent(mapEvent);
+    this.mapEvent = null;
+  }
+
+  onBattleClose = () => {
+    this.enemy = null;
+    this.props.removeMapEvent(this.mapEvent);
+    this.setEvent();
+  };
+  onConfirm = () => {
+    this.talk = null;
+    this.setEvent();
+  };
+  onMenuClose = () => {
+    this.showMenu = null;
+  };
+  onMessageClose = () => {
+    this.msg = null;
+  };
+
+  updateSaveData(context, gets, n = 1) {
+    if (Array.isArray(gets)) {
+      gets.forEach(([id, value]) => this.updateSaveData(context, id, value));
+    } else if (typeof gets === 'string') {
+      const saveData = context ? this.props.saveData[context] : this.props.saveData;
+      saveData[gets] = saveData[gets] || 0;
+      saveData[gets] += Number(n);
+    } else if (typeof gets === 'object') {
+      this.updateSaveData(context, Object.entries(gets));
+    } else {
+      console.error(gets, n);
+    }
+  }
+
+  checkSaveData(context, gets, n = 1) {
+    if (Array.isArray(gets)) {
+      return gets.some(([id, value]) => this.checkSaveData(context, id, value));
+    } else if (typeof gets === 'string') {
+      const saveData = context ? this.props.saveData[context] : this.props.saveData;
+      saveData[gets] = saveData[gets] || 0;
+      return saveData[gets] + Number(n) >= 0;
+    } else if (typeof gets === 'object') {
+      return this.checkSaveData(context, Object.entries(gets), null, 0);
+    } else {
+      return false;
+    }
+  }
+
+  onShopEvent = (need, effect) => {
+    if (this.checkSaveData(...convertPropertyStr(need))) {
+      this.updateSaveData(...convertPropertyStr(need));
+      this.updateSaveData(...convertPropertyStr(effect));
+    }
+  };
+  onShopListClose = () => {
+    this.buying = false;
+  };
+  onShopListConfirm = shopid => {
+    this.buying = false;
+    this.shopid = shopid;
+    this.mapEvent = [0, 0, 0, []];
+  };
+
+  render() {
+    return this.$c("div", null, this.$c("img", {
+      style: this.styles.hero,
+      src: "Characters/hero.png"
+    }), this.buying && this.$c(ShopList, {
+      saveData: this.props.saveData,
+      onClose: this.onShopListClose,
+      onConfirm: this.onShopListConfirm
+    }), this.shopid && this.$c(Shop, {
+      shopid: this.shopid,
+      saveData: this.props.saveData,
+      onClose: this.onShopClose,
+      onShopEvent: this.onShopEvent
+    }), this.enemy && this.$c(Battle, {
+      enemy: this.enemy,
+      enemyId: this.enemyId,
+      hero: this.props.saveData.hero,
+      saveData: this.props.saveData,
+      onClose: this.onBattleClose
+    }), this.showMenu && this.$c(Menu, {
+      saveData: this.props.saveData,
+      onClose: this.onMenuClose
+    }), this.talk && this.$c(Talk, {
+      talk: this.talk,
+      key: this.talk,
+      onConfirm: this.onConfirm
+    }), this.msg && this.$c(Message, {
+      msg: this.msg,
+      key: this.msg,
+      onMessageClose: this.onMessageClose
+    }), this.showEnemyInfo && this.$c(Hero$1, {
+      enemys: this.props.enemys,
+      saveData: this.props.saveData,
+      onClose: () => this.showEnemyInfo = false
+    }));
+  }
+
+}
+
+class Status extends Component {
+  create() {
+    this.walls = [];
+
+    for (let x = 0; x < 5; x++) {
+      for (let y = 0; y < 13; y++) {
+        if (x === 4 || y === 0 || y === 12) {
+          this.walls.push(this.$c("img", {
+            src: "terrains.png",
+            style: {
+              sx: 0,
+              sy: 32 * 2,
+              x: x * 32,
+              y: y * 32,
+              width: 32,
+              height: 32
+            }
+          }));
+        }
+      }
+    }
+  }
+
+  render() {
+    const map = ['魔塔', this.props.map.name, this.props.saveData.hero.lv, this.props.saveData.hero.hp, this.props.saveData.hero.atk, this.props.saveData.hero.def, this.props.saveData.hero.exp, this.props.saveData.money, this.props.saveData.items.yellowKey, this.props.saveData.items.blueKey, this.props.saveData.items.redKey];
+    const size = 32;
+    const offset = (32 - size) / 2;
+    return this.$c("div", {
+      style: {
+        fontSize: 24
+      }
+    }, this.walls, map.map((value, index) => {
+      return this.$c("div", {
+        style: {
+          y: (index + 1) * 32,
+          wdith: 32,
+          height: 32
+        }
+      }, this.$c("img", {
+        src: "icons.png",
+        style: {
+          x: offset,
+          y: offset,
+          sx: 0,
+          sy: index * 32,
+          wdith: size,
+          height: size,
+          swidth: 32,
+          sheight: 32
+        }
+      }), this.$c("div", {
+        style: {
+          x: 32,
+          height: 32,
+          width: 32 * 3
+        }
+      }, value));
+    }));
+  }
+
+}
+
+class ScrollText extends KeyEventComponent {
+  styles = {
+    text: {
+      fontSize: 20,
+      textAlign: 'left',
+      textBaseline: 'top',
+      x: 32,
+      y: 32 * 5,
+      width: 32 * 18,
+      height: 32 * 13
+    }
+  };
+
+  create() {
+    const {
+      text,
+      bgm
+    } = this.props.map;
+    this.text = text.split('\n');
+    window.$audio.play('bgm', bgm);
+  }
+
+  destroy() {
+    const bgm = this.props.map.bgm;
+    window.$audio.pause('bgm', bgm);
+  }
+
+  onKeyDown({
+    code
+  }) {
+    if (code === 'Space') {
+      if (this.ready) {
+        const {
+          type,
+          data
+        } = this.props.map.event;
+
+        if (type === 'mapLoad') {
+          this.props.onClose(data);
+        } else if (type === 'title') {
+          this.props.onTitle(data);
+        }
+      }
+    }
+  }
+
+  render() {
+    const size = 32;
+    const style = this.styles.text;
+
+    if (style.y > -32 * (this.text.length - 2)) {
+      const y = 1;
+      style.y -= y;
+    } else {
+      this.ready = true;
+    }
+
+    return this.$c("div", {
+      style: this.styles.text,
+      onClick: this.onKeyDown
+    }, this.text.map((text, index) => {
+      const optionStyle = {
+        y: index * size
+      };
+      return this.$c("div", {
+        style: optionStyle
+      }, text);
+    }));
+  }
+
+}
+
+class Map extends Component {
+  tick = 0;
+  interval = 10;
+  styles = {
+    map: {
+      height: 32 * 13,
+      width: 32 * (13 + 5),
+      backgroundImage: 'ground.png'
+    }
+  };
+
+  create() {
+    const bgm = this.props.map.bgm;
+    window.$audio.play('bgm', bgm);
+  }
+
+  destroy() {
+    const bgm = this.props.map.bgm;
+    window.$audio.pause('bgm', bgm);
+  }
+
+  renderMapTerrains(status) {
+    const {
+      mapTerrains
+    } = this.props.map;
+    const tick = this.tick;
+    const terrains = [];
+
+    if (!mapTerrains) {
+      return;
+    }
+
+    mapTerrains.forEach((line, y) => {
+      line.forEach((value, x) => {
+        if (value) {
+          const info = window.$res.mapping[value];
+          const {
+            type,
+            name
+          } = info;
+          const detail = window.$res[type][name];
+          let sx = 0;
+
+          if (info.type === 'animates') {
+            sx = tick % 4 * 32;
+          }
+
+          const style = {
+            sy: detail.sy * 32,
+            sx,
+            x: x * 32,
+            y: y * 32,
+            height: 32,
+            width: 32
+          };
+          terrains.push(this.$c("img", {
+            src: type + '.png',
+            style: style
+          }));
+        } else {
+          return null;
+        }
+      });
+    });
+    return terrains;
+  }
+
+  renderMapEvents() {
+    const {
+      mapId,
+      destroy = {}
+    } = this.props.saveData;
+    const {
+      mapEvents
+    } = this.props.map;
+    const tick = this.tick;
+    const enemys = {};
+    this.enemys = enemys;
+
+    if (mapEvents) {
+      return mapEvents.map(event => {
+        const [x, y, value, events] = event;
+
+        if (value) {
+          const info = window.$res.mapping[value];
+
+          if (info) {
+            const {
+              type,
+              name
+            } = info;
+            const detail = window.$res[type][name];
+            let sx = 0;
+
+            if (type === 'npcs' || type === 'enemys') {
+              sx = tick % 2 * 32;
+            } // terrians items icons npcs enemys
+
+
+            if (destroy[[mapId, x, y]]) {
+              return null;
+            }
+
+            if (type === 'enemys') {
+              enemys[name] = name;
+            }
+
+            return this.$c("div", {
+              style: {
+                x: x * 32,
+                y: y * 32,
+                height: 32,
+                width: 32
+              }
+            }, this.$c("img", {
+              src: type + '.png',
+              style: {
+                sy: detail.sy * 32,
+                sx,
+                height: 32,
+                width: 32
+              }
+            }));
+          } else {
+            debugger;
+          }
+        }
+
+        return null;
+      });
+    }
+  }
+
+  onRemoveMapEvent = mapEvent => {
+    const [x, y] = mapEvent;
+    const mapId = this.props.saveData.mapId;
+    this.props.saveData.destroy = this.props.saveData.destroy || {};
+    this.props.saveData.destroy[[mapId, x, y]] = 1;
+  };
+  onTitle = () => {
+    this.props.onTitle();
+  };
+
+  render() {
+    this.interval--;
+
+    if (this.interval === 0) {
+      this.tick++;
+      this.interval = 10;
+    }
+
+    const mapTerrains = this.renderMapTerrains();
+    const mapEvents = this.renderMapEvents();
+    return this.$c("div", {
+      style: this.styles.map
+    }, this.$c("div", {
+      style: {
+        x: 32 * 13,
+        y: 0
+      }
+    }, this.$c(Status, {
+      saveData: this.props.saveData,
+      map: this.props.map
+    })), mapTerrains, mapEvents, this.$c(Hero, {
+      mapTerrains: mapTerrains,
+      mapEvents: mapEvents,
+      saveData: this.props.saveData,
+      enemys: this.enemys,
+      map: this.props.map,
+      onLoadMap: this.props.onLoadMap,
+      removeMapEvent: this.onRemoveMapEvent,
+      onTitle: this.onTitle
+    }));
+  }
+
+}
+
+const loadImage = src => {
+  return new Promise(function (resolve, reject) {
+    const img = new Image();
+    img.addEventListener('load', () => resolve(img));
+    img.addEventListener('error', () => reject(img));
+    img.src = src;
+  });
+};
+const loadSound = src => {
+  return new Promise(function (resolve, reject) {
+    const audio = new Audio();
+    audio.addEventListener('canplay', () => resolve(audio));
+    audio.addEventListener('error', () => reject(audio));
+    audio.src = src;
+  });
+};
+function loadJSON(url) {
+  return fetch(url).then(data => data.json());
+}
+function loadText(url) {
+  return fetch(url).then(data => data.text()).then(data => formatText(data));
+}
+function checkFont(name, size = 16) {
+  return document.fonts.check(`${size}px ${name}`);
+}
+function loadFont({
+  name,
+  url
+}) {
+  if (checkFont(name)) {
+    return Promise.resolve();
+  }
+
+  const fontface = new FontFace(name, `url("${url}")`);
+  document.fonts.add(fontface);
+  fontface.load();
+  return fontface.loaded;
+}
+
+const resource = {
+  images: {},
+  sounds: {}
+};
+window.$res = resource;
+const loaderMap = ['game.json', 'save.json', 'shop.json', 'mapping.dat'];
+const sprite = ['enemys', 'items', 'animates', 'icons', 'npcs', 'terrains', 'boss'];
+const arr3 = [].concat(loaderMap.map(v => `Data/${v}`), sprite.map(v => `Sprite/${v}.dat`));
+const loaderData = () => Promise.all(arr3.map(url => url.endsWith('.dat') ? loadText(`${url}`) : loadJSON(`${url}`))).then(([game, save, shop, mapping, enemys, items, animates, icons, npcs, terrains, boss]) => {
+  Object.assign(resource, {
+    game,
+    save,
+    shop,
+    mapping,
+    enemys,
+    items,
+    animates,
+    icons,
+    npcs,
+    terrains,
+    boss
+  });
+});
+
+const loadImages = () => {
+  const o = sprite.map(v => `Sprite/${v}.png`);
+  const o2 = ['Characters/hero.png', 'ground.png', 'Battlebacks/mota.jpg'].map(v => `Graph/${v}`);
+  return Promise.all([...o, ...o2].map(src => {
+    return new Promise(resolve => {
+      loadImage(`${src}`).then(img => {
+        src = src.replace('Graph/', '');
+
+        if (src.includes('Sprite')) {
+          src = src.split('/')[1];
+        }
+
+        resource.images[src] = img;
+        resolve();
+      });
+    });
+  }));
+};
+
+const loaderImage = () => Promise.all([loadImages()]);
+const sounds = ['bgm/terror.mp3', 'bgm/prologue.mp3', 'bgm/area1.mp3', 'bgm/area2.mp3', 'bgm/area3.mp3', 'enemy/redWizard.mp3', 'enemy/brownWizard.mp3', 'enemy/whiteKing.mp3', 'enemy/blackMagician.mp3', 'se/attack.mp3', 'se/floor.mp3', 'se/door.mp3', 'se/buy.mp3', 'se/item.mp3', 'se/dialogue.mp3', 'se/unlockCtrl.mp3', 'se/step.mp3', 'se/constants.mp3', 'se/sell.mp3', 'se/load.mp3'];
+const loaderMusic = () => Promise.all([loadSounds(sounds) // loadSounds(sounds.sounds),
+]);
+const loaderFont = font => {
+  return loadFont(font);
+};
+
+const loadSounds = data => {
+  return Promise.all(data.map(sound => loadSound(`Audio/${sound}`))).then(audioes => {
+    audioes.forEach((audio, i) => resource.sounds[data[i]] = audio);
+  });
+};
+
+const loadMap = mapId => {
+  return loadJSON(`Maps/${mapId}.json`);
+};
+
+class Game extends Component {
+  styles = {
+    app: {
+      height: 32 * 13,
+      width: 32 * 18,
+      textAlign: 'center',
+      textBaseline: 'middle'
+    }
+  };
+
+  async loadFont() {
+    this.loading = '加载字体';
+    const font = window.$res.game.font;
+    await loaderFont(font);
+    this.styles.app.fontFamily = font.name;
+  }
+
+  async create() {
+    this.loading = '加载数据';
+    await loaderData();
+    this.loading = '加载图片';
+    await loaderImage();
+    this.loading = '加载音乐';
+    await loaderMusic();
+    this.loading = false;
+    this.saveData = window.$res.save;
+  }
+
+  onLoadMap = async data => {
+    this.loading = '加载地图';
+    Object.assign(this.saveData, data);
+    this.map = await loadMap(this.saveData.mapId);
+    this.loading = false;
+    this.randMapKey = `${this.saveData.mapId} ${new Date()}`;
+  };
+  onTitle = () => {
+    this.map = null;
+  };
+
+  render() {
+    return this.$c("div", {
+      style: this.styles.app
+    }, this.loading ? this.$c(Loading, {
+      msg: this.loading
+    }) : this.map ? this.map.text ? this.$c(ScrollText, {
+      map: this.map,
+      onClose: this.onLoadMap,
+      onTitle: this.onTitle
+    }) : this.$c(Map, {
+      map: this.map,
+      key: this.randMapKey,
+      onLoadMap: this.onLoadMap,
+      saveData: this.saveData,
+      onEvent: this.onEvent
+    }) : this.$c(Title, {
+      onLoadMap: this.onLoadMap
+    }), this.$c(FPS, null));
+  }
+
+}
+
+new Engine(Game);
 //# sourceMappingURL=bundle.js.map

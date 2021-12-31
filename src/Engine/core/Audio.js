@@ -4,16 +4,18 @@ export default class Audio {
     this.audioes = audioes || window.$res.sounds
   }
 
-  play (type, name) {
+  control (type, name, control) {
     this.audioes = window.$res.sounds
-    if (type === 'bgm') {
-      if (this.current) {
-        this.current.pause()
-      }
-    }
-
     this.current = this.audioes[`${type}/${name}`]
     this.current.loop = true
-    this.current.play()
+    this.current[control]()
+  }
+
+  play (type, name) {
+    this.control(type, name, 'play')
+  }
+
+  pause (type, name) {
+    this.control(type, name, 'pause')
   }
 }

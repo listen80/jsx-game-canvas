@@ -8,7 +8,7 @@ export class Component {
   }
 
   $c = createNode
-  $destory () { }
+  $destroy () { }
 }
 
 export class KeyEventComponent extends Component {
@@ -22,7 +22,7 @@ export class KeyEventComponent extends Component {
     curFoucs = this
   }
 
-  destory () {
+  destroy () {
     this.$isFocus = false
     if (this.$preFocus) {
       this.$preFocus.$isFocus = true

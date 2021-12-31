@@ -11,7 +11,7 @@ function destoryInstance (pre) {
   if (!isPrimitive(pre) && !isUndefined(pre)) {
     if (isFunc(pre.tag)) {
       destoryInstance(pre.node)
-      pre.instance.destory && pre.instance.destory()
+      pre.instance.destroy && pre.instance.destroy()
     } else if (Array.isArray(pre)) {
       while (pre.length) {
         destoryInstance(pre.pop())
@@ -24,6 +24,10 @@ function destoryInstance (pre) {
 
 function updateInstance (pre, next) {
   next.instance = pre.instance
+  if (!next.instance) {
+    debugger
+    return
+  }
   next.node = pre.node
   next.instance.props = next.props
   renderNode(next)
@@ -34,41 +38,27 @@ function renderNode (next) {
   next.node = patchNode(next.node, instance.render())
 }
 
-export function patchNodeBak (pre, next) {
-  if (isPrimitive(next) || isUndefined(pre)) {
-    destoryInstance(pre)
-  } else if (this) {
-    //
-  }
-}
-
 export function patchNode (pre, next) {
-  if (pre) {
-    if (next) {
-      if (isFunc(next.tag)) {
-        if (pre.tag === next.tag && (pre.props?.key === next.props?.key)) {
-          updateInstance(pre, next)
-        } else {
-          destoryInstance(pre)
-          createInstance(next)
-        }
-      }
-    } else {
-      destoryInstance(pre)
-    }
-  } else {
-    if (next) {
-      if (isFunc(next.tag)) {
+  if (isPrimitive(next) || isUndefined(next)) {
+    destoryInstance(pre)
+  } else if (isFunc(next.tag)) {
+    if (pre) {
+      if (pre.tag === next.tag && pre.props?.key === next.props?.key) {
+        updateInstance(pre, next)
+      } else {
+        destoryInstance(pre)
         createInstance(next)
       }
+    } else {
+      createInstance(next)
     }
-  }
-
-  const preChildren = (pre || {}).children || []
-  const nextChildren = (next || {}).children || []
-  const length = Math.max(preChildren.length, nextChildren.length)
-  for (let i = 0; i < length; i++) {
-    patchNode(preChildren[i], nextChildren[i])
+  } else if (isArray(next.children)) {
+    const preChildren = pre?.children || []
+    const nextChildren = next.children
+    // todo diff algorithm
+    for (let i = 0; i < next.children.length; i++) {
+      patchNode(preChildren[i], nextChildren[i])
+    }
   }
 
   return next

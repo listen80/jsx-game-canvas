@@ -19,6 +19,11 @@ export default class ScrollText extends KeyEventComponent {
     window.$audio.play('bgm', bgm)
   }
 
+  destroy () {
+    const bgm = this.props.map.bgm
+    window.$audio.pause('bgm', bgm)
+  }
+
   onKeyDown ({ code }) {
     if (code === 'Space') {
       if (this.ready) {
