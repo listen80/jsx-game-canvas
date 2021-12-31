@@ -34,11 +34,7 @@ export default class Title extends Component {
   }
 
   onConfirm = (isLoad) => {
-    this.saveData = Object.assign(
-      window.$res.save,
-      isLoad ? loadGame() : null,
-    )
-    this.props.onLoadMap()
+    this.props.onLoadMap(isLoad ? loadGame() : null)
   }
 
   render () {
