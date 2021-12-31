@@ -1,6 +1,7 @@
 import { Component, KeyEventComponent } from 'Engine'
 
 export default class Talk extends KeyEventComponent {
+  index = 0
   width = 7
   styles = {
     talk: {
@@ -15,21 +16,19 @@ export default class Talk extends KeyEventComponent {
     },
   }
 
-  index = 0
-
   onKeyDown ({ code }) {
     if (code === 'Space') {
       this.index++
       if (this.index === this.props.talk.length) {
         this.props.onConfirm()
       } else {
-        this.create()
+        this.next()
       }
     }
+    window.$audio.play('se', 'dialogue.mp3')
   }
 
-  create () {
-    this.turn = !this.turn
+  next () {
     const talks = this.props.talk[this.index].split(/\n/)
     this.current = []
     talks.forEach((talk) => {
@@ -48,7 +47,12 @@ export default class Talk extends KeyEventComponent {
       y: 32 * 6,
       height: 32 * this.current.length,
     }
+    this.turn = !this.turn
     Object.assign(this.styles.talk, this.turn ? leftStyle : rightStyle)
+  }
+
+  create () {
+    this.next()
   }
 
   render () {

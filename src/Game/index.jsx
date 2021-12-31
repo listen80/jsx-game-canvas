@@ -41,6 +41,7 @@ export default class Game extends Component {
     this.map = await loadMap(this.saveData.mapId)
     this.loading = false
     this.randMapKey = `${this.saveData.mapId} ${new Date()}`
+    window.$audio.play('se', 'floor.mp3')
   };
 
   onTitle = () => {

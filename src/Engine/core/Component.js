@@ -7,8 +7,9 @@ export class Component {
     this.$children = children
   }
 
-  $c = createNode
-  $destroy () { }
+  $c (...argu) {
+    return createNode(...argu)
+  }
 }
 
 export class KeyEventComponent extends Component {
@@ -16,13 +17,16 @@ export class KeyEventComponent extends Component {
     super(...argu)
     if (curFoucs) {
       curFoucs.$isFocus = false
+      curFoucs.$nextFocus = this
     }
     this.$isFocus = true
     this.$preFocus = curFoucs
+    console.warn(this)
     curFoucs = this
   }
 
   destroy () {
+    console.log('in', this)
     this.$isFocus = false
     if (this.$preFocus) {
       this.$preFocus.$isFocus = true

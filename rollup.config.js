@@ -6,13 +6,12 @@ import alias from '@rollup/plugin-alias'
 import { terser } from 'rollup-plugin-terser' // 压缩代码
 import serve from 'rollup-plugin-serve' // 启动服务
 
-import path from 'path'
-
 import replace from 'rollup-plugin-replace' // 注入环境变量
 // import postcss from 'rollup-plugin-postcss';
 // import vue from 'rollup-plugin-vue' // 处理vue的插件ƒ
 // import livereload from 'rollup-plugin-livereload' // 实时刷新
 
+import path from 'path'
 export default {
   input: path.join('src'),
   output: {
@@ -22,7 +21,6 @@ export default {
     alias({
       entries: {
         Engine: path.resolve('src/Engine'),
-        Component: path.resolve('src/Engine'),
       },
     }),
     commonjs(),
@@ -36,13 +34,12 @@ export default {
       babelHelpers: 'bundled', // 多次使用辅助函数只保留一个  比如 class 在转换成es5时会使用多个辅助函数则只保留一个
     }),
     // jsx({
-    //   factory: "h"
-    // })
+    //   factory: 'h',
+    // }),
     // postcss(),
     // vue(),
-    // terser(),
     process.env.NODE_ENV === 'production'
-      ? null
+      ? terser()
       : serve({
         open: true,
         port: 8080,

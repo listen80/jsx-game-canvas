@@ -7,7 +7,7 @@ export default class Audio {
   control (type, name, control) {
     this.audioes = window.$res.sounds
     this.current = this.audioes[`${type}/${name}`]
-    this.current.loop = true
+    this.current.loop = type === 'bgm'
     this.current[control]()
   }
 

@@ -2,9 +2,9 @@ id,name,type,property
 yellowKey,黄钥匙,1,
 blueKey,蓝钥匙,1,
 redKey,红钥匙,1,
-book,圣光徽,1,
-cross,幸运十字架,1,
-compass,风之罗盘,1,
+book,圣光徽,3,
+cross,幸运十字架,3,
+compass,风之罗盘,3,
 redJewel,红宝石,2,hero.atk:3
 blueJewel,蓝宝石,2,hero.def:3
 redPotion,小血瓶,2,hero.hp:200
@@ -19,8 +19,8 @@ smallFly,小飞羽,2,hero.hp:800;lv:1;atk:7;def:7
 bigFly,大飞羽,2,hero.hp:4000;lv:3;atk:30;def:30
 boxKey,钥匙盒,2,items.yellowKey:1;blueKey:1;redKey:1
 moneyPocket,钱袋,2,money:300
-pickaxe,锄头,1,
-holyWater,圣水,1,
-wand0,冰之灵杖,1,
-wand1,炎之灵杖,1,
-wand2,心之灵杖,1,
+pickaxe,锄头,3,
+holyWater,圣水,3,
+wand0,冰之灵杖,3,
+wand1,炎之灵杖,3,
+wand2,心之灵杖,3,

@@ -16,9 +16,9 @@ class Component {
     this.$children = children;
   }
 
-  $c = createNode;
-
-  $destroy() {}
+  $c(...argu) {
+    return createNode(...argu);
+  }
 
 }
 class KeyEventComponent extends Component {
@@ -27,14 +27,17 @@ class KeyEventComponent extends Component {
 
     if (curFoucs) {
       curFoucs.$isFocus = false;
+      curFoucs.$nextFocus = this;
     }
 
     this.$isFocus = true;
     this.$preFocus = curFoucs;
+    console.warn(this);
     curFoucs = this;
   }
 
   destroy() {
+    console.log('in', this);
     this.$isFocus = false;
 
     if (this.$preFocus) {
@@ -572,7 +575,7 @@ class Audio$1 {
   control(type, name, control) {
     this.audioes = window.$res.sounds;
     this.current = this.audioes[`${type}/${name}`];
-    this.current.loop = true;
+    this.current.loop = type === 'bgm';
     this.current[control]();
   }
 
@@ -1090,6 +1093,8 @@ class Battle extends KeyEventComponent {
       this.tick++;
 
       if (this.tick === tick) {
+        window.$audio.play('se', 'attack.mp3');
+
         if (this.turn) {
           const atk = enemy.atk - hero.def;
 
@@ -1226,6 +1231,7 @@ class Battle extends KeyEventComponent {
 }
 
 class Talk extends KeyEventComponent {
+  index = 0;
   width = 7;
   styles = {
     talk: {
@@ -1239,7 +1245,6 @@ class Talk extends KeyEventComponent {
       textBaseline: 'middle'
     }
   };
-  index = 0;
 
   onKeyDown({
     code
@@ -1250,13 +1255,14 @@ class Talk extends KeyEventComponent {
       if (this.index === this.props.talk.length) {
         this.props.onConfirm();
       } else {
-        this.create();
+        this.next();
       }
     }
+
+    window.$audio.play('se', 'dialogue.mp3');
   }
 
-  create() {
-    this.turn = !this.turn;
+  next() {
     const talks = this.props.talk[this.index].split(/\n/);
     this.current = [];
     talks.forEach(talk => {
@@ -1274,7 +1280,12 @@ class Talk extends KeyEventComponent {
       y: 32 * 6,
       height: 32 * this.current.length
     };
+    this.turn = !this.turn;
     Object.assign(this.styles.talk, this.turn ? leftStyle : rightStyle);
+  }
+
+  create() {
+    this.next();
   }
 
   render() {
@@ -1712,10 +1723,11 @@ class Hero extends KeyEventComponent {
           type
         } = item;
 
-        if (type === '1') {
+        if (type === '1' || type === '3') {
           this.remove(mapEvent);
           this.updateSaveData('items', name);
           this.msg = `获得${item.name}`;
+          window.$audio.play('se', type === '1' ? 'item.mp3' : 'constants.mp3');
         } else if (type === '2') {
           this.remove(mapEvent);
           this.updateSaveData(...item.property);
@@ -1735,6 +1747,7 @@ class Hero extends KeyEventComponent {
 
             this.msg += ` ${propertyName}${value > 0 ? '+' : '-'}${value}`;
           });
+          window.$audio.play('se', 'item.mp3');
         }
 
         return true;
@@ -1752,6 +1765,7 @@ class Hero extends KeyEventComponent {
           if (this.props.saveData.items[key]) {
             this.props.saveData.items[key]--;
             this.remove(mapEvent);
+            window.$audio.play('se', 'door.mp3');
             return true;
           }
         }
@@ -1973,14 +1987,18 @@ class Status extends Component {
   }
 
   render() {
-    const map = ['魔塔', this.props.map.name, this.props.saveData.hero.lv, this.props.saveData.hero.hp, this.props.saveData.hero.atk, this.props.saveData.hero.def, this.props.saveData.hero.exp, this.props.saveData.money, this.props.saveData.items.yellowKey, this.props.saveData.items.blueKey, this.props.saveData.items.redKey];
+    const {
+      saveData,
+      map
+    } = this.props;
+    const rowProperty = [window.$res.game.title, map.name, saveData.hero.lv, saveData.hero.hp, saveData.hero.atk, saveData.hero.def, saveData.hero.exp, saveData.money, saveData.items.yellowKey, saveData.items.blueKey, saveData.items.redKey];
     const size = 32;
     const offset = (32 - size) / 2;
     return this.$c("div", {
       style: {
         fontSize: 24
       }
-    }, this.walls, map.map((value, index) => {
+    }, this.walls, rowProperty.map((value, index) => {
       return this.$c("div", {
         style: {
           y: (index + 1) * 32,
@@ -2299,16 +2317,16 @@ function loadFont({
   return fontface.loaded;
 }
 
-const resource = {
+const $res = {
   images: {},
   sounds: {}
 };
-window.$res = resource;
+window.$res = $res;
 const loaderMap = ['game.json', 'save.json', 'shop.json', 'mapping.dat'];
 const sprite = ['enemys', 'items', 'animates', 'icons', 'npcs', 'terrains', 'boss'];
 const arr3 = [].concat(loaderMap.map(v => `Data/${v}`), sprite.map(v => `Sprite/${v}.dat`));
 const loaderData = () => Promise.all(arr3.map(url => url.endsWith('.dat') ? loadText(`${url}`) : loadJSON(`${url}`))).then(([game, save, shop, mapping, enemys, items, animates, icons, npcs, terrains, boss]) => {
-  Object.assign(resource, {
+  Object.assign($res, {
     game,
     save,
     shop,
@@ -2335,7 +2353,7 @@ const loadImages = () => {
           src = src.split('/')[1];
         }
 
-        resource.images[src] = img;
+        $res.images[src] = img;
         resolve();
       });
     });
@@ -2352,7 +2370,7 @@ const loaderFont = font => {
 
 const loadSounds = data => {
   return Promise.all(data.map(sound => loadSound(`Audio/${sound}`))).then(audioes => {
-    audioes.forEach((audio, i) => resource.sounds[data[i]] = audio);
+    audioes.forEach((audio, i) => $res.sounds[data[i]] = audio);
   });
 };
 
@@ -2394,6 +2412,7 @@ class Game extends Component {
     this.map = await loadMap(this.saveData.mapId);
     this.loading = false;
     this.randMapKey = `${this.saveData.mapId} ${new Date()}`;
+    window.$audio.play('se', 'floor.mp3');
   };
   onTitle = () => {
     this.map = null;

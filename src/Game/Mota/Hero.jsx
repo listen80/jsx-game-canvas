@@ -115,10 +115,11 @@ export default class Hero extends KeyEventComponent {
       if (type === 'items') {
         const item = window.$res.items[name]
         const { type } = item
-        if (type === '1') {
+        if (type === '1' || type === '3') {
           this.remove(mapEvent)
           this.updateSaveData('items', name)
           this.msg = `获得${item.name}`
+          window.$audio.play('se', type === '1' ? 'item.mp3' : 'constants.mp3')
         } else if (type === '2') {
           this.remove(mapEvent)
           this.updateSaveData(...item.property)
@@ -136,6 +137,7 @@ export default class Hero extends KeyEventComponent {
             }
             this.msg += ` ${propertyName}${value > 0 ? '+' : '-'}${value}`
           })
+          window.$audio.play('se', 'item.mp3')
         }
         return true
       } else if (type === 'enemys') {
@@ -161,6 +163,7 @@ export default class Hero extends KeyEventComponent {
           if (this.props.saveData.items[key]) {
             this.props.saveData.items[key]--
             this.remove(mapEvent)
+            window.$audio.play('se', 'door.mp3')
             return true
           }
         }

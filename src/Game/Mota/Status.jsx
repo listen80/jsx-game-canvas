@@ -14,25 +14,26 @@ export default class Status extends Component {
   }
 
   render () {
-    const map = [
-      '魔塔',
-      this.props.map.name,
-      this.props.saveData.hero.lv,
-      this.props.saveData.hero.hp,
-      this.props.saveData.hero.atk,
-      this.props.saveData.hero.def,
-      this.props.saveData.hero.exp,
-      this.props.saveData.money,
-      this.props.saveData.items.yellowKey,
-      this.props.saveData.items.blueKey,
-      this.props.saveData.items.redKey,
+    const { saveData, map } = this.props
+    const rowProperty = [
+      window.$res.game.title,
+      map.name,
+      saveData.hero.lv,
+      saveData.hero.hp,
+      saveData.hero.atk,
+      saveData.hero.def,
+      saveData.hero.exp,
+      saveData.money,
+      saveData.items.yellowKey,
+      saveData.items.blueKey,
+      saveData.items.redKey,
     ]
     const size = 32
     const offset = (32 - size) / 2
     return (
       <div style={{ fontSize: 24 }}>
         {this.walls}
-        {map.map((value, index) => {
+        {rowProperty.map((value, index) => {
           return <div style={{ y: (index + 1) * 32, wdith: 32, height: 32 }}>
             <img src="icons.png" style={{ x: offset, y: offset, sx: 0, sy: index * 32, wdith: size, height: size, swidth: 32, sheight: 32 }} />
             <div style={{ x: 32, height: 32, width: 32 * 3 }}>{value}</div>

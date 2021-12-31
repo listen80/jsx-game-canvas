@@ -1,11 +1,11 @@
 import { loadImage, loadSound, loadJSON, loadFont, loadText } from './http'
 
-const resource = {
+const $res = {
   images: {},
   sounds: {},
 }
 
-window.$res = resource
+window.$res = $res
 
 const loaderMap = [
   'game.json',
@@ -28,7 +28,7 @@ const arr3 = [].concat(loaderMap.map(v => `Data/${v}`), sprite.map(v => `Sprite/
 
 export const loaderData = () => Promise.all(arr3.map(url => url.endsWith('.dat') ? loadText(`${url}`) : loadJSON(`${url}`)))
   .then(([game, save, shop, mapping, enemys, items, animates, icons, npcs, terrains, boss]) => {
-    Object.assign(resource, { game, save, shop, mapping, enemys, items, animates, icons, npcs, terrains, boss })
+    Object.assign($res, { game, save, shop, mapping, enemys, items, animates, icons, npcs, terrains, boss })
   })
 
 const loadImages = () => {
@@ -42,7 +42,7 @@ const loadImages = () => {
         if (src.includes('Sprite')) {
           src = src.split('/')[1]
         }
-        resource.images[src] = img
+        $res.images[src] = img
         resolve()
       })
     })
@@ -84,7 +84,7 @@ export const loaderFont = (font) => {
 
 const loadSounds = data => {
   return Promise.all(data.map(sound => loadSound(`Audio/${sound}`))).then(audioes => {
-    audioes.forEach((audio, i) => (resource.sounds[data[i]] = audio))
+    audioes.forEach((audio, i) => ($res.sounds[data[i]] = audio))
   })
 }
 
