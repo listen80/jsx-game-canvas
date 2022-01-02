@@ -109,6 +109,7 @@ class UI {
     this.mergeStyle(baseStyle);
     this.mouseEvents = [];
     this.keyEvents = [];
+    this.onMouseClick = [];
     this.bind();
   }
 
@@ -504,10 +505,10 @@ class UI {
                 event
               };
             } else if (name === 'onClick') {
-              this.onMouseClick = {
+              this.onMouseClick.push({
                 node,
                 event
-              };
+              });
             }
           }
         });
@@ -536,21 +537,17 @@ class UI {
     //   }
     // }
 
-    if (this.onMouseClick) {
+    this.onMouseClick.forEach(({
+      node,
+      event
+    }) => {
       var _node$props;
-
-      const {
-        node,
-        event
-      } = this.onMouseClick;
 
       if (node !== null && node !== void 0 && (_node$props = node.props) !== null && _node$props !== void 0 && _node$props.onClick) {
         node.props.onClick(event);
       }
-
-      this.onMouseClick = null;
-    }
-
+    });
+    this.onMouseClick = [];
     this.mouseEvents = [];
     this.moveEvent = null;
     this.moveEventTarget = null;
@@ -2041,8 +2038,7 @@ class ScrollText extends KeyEventComponent {
       x: 0,
       y: 0,
       width: 32 * 18,
-      height: 32 * 13,
-      backgroundColor: 'red'
+      height: 32 * 13
     },
     scroll: {
       x: 32,
@@ -2068,11 +2064,11 @@ class ScrollText extends KeyEventComponent {
     code
   }) {
     if (code === 'Space') {
-      this.next();
+      this.onClick();
     }
   }
 
-  next() {
+  onClick = () => {
     if (this.ready) {
       const {
         type,
@@ -2085,7 +2081,7 @@ class ScrollText extends KeyEventComponent {
         this.props.onTitle(data);
       }
     }
-  }
+  };
 
   render() {
     const size = 32;
@@ -2100,7 +2096,7 @@ class ScrollText extends KeyEventComponent {
 
     return this.$c("div", {
       style: this.styles.text,
-      onClick: this.next
+      onClick: this.onClick
     }, this.$c("div", {
       style: this.styles.scroll
     }, this.text.map((text, index) => this.$c("div", {

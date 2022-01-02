@@ -26,6 +26,7 @@ export default class UI {
 
     this.mouseEvents = []
     this.keyEvents = []
+    this.onMouseClick = []
     this.bind()
   }
 
@@ -271,7 +272,7 @@ export default class UI {
             if (name === 'onMouseMove') {
               this.onMouseMove = { node, event }
             } else if (name === 'onClick') {
-              this.onMouseClick = { node, event }
+              this.onMouseClick.push({ node, event })
             }
           }
         })
@@ -298,13 +299,12 @@ export default class UI {
     //     moveEventTarget.props.onMouseEnter && moveEventTarget.props.onMouseEnter()
     //   }
     // }
-    if (this.onMouseClick) {
-      const { node, event } = this.onMouseClick
+    this.onMouseClick.forEach(({ node, event }) => {
       if (node?.props?.onClick) {
         node.props.onClick(event)
       }
-      this.onMouseClick = null
-    }
+    })
+    this.onMouseClick = []
     this.mouseEvents = []
     this.moveEvent = null
     this.moveEventTarget = null
