@@ -1,6 +1,6 @@
 import { KeyEventComponent } from 'Engine'
 
-export default class Hero extends KeyEventComponent {
+export default class EnemyInfo extends KeyEventComponent {
   onKeyDown ({ code }) {
     if (code === 'KeyX') {
       this.props.onClose()

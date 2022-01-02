@@ -601,7 +601,7 @@ function destoryInstance(pre) {
     if (isFunc(pre.tag)) {
       destoryInstance(pre.node);
       pre.instance.destroy && pre.instance.destroy();
-    } else if (Array.isArray(pre)) {
+    } else if (isArray(pre)) {
       while (pre.length) {
         destoryInstance(pre.pop());
       }
@@ -613,68 +613,44 @@ function destoryInstance(pre) {
 
 function updateInstance(pre, next) {
   next.instance = pre.instance;
-
-  if (!next.instance) {
-    debugger;
-    return;
-  }
-
   next.node = pre.node;
   next.instance.props = next.props;
   renderNode(next);
 }
 
 function renderNode(next) {
-  const instance = next.instance;
-  next.node = patchNode(next.node, instance.render());
+  next.node = patchNode(next.node, next.instance.render());
 }
-
 function patchNode(pre, next) {
-  var _pre$tag;
+  if (pre) {
+    if (next) {
+      if (isFunc(next.tag)) {
+        var _pre$props2, _next$props2;
 
-  if ((pre === null || pre === void 0 ? void 0 : (_pre$tag = pre.tag) === null || _pre$tag === void 0 ? void 0 : _pre$tag.name) === 'ShopList') {
-    var _pre$tag2;
-
-    if ((pre === null || pre === void 0 ? void 0 : (_pre$tag2 = pre.tag) === null || _pre$tag2 === void 0 ? void 0 : _pre$tag2.name) !== 'ShopList') {
-      debugger;
+        if (pre.tag === next.tag && ((_pre$props2 = pre.props) === null || _pre$props2 === void 0 ? void 0 : _pre$props2.key) === ((_next$props2 = next.props) === null || _next$props2 === void 0 ? void 0 : _next$props2.key)) {
+          updateInstance(pre, next);
+        } else {
+          destoryInstance(pre);
+          createInstance(next);
+        }
+      }
+    } else {
+      destoryInstance(pre);
+    }
+  } else {
+    if (next) {
+      if (isFunc(next.tag)) {
+        createInstance(next);
+      }
     }
   }
 
-  if (isPrimitive(next) || isUndefined(next)) {
-    destoryInstance(pre);
-  } else if (isFunc(next.tag)) {
-    if (pre) {
-      var _pre$props, _next$props;
+  const preChildren = (pre || {}).children || [];
+  const nextChildren = (next || {}).children || [];
+  const length = Math.max(preChildren.length, nextChildren.length);
 
-      if (pre.tag === next.tag && ((_pre$props = pre.props) === null || _pre$props === void 0 ? void 0 : _pre$props.key) === ((_next$props = next.props) === null || _next$props === void 0 ? void 0 : _next$props.key)) {
-        updateInstance(pre, next);
-      } else {
-        destoryInstance(pre);
-        createInstance(next);
-      }
-    } else {
-      createInstance(next);
-    }
-  } else if (isArray(next.children)) {
-    if (!pre || !isArray(pre.children)) {
-      destoryInstance(pre);
-
-      for (let i = 0; i < next.children.length; i++) {
-        patchNode(null, next.children[i]);
-      }
-    } else {
-      for (let i = 0; i < next.children.length; i++) {
-        patchNode(pre.children[i], next.children[i]);
-      }
-    }
-  } else if (isArray(next)) {
-    if (isArray(pre)) {
-      for (let i = 0; i < next.length; i++) {
-        patchNode(pre[i], next[i]);
-      }
-    } else {
-      destoryInstance(pre);
-    }
+  for (let i = 0; i < length; i++) {
+    patchNode(preChildren[i], nextChildren[i]);
   }
 
   return next;
@@ -720,7 +696,7 @@ class Engine {
 
   keyFrame() {
     this.root = patchNode(this.root, this.Game, this.ui);
-    this.ui.render(this.root);
+    this.ui.render(this.root); // console.log(this.root)
   }
 
 }
@@ -1389,7 +1365,7 @@ class Message extends Component {
 
 }
 
-class Hero$1 extends KeyEventComponent {
+class EnemyInfo extends KeyEventComponent {
   onKeyDown({
     code
   }) {
@@ -1981,7 +1957,7 @@ class Hero extends KeyEventComponent {
       msg: this.msg,
       key: this.msg,
       onMessageClose: this.onMessageClose
-    }), this.showEnemyInfo && this.$c(Hero$1, {
+    }), this.showEnemyInfo && this.$c(EnemyInfo, {
       enemys: this.props.enemys,
       saveData: this.props.saveData,
       onClose: () => this.showEnemyInfo = false
@@ -2062,10 +2038,15 @@ class ScrollText extends KeyEventComponent {
       fontSize: 20,
       textAlign: 'left',
       textBaseline: 'top',
-      x: 32,
-      y: 32 * 5,
+      x: 0,
+      y: 0,
       width: 32 * 18,
-      height: 32 * 13
+      height: 32 * 13,
+      backgroundColor: 'red'
+    },
+    scroll: {
+      x: 32,
+      y: 32 * 5
     }
   };
 
@@ -2087,24 +2068,28 @@ class ScrollText extends KeyEventComponent {
     code
   }) {
     if (code === 'Space') {
-      if (this.ready) {
-        const {
-          type,
-          data
-        } = this.props.map.event;
+      this.next();
+    }
+  }
 
-        if (type === 'mapLoad') {
-          this.props.onClose(data);
-        } else if (type === 'title') {
-          this.props.onTitle(data);
-        }
+  next() {
+    if (this.ready) {
+      const {
+        type,
+        data
+      } = this.props.map.event;
+
+      if (type === 'mapLoad') {
+        this.props.onClose(data);
+      } else if (type === 'title') {
+        this.props.onTitle(data);
       }
     }
   }
 
   render() {
     const size = 32;
-    const style = this.styles.text;
+    const style = this.styles.scroll;
 
     if (style.y > -32 * (this.text.length - 2)) {
       const y = 1;
@@ -2115,15 +2100,14 @@ class ScrollText extends KeyEventComponent {
 
     return this.$c("div", {
       style: this.styles.text,
-      onClick: this.onKeyDown
-    }, this.text.map((text, index) => {
-      const optionStyle = {
+      onClick: this.next
+    }, this.$c("div", {
+      style: this.styles.scroll
+    }, this.text.map((text, index) => this.$c("div", {
+      style: {
         y: index * size
-      };
-      return this.$c("div", {
-        style: optionStyle
-      }, text);
-    }));
+      }
+    }, text))));
   }
 
 }

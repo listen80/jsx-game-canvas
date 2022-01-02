@@ -6,10 +6,15 @@ export default class ScrollText extends KeyEventComponent {
       fontSize: 20,
       textAlign: 'left',
       textBaseline: 'top',
-      x: 32,
-      y: 32 * 5,
+      x: 0,
+      y: 0,
       width: 32 * 18,
       height: 32 * 13,
+      backgroundColor: 'red',
+    },
+    scroll: {
+      x: 32,
+      y: 32 * 5,
     },
   };
 
@@ -26,20 +31,24 @@ export default class ScrollText extends KeyEventComponent {
 
   onKeyDown ({ code }) {
     if (code === 'Space') {
-      if (this.ready) {
-        const { type, data } = this.props.map.event
-        if (type === 'mapLoad') {
-          this.props.onClose(data)
-        } else if (type === 'title') {
-          this.props.onTitle(data)
-        }
+      this.next()
+    }
+  }
+
+  next () {
+    if (this.ready) {
+      const { type, data } = this.props.map.event
+      if (type === 'mapLoad') {
+        this.props.onClose(data)
+      } else if (type === 'title') {
+        this.props.onTitle(data)
       }
     }
   }
 
   render () {
     const size = 32
-    const style = this.styles.text
+    const style = this.styles.scroll
     if (style.y > -32 * (this.text.length - 2)) {
       const y = 1
       style.y -= y
@@ -47,13 +56,10 @@ export default class ScrollText extends KeyEventComponent {
       this.ready = true
     }
     return (
-      <div style={this.styles.text} onClick={this.onKeyDown}>
-        {this.text.map((text, index) => {
-          const optionStyle = {
-            y: index * size,
-          }
-          return <div style={optionStyle}>{text}</div>
-        })}
+      <div style={this.styles.text} onClick={this.next}>
+        <div style={this.styles.scroll}>
+          {this.text.map((text, index) => <div style={{ y: index * size }}>{text}</div>)}
+        </div>
       </div>
     )
   }

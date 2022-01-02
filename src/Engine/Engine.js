@@ -42,5 +42,6 @@ export default class Engine {
   keyFrame () {
     this.root = patchNode(this.root, this.Game, this.ui)
     this.ui.render(this.root)
+    // console.log(this.root)
   }
 }

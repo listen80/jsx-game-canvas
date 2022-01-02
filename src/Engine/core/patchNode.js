@@ -1,4 +1,4 @@
-import { isFunc, isPrimitive, isArray, isUndefined } from '../utils/common'
+import { isFunc, isPrimitive, isArray, isUndefined, isString } from '../utils/common'
 
 function createInstance (next) {
   const Class = next.tag
@@ -12,7 +12,7 @@ function destoryInstance (pre) {
     if (isFunc(pre.tag)) {
       destoryInstance(pre.node)
       pre.instance.destroy && pre.instance.destroy()
-    } else if (Array.isArray(pre)) {
+    } else if (isArray(pre)) {
       while (pre.length) {
         destoryInstance(pre.pop())
       }
@@ -24,24 +24,16 @@ function destoryInstance (pre) {
 
 function updateInstance (pre, next) {
   next.instance = pre.instance
-  if (!next.instance) {
-    debugger
-    return
-  }
   next.node = pre.node
   next.instance.props = next.props
   renderNode(next)
 }
 
 function renderNode (next) {
-  const instance = next.instance
-  next.node = patchNode(next.node, instance.render())
+  next.node = patchNode(next.node, next.instance.render())
 }
 
-export function patchNode (pre, next) {
-  if (pre?.tag?.name === 'ShopList') {
-    if (pre?.tag?.name !== 'ShopList') { debugger }
-  }
+export function patchNodeBak (pre, next) {
   if (isPrimitive(next) || isUndefined(next)) {
     destoryInstance(pre)
   } else if (isFunc(next.tag)) {
@@ -55,15 +47,13 @@ export function patchNode (pre, next) {
     } else {
       createInstance(next)
     }
-  } else if (isArray(next.children)) {
-    if (!pre || !isArray(pre.children)) {
-      destoryInstance(pre)
-      for (let i = 0; i < next.children.length; i++) {
+  } else if (isString(next.tag)) {
+    const preChildren = pre && isString(pre.tag)
+    for (let i = 0; i < next.children.length; i++) {
+      if (preChildren) {
+        patchNode(preChildren[i], next.children[i])
+      } else {
         patchNode(null, next.children[i])
-      }
-    } else {
-      for (let i = 0; i < next.children.length; i++) {
-        patchNode(pre.children[i], next.children[i])
       }
     }
   } else if (isArray(next)) {
@@ -74,6 +64,37 @@ export function patchNode (pre, next) {
     } else {
       destoryInstance(pre)
     }
+  }
+  return next
+}
+
+export function patchNode (pre, next) {
+  if (pre) {
+    if (next) {
+      if (isFunc(next.tag)) {
+        if (pre.tag === next.tag && (pre.props?.key === next.props?.key)) {
+          updateInstance(pre, next)
+        } else {
+          destoryInstance(pre)
+          createInstance(next)
+        }
+      }
+    } else {
+      destoryInstance(pre)
+    }
+  } else {
+    if (next) {
+      if (isFunc(next.tag)) {
+        createInstance(next)
+      }
+    }
+  }
+
+  const preChildren = (pre || {}).children || []
+  const nextChildren = (next || {}).children || []
+  const length = Math.max(preChildren.length, nextChildren.length)
+  for (let i = 0; i < length; i++) {
+    patchNode(preChildren[i], nextChildren[i])
   }
 
   return next
