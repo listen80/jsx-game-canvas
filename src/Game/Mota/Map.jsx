@@ -118,7 +118,7 @@ export default class Map extends Component {
 
   onClick = (e) => {
     console.log(e)
-    // 寻址dfs
+    // DFS BFS
   };
 
   render () {

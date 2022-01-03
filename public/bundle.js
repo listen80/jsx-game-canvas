@@ -2177,7 +2177,7 @@ class Map extends Component {
     this.props.onTitle();
   };
   onClick = e => {
-    console.log(e); // 寻址dfs
+    console.log(e); // DFS BFS
   };
 
   render() {
