@@ -21,12 +21,12 @@ export class KeyEventComponent extends Component {
     }
     this.$isFocus = true
     this.$preFocus = curFoucs
-    console.warn(this)
+    console.warn('create\n', this)
     curFoucs = this
   }
 
   destroy () {
-    console.log('in', this)
+    console.warn('destroy\n', this)
     this.$isFocus = false
     if (this.$preFocus) {
       this.$preFocus.$isFocus = true

@@ -209,8 +209,6 @@ export default class UI {
     }
     if (tag === 'img') {
       this.drawImage(node, offsetX, offsetY)
-    } else if (tag === 'text') {
-      this.drawText(node, offsetX, offsetY)
     } else if (tag === 'circle') {
       this.drawCircle(node, offsetX, offsetY)
     } else if (tag === 'line') {
