@@ -2027,93 +2027,21 @@ class Status extends Component {
 
 }
 
-class ScrollText extends KeyEventComponent {
-  styles = {
-    text: {
-      fontSize: 20,
-      textAlign: 'left',
-      textBaseline: 'top',
-      x: 0,
-      y: 0,
-      width: 32 * 18,
-      height: 32 * 13
-    },
-    scroll: {
-      x: 32,
-      y: 32 * 5
-    }
-  };
-
-  create() {
-    const {
-      text,
-      bgm
-    } = this.props.map;
-    this.text = text.split('\n');
-    window.$audio.play('bgm', bgm);
-  }
-
-  destroy() {
-    const bgm = this.props.map.bgm;
-    window.$audio.pause('bgm', bgm);
-  }
-
-  onKeyDown({
-    code
-  }) {
-    if (code === 'Space') {
-      this.onClick();
-    }
-  }
-
-  onClick = () => {
-    if (this.ready) {
-      const {
-        type,
-        data
-      } = this.props.map.event;
-
-      if (type === 'mapLoad') {
-        this.props.onClose(data);
-      } else if (type === 'title') {
-        this.props.onTitle(data);
-      }
-    }
-  };
-
-  render() {
-    const size = 32;
-    const style = this.styles.scroll;
-
-    if (style.y > -32 * (this.text.length - 2)) {
-      const y = 1;
-      style.y -= y;
-    } else {
-      this.ready = true;
-    }
-
-    return this.$c("div", {
-      style: this.styles.text,
-      onClick: this.onClick
-    }, this.$c("div", {
-      style: this.styles.scroll
-    }, this.text.map((text, index) => this.$c("div", {
-      style: {
-        y: index * size
-      }
-    }, text))));
-  }
-
-}
-
 class Map extends Component {
   tick = 0;
   interval = 10;
   styles = {
     map: {
       height: 32 * 13,
-      width: 32 * (13 + 5),
+      width: 32 * 13,
       backgroundImage: 'ground.png'
+    },
+    statusBar: {
+      x: 32 * 13,
+      y: 0,
+      backgroundImage: 'ground.png',
+      width: 32 * 5,
+      height: 13 * 32
     }
   };
 
@@ -2248,6 +2176,9 @@ class Map extends Component {
   onTitle = () => {
     this.props.onTitle();
   };
+  onClick = e => {
+    console.log(e); // 寻址dfs
+  };
 
   render() {
     this.interval--;
@@ -2259,17 +2190,15 @@ class Map extends Component {
 
     const mapTerrains = this.renderMapTerrains();
     const mapEvents = this.renderMapEvents();
-    return this.$c("div", {
-      style: this.styles.map
-    }, this.$c("div", {
-      style: {
-        x: 32 * 13,
-        y: 0
-      }
+    return this.$c("div", null, this.$c("div", {
+      style: this.styles.map,
+      onClick: this.onClick
+    }, mapTerrains, mapEvents), this.$c("div", {
+      style: this.styles.statusBar
     }, this.$c(Status, {
       saveData: this.props.saveData,
       map: this.props.map
-    })), mapTerrains, mapEvents, this.$c(Hero, {
+    })), this.$c(Hero, {
       mapTerrains: mapTerrains,
       mapEvents: mapEvents,
       saveData: this.props.saveData,
@@ -2279,6 +2208,85 @@ class Map extends Component {
       removeMapEvent: this.onRemoveMapEvent,
       onTitle: this.onTitle
     }));
+  }
+
+}
+
+class ScrollText extends KeyEventComponent {
+  styles = {
+    text: {
+      fontSize: 20,
+      textAlign: 'left',
+      textBaseline: 'top',
+      x: 0,
+      y: 0,
+      width: 32 * 18,
+      height: 32 * 13
+    },
+    scroll: {
+      x: 32,
+      y: 32 * 5
+    }
+  };
+
+  create() {
+    const {
+      text,
+      bgm
+    } = this.props.map;
+    this.text = text.split('\n');
+    window.$audio.play('bgm', bgm);
+  }
+
+  destroy() {
+    const bgm = this.props.map.bgm;
+    window.$audio.pause('bgm', bgm);
+  }
+
+  onKeyDown({
+    code
+  }) {
+    if (code === 'Space') {
+      this.onClick();
+    }
+  }
+
+  onClick = () => {
+    if (this.ready) {
+      const {
+        type,
+        data
+      } = this.props.map.event;
+
+      if (type === 'mapLoad') {
+        this.props.onClose(data);
+      } else if (type === 'title') {
+        this.props.onTitle(data);
+      }
+    }
+  };
+
+  render() {
+    const size = 32;
+    const style = this.styles.scroll;
+
+    if (style.y > -32 * (this.text.length - 2)) {
+      const y = 1;
+      style.y -= y;
+    } else {
+      this.ready = true;
+    }
+
+    return this.$c("div", {
+      style: this.styles.text,
+      onClick: this.onClick
+    }, this.$c("div", {
+      style: this.styles.scroll
+    }, this.text.map((text, index) => this.$c("div", {
+      style: {
+        y: index * size
+      }
+    }, text))));
   }
 
 }

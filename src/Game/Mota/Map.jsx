@@ -1,17 +1,23 @@
 import { Component } from 'Engine'
 import Hero from './Hero'
 import Status from './Status'
-import ScrollText from './ScrollText'
 export default class Map extends Component {
-  tick = 0
-  interval = 10
+  tick = 0;
+  interval = 10;
   styles = {
     map: {
       height: 32 * 13,
-      width: 32 * (13 + 5),
+      width: 32 * 13,
       backgroundImage: 'ground.png',
     },
-  }
+    statusBar: {
+      x: 32 * 13,
+      y: 0,
+      backgroundImage: 'ground.png',
+      width: 32 * 5,
+      height: 13 * 32,
+    },
+  };
 
   create () {
     const bgm = this.props.map.bgm
@@ -38,10 +44,17 @@ export default class Map extends Component {
           const detail = window.$res[type][name]
           let sx = 0
           if (info.type === 'animates') {
-            sx = tick % 4 * 32
+            sx = (tick % 4) * 32
           }
-          const style = { sy: detail.sy * 32, sx, x: x * 32, y: y * 32, height: 32, width: 32 }
-          terrains.push(<img src={type + '.png'} style={style}/>)
+          const style = {
+            sy: detail.sy * 32,
+            sx,
+            x: x * 32,
+            y: y * 32,
+            height: 32,
+            width: 32,
+          }
+          terrains.push(<img src={type + '.png'} style={style} />)
         } else {
           return null
         }
@@ -66,7 +79,7 @@ export default class Map extends Component {
             const detail = window.$res[type][name]
             let sx = 0
             if (type === 'npcs' || type === 'enemys') {
-              sx = tick % 2 * 32
+              sx = (tick % 2) * 32
             }
             // terrians items icons npcs enemys
             if (destroy[[mapId, x, y]]) {
@@ -75,9 +88,14 @@ export default class Map extends Component {
             if (type === 'enemys') {
               enemys[name] = name
             }
-            return <div style={{ x: x * 32, y: y * 32, height: 32, width: 32 }}>
-              <img src={type + '.png'} style={{ sy: detail.sy * 32, sx, height: 32, width: 32 }} />
-            </div>
+            return (
+              <div style={{ x: x * 32, y: y * 32, height: 32, width: 32 }}>
+                <img
+                  src={type + '.png'}
+                  style={{ sy: detail.sy * 32, sx, height: 32, width: 32 }}
+                />
+              </div>
+            )
           } else {
             debugger
           }
@@ -92,11 +110,16 @@ export default class Map extends Component {
     const mapId = this.props.saveData.mapId
     this.props.saveData.destroy = this.props.saveData.destroy || {}
     this.props.saveData.destroy[[mapId, x, y]] = 1
-  }
+  };
 
   onTitle = () => {
     this.props.onTitle()
-  }
+  };
+
+  onClick = (e) => {
+    console.log(e)
+    // 寻址dfs
+  };
 
   render () {
     this.interval--
@@ -107,12 +130,14 @@ export default class Map extends Component {
     const mapTerrains = this.renderMapTerrains()
     const mapEvents = this.renderMapEvents()
     return (
-      <div style={this.styles.map}>
-        <div style={{ x: 32 * 13, y: 0 }}>
-          <Status saveData={this.props.saveData} map={this.props.map}/>
+      <div>
+        <div style={this.styles.map} onClick={this.onClick}>
+          {mapTerrains}
+          {mapEvents}
         </div>
-        {mapTerrains}
-        {mapEvents}
+        <div style={this.styles.statusBar}>
+          <Status saveData={this.props.saveData} map={this.props.map} />
+        </div>
         <Hero
           mapTerrains={mapTerrains}
           mapEvents={mapEvents}
