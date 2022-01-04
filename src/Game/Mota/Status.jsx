@@ -28,14 +28,12 @@ export default class Status extends Component {
       saveData.items.blueKey,
       saveData.items.redKey,
     ]
-    const size = 32
-    const offset = (32 - size) / 2
     return (
       <div style={{ fontSize: 24 }}>
         {this.walls}
         {rowProperty.map((value, index) => {
-          return <div style={{ y: (index + 1) * 32, wdith: 32, height: 32 }}>
-            <img src="icons.png" style={{ x: offset, y: offset, sx: 0, sy: index * 32, wdith: size, height: size, swidth: 32, sheight: 32 }} />
+          return <div style={{ y: (index + 1) * 32, width: 32, height: 32 }}>
+            <img src="icons.png" style={{ sy: index * 32, width: 32, height: 32, swidth: 32, sheight: 32 }} />
             <div style={{ x: 32, height: 32, width: 32 * 3 }}>{value}</div>
           </div>
         })}

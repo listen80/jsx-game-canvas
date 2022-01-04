@@ -43,7 +43,7 @@ export default class Battle extends KeyEventComponent {
     if (enemy.hp > 0) {
       this.tick++
       if (this.tick === tick) {
-        window.$audio.play('se', 'attack.mp3')
+        window.$sound.play('se', 'attack.mp3')
 
         if (this.turn) {
           const atk = enemy.atk - hero.def

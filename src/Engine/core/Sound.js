@@ -1,12 +1,12 @@
-export default class Audio {
+export default class Sound {
   current = null
-  constructor (audioes) {
-    this.audioes = audioes || window.$res.sounds
+  constructor (Soundes) {
+    this.Soundes = Soundes || window.$res.sounds
   }
 
   control (type, name, control) {
-    this.audioes = window.$res.sounds
-    this.current = this.audioes[`${type}/${name}`]
+    this.Soundes = window.$res.sounds
+    this.current = this.Soundes[`${type}/${name}`]
     this.current.loop = type === 'bgm'
     this.current[control]()
   }

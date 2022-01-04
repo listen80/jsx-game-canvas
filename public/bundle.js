@@ -560,16 +560,16 @@ class UI {
 
 }
 
-class Audio$1 {
+class Sound {
   current = null;
 
-  constructor(audioes) {
-    this.audioes = audioes || window.$res.sounds;
+  constructor(Soundes) {
+    this.Soundes = Soundes || window.$res.sounds;
   }
 
   control(type, name, control) {
-    this.audioes = window.$res.sounds;
-    this.current = this.audioes[`${type}/${name}`];
+    this.Soundes = window.$res.sounds;
+    this.current = this.Soundes[`${type}/${name}`];
     this.current.loop = type === 'bgm';
     this.current[control]();
   }
@@ -654,12 +654,11 @@ function patchNode(pre, next) {
 class Engine {
   constructor(Game) {
     if (this.check()) {
-      this.$resource = Object.create(null);
       this.$state = Object.create(null);
       this.Game = createNode(Game, null);
       this.$foucs = null;
-      this.$audio = new Audio$1();
-      window.$audio = this.$audio;
+      this.$sound = new Sound();
+      window.$sound = this.$sound;
       this.ui = new UI();
       this.gameStart();
     }
@@ -691,7 +690,7 @@ class Engine {
 
   keyFrame() {
     this.root = patchNode(this.root, this.Game, this.ui);
-    this.ui.render(this.root); // console.log(this.root)
+    this.ui.render(this.root);
   }
 
 }
@@ -1087,7 +1086,7 @@ class Battle extends KeyEventComponent {
       this.tick++;
 
       if (this.tick === tick) {
-        window.$audio.play('se', 'attack.mp3');
+        window.$sound.play('se', 'attack.mp3');
 
         if (this.turn) {
           const atk = enemy.atk - hero.def;
@@ -1253,7 +1252,7 @@ class Talk extends KeyEventComponent {
       }
     }
 
-    window.$audio.play('se', 'dialogue.mp3');
+    window.$sound.play('se', 'dialogue.mp3');
   }
 
   next() {
@@ -1725,7 +1724,7 @@ class Hero extends KeyEventComponent {
           this.remove(mapEvent);
           this.updateSaveData('items', name);
           this.msg = `获得${item.name}`;
-          window.$audio.play('se', type === '1' ? 'item.mp3' : 'constants.mp3');
+          window.$sound.play('se', type === '1' ? 'item.mp3' : 'constants.mp3');
         } else if (type === '2') {
           this.remove(mapEvent);
           this.updateSaveData(...item.property);
@@ -1745,7 +1744,7 @@ class Hero extends KeyEventComponent {
 
             this.msg += ` ${propertyName}${value > 0 ? '+' : '-'}${value}`;
           });
-          window.$audio.play('se', 'item.mp3');
+          window.$sound.play('se', 'item.mp3');
         }
 
         return true;
@@ -1763,7 +1762,7 @@ class Hero extends KeyEventComponent {
           if (this.props.saveData.items[key]) {
             this.props.saveData.items[key]--;
             this.remove(mapEvent);
-            window.$audio.play('se', 'door.mp3');
+            window.$sound.play('se', 'door.mp3');
             return true;
           }
         }
@@ -1990,8 +1989,6 @@ class Status extends Component {
       map
     } = this.props;
     const rowProperty = [window.$res.game.title, map.name, saveData.hero.lv, saveData.hero.hp, saveData.hero.atk, saveData.hero.def, saveData.hero.exp, saveData.money, saveData.items.yellowKey, saveData.items.blueKey, saveData.items.redKey];
-    const size = 32;
-    const offset = (32 - size) / 2;
     return this.$c("div", {
       style: {
         fontSize: 24
@@ -2000,18 +1997,15 @@ class Status extends Component {
       return this.$c("div", {
         style: {
           y: (index + 1) * 32,
-          wdith: 32,
+          width: 32,
           height: 32
         }
       }, this.$c("img", {
         src: "icons.png",
         style: {
-          x: offset,
-          y: offset,
-          sx: 0,
           sy: index * 32,
-          wdith: size,
-          height: size,
+          width: 32,
+          height: 32,
           swidth: 32,
           sheight: 32
         }
@@ -2047,12 +2041,12 @@ class Map extends Component {
 
   create() {
     const bgm = this.props.map.bgm;
-    window.$audio.play('bgm', bgm);
+    window.$sound.play('bgm', bgm);
   }
 
   destroy() {
     const bgm = this.props.map.bgm;
-    window.$audio.pause('bgm', bgm);
+    window.$sound.pause('bgm', bgm);
   }
 
   renderMapTerrains(status) {
@@ -2235,12 +2229,12 @@ class ScrollText extends KeyEventComponent {
       bgm
     } = this.props.map;
     this.text = text.split('\n');
-    window.$audio.play('bgm', bgm);
+    window.$sound.play('bgm', bgm);
   }
 
   destroy() {
     const bgm = this.props.map.bgm;
-    window.$audio.pause('bgm', bgm);
+    window.$sound.pause('bgm', bgm);
   }
 
   onKeyDown({
@@ -2313,17 +2307,10 @@ function loadJSON(url) {
 function loadText(url) {
   return fetch(url).then(data => data.text()).then(data => formatText(data));
 }
-function checkFont(name, size = 16) {
-  return document.fonts.check(`${size}px ${name}`);
-}
 function loadFont({
   name,
   url
 }) {
-  if (checkFont(name)) {
-    return Promise.resolve();
-  }
-
   const fontface = new FontFace(name, `url("${url}")`);
   document.fonts.add(fontface);
   fontface.load();
@@ -2382,8 +2369,8 @@ const loaderFont = font => {
 };
 
 const loadSounds = data => {
-  return Promise.all(data.map(sound => loadSound(`Audio/${sound}`))).then(audioes => {
-    audioes.forEach((audio, i) => $res.sounds[data[i]] = audio);
+  return Promise.all(data.map(sound => loadSound(`Sound/${sound}`))).then(Soundes => {
+    Soundes.forEach((Sound, i) => $res.sounds[data[i]] = Sound);
   });
 };
 
@@ -2425,7 +2412,7 @@ class Game extends Component {
     this.map = await loadMap(this.saveData.mapId);
     this.loading = false;
     this.randMapKey = `${this.saveData.mapId} ${new Date()}`;
-    window.$audio.play('se', 'floor.mp3');
+    window.$sound.play('se', 'floor.mp3');
   };
   onTitle = () => {
     this.map = null;

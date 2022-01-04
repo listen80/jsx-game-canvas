@@ -83,8 +83,8 @@ export const loaderFont = (font) => {
 }
 
 const loadSounds = data => {
-  return Promise.all(data.map(sound => loadSound(`Audio/${sound}`))).then(audioes => {
-    audioes.forEach((audio, i) => ($res.sounds[data[i]] = audio))
+  return Promise.all(data.map(sound => loadSound(`Sound/${sound}`))).then(Soundes => {
+    Soundes.forEach((Sound, i) => ($res.sounds[data[i]] = Sound))
   })
 }
 

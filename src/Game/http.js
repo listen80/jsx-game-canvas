@@ -31,9 +31,6 @@ export function checkFont (name, size = 16) {
 }
 
 export function loadFont ({ name, url }) {
-  if (checkFont(name)) {
-    return Promise.resolve()
-  }
   const fontface = new FontFace(name, `url("${url}")`)
   document.fonts.add(fontface)
   fontface.load()

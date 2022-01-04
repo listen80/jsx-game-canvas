@@ -21,12 +21,12 @@ export default class Map extends Component {
 
   create () {
     const bgm = this.props.map.bgm
-    window.$audio.play('bgm', bgm)
+    window.$sound.play('bgm', bgm)
   }
 
   destroy () {
     const bgm = this.props.map.bgm
-    window.$audio.pause('bgm', bgm)
+    window.$sound.pause('bgm', bgm)
   }
 
   renderMapTerrains (status) {
