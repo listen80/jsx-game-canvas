@@ -96,8 +96,6 @@ export default class Map extends Component {
                 />
               </div>
             )
-          } else {
-            debugger
           }
         }
         return null

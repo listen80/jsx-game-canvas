@@ -1502,10 +1502,6 @@ class ShopList extends Component {
     this.props.onConfirm(shopid);
   };
 
-  destroy() {
-    debugger;
-  }
-
   render() {
     return this.$c("div", {
       style: this.style
@@ -1584,11 +1580,7 @@ const formatText = data => {
       } else if (['id', 'name', 'type'].includes(key)) {
         item[key] = value;
       } else {
-        if (isNaN(value)) {
-          debugger;
-        }
-
-        item[key] = Number(value);
+        item[key] = isNaN(value) ? value : Number(value);
       }
     });
     o[id] = item;
@@ -1699,7 +1691,6 @@ class Hero extends KeyEventComponent {
 
   handleEvents(mapEvent) {
     if (this.mapEvent) {
-      debugger;
       return;
     }
 
@@ -2151,8 +2142,6 @@ class Map extends Component {
                 width: 32
               }
             }));
-          } else {
-            debugger;
           }
         }
 

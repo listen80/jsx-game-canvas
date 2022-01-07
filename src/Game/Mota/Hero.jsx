@@ -101,7 +101,6 @@ export default class Hero extends KeyEventComponent {
 
   handleEvents (mapEvent) {
     if (this.mapEvent) {
-      debugger
       return
     }
 

@@ -29,10 +29,7 @@ export const formatText = (data) => {
       } else if (['id', 'name', 'type'].includes(key)) {
         item[key] = value
       } else {
-        if (isNaN(value)) {
-          debugger
-        }
-        item[key] = Number(value)
+        item[key] = isNaN(value) ? value : Number(value)
       }
     })
     o[id] = item
