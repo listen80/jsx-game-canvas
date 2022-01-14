@@ -62,6 +62,7 @@ export default class Hero extends KeyEventComponent {
       styleHero.sy = 64
     } else if (code === 'KeyS') {
       saveGame(this.props.saveData)
+      window.$sound.play('se', 'load.mp3')
       this.msg = '存储成功'
     } else if (code === 'KeyL') {
       this.props.onLoadMap(loadGame())

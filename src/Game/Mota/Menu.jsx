@@ -1,5 +1,4 @@
 import { Component } from 'Engine'
-import { loadGame, saveGame } from '../sl'
 import Select from './Select'
 const options = [
   { text: '物品' },

@@ -1649,6 +1649,7 @@ class Hero extends KeyEventComponent {
       styleHero.sy = 64;
     } else if (code === 'KeyS') {
       saveGame(this.props.saveData);
+      window.$sound.play('se', 'load.mp3');
       this.msg = '存储成功';
     } else if (code === 'KeyL') {
       this.props.onLoadMap(loadGame());
@@ -2350,7 +2351,7 @@ const loadImages = () => {
 };
 
 const loaderImage = () => Promise.all([loadImages()]);
-const sounds = ['bgm/terror.mp3', 'bgm/prologue.mp3', 'bgm/area1.mp3', 'bgm/area2.mp3', 'bgm/area3.mp3', 'enemy/redWizard.mp3', 'enemy/brownWizard.mp3', 'enemy/whiteKing.mp3', 'enemy/blackMagician.mp3', 'se/attack.mp3', 'se/floor.mp3', 'se/door.mp3', 'se/buy.mp3', 'se/item.mp3', 'se/dialogue.mp3', 'se/unlockCtrl.mp3', 'se/step.mp3', 'se/constants.mp3', 'se/sell.mp3', 'se/load.mp3'];
+const sounds = ['bgm/area1.mp3', 'bgm/area2.mp3', 'bgm/area3.mp3', 'bgm/prologue.mp3', 'bgm/terror.mp3', 'enemy/blackMagician.mp3', 'enemy/brownWizard.mp3', 'enemy/redWizard.mp3', 'enemy/whiteKing.mp3', 'se/attack.mp3', 'se/buy.mp3', 'se/constants.mp3', 'se/dialogue.mp3', 'se/door.mp3', 'se/floor.mp3', 'se/item.mp3', 'se/load.mp3', 'se/relieve.mp3', 'se/sell.mp3', 'se/step.mp3'];
 const loaderMusic = () => Promise.all([loadSounds(sounds) // loadSounds(sounds.sounds),
 ]);
 const loaderFont = font => {
