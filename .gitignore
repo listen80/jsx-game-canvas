@@ -25,3 +25,4 @@ pnpm-debug.log*
 
 *.zip
 *.exe
+bundle.js.map
