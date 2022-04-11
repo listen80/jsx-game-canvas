@@ -1,4 +1,4 @@
-import { formatText } from './utils'
+import { formatText } from './format'
 
 export const loadImage = src => {
   return new Promise(function (resolve, reject) {

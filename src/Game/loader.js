@@ -1,4 +1,4 @@
-import { loadImage, loadSound, loadJSON, loadFont, loadText } from './http'
+import { loadImage, loadSound, loadJSON, loadFont, loadText } from '../Engine/utils/http'
 
 const $res = {
   images: {},

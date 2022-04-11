@@ -115,7 +115,7 @@ export default class Map extends Component {
   };
 
   onClick = (e) => {
-    console.log(e)
+    // console.log(e)
     // DFS BFS
   };
 

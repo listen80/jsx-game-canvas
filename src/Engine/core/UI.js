@@ -1,6 +1,7 @@
 import { baseStyle } from '../const/baseStyle'
 import { isPrimitive, isFunc, isArray, isUndefined } from '../utils/common'
 import { curFoucs } from './Component'
+
 const getImage = (src) => window.$res.images[src]
 
 const moveEvent = 'MouseMove'

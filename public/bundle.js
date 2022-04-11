@@ -31,13 +31,13 @@ class KeyEventComponent extends Component {
     }
 
     this.$isFocus = true;
-    this.$preFocus = curFoucs;
-    console.warn('create\n', this);
+    this.$preFocus = curFoucs; // console.warn('create\n', this)
+
     curFoucs = this;
   }
 
   destroy() {
-    console.warn('destroy\n', this);
+    // console.warn('destroy\n', this)
     this.$isFocus = false;
 
     if (this.$preFocus) {
@@ -653,7 +653,7 @@ function patchNode(pre, next) {
 
 class Engine {
   constructor(Game) {
-    if (this.check()) {
+    if (this.checkChromeVersion()) {
       this.$state = Object.create(null);
       this.Game = createNode(Game, null);
       this.$foucs = null;
@@ -664,7 +664,7 @@ class Engine {
     }
   }
 
-  check() {
+  checkChromeVersion() {
     if (location.protocol === 'file:') {
       alert('不能直接运行index.html');
     } else if (!navigator.userAgent.match(/Chrome\/(\d+)/) || RegExp.$1 < 86) {
@@ -689,7 +689,7 @@ class Engine {
   }
 
   keyFrame() {
-    this.root = patchNode(this.root, this.Game, this.ui);
+    this.root = patchNode(this.root, this.Game);
     this.ui.render(this.root);
   }
 
@@ -1657,11 +1657,7 @@ class Hero extends KeyEventComponent {
       this.showEnemyInfo = !this.showEnemyInfo;
     } else if (code === 'KeyB') {
       this.buying = true;
-    } else if (code === 'PageUp') {
-      console.log(this.props);
-    } else if (code === 'PageUp') {
-      console.log(this.props);
-    }
+    } else ;
 
     if (moveVector) {
       const vector = updateVector(styleHero, moveVector);
@@ -1786,7 +1782,7 @@ class Hero extends KeyEventComponent {
         this.remove(this.mapEvent);
         return;
       } else if (type === 'moveBlock') {
-        console.log(this.mapEvent);
+        // console.log(this.mapEvent)
         this.remove(this.mapEvent);
         return;
       } else if (type === 'enemy') {
@@ -1839,9 +1835,7 @@ class Hero extends KeyEventComponent {
         } else {
           this.mapEvent = [0, 0, 0, falseEvent];
         }
-      } else {
-        console.error(event);
-      }
+      } else ;
 
       this.setEvent();
     } else {
@@ -1879,9 +1873,7 @@ class Hero extends KeyEventComponent {
       saveData[gets] += Number(n);
     } else if (typeof gets === 'object') {
       this.updateSaveData(context, Object.entries(gets));
-    } else {
-      console.error(gets, n);
-    }
+    } else ;
   }
 
   checkSaveData(context, gets, n = 1) {
@@ -2160,8 +2152,8 @@ class Map extends Component {
   onTitle = () => {
     this.props.onTitle();
   };
-  onClick = e => {
-    console.log(e); // DFS BFS
+  onClick = e => {// console.log(e)
+    // DFS BFS
   };
 
   render() {

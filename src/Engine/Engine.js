@@ -2,9 +2,10 @@ import UI from './core/UI'
 import Sound from './core/Sound'
 import { createNode } from './core/createNode'
 import { patchNode } from './core/patchNode'
+
 export default class Engine {
   constructor (Game) {
-    if (this.check()) {
+    if (this.checkChromeVersion()) {
       this.$state = Object.create(null)
       this.Game = createNode(Game, null)
       this.$foucs = null
@@ -15,7 +16,7 @@ export default class Engine {
     }
   }
 
-  check () {
+  checkChromeVersion () {
     if (location.protocol === 'file:') {
       alert('不能直接运行index.html')
     } else if (!navigator.userAgent.match(/Chrome\/(\d+)/) || RegExp.$1 < 86) {
@@ -39,7 +40,7 @@ export default class Engine {
   }
 
   keyFrame () {
-    this.root = patchNode(this.root, this.Game, this.ui)
+    this.root = patchNode(this.root, this.Game)
     this.ui.render(this.root)
   }
 }

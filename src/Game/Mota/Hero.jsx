@@ -9,8 +9,8 @@ import EnemyInfo from './EnemyInfo'
 import ShopList from './ShopList'
 
 import { saveGame, loadGame } from '../sl'
-import { isCoincided, updateVector, assignVector } from '../physics'
-import { convertPropertyStr } from '../utils'
+import { isCoincided, updateVector, assignVector } from '../../Engine/utils/physics'
+import { convertPropertyStr } from '../../Engine/utils/format'
 
 const propertyNames = {
   lv: '等级',
@@ -71,9 +71,9 @@ export default class Hero extends KeyEventComponent {
     } else if (code === 'KeyB') {
       this.buying = true
     } else if (code === 'PageUp') {
-      console.log(this.props)
+      // console.log(this.props)
     } else if (code === 'PageUp') {
-      console.log(this.props)
+      // console.log(this.props)
     }
     if (moveVector) {
       const vector = updateVector(styleHero, moveVector)
@@ -192,7 +192,7 @@ export default class Hero extends KeyEventComponent {
         this.remove(this.mapEvent)
         return
       } else if (type === 'moveBlock') {
-        console.log(this.mapEvent)
+        // console.log(this.mapEvent)
         this.remove(this.mapEvent)
         return
       } else if (type === 'enemy') {
@@ -238,7 +238,7 @@ export default class Hero extends KeyEventComponent {
           this.mapEvent = [0, 0, 0, falseEvent]
         }
       } else {
-        console.error(event)
+        // console.error(event)
       }
       this.setEvent()
     } else {
@@ -282,7 +282,7 @@ export default class Hero extends KeyEventComponent {
     } else if (typeof gets === 'object') {
       this.updateSaveData(context, Object.entries(gets))
     } else {
-      console.error(gets, n)
+      // console.error(gets, n)
     }
   }
 
