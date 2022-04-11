@@ -1,10 +1,10 @@
 import { Component } from 'Engine'
-import FPS from './Mota/FPS'
-import Loading from './Mota/Loading'
-import Title from './Mota/Title'
-import Map from './Mota/Map'
-import ScrollText from './Mota/ScrollText'
-import { loaderData, loaderMusic, loaderImage, loadMap, loaderFont } from './loader'
+import FPS from './render/FPS'
+import Loading from './render/Loading'
+import Title from './render/Title'
+import Map from './render/Map'
+import ScrollText from './render/ScrollText'
+import { loaderData, loaderMusic, loaderImage, loadMap, loaderFont } from '../Engine/loader'
 
 export default class Game extends Component {
   styles = {
@@ -27,7 +27,7 @@ export default class Game extends Component {
     this.loading = '加载数据'
     await loaderData()
     this.loading = '加载图片'
-    await loaderImage()
+    await loaderImage(window.$res)
     this.loading = '加载音乐'
     await loaderMusic()
     this.loading = false

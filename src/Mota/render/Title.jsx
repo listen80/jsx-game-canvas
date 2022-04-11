@@ -1,6 +1,6 @@
 import { Component } from 'Engine'
 import Select from './Select'
-import { loadGame } from '../sl'
+import { loadGame } from '../../Engine/utils/sl'
 
 export default class Title extends Component {
   styles = {

@@ -8,7 +8,7 @@ import Message from './Message'
 import EnemyInfo from './EnemyInfo'
 import ShopList from './ShopList'
 
-import { saveGame, loadGame } from '../sl'
+import { saveGame, loadGame } from '../../Engine/utils/sl'
 import { isCoincided, updateVector, assignVector } from '../../Engine/utils/physics'
 import { convertPropertyStr } from '../../Engine/utils/format'
 

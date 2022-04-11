@@ -1,4 +1,4 @@
-import { loadImage, loadSound, loadJSON, loadFont, loadText } from '../Engine/utils/http'
+import { loadImage, loadSound, loadJSON, loadFont, loadText } from './utils/http'
 
 const $res = {
   images: {},
@@ -24,6 +24,11 @@ const sprite = [
   'boss',
 ]
 
+const radioImages = [
+  'Characters/hero.png',
+  'ground.png',
+  'Battlebacks/mota.jpg'
+]
 const arr3 = [].concat(loaderMap.map(v => `Data/${v}`), sprite.map(v => `Sprite/${v}.dat`))
 
 export const loaderData = () => Promise.all(arr3.map(url => url.endsWith('.dat') ? loadText(`${url}`) : loadJSON(`${url}`)))
@@ -31,9 +36,9 @@ export const loaderData = () => Promise.all(arr3.map(url => url.endsWith('.dat')
     Object.assign($res, { game, save, shop, mapping, enemys, items, animates, icons, npcs, terrains, boss })
   })
 
-const loadImages = () => {
+const loadImages = ($res) => {
   const o = sprite.map(v => `Sprite/${v}.png`)
-  const o2 = ['Characters/hero.png', 'ground.png', 'Battlebacks/mota.jpg'].map(v => `Graph/${v}`)
+  const o2 = radioImages.map(v => `Graph/${v}`)
 
   return Promise.all([...o, ...o2].map(src => {
     return new Promise((resolve) => {
@@ -49,7 +54,7 @@ const loadImages = () => {
   }))
 }
 
-export const loaderImage = () => Promise.all([loadImages()])
+export const loaderImage = ($res) => Promise.all([loadImages($res)])
 const sounds = [
   'bgm/area1.mp3',
   'bgm/area2.mp3',

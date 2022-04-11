@@ -1,4 +1,4 @@
 import Engine from './Engine'
-import Game from './Game'
+import Mota from './Mota'
 // eslint-disable-next-line no-new
-new Engine(Game)
+new Engine(Mota)
