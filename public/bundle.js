@@ -1,8 +1,10 @@
 function createNode(tag, props, ...children) {
+  const $parent = this;
   return {
     tag,
     props,
-    children
+    children,
+    $parent
   };
 }
 
@@ -17,7 +19,8 @@ class Component {
   }
 
   $c(...argu) {
-    return createNode(...argu);
+    const node = createNode.call(this, ...argu);
+    return node;
   }
 
 }
@@ -45,6 +48,110 @@ class KeyEventComponent extends Component {
     }
 
     curFoucs = this.$preFocus;
+  }
+
+}
+
+function convertPropertyStr(str) {
+  const arr = str.split('.');
+
+  if (arr.length === 1) {
+    arr.unshift('');
+  }
+
+  const [key, propertyStr] = arr;
+  const properties = propertyStr.split(';').map(v => v.split(':'));
+  return [key, properties];
+}
+const formatText = data => {
+  const o = [];
+  data = data.split(/\r?\n/);
+  const keys = data.shift().split(',');
+  data.forEach((row, index) => {
+    if (!row.trim()) {
+      return;
+    }
+
+    const properties = row.split(',');
+    const [id] = properties;
+    const item = {
+      sy: index
+    };
+    keys.forEach((key, index) => {
+      const value = properties[index];
+
+      if (!value) {
+        return;
+      }
+
+      if (key === 'property') {
+        item[key] = convertPropertyStr(value);
+      } else if (['id', 'name', 'type'].includes(key)) {
+        item[key] = value;
+      } else {
+        item[key] = isNaN(value) ? value : Number(value);
+      }
+    });
+    o[id] = item;
+    o.push(item);
+    return data;
+  });
+  return o;
+};
+
+const loadImage = src => {
+  return new Promise(function (resolve, reject) {
+    const img = new Image();
+    img.addEventListener('load', () => resolve(img));
+    img.addEventListener('error', () => reject(img));
+    img.src = src;
+  });
+};
+const loadSound = src => {
+  return new Promise(function (resolve, reject) {
+    const audio = new Audio();
+    audio.addEventListener('canplay', () => resolve(audio));
+    audio.addEventListener('error', () => reject(audio));
+    audio.src = src;
+  });
+};
+function loadJSON(url) {
+  return fetch(url).then(data => data.json());
+}
+function loadText(url) {
+  return fetch(url).then(data => data.text()).then(data => formatText(data));
+}
+
+class Sound {
+  constructor(sounds) {
+    this.sounds = sounds || Object.create(null);
+  }
+
+  control(type, name, control) {
+    const current = this.sounds[`${type}/${name}`];
+    current.loop = type === 'bgm';
+    current[control]();
+    return current;
+  }
+
+  load(sounds) {
+    const loadSounds = data => {
+      return Promise.all(data.map(sound => loadSound(`Sound/${sound}`))).then(sounds => {
+        sounds.forEach((Sound, i) => this.sounds[data[i]] = Sound);
+      });
+    };
+
+    const loaderMusic = () => Promise.all([loadSounds(sounds)]);
+
+    return loaderMusic();
+  }
+
+  play(type, name) {
+    return this.control(type, name, 'play');
+  }
+
+  pause(type, name) {
+    return this.control(type, name, 'pause');
   }
 
 }
@@ -85,14 +192,12 @@ const isFunc = f => typeof f === 'function';
 const isArray = a => Array.isArray(a);
 const isUndefined = o => o === undefined || o === null;
 
-const getImage = src => window.$res.images[src];
-
 const moveEvent = 'MouseMove';
-const mouseEvents = ['ContextMenu', 'Click', 'Wheel', moveEvent];
+const mouseEvents = ['ContextMenu', 'Click', 'Wheel', moveEvent]; //  "MouseDown", "MouseUp"
 
 const keyEvents = ['KeyDown', 'KeyUp'];
 class UI {
-  constructor(screen = {}) {
+  constructor(game, screen = {}) {
     const canvas = document.createElement('canvas');
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
@@ -111,7 +216,12 @@ class UI {
     this.keyEvents = [];
     this.onMouseClick = [];
     this.bind();
+    this.$images = game.$images;
   }
+
+  getImage = src => {
+    return this.$images.images[src];
+  };
 
   bind() {
     mouseEvents.forEach(name => {
@@ -228,7 +338,7 @@ class UI {
         const {
           context
         } = this;
-        context.drawImage(getImage(props.src), sx, sy, swidth || width, sheight || height, offsetX, offsetY, width, height);
+        context.drawImage(this.getImage(props.src), sx, sy, swidth || width, sheight || height, offsetX, offsetY, width, height);
       }
     }
   }
@@ -258,7 +368,7 @@ class UI {
       context.save();
       context.beginPath();
       context.rect(offsetX, offsetY, width, height);
-      context.fillStyle = context.createPattern(getImage(backgroundImage), 'repeat');
+      context.fillStyle = context.createPattern(this.getImage(backgroundImage), 'repeat');
       context.fill();
       context.closePath();
       context.restore();
@@ -560,26 +670,63 @@ class UI {
 
 }
 
-class Sound {
-  current = null;
-
-  constructor(Soundes) {
-    this.Soundes = Soundes || window.$res.sounds;
+const sprite$1 = ['enemys', 'items', 'animates', 'icons', 'npcs', 'terrains', 'boss'];
+const radioImages = ['Characters/hero.png', 'ground.png', 'Battlebacks/mota.jpg'];
+class ImageCollection {
+  constructor(images) {
+    this.images = images || {};
   }
 
-  control(type, name, control) {
-    this.Soundes = window.$res.sounds;
-    this.current = this.Soundes[`${type}/${name}`];
-    this.current.loop = type === 'bgm';
-    this.current[control]();
+  load() {
+    const loadImages = () => {
+      const o = sprite$1.map(v => `Sprite/${v}.png`);
+      const o2 = radioImages.map(v => `Graph/${v}`);
+      return Promise.all([...o, ...o2].map(src => {
+        return new Promise(resolve => {
+          loadImage(`${src}`).then(img => {
+            src = src.replace('Graph/', '');
+
+            if (src.includes('Sprite')) {
+              src = src.split('/')[1];
+            }
+
+            this.images[src] = img;
+            resolve();
+          });
+        });
+      }));
+    };
+
+    return Promise.all([loadImages()]);
   }
 
-  play(type, name) {
-    this.control(type, name, 'play');
-  }
+}
 
-  pause(type, name) {
-    this.control(type, name, 'pause');
+class Data {
+  constructor() {}
+
+  load() {
+    const loaderMap = ['game.json', 'save.json', 'shop.json', 'mapping.dat'];
+    const sprite = ['enemys', 'items', 'animates', 'icons', 'npcs', 'terrains', 'boss'];
+    const arr3 = [].concat(loaderMap.map(v => `Data/${v}`), sprite.map(v => `Sprite/${v}.dat`));
+
+    const loaderData = () => Promise.all(arr3.map(url => url.endsWith('.dat') ? loadText(`${url}`) : loadJSON(`${url}`))).then(([game, save, shop, mapping, enemys, items, animates, icons, npcs, terrains, boss]) => {
+      Object.assign(this, {
+        game,
+        save,
+        shop,
+        mapping,
+        enemys,
+        items,
+        animates,
+        icons,
+        npcs,
+        terrains,
+        boss
+      });
+    });
+
+    return loaderData();
   }
 
 }
@@ -587,6 +734,9 @@ class Sound {
 function createInstance(next) {
   const Class = next.tag;
   next.instance = new Class(next);
+  next.instance.$images = next.$parent.$images;
+  next.instance.$sound = next.$parent.$sound;
+  next.instance.$data = next.$parent.$data;
   next.instance.create && next.instance.create();
   renderNode(next);
 }
@@ -655,11 +805,11 @@ class Engine {
   constructor(Game) {
     if (this.checkChromeVersion()) {
       this.$state = Object.create(null);
-      this.Game = createNode(Game, null);
-      this.$foucs = null;
       this.$sound = new Sound();
-      window.$sound = this.$sound;
-      this.ui = new UI();
+      this.$images = new ImageCollection();
+      this.$data = new Data();
+      this.ui = new UI(this);
+      this.Game = createNode.call(this, Game, null);
       this.gameStart();
     }
   }
@@ -1008,7 +1158,7 @@ class Shop extends Component {
   };
 
   create() {
-    this.shop = window.$res.shop[this.props.shopid];
+    this.shop = this.$data.shop[this.props.shopid];
   }
 
   onConfirm = index => {
@@ -1086,7 +1236,7 @@ class Battle extends KeyEventComponent {
       this.tick++;
 
       if (this.tick === tick) {
-        window.$sound.play('se', 'attack.mp3');
+        this.$sound.play('se', 'attack.mp3');
 
         if (this.turn) {
           const atk = enemy.atk - hero.def;
@@ -1252,7 +1402,7 @@ class Talk extends KeyEventComponent {
       }
     }
 
-    window.$sound.play('se', 'dialogue.mp3');
+    this.$sound.play('se', 'dialogue.mp3');
   }
 
   next() {
@@ -1414,7 +1564,7 @@ class EnemyInfo extends KeyEventComponent {
         y: index * 32 + 32,
         height: 32
       };
-      const enemy = window.$res.enemys[enemyId];
+      const enemy = this.$data.enemys[enemyId];
       const hero = this.props.saveData.hero;
       let cost = 0;
 
@@ -1543,53 +1693,6 @@ function assignVector(vector, obj) {
   return Object.assign(vector, obj);
 }
 
-function convertPropertyStr(str) {
-  const arr = str.split('.');
-
-  if (arr.length === 1) {
-    arr.unshift('');
-  }
-
-  const [key, propertyStr] = arr;
-  const properties = propertyStr.split(';').map(v => v.split(':'));
-  return [key, properties];
-}
-const formatText = data => {
-  const o = [];
-  data = data.split(/\r?\n/);
-  const keys = data.shift().split(',');
-  data.forEach((row, index) => {
-    if (!row.trim()) {
-      return;
-    }
-
-    const properties = row.split(',');
-    const [id] = properties;
-    const item = {
-      sy: index
-    };
-    keys.forEach((key, index) => {
-      const value = properties[index];
-
-      if (!value) {
-        return;
-      }
-
-      if (key === 'property') {
-        item[key] = convertPropertyStr(value);
-      } else if (['id', 'name', 'type'].includes(key)) {
-        item[key] = value;
-      } else {
-        item[key] = isNaN(value) ? value : Number(value);
-      }
-    });
-    o[id] = item;
-    o.push(item);
-    return data;
-  });
-  return o;
-};
-
 const propertyNames = {
   lv: '等级',
   money: '金币',
@@ -1649,7 +1752,7 @@ class Hero extends KeyEventComponent {
       styleHero.sy = 64;
     } else if (code === 'KeyS') {
       saveGame(this.props.saveData);
-      window.$sound.play('se', 'load.mp3');
+      this.$sound.play('se', 'load.mp3');
       this.msg = '存储成功';
     } else if (code === 'KeyL') {
       this.props.onLoadMap(loadGame());
@@ -1696,14 +1799,14 @@ class Hero extends KeyEventComponent {
       this.eventIndex = 0;
       this.setEvent();
     } else {
-      const info = window.$res.mapping[mapEvent[2]];
+      const info = this.$data.mapping[mapEvent[2]];
       const {
         name,
         type
       } = info;
 
       if (type === 'items') {
-        const item = window.$res.items[name];
+        const item = this.$data.items[name];
         const {
           type
         } = item;
@@ -1712,7 +1815,7 @@ class Hero extends KeyEventComponent {
           this.remove(mapEvent);
           this.updateSaveData('items', name);
           this.msg = `获得${item.name}`;
-          window.$sound.play('se', type === '1' ? 'item.mp3' : 'constants.mp3');
+          this.$sound.play('se', type === '1' ? 'item.mp3' : 'constants.mp3');
         } else if (type === '2') {
           this.remove(mapEvent);
           this.updateSaveData(...item.property);
@@ -1725,14 +1828,14 @@ class Hero extends KeyEventComponent {
             if (name === 'hero') {
               propertyName = propertyNames[key];
             } else if (name === 'items') {
-              propertyName = window.$res.items[key].name;
+              propertyName = this.$data.items[key].name;
             } else if (key === 'money') {
               propertyName = '金币';
             }
 
             this.msg += ` ${propertyName}${value > 0 ? '+' : '-'}${value}`;
           });
-          window.$sound.play('se', 'item.mp3');
+          this.$sound.play('se', 'item.mp3');
         }
 
         return true;
@@ -1750,7 +1853,7 @@ class Hero extends KeyEventComponent {
           if (this.props.saveData.items[key]) {
             this.props.saveData.items[key]--;
             this.remove(mapEvent);
-            window.$sound.play('se', 'door.mp3');
+            this.$sound.play('se', 'door.mp3');
             return true;
           }
         }
@@ -1774,7 +1877,7 @@ class Hero extends KeyEventComponent {
       } else if (type === 'openShop') {
         this.shopid = event.id;
         this.props.saveData.shops = this.props.saveData.shops || {};
-        this.props.saveData.shops[this.shopid] = window.$res.shop[this.shopid].title;
+        this.props.saveData.shops[this.shopid] = this.$data.shop[this.shopid].title;
         return;
       } else if (type === 'getItems') {
         this.updateSaveData('items', data);
@@ -1786,7 +1889,7 @@ class Hero extends KeyEventComponent {
         this.remove(this.mapEvent);
         return;
       } else if (type === 'enemy') {
-        const enemy = window.$res.enemys[data];
+        const enemy = this.$data.enemys[data];
         const hero = this.props.saveData.hero;
 
         if (hero.atk > enemy.def) {
@@ -1972,7 +2075,7 @@ class Status extends Component {
       saveData,
       map
     } = this.props;
-    const rowProperty = [window.$res.game.title, map.name, saveData.hero.lv, saveData.hero.hp, saveData.hero.atk, saveData.hero.def, saveData.hero.exp, saveData.money, saveData.items.yellowKey, saveData.items.blueKey, saveData.items.redKey];
+    const rowProperty = [this.$data.game.title, map.name, saveData.hero.lv, saveData.hero.hp, saveData.hero.atk, saveData.hero.def, saveData.hero.exp, saveData.money, saveData.items.yellowKey, saveData.items.blueKey, saveData.items.redKey];
     return this.$c("div", {
       style: {
         fontSize: 24
@@ -2025,12 +2128,12 @@ class Map extends Component {
 
   create() {
     const bgm = this.props.map.bgm;
-    window.$sound.play('bgm', bgm);
+    this.$sound.play('bgm', bgm);
   }
 
   destroy() {
     const bgm = this.props.map.bgm;
-    window.$sound.pause('bgm', bgm);
+    this.$sound.pause('bgm', bgm);
   }
 
   renderMapTerrains(status) {
@@ -2047,12 +2150,12 @@ class Map extends Component {
     mapTerrains.forEach((line, y) => {
       line.forEach((value, x) => {
         if (value) {
-          const info = window.$res.mapping[value];
+          const info = this.$data.mapping[value];
           const {
             type,
             name
           } = info;
-          const detail = window.$res[type][name];
+          const detail = this.$data[type][name];
           let sx = 0;
 
           if (info.type === 'animates') {
@@ -2096,14 +2199,14 @@ class Map extends Component {
         const [x, y, value, events] = event;
 
         if (value) {
-          const info = window.$res.mapping[value];
+          const info = this.$data.mapping[value];
 
           if (info) {
             const {
               type,
               name
             } = info;
-            const detail = window.$res[type][name];
+            const detail = this.$data[type][name];
             let sx = 0;
 
             if (type === 'npcs' || type === 'enemys') {
@@ -2211,12 +2314,12 @@ class ScrollText extends KeyEventComponent {
       bgm
     } = this.props.map;
     this.text = text.split('\n');
-    window.$sound.play('bgm', bgm);
+    this.$sound.play('bgm', bgm);
   }
 
   destroy() {
     const bgm = this.props.map.bgm;
-    window.$sound.pause('bgm', bgm);
+    this.$sound.pause('bgm', bgm);
   }
 
   onKeyDown({
@@ -2267,99 +2370,14 @@ class ScrollText extends KeyEventComponent {
 
 }
 
-const loadImage = src => {
-  return new Promise(function (resolve, reject) {
-    const img = new Image();
-    img.addEventListener('load', () => resolve(img));
-    img.addEventListener('error', () => reject(img));
-    img.src = src;
-  });
-};
-const loadSound = src => {
-  return new Promise(function (resolve, reject) {
-    const audio = new Audio();
-    audio.addEventListener('canplay', () => resolve(audio));
-    audio.addEventListener('error', () => reject(audio));
-    audio.src = src;
-  });
-};
-function loadJSON(url) {
-  return fetch(url).then(data => data.json());
-}
-function loadText(url) {
-  return fetch(url).then(data => data.text()).then(data => formatText(data));
-}
-function loadFont({
-  name,
-  url
-}) {
-  const fontface = new FontFace(name, `url("${url}")`);
-  document.fonts.add(fontface);
-  fontface.load();
-  return fontface.loaded;
-}
-
-const $res = {
-  images: {},
-  sounds: {}
-};
-window.$res = $res;
-const loaderMap = ['game.json', 'save.json', 'shop.json', 'mapping.dat'];
-const sprite = ['enemys', 'items', 'animates', 'icons', 'npcs', 'terrains', 'boss'];
-const radioImages = ['Characters/hero.png', 'ground.png', 'Battlebacks/mota.jpg'];
-const arr3 = [].concat(loaderMap.map(v => `Data/${v}`), sprite.map(v => `Sprite/${v}.dat`));
-const loaderData = () => Promise.all(arr3.map(url => url.endsWith('.dat') ? loadText(`${url}`) : loadJSON(`${url}`))).then(([game, save, shop, mapping, enemys, items, animates, icons, npcs, terrains, boss]) => {
-  Object.assign($res, {
-    game,
-    save,
-    shop,
-    mapping,
-    enemys,
-    items,
-    animates,
-    icons,
-    npcs,
-    terrains,
-    boss
-  });
-});
-
-const loadImages = $res => {
-  const o = sprite.map(v => `Sprite/${v}.png`);
-  const o2 = radioImages.map(v => `Graph/${v}`);
-  return Promise.all([...o, ...o2].map(src => {
-    return new Promise(resolve => {
-      loadImage(`${src}`).then(img => {
-        src = src.replace('Graph/', '');
-
-        if (src.includes('Sprite')) {
-          src = src.split('/')[1];
-        }
-
-        $res.images[src] = img;
-        resolve();
-      });
-    });
-  }));
-};
-
-const loaderImage = $res => Promise.all([loadImages($res)]);
-const sounds = ['bgm/area1.mp3', 'bgm/area2.mp3', 'bgm/area3.mp3', 'bgm/prologue.mp3', 'bgm/terror.mp3', 'enemy/blackMagician.mp3', 'enemy/brownWizard.mp3', 'enemy/redWizard.mp3', 'enemy/whiteKing.mp3', 'se/attack.mp3', 'se/buy.mp3', 'se/constants.mp3', 'se/dialogue.mp3', 'se/door.mp3', 'se/floor.mp3', 'se/item.mp3', 'se/load.mp3', 'se/relieve.mp3', 'se/sell.mp3', 'se/step.mp3'];
-const loaderMusic = () => Promise.all([loadSounds(sounds) // loadSounds(sounds.sounds),
-]);
-const loaderFont = font => {
-  return loadFont(font);
-};
-
-const loadSounds = data => {
-  return Promise.all(data.map(sound => loadSound(`Sound/${sound}`))).then(Soundes => {
-    Soundes.forEach((Sound, i) => $res.sounds[data[i]] = Sound);
-  });
-};
-
 const loadMap = mapId => {
   return loadJSON(`Maps/${mapId}.json`);
 };
+
+const loaderMap = ['game.json', 'save.json', 'shop.json', 'mapping.dat'];
+const sprite = ['enemys', 'items', 'animates', 'icons', 'npcs', 'terrains', 'boss'];
+[].concat(loaderMap.map(v => `Data/${v}`), sprite.map(v => `Sprite/${v}.dat`));
+const sounds = ['bgm/area1.mp3', 'bgm/area2.mp3', 'bgm/area3.mp3', 'bgm/prologue.mp3', 'bgm/terror.mp3', 'enemy/blackMagician.mp3', 'enemy/brownWizard.mp3', 'enemy/redWizard.mp3', 'enemy/whiteKing.mp3', 'se/attack.mp3', 'se/buy.mp3', 'se/constants.mp3', 'se/dialogue.mp3', 'se/door.mp3', 'se/floor.mp3', 'se/item.mp3', 'se/load.mp3', 'se/relieve.mp3', 'se/sell.mp3', 'se/step.mp3'];
 
 class Game extends Component {
   styles = {
@@ -2373,20 +2391,21 @@ class Game extends Component {
 
   async loadFont() {
     this.loading = '加载字体';
-    const font = window.$res.game.font;
+    const font = this.$data.game.font;
     await loaderFont(font);
     this.styles.app.fontFamily = font.name;
   }
 
   async create() {
     this.loading = '加载数据';
-    await loaderData();
-    this.loading = '加载图片';
-    await loaderImage(window.$res);
+    await this.$data.load();
+    this.loading = '加载图片'; // console.log(this.$images)
+
+    await this.$images.load(sprite);
     this.loading = '加载音乐';
-    await loaderMusic();
+    await this.$sound.load(sounds);
     this.loading = false;
-    this.saveData = window.$res.save;
+    this.saveData = this.$data.save;
   }
 
   onLoadMap = async data => {
@@ -2395,7 +2414,7 @@ class Game extends Component {
     this.map = await loadMap(this.saveData.mapId);
     this.loading = false;
     this.randMapKey = `${this.saveData.mapId} ${new Date()}`;
-    window.$sound.play('se', 'floor.mp3');
+    this.$sound.play('se', 'floor.mp3');
   };
   onTitle = () => {
     this.map = null;
@@ -2423,5 +2442,5 @@ class Game extends Component {
 
 }
 
-new Engine(Game);
+window.mota = new Engine(Game);
 //# sourceMappingURL=bundle.js.map

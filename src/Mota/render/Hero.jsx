@@ -62,7 +62,7 @@ export default class Hero extends KeyEventComponent {
       styleHero.sy = 64
     } else if (code === 'KeyS') {
       saveGame(this.props.saveData)
-      window.$sound.play('se', 'load.mp3')
+      this.$sound.play('se', 'load.mp3')
       this.msg = '存储成功'
     } else if (code === 'KeyL') {
       this.props.onLoadMap(loadGame())
@@ -110,16 +110,16 @@ export default class Hero extends KeyEventComponent {
       this.eventIndex = 0
       this.setEvent()
     } else {
-      const info = window.$res.mapping[mapEvent[2]]
+      const info = this.$data.mapping[mapEvent[2]]
       const { name, type } = info
       if (type === 'items') {
-        const item = window.$res.items[name]
+        const item = this.$data.items[name]
         const { type } = item
         if (type === '1' || type === '3') {
           this.remove(mapEvent)
           this.updateSaveData('items', name)
           this.msg = `获得${item.name}`
-          window.$sound.play('se', type === '1' ? 'item.mp3' : 'constants.mp3')
+          this.$sound.play('se', type === '1' ? 'item.mp3' : 'constants.mp3')
         } else if (type === '2') {
           this.remove(mapEvent)
           this.updateSaveData(...item.property)
@@ -131,13 +131,13 @@ export default class Hero extends KeyEventComponent {
             if (name === 'hero') {
               propertyName = propertyNames[key]
             } else if (name === 'items') {
-              propertyName = window.$res.items[key].name
+              propertyName = this.$data.items[key].name
             } else if (key === 'money') {
               propertyName = '金币'
             }
             this.msg += ` ${propertyName}${value > 0 ? '+' : '-'}${value}`
           })
-          window.$sound.play('se', 'item.mp3')
+          this.$sound.play('se', 'item.mp3')
         }
         return true
       } else if (type === 'enemys') {
@@ -163,7 +163,7 @@ export default class Hero extends KeyEventComponent {
           if (this.props.saveData.items[key]) {
             this.props.saveData.items[key]--
             this.remove(mapEvent)
-            window.$sound.play('se', 'door.mp3')
+            this.$sound.play('se', 'door.mp3')
             return true
           }
         }
@@ -184,7 +184,7 @@ export default class Hero extends KeyEventComponent {
         this.shopid = event.id
         this.props.saveData.shops = this.props.saveData.shops || {}
         this.props.saveData.shops[this.shopid] =
-          window.$res.shop[this.shopid].title
+          this.$data.shop[this.shopid].title
         return
       } else if (type === 'getItems') {
         this.updateSaveData('items', data)
@@ -196,7 +196,7 @@ export default class Hero extends KeyEventComponent {
         this.remove(this.mapEvent)
         return
       } else if (type === 'enemy') {
-        const enemy = window.$res.enemys[data]
+        const enemy = this.$data.enemys[data]
         const hero = this.props.saveData.hero
         if (hero.atk > enemy.def) {
           if (

@@ -4,8 +4,9 @@ import Loading from './render/Loading'
 import Title from './render/Title'
 import Map from './render/Map'
 import ScrollText from './render/ScrollText'
-import { loaderData, loaderMusic, loaderImage, loadMap, loaderFont } from '../Engine/loader'
+import { loadMap } from '../Engine/loader'
 
+import { sounds, sprite } from './const/list'
 export default class Game extends Component {
   styles = {
     app: {
@@ -18,21 +19,21 @@ export default class Game extends Component {
 
   async loadFont () {
     this.loading = '加载字体'
-    const font = window.$res.game.font
+    const font = this.$data.game.font
     await loaderFont(font)
     this.styles.app.fontFamily = font.name
   }
 
   async create () {
     this.loading = '加载数据'
-    await loaderData()
+    await this.$data.load()
     this.loading = '加载图片'
-    await loaderImage(window.$res)
+    // console.log(this.$images)
+    await this.$images.load(sprite)
     this.loading = '加载音乐'
-    await loaderMusic()
+    await this.$sound.load(sounds)
     this.loading = false
-
-    this.saveData = window.$res.save
+    this.saveData = this.$data.save
   }
 
   onLoadMap = async (data) => {
@@ -41,7 +42,7 @@ export default class Game extends Component {
     this.map = await loadMap(this.saveData.mapId)
     this.loading = false
     this.randMapKey = `${this.saveData.mapId} ${new Date()}`
-    window.$sound.play('se', 'floor.mp3')
+    this.$sound.play('se', 'floor.mp3')
   };
 
   onTitle = () => {

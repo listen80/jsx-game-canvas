@@ -25,7 +25,7 @@ export default class Talk extends KeyEventComponent {
         this.next()
       }
     }
-    window.$sound.play('se', 'dialogue.mp3')
+    this.$sound.play('se', 'dialogue.mp3')
   }
 
   next () {

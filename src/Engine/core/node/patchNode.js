@@ -1,8 +1,12 @@
-import { isFunc, isPrimitive, isArray, isUndefined, isString } from '../utils/common'
+import { isFunc, isPrimitive, isArray, isUndefined, isString } from '../../utils/common'
 
 function createInstance (next) {
   const Class = next.tag
   next.instance = new Class(next)
+  next.instance.$images = next.$parent.$images
+  next.instance.$sound = next.$parent.$sound
+  next.instance.$data = next.$parent.$data
+
   next.instance.create && next.instance.create()
   renderNode(next)
 }

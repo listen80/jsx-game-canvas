@@ -1,14 +1,16 @@
-import { createNode } from './createNode'
+import { createNode } from './node/createNode'
 let curFoucs = null
 export { curFoucs }
 export class Component {
   constructor ({ props, children }) {
     this.props = props
     this.$children = children
+
   }
 
   $c (...argu) {
-    return createNode(...argu)
+    const node = createNode.call(this, ...argu)
+    return node
   }
 }
 

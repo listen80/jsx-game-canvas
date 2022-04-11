@@ -1,17 +1,20 @@
-import UI from './core/UI'
+import Render from './core/Render'
 import Sound from './core/Sound'
-import { createNode } from './core/createNode'
-import { patchNode } from './core/patchNode'
+import Images from './core/Images'
+import Data from './core/Data'
+
+import { createNode } from './core/node/createNode'
+import { patchNode } from './core/node/patchNode'
 
 export default class Engine {
   constructor (Game) {
     if (this.checkChromeVersion()) {
       this.$state = Object.create(null)
-      this.Game = createNode(Game, null)
-      this.$foucs = null
       this.$sound = new Sound()
-      window.$sound = this.$sound
-      this.ui = new UI()
+      this.$images = new Images()
+      this.$data = new Data()
+      this.ui = new Render(this)
+      this.Game = createNode.call(this, Game, null)
       this.gameStart()
     }
   }

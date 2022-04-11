@@ -21,12 +21,12 @@ export default class Map extends Component {
 
   create () {
     const bgm = this.props.map.bgm
-    window.$sound.play('bgm', bgm)
+    this.$sound.play('bgm', bgm)
   }
 
   destroy () {
     const bgm = this.props.map.bgm
-    window.$sound.pause('bgm', bgm)
+    this.$sound.pause('bgm', bgm)
   }
 
   renderMapTerrains (status) {
@@ -39,9 +39,9 @@ export default class Map extends Component {
     mapTerrains.forEach((line, y) => {
       line.forEach((value, x) => {
         if (value) {
-          const info = window.$res.mapping[value]
+          const info = this.$data.mapping[value]
           const { type, name } = info
-          const detail = window.$res[type][name]
+          const detail = this.$data[type][name]
           let sx = 0
           if (info.type === 'animates') {
             sx = (tick % 4) * 32
@@ -73,10 +73,10 @@ export default class Map extends Component {
       return mapEvents.map((event) => {
         const [x, y, value, events] = event
         if (value) {
-          const info = window.$res.mapping[value]
+          const info = this.$data.mapping[value]
           if (info) {
             const { type, name } = info
-            const detail = window.$res[type][name]
+            const detail = this.$data[type][name]
             let sx = 0
             if (type === 'npcs' || type === 'enemys') {
               sx = (tick % 2) * 32

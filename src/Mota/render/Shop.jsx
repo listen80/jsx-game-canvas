@@ -32,7 +32,7 @@ export default class Shop extends Component {
   }
 
   create () {
-    this.shop = window.$res.shop[this.props.shopid]
+    this.shop = this.$data.shop[this.props.shopid]
   }
 
   onConfirm = (index) => {

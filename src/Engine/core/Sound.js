@@ -1,21 +1,33 @@
+import { loadSound } from '../utils/http'
+
 export default class Sound {
-  current = null
-  constructor (Soundes) {
-    this.Soundes = Soundes || window.$res.sounds
+  constructor (sounds) {
+    this.sounds = sounds || Object.create(null)
   }
 
   control (type, name, control) {
-    this.Soundes = window.$res.sounds
-    this.current = this.Soundes[`${type}/${name}`]
-    this.current.loop = type === 'bgm'
-    this.current[control]()
+    const current = this.sounds[`${type}/${name}`]
+    current.loop = type === 'bgm'
+    current[control]()
+    return current
+  }
+
+  load(sounds) {
+    const loadSounds = (data) => {
+      return Promise.all(data.map(sound => loadSound(`Sound/${sound}`))).then(sounds => {
+        sounds.forEach((Sound, i) => (this.sounds[data[i]] = Sound))
+      })
+    }
+    
+    const loaderMusic = () => Promise.all([loadSounds(sounds)])
+    return loaderMusic()
   }
 
   play (type, name) {
-    this.control(type, name, 'play')
+    return this.control(type, name, 'play')
   }
 
   pause (type, name) {
-    this.control(type, name, 'pause')
+    return this.control(type, name, 'pause')
   }
 }

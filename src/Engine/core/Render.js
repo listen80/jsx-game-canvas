@@ -2,18 +2,14 @@ import { baseStyle } from '../const/baseStyle'
 import { isPrimitive, isFunc, isArray, isUndefined } from '../utils/common'
 import { curFoucs } from './Component'
 
-const getImage = (src) => window.$res.images[src]
-
 const moveEvent = 'MouseMove'
 const mouseEvents = ['ContextMenu', 'Click', 'Wheel', moveEvent]
 
-const moveEventTarget = null
-const mouseClickEventTarget = null
 //  "MouseDown", "MouseUp"
 const keyEvents = ['KeyDown', 'KeyUp']
 
 export default class UI {
-  constructor (screen = {}) {
+  constructor (game, screen = {}) {
     const canvas = document.createElement('canvas')
     this.canvas = canvas
     this.context = canvas.getContext('2d')
@@ -29,6 +25,11 @@ export default class UI {
     this.keyEvents = []
     this.onMouseClick = []
     this.bind()
+    this.$images = game.$images
+  }
+
+  getImage = (src) => {
+    return this.$images.images[src]
   }
 
   bind () {
@@ -105,7 +106,7 @@ export default class UI {
       if (style) {
         const { sx = 0, sy = 0, width = 32, height = 32, swidth, sheight } = style
         const { context } = this
-        context.drawImage(getImage(props.src), sx, sy, swidth || width, sheight || height, offsetX, offsetY, width, height)
+        context.drawImage(this.getImage(props.src), sx, sy, swidth || width, sheight || height, offsetX, offsetY, width, height)
       }
     }
   }
@@ -126,7 +127,7 @@ export default class UI {
       context.save()
       context.beginPath()
       context.rect(offsetX, offsetY, width, height)
-      context.fillStyle = context.createPattern(getImage(backgroundImage), 'repeat')
+      context.fillStyle = context.createPattern(this.getImage(backgroundImage), 'repeat')
       context.fill()
       context.closePath()
       context.restore()
