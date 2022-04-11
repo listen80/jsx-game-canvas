@@ -6,6 +6,7 @@ function createInstance (next) {
   next.instance.$images = next.$parent.$images
   next.instance.$sound = next.$parent.$sound
   next.instance.$data = next.$parent.$data
+  next.instance.$font = next.$parent.$font
 
   next.instance.create && next.instance.create()
   renderNode(next)

@@ -40,7 +40,7 @@ export default class Title extends Component {
   render () {
     return (
       <div style={this.styles.title}>
-        <div style={this.styles.gameName}>魔塔</div>
+        <div style={this.styles.gameName}>{this.$data.game.title}</div>
         <Select activeIndex={this.activeIndex} options={this.options} style={this.styles.select} onConfirm={this.onConfirm}></Select>
       </div>
     )

@@ -121,6 +121,15 @@ function loadJSON(url) {
 function loadText(url) {
   return fetch(url).then(data => data.text()).then(data => formatText(data));
 }
+function loadFont({
+  name,
+  url
+}) {
+  const fontface = new FontFace(name, `url("${url}")`);
+  document.fonts.add(fontface);
+  fontface.load();
+  return fontface.loaded;
+}
 
 class Sound {
   constructor(sounds) {
@@ -128,7 +137,9 @@ class Sound {
   }
 
   control(type, name, control) {
-    const current = this.sounds[`${type}/${name}`];
+    const current = this.sounds[`${type}/${name}`].cloneNode(); // const current = new Audio()
+    // current.src = `${type}/${name}`
+
     current.loop = type === 'bgm';
     current[control]();
     return current;
@@ -731,12 +742,22 @@ class Data {
 
 }
 
+class Font {
+  constructor() {}
+
+  load(data) {
+    return loadFont(data);
+  }
+
+}
+
 function createInstance(next) {
   const Class = next.tag;
   next.instance = new Class(next);
   next.instance.$images = next.$parent.$images;
   next.instance.$sound = next.$parent.$sound;
   next.instance.$data = next.$parent.$data;
+  next.instance.$font = next.$parent.$font;
   next.instance.create && next.instance.create();
   renderNode(next);
 }
@@ -802,14 +823,16 @@ function patchNode(pre, next) {
 }
 
 class Engine {
-  constructor(Game) {
+  constructor($game) {
     if (this.checkChromeVersion()) {
       this.$state = Object.create(null);
+      this.$data = new Data();
       this.$sound = new Sound();
       this.$images = new ImageCollection();
-      this.$data = new Data();
-      this.ui = new UI(this);
-      this.Game = createNode.call(this, Game, null);
+      this.$font = new Font();
+      this.$ui = new UI(this);
+      this.$root = null;
+      this.$game = $game;
       this.gameStart();
     }
   }
@@ -839,8 +862,8 @@ class Engine {
   }
 
   keyFrame() {
-    this.root = patchNode(this.root, this.Game);
-    this.ui.render(this.root);
+    this.$root = patchNode(this.$root, createNode.call(this, this.$game, null));
+    this.$ui.render(this.$root);
   }
 
 }
@@ -1046,7 +1069,7 @@ class Title extends Component {
       style: this.styles.title
     }, this.$c("div", {
       style: this.styles.gameName
-    }, "\u9B54\u5854"), this.$c(Select, {
+    }, this.$data.game.title), this.$c(Select, {
       activeIndex: this.activeIndex,
       options: this.options,
       style: this.styles.select,
@@ -1230,7 +1253,7 @@ class Battle extends KeyEventComponent {
   render() {
     const enemy = this.enemy;
     const hero = this.hero;
-    const tick = location.hostname === 'localhost' ? 1 : 5;
+    const tick = location.hostname === 'localhost' ? 1 : 30;
 
     if (enemy.hp > 0) {
       this.tick++;
@@ -1755,6 +1778,7 @@ class Hero extends KeyEventComponent {
       this.$sound.play('se', 'load.mp3');
       this.msg = '存储成功';
     } else if (code === 'KeyL') {
+      this.$sound.play('se', 'load.mp3');
       this.props.onLoadMap(loadGame());
     } else if (code === 'KeyX') {
       this.showEnemyInfo = !this.showEnemyInfo;
@@ -2128,12 +2152,14 @@ class Map extends Component {
 
   create() {
     const bgm = this.props.map.bgm;
-    this.$sound.play('bgm', bgm);
+    this.mapBgm = this.$sound.play('bgm', bgm);
   }
 
   destroy() {
-    const bgm = this.props.map.bgm;
-    this.$sound.pause('bgm', bgm);
+    this.props.map.bgm; // this.$sound.pause('bgm', bgm)
+
+    this.mapBgm.pause();
+    console.info(111);
   }
 
   renderMapTerrains(status) {
@@ -2374,9 +2400,7 @@ const loadMap = mapId => {
   return loadJSON(`Maps/${mapId}.json`);
 };
 
-const loaderMap = ['game.json', 'save.json', 'shop.json', 'mapping.dat'];
 const sprite = ['enemys', 'items', 'animates', 'icons', 'npcs', 'terrains', 'boss'];
-[].concat(loaderMap.map(v => `Data/${v}`), sprite.map(v => `Sprite/${v}.dat`));
 const sounds = ['bgm/area1.mp3', 'bgm/area2.mp3', 'bgm/area3.mp3', 'bgm/prologue.mp3', 'bgm/terror.mp3', 'enemy/blackMagician.mp3', 'enemy/brownWizard.mp3', 'enemy/redWizard.mp3', 'enemy/whiteKing.mp3', 'se/attack.mp3', 'se/buy.mp3', 'se/constants.mp3', 'se/dialogue.mp3', 'se/door.mp3', 'se/floor.mp3', 'se/item.mp3', 'se/load.mp3', 'se/relieve.mp3', 'se/sell.mp3', 'se/step.mp3'];
 
 class Game extends Component {
@@ -2389,16 +2413,18 @@ class Game extends Component {
     }
   };
 
-  async loadFont() {
-    this.loading = '加载字体';
-    const font = this.$data.game.font;
-    await loaderFont(font);
-    this.styles.app.fontFamily = font.name;
-  }
-
   async create() {
     this.loading = '加载数据';
     await this.$data.load();
+
+    if (this.$data.game.font && this.$data.game.font.load !== false) {
+      this.loading = '加载字体';
+      const font = this.$data.game.font;
+      await this.$font.load(font);
+      this.styles.app.fontFamily = font.name;
+    }
+
+    document.title = this.$data.game.title;
     this.loading = '加载图片'; // console.log(this.$images)
 
     await this.$images.load(sprite);
@@ -2406,6 +2432,7 @@ class Game extends Component {
     await this.$sound.load(sounds);
     this.loading = false;
     this.saveData = this.$data.save;
+    console.log(this.$data);
   }
 
   onLoadMap = async data => {
@@ -2413,8 +2440,7 @@ class Game extends Component {
     Object.assign(this.saveData, data);
     this.map = await loadMap(this.saveData.mapId);
     this.loading = false;
-    this.randMapKey = `${this.saveData.mapId} ${new Date()}`;
-    this.$sound.play('se', 'floor.mp3');
+    this.randMapKey = `${this.saveData.mapId} ${new Date()}`; // this.$sound.play('se', 'floor.mp3')
   };
   onTitle = () => {
     this.map = null;
@@ -2442,5 +2468,7 @@ class Game extends Component {
 
 }
 
-window.mota = new Engine(Game);
+!function () {
+  this.mota = new Engine(Game);
+}();
 //# sourceMappingURL=bundle.js.map

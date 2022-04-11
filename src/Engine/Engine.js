@@ -2,24 +2,27 @@ import Render from './core/Render'
 import Sound from './core/Sound'
 import Images from './core/Images'
 import Data from './core/Data'
+import Font from './core/Font'
 
 import { createNode } from './core/node/createNode'
 import { patchNode } from './core/node/patchNode'
 
 export default class Engine {
-  constructor (Game) {
+  constructor($game) {
     if (this.checkChromeVersion()) {
       this.$state = Object.create(null)
+      this.$data = new Data()
       this.$sound = new Sound()
       this.$images = new Images()
-      this.$data = new Data()
-      this.ui = new Render(this)
-      this.Game = createNode.call(this, Game, null)
+      this.$font = new Font()
+      this.$ui = new Render(this)
+      this.$root = null
+      this.$game = $game
       this.gameStart()
     }
   }
 
-  checkChromeVersion () {
+  checkChromeVersion() {
     if (location.protocol === 'file:') {
       alert('不能直接运行index.html')
     } else if (!navigator.userAgent.match(/Chrome\/(\d+)/) || RegExp.$1 < 86) {
@@ -29,12 +32,12 @@ export default class Engine {
     }
   }
 
-  gameStop () {
+  gameStop() {
     cancelAnimationFrame(this.ident)
     this.ident = -1
   }
 
-  gameStart () {
+  gameStart() {
     const frame = () => {
       this.keyFrame()
       this.ident = requestAnimationFrame(frame)
@@ -42,8 +45,8 @@ export default class Engine {
     frame()
   }
 
-  keyFrame () {
-    this.root = patchNode(this.root, this.Game)
-    this.ui.render(this.root)
+  keyFrame() {
+    this.$root = patchNode(this.$root, createNode.call(this, this.$game, null))
+    this.$ui.render(this.$root)
   }
 }

@@ -1,10 +1,3 @@
-const loaderMap = [
-  'game.json',
-  'save.json',
-  'shop.json',
-  'mapping.dat',
-]
-
 export const sprite = [
   'enemys',
   'items',
@@ -14,8 +7,6 @@ export const sprite = [
   'terrains',
   'boss',
 ]
-
-const arr3 = [].concat(loaderMap.map(v => `Data/${v}`), sprite.map(v => `Sprite/${v}.dat`))
 
 export const sounds = [
   'bgm/area1.mp3',

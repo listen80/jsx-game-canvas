@@ -1,5 +1,4 @@
 {
-  "title": "魔 塔",
   "screen": {
     "width": 416,
     "height": 416
@@ -16,6 +15,9 @@
   },
   "font": {
     "name": "华文行楷",
-    "url": "Fonts/华文行楷.ttf"
-  }
+    "url": "Fonts/华文行楷.ttf",
+    "load": false
+  },
+  "title": "魔 塔",
+  "images": ["ground.png"]
 }

@@ -17,16 +17,18 @@ export default class Game extends Component {
     },
   };
 
-  async loadFont () {
-    this.loading = '加载字体'
-    const font = this.$data.game.font
-    await loaderFont(font)
-    this.styles.app.fontFamily = font.name
-  }
 
-  async create () {
+  async create() {
     this.loading = '加载数据'
     await this.$data.load()
+    if (this.$data.game.font && this.$data.game.font.load !== false) {
+      this.loading = '加载字体'
+      const font = this.$data.game.font
+      await this.$font.load(font)
+      this.styles.app.fontFamily = font.name
+    }
+    document.title = this.$data.game.title
+    
     this.loading = '加载图片'
     // console.log(this.$images)
     await this.$images.load(sprite)
@@ -34,6 +36,7 @@ export default class Game extends Component {
     await this.$sound.load(sounds)
     this.loading = false
     this.saveData = this.$data.save
+    console.log(this.$data)
   }
 
   onLoadMap = async (data) => {
@@ -42,31 +45,31 @@ export default class Game extends Component {
     this.map = await loadMap(this.saveData.mapId)
     this.loading = false
     this.randMapKey = `${this.saveData.mapId} ${new Date()}`
-    this.$sound.play('se', 'floor.mp3')
+    // this.$sound.play('se', 'floor.mp3')
   };
 
   onTitle = () => {
     this.map = null
   }
 
-  render () {
+  render() {
     return <div style={this.styles.app}>
-        {
-          this.loading
-            ? <Loading msg={this.loading} />
-            : this.map
-              ? this.map.text
-                ? <ScrollText map={this.map} onClose={this.onLoadMap} onTitle={this.onTitle}></ScrollText>
-                : <Map
-                  map={this.map}
-                  key={this.randMapKey}
-                  onLoadMap={this.onLoadMap}
-                  saveData={this.saveData}
-                  onEvent={this.onEvent}
-                />
-              : <Title onLoadMap={this.onLoadMap} />
-        }
-        <FPS />
-      </div>
+      {
+        this.loading
+          ? <Loading msg={this.loading} />
+          : this.map
+            ? this.map.text
+              ? <ScrollText map={this.map} onClose={this.onLoadMap} onTitle={this.onTitle}></ScrollText>
+              : <Map
+                map={this.map}
+                key={this.randMapKey}
+                onLoadMap={this.onLoadMap}
+                saveData={this.saveData}
+                onEvent={this.onEvent}
+              />
+            : <Title onLoadMap={this.onLoadMap} />
+      }
+      <FPS />
+    </div>
   }
 }

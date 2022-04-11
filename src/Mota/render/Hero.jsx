@@ -65,6 +65,7 @@ export default class Hero extends KeyEventComponent {
       this.$sound.play('se', 'load.mp3')
       this.msg = '存储成功'
     } else if (code === 'KeyL') {
+      this.$sound.play('se', 'load.mp3')
       this.props.onLoadMap(loadGame())
     } else if (code === 'KeyX') {
       this.showEnemyInfo = !this.showEnemyInfo
