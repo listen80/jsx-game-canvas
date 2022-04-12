@@ -1,5 +1,6 @@
 import { Component } from 'Engine'
 import Select from './Select'
+
 const options = [
   { text: '物品' },
   { text: '技能' },
@@ -42,7 +43,6 @@ export default class Menu extends Component {
   render () {
     return <div style={this.styles.menu}>
       <Select options={options} style={this.styles.select} onConfirm={this.onConfirm} onClose={this.props.onClose} />
-
       {
         this.activeIndex === -1
           ? null

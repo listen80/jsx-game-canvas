@@ -59,7 +59,7 @@ export default class Battle extends KeyEventComponent {
             enemy.hp = 0
             const { exp, money } = enemy
             hero.exp += exp
-            this.props.saveData.money += money
+            this.$data.save.money += money
             this.battleMsg = `战斗胜利，获得${money}金币，${exp}经验`
           }
         }

@@ -1,8 +1,4 @@
-import { loadImage, loadSound, loadJSON, loadFont, loadText } from './utils/http'
-
-export const loaderFont = (font) => {
-  return loadFont(font)
-}
+import { loadJSON, loadFont } from './utils/http'
 
 export const loadMap = mapId => {
   return loadJSON(`Maps/${mapId}.json`)

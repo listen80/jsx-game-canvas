@@ -23,7 +23,7 @@ const propertyNames = {
 export default class Hero extends KeyEventComponent {
   tick = 0;
   create () {
-    const hero = Object.assign(this.props.saveData.position, {
+    const hero = Object.assign(this.$data.save.position, {
       width: 32,
       height: 32,
     })
@@ -61,7 +61,7 @@ export default class Hero extends KeyEventComponent {
       moveVector = { x: step }
       styleHero.sy = 64
     } else if (code === 'KeyS') {
-      saveGame(this.props.saveData)
+      saveGame(this.$data.save)
       this.$sound.play('se', 'load.mp3')
       this.msg = '存储成功'
     } else if (code === 'KeyL') {
@@ -161,8 +161,8 @@ export default class Hero extends KeyEventComponent {
           ].includes(name)
         ) {
           const key = name.slice(0, -4) + 'Key'
-          if (this.props.saveData.items[key]) {
-            this.props.saveData.items[key]--
+          if (this.$data.save.items[key]) {
+            this.$data.save.items[key]--
             this.remove(mapEvent)
             this.$sound.play('se', 'door.mp3')
             return true
@@ -183,8 +183,8 @@ export default class Hero extends KeyEventComponent {
         this.props.onLoadMap(data)
       } else if (type === 'openShop') {
         this.shopid = event.id
-        this.props.saveData.shops = this.props.saveData.shops || {}
-        this.props.saveData.shops[this.shopid] =
+        this.$data.save.shops = this.$data.save.shops || {}
+        this.$data.save.shops[this.shopid] =
           this.$data.shop[this.shopid].title
         return
       } else if (type === 'getItems') {
@@ -198,7 +198,7 @@ export default class Hero extends KeyEventComponent {
         return
       } else if (type === 'enemy') {
         const enemy = this.$data.enemys[data]
-        const hero = this.props.saveData.hero
+        const hero = this.$data.save.hero
         if (hero.atk > enemy.def) {
           if (
             hero.def >= enemy.atk ||
@@ -228,7 +228,7 @@ export default class Hero extends KeyEventComponent {
       } else if (type === 'removeMapBlock') {
         const { mapId, position } = data
         const { x, y } = position
-        this.props.saveData.destroy[[mapId, x, y]] = true
+        this.$data.save.destroy[[mapId, x, y]] = true
       } else if (type === 'if') {
         const { condition, true: trueEvent, false: falseEvent } = event
         this.mapEvent = null
@@ -276,8 +276,8 @@ export default class Hero extends KeyEventComponent {
       gets.forEach(([id, value]) => this.updateSaveData(context, id, value))
     } else if (typeof gets === 'string') {
       const saveData = context
-        ? this.props.saveData[context]
-        : this.props.saveData
+        ? this.$data.save[context]
+        : this.$data.save
       saveData[gets] = saveData[gets] || 0
       saveData[gets] += Number(n)
     } else if (typeof gets === 'object') {
@@ -292,8 +292,8 @@ export default class Hero extends KeyEventComponent {
       return gets.some(([id, value]) => this.checkSaveData(context, id, value))
     } else if (typeof gets === 'string') {
       const saveData = context
-        ? this.props.saveData[context]
-        : this.props.saveData
+        ? this.$data.save[context]
+        : this.$data.save
       saveData[gets] = saveData[gets] || 0
       return saveData[gets] + Number(n) >= 0
     } else if (typeof gets === 'object') {
@@ -326,7 +326,6 @@ export default class Hero extends KeyEventComponent {
         <img style={this.styles.hero} src="Characters/hero.png"></img>
         {this.buying && (
           <ShopList
-            saveData={this.props.saveData}
             onClose={this.onShopListClose}
             onConfirm={this.onShopListConfirm}
           />
@@ -334,7 +333,6 @@ export default class Hero extends KeyEventComponent {
         {this.shopid && (
           <Shop
             shopid={this.shopid}
-            saveData={this.props.saveData}
             onClose={this.onShopClose}
             onShopEvent={this.onShopEvent}
           />
@@ -343,13 +341,12 @@ export default class Hero extends KeyEventComponent {
           <Battle
             enemy={this.enemy}
             enemyId={this.enemyId}
-            hero={this.props.saveData.hero}
-            saveData={this.props.saveData}
+            hero={this.$data.save.hero}
             onClose={this.onBattleClose}
           />
         )}
         {this.showMenu && (
-          <Menu saveData={this.props.saveData} onClose={this.onMenuClose} />
+          <Menu onClose={this.onMenuClose} />
         )}
         {this.talk && (
           <Talks talk={this.talk} key={this.talk} onConfirm={this.onConfirm} />
@@ -364,7 +361,6 @@ export default class Hero extends KeyEventComponent {
         {this.showEnemyInfo && (
           <EnemyInfo
             enemys={this.props.enemys}
-            saveData={this.props.saveData}
             onClose={() => (this.showEnemyInfo = false)}
           />
         )}

@@ -32,7 +32,7 @@ export default class EnemyInfo extends KeyEventComponent {
               height: 32,
             }
             const enemy = this.$data.enemys[enemyId]
-            const hero = this.props.saveData.hero
+            const hero = this.$data.save.hero
             let cost = 0
             if (hero.atk > enemy.def) {
               if (

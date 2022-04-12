@@ -14,19 +14,20 @@ export default class Status extends Component {
   }
 
   render () {
-    const { saveData, map } = this.props
+    const { map } = this.props
+    const { save } = this.$data
     const rowProperty = [
       this.$data.game.title,
       map.name,
-      saveData.hero.lv,
-      saveData.hero.hp,
-      saveData.hero.atk,
-      saveData.hero.def,
-      saveData.hero.exp,
-      saveData.money,
-      saveData.items.yellowKey,
-      saveData.items.blueKey,
-      saveData.items.redKey,
+      save.hero.lv,
+      save.hero.hp,
+      save.hero.atk,
+      save.hero.def,
+      save.hero.exp,
+      save.money,
+      save.items.yellowKey,
+      save.items.blueKey,
+      save.items.redKey,
     ]
     return (
       <div style={{ fontSize: 24 }}>

@@ -33,16 +33,14 @@ export default class Game extends Component {
     this.loading = '加载音乐'
     await this.$sound.load(sounds)
     this.loading = false
-    this.saveData = this.$data.save
   }
 
   onLoadMap = async (data) => {
     this.loading = '加载地图'
-    Object.assign(this.saveData, data)
-    this.map = await loadMap(this.saveData.mapId)
+    Object.assign(this.$data.save, data)
+    this.map = await loadMap(this.$data.save.mapId)
     this.loading = false
-    this.randMapKey = `${this.saveData.mapId} ${new Date()}`
-    // this.$sound.play('se', 'floor.mp3')
+    this.randMapKey = `${this.$data.save.mapId} ${new Date()}`
   };
 
   onTitle = () => {
@@ -61,7 +59,6 @@ export default class Game extends Component {
                 map={this.map}
                 key={this.randMapKey}
                 onLoadMap={this.onLoadMap}
-                saveData={this.saveData}
                 onEvent={this.onEvent}
               />
             : <Title onLoadMap={this.onLoadMap} />

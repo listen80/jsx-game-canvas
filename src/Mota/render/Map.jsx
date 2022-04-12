@@ -66,7 +66,7 @@ export default class Map extends Component {
   }
 
   renderMapEvents () {
-    const { mapId, destroy = {} } = this.props.saveData
+    const { mapId, destroy = {} } = this.$data.save
     const { mapEvents } = this.props.map
     const tick = this.tick
     const enemys = {}
@@ -107,9 +107,9 @@ export default class Map extends Component {
 
   onRemoveMapEvent = (mapEvent) => {
     const [x, y] = mapEvent
-    const mapId = this.props.saveData.mapId
-    this.props.saveData.destroy = this.props.saveData.destroy || {}
-    this.props.saveData.destroy[[mapId, x, y]] = 1
+    const mapId = this.$data.save.mapId
+    this.$data.save.destroy = this.$data.save.destroy || {}
+    this.$data.save.destroy[[mapId, x, y]] = 1
   };
 
   onTitle = () => {
@@ -136,12 +136,11 @@ export default class Map extends Component {
           {mapEvents}
         </div>
         <div style={this.styles.statusBar}>
-          <Status saveData={this.props.saveData} map={this.props.map} />
+          <Status map={this.props.map} />
         </div>
         <Hero
           mapTerrains={mapTerrains}
           mapEvents={mapEvents}
-          saveData={this.props.saveData}
           enemys={this.enemys}
           map={this.props.map}
           onLoadMap={this.props.onLoadMap}

@@ -12,7 +12,7 @@ export default class ShopList extends Component {
   }
 
   create () {
-    const shops = this.props.saveData.shops || []
+    const shops = this.$data.save.shops || []
     this.options = Object.entries(shops).map(([shopid, text]) => {
       return { text, shopid }
     })

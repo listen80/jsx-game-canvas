@@ -1025,8 +1025,8 @@ function getStorage(key) {
   }
 }
 
-function saveGame(saveData) {
-  return setStorage('game', saveData);
+function saveGame(save) {
+  return setStorage('game', save);
 }
 function loadGame() {
   return getStorage('game');
@@ -1281,7 +1281,7 @@ class Battle extends KeyEventComponent {
               money
             } = enemy;
             hero.exp += exp;
-            this.props.saveData.money += money;
+            this.$data.save.money += money;
             this.battleMsg = `战斗胜利，获得${money}金币，${exp}经验`;
           }
         }
@@ -1588,7 +1588,7 @@ class EnemyInfo extends KeyEventComponent {
         height: 32
       };
       const enemy = this.$data.enemys[enemyId];
-      const hero = this.props.saveData.hero;
+      const hero = this.$data.save.hero;
       let cost = 0;
 
       if (hero.atk > enemy.def) {
@@ -1659,7 +1659,7 @@ class ShopList extends Component {
   };
 
   create() {
-    const shops = this.props.saveData.shops || [];
+    const shops = this.$data.save.shops || [];
     this.options = Object.entries(shops).map(([shopid, text]) => {
       return {
         text,
@@ -1728,7 +1728,7 @@ class Hero extends KeyEventComponent {
   tick = 0;
 
   create() {
-    const hero = Object.assign(this.props.saveData.position, {
+    const hero = Object.assign(this.$data.save.position, {
       width: 32,
       height: 32
     });
@@ -1774,7 +1774,7 @@ class Hero extends KeyEventComponent {
       };
       styleHero.sy = 64;
     } else if (code === 'KeyS') {
-      saveGame(this.props.saveData);
+      saveGame(this.$data.save);
       this.$sound.play('se', 'load.mp3');
       this.msg = '存储成功';
     } else if (code === 'KeyL') {
@@ -1874,8 +1874,8 @@ class Hero extends KeyEventComponent {
         if (['yellowDoor', 'redDoor', 'blueDoor', 'steelDoor', 'specialDoor'].includes(name)) {
           const key = name.slice(0, -4) + 'Key';
 
-          if (this.props.saveData.items[key]) {
-            this.props.saveData.items[key]--;
+          if (this.$data.save.items[key]) {
+            this.$data.save.items[key]--;
             this.remove(mapEvent);
             this.$sound.play('se', 'door.mp3');
             return true;
@@ -1900,8 +1900,8 @@ class Hero extends KeyEventComponent {
         this.props.onLoadMap(data);
       } else if (type === 'openShop') {
         this.shopid = event.id;
-        this.props.saveData.shops = this.props.saveData.shops || {};
-        this.props.saveData.shops[this.shopid] = this.$data.shop[this.shopid].title;
+        this.$data.save.shops = this.$data.save.shops || {};
+        this.$data.save.shops[this.shopid] = this.$data.shop[this.shopid].title;
         return;
       } else if (type === 'getItems') {
         this.updateSaveData('items', data);
@@ -1914,7 +1914,7 @@ class Hero extends KeyEventComponent {
         return;
       } else if (type === 'enemy') {
         const enemy = this.$data.enemys[data];
-        const hero = this.props.saveData.hero;
+        const hero = this.$data.save.hero;
 
         if (hero.atk > enemy.def) {
           if (hero.def >= enemy.atk || enemy.hp / (hero.atk - enemy.def) <= hero.hp / (enemy.atk - hero.def)) {
@@ -1947,7 +1947,7 @@ class Hero extends KeyEventComponent {
           x,
           y
         } = position;
-        this.props.saveData.destroy[[mapId, x, y]] = true;
+        this.$data.save.destroy[[mapId, x, y]] = true;
       } else if (type === 'if') {
         const {
           condition,
@@ -1995,7 +1995,7 @@ class Hero extends KeyEventComponent {
     if (Array.isArray(gets)) {
       gets.forEach(([id, value]) => this.updateSaveData(context, id, value));
     } else if (typeof gets === 'string') {
-      const saveData = context ? this.props.saveData[context] : this.props.saveData;
+      const saveData = context ? this.$data.save[context] : this.$data.save;
       saveData[gets] = saveData[gets] || 0;
       saveData[gets] += Number(n);
     } else if (typeof gets === 'object') {
@@ -2007,7 +2007,7 @@ class Hero extends KeyEventComponent {
     if (Array.isArray(gets)) {
       return gets.some(([id, value]) => this.checkSaveData(context, id, value));
     } else if (typeof gets === 'string') {
-      const saveData = context ? this.props.saveData[context] : this.props.saveData;
+      const saveData = context ? this.$data.save[context] : this.$data.save;
       saveData[gets] = saveData[gets] || 0;
       return saveData[gets] + Number(n) >= 0;
     } else if (typeof gets === 'object') {
@@ -2037,22 +2037,18 @@ class Hero extends KeyEventComponent {
       style: this.styles.hero,
       src: "Characters/hero.png"
     }), this.buying && this.$c(ShopList, {
-      saveData: this.props.saveData,
       onClose: this.onShopListClose,
       onConfirm: this.onShopListConfirm
     }), this.shopid && this.$c(Shop, {
       shopid: this.shopid,
-      saveData: this.props.saveData,
       onClose: this.onShopClose,
       onShopEvent: this.onShopEvent
     }), this.enemy && this.$c(Battle, {
       enemy: this.enemy,
       enemyId: this.enemyId,
-      hero: this.props.saveData.hero,
-      saveData: this.props.saveData,
+      hero: this.$data.save.hero,
       onClose: this.onBattleClose
     }), this.showMenu && this.$c(Menu, {
-      saveData: this.props.saveData,
       onClose: this.onMenuClose
     }), this.talk && this.$c(Talk, {
       talk: this.talk,
@@ -2064,7 +2060,6 @@ class Hero extends KeyEventComponent {
       onMessageClose: this.onMessageClose
     }), this.showEnemyInfo && this.$c(EnemyInfo, {
       enemys: this.props.enemys,
-      saveData: this.props.saveData,
       onClose: () => this.showEnemyInfo = false
     }));
   }
@@ -2096,10 +2091,12 @@ class Status extends Component {
 
   render() {
     const {
-      saveData,
       map
     } = this.props;
-    const rowProperty = [this.$data.game.title, map.name, saveData.hero.lv, saveData.hero.hp, saveData.hero.atk, saveData.hero.def, saveData.hero.exp, saveData.money, saveData.items.yellowKey, saveData.items.blueKey, saveData.items.redKey];
+    const {
+      save
+    } = this.$data;
+    const rowProperty = [this.$data.game.title, map.name, save.hero.lv, save.hero.hp, save.hero.atk, save.hero.def, save.hero.exp, save.money, save.items.yellowKey, save.items.blueKey, save.items.redKey];
     return this.$c("div", {
       style: {
         fontSize: 24
@@ -2212,7 +2209,7 @@ class Map extends Component {
     const {
       mapId,
       destroy = {}
-    } = this.props.saveData;
+    } = this.$data.save;
     const {
       mapEvents
     } = this.props.map;
@@ -2274,9 +2271,9 @@ class Map extends Component {
 
   onRemoveMapEvent = mapEvent => {
     const [x, y] = mapEvent;
-    const mapId = this.props.saveData.mapId;
-    this.props.saveData.destroy = this.props.saveData.destroy || {};
-    this.props.saveData.destroy[[mapId, x, y]] = 1;
+    const mapId = this.$data.save.mapId;
+    this.$data.save.destroy = this.$data.save.destroy || {};
+    this.$data.save.destroy[[mapId, x, y]] = 1;
   };
   onTitle = () => {
     this.props.onTitle();
@@ -2301,12 +2298,10 @@ class Map extends Component {
     }, mapTerrains, mapEvents), this.$c("div", {
       style: this.styles.statusBar
     }, this.$c(Status, {
-      saveData: this.props.saveData,
       map: this.props.map
     })), this.$c(Hero, {
       mapTerrains: mapTerrains,
       mapEvents: mapEvents,
-      saveData: this.props.saveData,
       enemys: this.enemys,
       map: this.props.map,
       onLoadMap: this.props.onLoadMap,
@@ -2431,15 +2426,14 @@ class Game extends Component {
     this.loading = '加载音乐';
     await this.$sound.load(sounds);
     this.loading = false;
-    this.saveData = this.$data.save;
   }
 
   onLoadMap = async data => {
     this.loading = '加载地图';
-    Object.assign(this.saveData, data);
-    this.map = await loadMap(this.saveData.mapId);
+    Object.assign(this.$data.save, data);
+    this.map = await loadMap(this.$data.save.mapId);
     this.loading = false;
-    this.randMapKey = `${this.saveData.mapId} ${new Date()}`; // this.$sound.play('se', 'floor.mp3')
+    this.randMapKey = `${this.$data.save.mapId} ${new Date()}`;
   };
   onTitle = () => {
     this.map = null;
@@ -2458,7 +2452,6 @@ class Game extends Component {
       map: this.map,
       key: this.randMapKey,
       onLoadMap: this.onLoadMap,
-      saveData: this.saveData,
       onEvent: this.onEvent
     }) : this.$c(Title, {
       onLoadMap: this.onLoadMap
