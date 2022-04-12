@@ -314,6 +314,5 @@ export default class UI {
     this.clearRect()
     this.renderRect(root, 0, 0, this.canvas)
     this.runEvent()
-    self.$root = root
   }
 }

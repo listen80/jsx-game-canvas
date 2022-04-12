@@ -7,6 +7,10 @@ export default class EnemyInfo extends KeyEventComponent {
     }
   }
 
+  onMouseDown () {
+    this.props.onClose()
+  }
+
   render () {
     const enemys = Object.keys(this.props.enemys)
     return (
@@ -14,8 +18,13 @@ export default class EnemyInfo extends KeyEventComponent {
         style={{
           textAlign: 'left',
           fontSize: 16,
-          backgroundColor: 'rgba(0,0,0,.8)',
-          width: 32 * 18,
+          // backgroundColor: 'rgba(0,0,0,1)',
+          backgroundImage: 'ground.png',
+          borderColor: 'yellow',
+          borderWidth: 10,
+          x: 0,
+          y: 0,
+          width: 32 * 13,
           height: 32 * 13,
         }}
       >

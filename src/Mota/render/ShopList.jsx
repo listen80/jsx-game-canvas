@@ -23,6 +23,12 @@ export default class ShopList extends Component {
     this.props.onConfirm(shopid)
   }
 
+  onKeyDown = ({ code }) => {
+    if (code === 'KeyB') {
+      this.props.onClose()
+    }
+  }
+
   render () {
     return (
       <div style={this.style}>

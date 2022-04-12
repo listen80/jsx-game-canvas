@@ -34,6 +34,8 @@ export default class Select extends KeyEventComponent {
       this.props.onConfirm && this.props.onConfirm(this.activeIndex, this.props.options[this.activeIndex])
     } else if (code === 'Escape') {
       this.props.onClose && this.props.onClose()
+    } else {
+      this.props.onKeyDown && this.props.onKeyDown({ code })
     }
   }
 

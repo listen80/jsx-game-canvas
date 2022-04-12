@@ -561,7 +561,6 @@ class UI {
     this.clearRect();
     this.renderRect(root, 0, 0, this.canvas);
     this.runEvent();
-    self.$root = root;
   }
 
 }
@@ -971,6 +970,10 @@ class Select extends KeyEventComponent {
       this.props.onConfirm && this.props.onConfirm(this.activeIndex, this.props.options[this.activeIndex]);
     } else if (code === 'Escape') {
       this.props.onClose && this.props.onClose();
+    } else {
+      this.props.onKeyDown && this.props.onKeyDown({
+        code
+      });
     }
   }
 
@@ -1541,14 +1544,23 @@ class EnemyInfo extends KeyEventComponent {
     }
   }
 
+  onMouseDown() {
+    this.props.onClose();
+  }
+
   render() {
     const enemys = Object.keys(this.props.enemys);
     return this.$c("div", {
       style: {
         textAlign: 'left',
         fontSize: 16,
-        backgroundColor: 'rgba(0,0,0,.8)',
-        width: 32 * 18,
+        // backgroundColor: 'rgba(0,0,0,1)',
+        backgroundImage: 'ground.png',
+        borderColor: 'yellow',
+        borderWidth: 10,
+        x: 0,
+        y: 0,
+        width: 32 * 13,
         height: 32 * 13
       }
     }, this.$c("div", {
@@ -1673,6 +1685,13 @@ class ShopList extends Component {
       shopid
     } = this.options[index];
     this.props.onConfirm(shopid);
+  };
+  onKeyDown = ({
+    code
+  }) => {
+    if (code === 'KeyB') {
+      this.props.onClose();
+    }
   };
 
   render() {
