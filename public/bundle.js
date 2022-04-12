@@ -1,3 +1,39 @@
+const fontFamily = document.fonts.check('16px 黑体') ? '黑体' : '黑体-简';
+const baseStyle = {
+  direction: 'ltr',
+  color: 'white',
+  // filter: "grayscale(.1)",
+  filter: 'none',
+  fontSize: 32,
+  font: '32px ' + fontFamily,
+  globalAlpha: 1,
+  globalCompositeOperation: 'source-over',
+  // imageSmoothingEnabled: true,
+  // imageSmoothingQuality: 'low',
+  imageSmoothingEnabled: false,
+  lineCap: 'butt',
+  lineDashOffset: 0,
+  lineJoin: 'miter',
+  lineWidth: 1,
+  miterLimit: 10,
+  shadowBlur: 0,
+  shadowColor: 'rgba(0, 0, 0, 0)',
+  shadowOffsetX: 0,
+  shadowOffsetY: 0,
+  strokeStyle: 'white',
+  textAlign: 'start',
+  // textBaseline: "alphabetic",
+  textBaseline: 'top'
+};
+
+const isPrimitive = value => {
+  const type = typeof value;
+  return type === 'string' || type === 'number';
+};
+const isFunc = f => typeof f === 'function';
+const isArray = a => Array.isArray(a);
+const isUndefined = o => o === undefined || o === null;
+
 function createNode(tag, props, ...children) {
   const $parent = this;
   return {
@@ -51,157 +87,6 @@ class KeyEventComponent extends Component {
   }
 
 }
-
-function convertPropertyStr(str) {
-  const arr = str.split('.');
-
-  if (arr.length === 1) {
-    arr.unshift('');
-  }
-
-  const [key, propertyStr] = arr;
-  const properties = propertyStr.split(';').map(v => v.split(':'));
-  return [key, properties];
-}
-const formatText = data => {
-  const o = [];
-  data = data.split(/\r?\n/);
-  const keys = data.shift().split(',');
-  data.forEach((row, index) => {
-    if (!row.trim()) {
-      return;
-    }
-
-    const properties = row.split(',');
-    const [id] = properties;
-    const item = {
-      sy: index
-    };
-    keys.forEach((key, index) => {
-      const value = properties[index];
-
-      if (!value) {
-        return;
-      }
-
-      if (key === 'property') {
-        item[key] = convertPropertyStr(value);
-      } else if (['id', 'name', 'type'].includes(key)) {
-        item[key] = value;
-      } else {
-        item[key] = isNaN(value) ? value : Number(value);
-      }
-    });
-    o[id] = item;
-    o.push(item);
-    return data;
-  });
-  return o;
-};
-
-const loadImage = src => {
-  return new Promise(function (resolve, reject) {
-    const img = new Image();
-    img.addEventListener('load', () => resolve(img));
-    img.addEventListener('error', () => reject(img));
-    img.src = src;
-  });
-};
-const loadSound = src => {
-  return new Promise(function (resolve, reject) {
-    const audio = new Audio();
-    audio.addEventListener('canplay', () => resolve(audio));
-    audio.addEventListener('error', () => reject(audio));
-    audio.src = src;
-  });
-};
-function loadJSON(url) {
-  return fetch(url).then(data => data.json());
-}
-function loadText(url) {
-  return fetch(url).then(data => data.text()).then(data => formatText(data));
-}
-function loadFont({
-  name,
-  url
-}) {
-  const fontface = new FontFace(name, `url("${url}")`);
-  document.fonts.add(fontface);
-  fontface.load();
-  return fontface.loaded;
-}
-
-class Sound {
-  constructor(sounds) {
-    this.sounds = sounds || Object.create(null);
-  }
-
-  control(type, name, control) {
-    const current = this.sounds[`${type}/${name}`].cloneNode(); // const current = new Audio()
-    // current.src = `${type}/${name}`
-
-    current.loop = type === 'bgm';
-    current[control]();
-    return current;
-  }
-
-  load(sounds) {
-    const loadSounds = data => {
-      return Promise.all(data.map(sound => loadSound(`Sound/${sound}`))).then(sounds => {
-        sounds.forEach((Sound, i) => this.sounds[data[i]] = Sound);
-      });
-    };
-
-    const loaderMusic = () => Promise.all([loadSounds(sounds)]);
-
-    return loaderMusic();
-  }
-
-  play(type, name) {
-    return this.control(type, name, 'play');
-  }
-
-  pause(type, name) {
-    return this.control(type, name, 'pause');
-  }
-
-}
-
-const fontFamily = document.fonts.check('16px 黑体') ? '黑体' : '黑体-简';
-const baseStyle = {
-  direction: 'ltr',
-  color: 'white',
-  // filter: "grayscale(.1)",
-  filter: 'none',
-  fontSize: 32,
-  font: '32px ' + fontFamily,
-  globalAlpha: 1,
-  globalCompositeOperation: 'source-over',
-  // imageSmoothingEnabled: true,
-  // imageSmoothingQuality: 'low',
-  imageSmoothingEnabled: false,
-  lineCap: 'butt',
-  lineDashOffset: 0,
-  lineJoin: 'miter',
-  lineWidth: 1,
-  miterLimit: 10,
-  shadowBlur: 0,
-  shadowColor: 'rgba(0, 0, 0, 0)',
-  shadowOffsetX: 0,
-  shadowOffsetY: 0,
-  strokeStyle: 'white',
-  textAlign: 'start',
-  // textBaseline: "alphabetic",
-  textBaseline: 'top'
-};
-
-const isPrimitive = value => {
-  const type = typeof value;
-  return type === 'string' || type === 'number';
-};
-const isFunc = f => typeof f === 'function';
-const isArray = a => Array.isArray(a);
-const isUndefined = o => o === undefined || o === null;
 
 const moveEvent = 'MouseMove';
 const mouseEvents = ['ContextMenu', 'Click', 'Wheel', moveEvent]; //  "MouseDown", "MouseUp"
@@ -677,6 +562,121 @@ class UI {
     this.renderRect(root, 0, 0, this.canvas);
     this.runEvent();
     self.$root = root;
+  }
+
+}
+
+function convertPropertyStr(str) {
+  const arr = str.split('.');
+
+  if (arr.length === 1) {
+    arr.unshift('');
+  }
+
+  const [key, propertyStr] = arr;
+  const properties = propertyStr.split(';').map(v => v.split(':'));
+  return [key, properties];
+}
+const formatText = data => {
+  const o = [];
+  data = data.split(/\r?\n/);
+  const keys = data.shift().split(',');
+  data.forEach((row, index) => {
+    if (!row.trim()) {
+      return;
+    }
+
+    const properties = row.split(',');
+    const [id] = properties;
+    const item = {
+      sy: index
+    };
+    keys.forEach((key, index) => {
+      const value = properties[index];
+
+      if (!value) {
+        return;
+      }
+
+      if (key === 'property') {
+        item[key] = convertPropertyStr(value);
+      } else if (['id', 'name', 'type'].includes(key)) {
+        item[key] = value;
+      } else {
+        item[key] = isNaN(value) ? value : Number(value);
+      }
+    });
+    o[id] = item;
+    o.push(item);
+    return data;
+  });
+  return o;
+};
+
+const loadImage = src => {
+  return new Promise(function (resolve, reject) {
+    const img = new Image();
+    img.addEventListener('load', () => resolve(img));
+    img.addEventListener('error', () => reject(img));
+    img.src = src;
+  });
+};
+const loadSound = src => {
+  return new Promise(function (resolve, reject) {
+    const audio = new Audio();
+    audio.addEventListener('canplay', () => resolve(audio));
+    audio.addEventListener('error', () => reject(audio));
+    audio.src = src;
+  });
+};
+function loadJSON(url) {
+  return fetch(url).then(data => data.json());
+}
+function loadText(url) {
+  return fetch(url).then(data => data.text()).then(data => formatText(data));
+}
+function loadFont({
+  name,
+  url
+}) {
+  const fontface = new FontFace(name, `url("${url}")`);
+  document.fonts.add(fontface);
+  fontface.load();
+  return fontface.loaded;
+}
+
+class Sound {
+  constructor(sounds) {
+    this.sounds = sounds || Object.create(null);
+  }
+
+  control(type, name, control) {
+    const current = this.sounds[`${type}/${name}`].cloneNode(); // const current = new Audio()
+    // current.src = `${type}/${name}`
+
+    current.loop = type === 'bgm';
+    current[control]();
+    return current;
+  }
+
+  load(sounds) {
+    const loadSounds = data => {
+      return Promise.all(data.map(sound => loadSound(`Sound/${sound}`))).then(sounds => {
+        sounds.forEach((Sound, i) => this.sounds[data[i]] = Sound);
+      });
+    };
+
+    const loaderMusic = () => Promise.all([loadSounds(sounds)]);
+
+    return loaderMusic();
+  }
+
+  play(type, name) {
+    return this.control(type, name, 'play');
+  }
+
+  pause(type, name) {
+    return this.control(type, name, 'pause');
   }
 
 }
@@ -2416,23 +2416,22 @@ class Game extends Component {
   async create() {
     this.loading = '加载数据';
     await this.$data.load();
+    const game = this.$data.game;
 
-    if (this.$data.game.font && this.$data.game.font.load !== false) {
+    if (game.font && game.font.load !== false) {
       this.loading = '加载字体';
-      const font = this.$data.game.font;
+      const font = game.font;
       await this.$font.load(font);
       this.styles.app.fontFamily = font.name;
     }
 
-    document.title = this.$data.game.title;
-    this.loading = '加载图片'; // console.log(this.$images)
-
+    document.title = game.title;
+    this.loading = '加载图片';
     await this.$images.load(sprite);
     this.loading = '加载音乐';
     await this.$sound.load(sounds);
     this.loading = false;
     this.saveData = this.$data.save;
-    console.log(this.$data);
   }
 
   onLoadMap = async data => {

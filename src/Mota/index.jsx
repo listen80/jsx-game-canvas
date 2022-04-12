@@ -17,26 +17,23 @@ export default class Game extends Component {
     },
   };
 
-
-  async create() {
+  async create () {
     this.loading = '加载数据'
     await this.$data.load()
-    if (this.$data.game.font && this.$data.game.font.load !== false) {
+    const game = this.$data.game
+    if (game.font && game.font.load !== false) {
       this.loading = '加载字体'
-      const font = this.$data.game.font
+      const font = game.font
       await this.$font.load(font)
       this.styles.app.fontFamily = font.name
     }
-    document.title = this.$data.game.title
-    
+    document.title = game.title
     this.loading = '加载图片'
-    // console.log(this.$images)
     await this.$images.load(sprite)
     this.loading = '加载音乐'
     await this.$sound.load(sounds)
     this.loading = false
     this.saveData = this.$data.save
-    console.log(this.$data)
   }
 
   onLoadMap = async (data) => {
@@ -52,7 +49,7 @@ export default class Game extends Component {
     this.map = null
   }
 
-  render() {
+  render () {
     return <div style={this.styles.app}>
       {
         this.loading
