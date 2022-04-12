@@ -1,11 +1,10 @@
 import { loadFont } from '../utils/http'
 
 export default class Font {
-  constructor() {
+  constructor () {
   }
 
-  load(data) {
+  load (data) {
     return loadFont(data)
   }
-
 }

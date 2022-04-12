@@ -13,7 +13,7 @@ const sprite = [
 const radioImages = [
   'Characters/hero.png',
   'ground.png',
-  'Battlebacks/mota.jpg'
+  'Battlebacks/mota.jpg',
 ]
 
 export default class ImageCollection {
@@ -21,11 +21,11 @@ export default class ImageCollection {
     this.images = images || {}
   }
 
-  load() {
+  load () {
     const loadImages = () => {
       const o = sprite.map(v => `Sprite/${v}.png`)
       const o2 = radioImages.map(v => `Graph/${v}`)
-    
+
       return Promise.all([...o, ...o2].map(src => {
         return new Promise((resolve) => {
           loadImage(`${src}`).then((img) => {
@@ -39,7 +39,7 @@ export default class ImageCollection {
         })
       }))
     }
-    
+
     return Promise.all([loadImages()])
   }
 }

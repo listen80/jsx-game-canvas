@@ -42,7 +42,7 @@
     "se/sell.mp3",
     "se/step.mp3"
   ],
-  "sprite" : [
+  "sprites" : [
     "enemys",
     "items",
     "animates",
