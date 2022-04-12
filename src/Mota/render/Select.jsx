@@ -64,7 +64,10 @@ export default class Select extends KeyEventComponent {
                 borderColor: '#ccc',
               }
               return (
-                <div style={optionStyle} onClick={() => this.onClick(index)} onMouseLeave={(e) => { this.activeIndex = -1 }} onMouseEnter={(e) => { this.activeIndex = index }}>
+                <div style={optionStyle}
+                  onClick={() => this.onClick(index)}
+                  onMouseLeave={(e) => { this.activeIndex = -1 }}
+                  onMouseEnter={(e) => { this.activeIndex = index }}>
                   {text}
                 </div>
               )

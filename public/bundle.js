@@ -680,7 +680,7 @@ class Sound {
 
 }
 
-const sprite$1 = ['enemys', 'items', 'animates', 'icons', 'npcs', 'terrains', 'boss'];
+const sprite = ['enemys', 'items', 'animates', 'icons', 'npcs', 'terrains', 'boss'];
 const radioImages = ['Characters/hero.png', 'ground.png', 'Battlebacks/mota.jpg'];
 class ImageCollection {
   constructor(images) {
@@ -689,7 +689,7 @@ class ImageCollection {
 
   load() {
     const loadImages = () => {
-      const o = sprite$1.map(v => `Sprite/${v}.png`);
+      const o = sprite.map(v => `Sprite/${v}.png`);
       const o2 = radioImages.map(v => `Graph/${v}`);
       return Promise.all([...o, ...o2].map(src => {
         return new Promise(resolve => {
@@ -713,8 +713,6 @@ class ImageCollection {
 }
 
 class Data {
-  constructor() {}
-
   load() {
     const loaderMap = ['game.json', 'save.json', 'shop.json', 'mapping.dat'];
     const sprite = ['enemys', 'items', 'animates', 'icons', 'npcs', 'terrains', 'boss'];
@@ -2414,9 +2412,6 @@ const loadMap = mapId => {
   return loadJSON(`Maps/${mapId}.json`);
 };
 
-const sprite = ['enemys', 'items', 'animates', 'icons', 'npcs', 'terrains', 'boss'];
-const sounds = ['bgm/area1.mp3', 'bgm/area2.mp3', 'bgm/area3.mp3', 'bgm/prologue.mp3', 'bgm/terror.mp3', 'enemy/blackMagician.mp3', 'enemy/brownWizard.mp3', 'enemy/redWizard.mp3', 'enemy/whiteKing.mp3', 'se/attack.mp3', 'se/buy.mp3', 'se/constants.mp3', 'se/dialogue.mp3', 'se/door.mp3', 'se/floor.mp3', 'se/item.mp3', 'se/load.mp3', 'se/relieve.mp3', 'se/sell.mp3', 'se/step.mp3'];
-
 class Game extends Component {
   styles = {
     app: {
@@ -2441,9 +2436,9 @@ class Game extends Component {
 
     document.title = game.title;
     this.loading = '加载图片';
-    await this.$images.load(sprite);
+    await this.$images.load(game.sprite);
     this.loading = '加载音乐';
-    await this.$sound.load(sounds);
+    await this.$sound.load(game.sounds);
     this.loading = false;
   }
 

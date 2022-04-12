@@ -5,8 +5,6 @@ import Title from './render/Title'
 import Map from './render/Map'
 import ScrollText from './render/ScrollText'
 import { loadMap } from '../Engine/loader'
-
-import { sounds, sprite } from './const/list'
 export default class Game extends Component {
   styles = {
     app: {
@@ -29,9 +27,9 @@ export default class Game extends Component {
     }
     document.title = game.title
     this.loading = '加载图片'
-    await this.$images.load(sprite)
+    await this.$images.load(game.sprite)
     this.loading = '加载音乐'
-    await this.$sound.load(sounds)
+    await this.$sound.load(game.sounds)
     this.loading = false
   }
 

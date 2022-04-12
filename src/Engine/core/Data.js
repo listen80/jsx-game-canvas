@@ -2,11 +2,7 @@ import { loadJSON, loadText } from '../utils/http'
 // import { loadImage, loadSound, loadJSON, loadFont, loadText } from './utils/http'
 
 export default class Data {
-  constructor() {
-  }
-
-  load() {
-
+  load () {
     const loaderMap = [
       'game.json',
       'save.json',
@@ -31,7 +27,5 @@ export default class Data {
         Object.assign(this, { game, save, shop, mapping, enemys, items, animates, icons, npcs, terrains, boss })
       })
     return loaderData()
-
   }
-
 }
