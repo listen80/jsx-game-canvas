@@ -25,25 +25,28 @@ export default class Battle extends KeyEventComponent {
     },
   }
 
-  create () {
+  create() {
     this.enemy = JSON.parse(JSON.stringify(this.props.enemy))
     this.hero = this.props.hero
   }
 
-  onKeyDown () {
+  onKeyDown() {
     if (this.battleMsg) {
       this.props.onClose && this.props.onClose()
     }
   }
 
-  render () {
+  render() {
     const enemy = this.enemy
     const hero = this.hero
-    const tick = location.hostname === 'localhost' ? 1 : 30
+    const isDev = location.hostname === 'localhost'
+    const tick = isDev ? 1 : 30
     if (enemy.hp > 0) {
       this.tick++
       if (this.tick === tick) {
-        this.$sound.play('se', 'attack.mp3')
+        if (!isDev) {
+          this.$sound.play('se', 'attack.mp3')
+        }
 
         if (this.turn) {
           const atk = enemy.atk - hero.def

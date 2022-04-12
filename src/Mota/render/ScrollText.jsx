@@ -20,12 +20,11 @@ export default class ScrollText extends KeyEventComponent {
   create () {
     const { text, bgm } = this.props.map
     this.text = text.split('\n')
-    this.$sound.play('bgm', bgm)
+    this.mapBgm = this.$sound.play('bgm', bgm)
   }
 
   destroy () {
-    const bgm = this.props.map.bgm
-    this.$sound.pause('bgm', bgm)
+    this.mapBgm.pause()
   }
 
   onKeyDown ({ code }) {

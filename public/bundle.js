@@ -1253,13 +1253,16 @@ class Battle extends KeyEventComponent {
   render() {
     const enemy = this.enemy;
     const hero = this.hero;
-    const tick = location.hostname === 'localhost' ? 1 : 30;
+    const isDev = location.hostname === 'localhost';
+    const tick = isDev ? 1 : 30;
 
     if (enemy.hp > 0) {
       this.tick++;
 
       if (this.tick === tick) {
-        this.$sound.play('se', 'attack.mp3');
+        if (!isDev) {
+          this.$sound.play('se', 'attack.mp3');
+        }
 
         if (this.turn) {
           const atk = enemy.atk - hero.def;
@@ -2340,12 +2343,11 @@ class ScrollText extends KeyEventComponent {
       bgm
     } = this.props.map;
     this.text = text.split('\n');
-    this.$sound.play('bgm', bgm);
+    this.mapBgm = this.$sound.play('bgm', bgm);
   }
 
   destroy() {
-    const bgm = this.props.map.bgm;
-    this.$sound.pause('bgm', bgm);
+    this.mapBgm.pause();
   }
 
   onKeyDown({
