@@ -686,7 +686,7 @@ class Sound {
 }
 
 const sprite = ['enemys', 'items', 'animates', 'icons', 'npcs', 'terrains', 'boss'];
-const radioImages = ['Characters/hero.png', 'ground.png', 'Battlebacks/mota.jpg', 'stand.png', 'skill.png', 'run.png'];
+const radioImages = ['Characters/hero.png', 'ground.png', 'Battlebacks/mota.jpg', 'stand.png', 'skill.png', 'run.png', 'fire.png', 'fireFlys.png', 'magic.jpeg'];
 class ImageCollection {
   constructor(images) {
     this.images = images || {};
@@ -1043,53 +1043,6 @@ function saveGame(save) {
 }
 function loadGame() {
   return getStorage('game');
-}
-
-class Title extends Component {
-  styles = {
-    title: {
-      width: 32 * (13 + 5),
-      height: 32 * 13
-    },
-    gameName: {
-      y: 40,
-      width: 32 * (13 + 5),
-      height: 128,
-      font: 'bold 128px 黑体'
-    },
-    select: {
-      x: 16 * 16,
-      y: 32 * 8,
-      width: 64
-    }
-  };
-
-  create() {
-    this.activeIndex = loadGame() ? 1 : 0;
-    this.options = [{
-      text: '开始'
-    }, {
-      text: '继续'
-    }];
-  }
-
-  onConfirm = isLoad => {
-    this.props.onLoadMap(isLoad ? loadGame() : null);
-  };
-
-  render() {
-    return this.$c("div", {
-      style: this.styles.title
-    }, this.$c("div", {
-      style: this.styles.gameName
-    }, this.$data.game.title), this.$c(Select, {
-      activeIndex: this.activeIndex,
-      options: this.options,
-      style: this.styles.select,
-      onConfirm: this.onConfirm
-    }));
-  }
-
 }
 
 const options = [{
@@ -2442,53 +2395,22 @@ class ScrollText extends KeyEventComponent {
 
 }
 
-const loadMap = mapId => {
-  return loadJSON(`Maps/${mapId}.json`);
-};
-
-const stand = {
-  src: 'stand.png',
-  maxTick: 4,
-  width: 632 / 4,
-  height: 768 / 8
-};
-
 class Animate extends Component {
-  styles = {
-    app: {
-      height: 32 * 13,
-      width: 32 * 18,
-      backgroundColor: '#ccc'
-    }
-  };
   interval = -1;
   tick = 0;
 
-  create() {
-    this.data = stand;
-  }
-
-  x = 0;
-  sy = 0;
-  onClick = e => {
-    console.log(e);
-    this.sy++;
-  };
-
-  destroy() {
-    // super.destroy()
-    console.log('Animate destory');
-  }
-
   render() {
     const {
+      x = 0,
+      y = 0,
       width,
       height,
       src,
       maxTick,
       maxInterval = 7,
-      loop
-    } = this.data;
+      center,
+      sy = 0
+    } = this.props.data;
     this.interval++;
 
     if (this.interval === maxInterval) {
@@ -2498,36 +2420,53 @@ class Animate extends Component {
       if (this.tick === maxTick) {
         this.tick = 0;
       }
-    } // this.x++
+    }
 
-
-    return this.$c("div", {
-      style: this.styles.app,
-      onClick: this.onClick
-    }, this.$c("img", {
+    return this.$c("img", {
       src: src,
       style: {
-        x: -width / 2 + 200 + this.x,
-        y: -height / 2 + 200,
+        x: x + (center ? -width / 2 : 0),
+        y: y + (center ? -height / 2 : 0),
         sx: this.tick * width,
-        sy: height * this.sy,
+        sy: height * sy,
         width: width,
         height: height
       }
-    }));
+    });
   }
 
 }
 
+const run = {
+  src: 'run.png',
+  maxTick: 6,
+  width: 996 / 6,
+  height: 824 / 8
+};
 class Test extends KeyEventComponent {
   onKeyDown = ({
     code
   }) => {
     console.log(code);
+    this.data.x = 200;
   };
 
+  create() {
+    this.data = run;
+    this.data.x = 0;
+    this.data.sy = 2;
+  }
+
   render() {
-    return this.$c("div", null, this.$c(Animate, null));
+    this.data.x += 3;
+
+    if (this.data.x > 400) {
+      this.data.x = 0;
+    }
+
+    return this.$c("div", null, this.$c(Animate, {
+      data: this.data
+    }));
   }
 
   destroy() {
@@ -2536,6 +2475,10 @@ class Test extends KeyEventComponent {
   }
 
 }
+
+const loadMap = mapId => {
+  return loadJSON(`Maps/${mapId}.json`);
+};
 
 class Game extends Component {
   styles = {
@@ -2577,20 +2520,9 @@ class Game extends Component {
   onTitle = () => {
     this.map = null;
   };
-  tick = false;
 
   render() {
-    // return <div style={{}}>
-    //   <div>22</div>
-    // </div>
-    this.tick = !this.tick;
-
-    if (this) {
-      if (!this.loading) {
-        return this.$c(Test, null);
-      }
-    }
-
+    const Title = Test;
     return this.$c("div", {
       style: this.styles.app
     }, this.loading ? this.$c(Loading, {
