@@ -1532,6 +1532,93 @@ class Message extends Component {
 
 }
 
+class Animate extends Component {
+  interval = -1;
+  tick = 0;
+
+  render() {
+    const {
+      x = 0,
+      y = 0,
+      width,
+      height,
+      src,
+      maxTick,
+      maxInterval = 10,
+      center,
+      sy = 0
+    } = this.props.data;
+    this.interval++;
+
+    if (this.interval === maxInterval) {
+      this.interval = 0;
+      this.tick++;
+
+      if (this.tick === maxTick) {
+        this.tick = 0;
+      }
+    }
+
+    return this.$c("img", {
+      src: src,
+      style: {
+        x: x + (center ? -width / 2 : 0),
+        y: y + (center ? -height / 2 : 0),
+        sx: this.tick * width,
+        sy: height * sy,
+        width: width,
+        height: height
+      }
+    });
+  }
+
+}
+
+class Table extends Component {
+  render() {
+    const {
+      dataSource,
+      columns,
+      size = 32,
+      data
+    } = this.props;
+    let x = 0;
+    return columns.map((column, index) => {
+      const {
+        title,
+        dataIndex,
+        width,
+        render
+      } = column;
+      const rowEle = this.$c("div", {
+        style: {
+          x: 0,
+          y: 0,
+          textAlign: 'start'
+        }
+      }, this.$c("div", {
+        style: {
+          x: x,
+          width: width * size,
+          height: size
+        }
+      }, title), dataSource.map((rowData, rowIndex) => {
+        return this.$c("div", {
+          style: {
+            x: x,
+            y: (rowIndex + 1) * size,
+            width: width * size,
+            height: size
+          }
+        }, render ? render.call(this, rowData, data, rowIndex, index) : rowData[dataIndex]);
+      }));
+      x += width * size;
+      return rowEle;
+    });
+  }
+
+}
+
 const styles = {
   wrap: {
     textAlign: 'left',
@@ -1549,16 +1636,18 @@ const styles = {
   }
 };
 const columns = [{
-  title: '',
+  title: null,
   width: 1,
 
   render(rowData) {
-    return this.$c("img", {
-      src: "enemys.png",
-      style: {
-        height: 32,
+    return this.$c(Animate, {
+      data: {
+        src: 'enemys.png',
+        maxTick: 2,
         width: 32,
-        sy: rowData.sy * 32
+        height: 32,
+        maxInterval: 10,
+        sy: rowData.sy
       }
     });
   }
@@ -1606,52 +1695,6 @@ const columns = [{
   }
 
 }];
-
-class Table extends Component {
-  render() {
-    const {
-      dataSource,
-      columns,
-      size = 32,
-      data
-    } = this.props;
-    let x = 0;
-    return columns.map((column, index) => {
-      const {
-        title,
-        dataIndex,
-        width,
-        render
-      } = column;
-      const rowEle = this.$c("div", {
-        style: {
-          x: 0,
-          y: 0,
-          textAlign: 'start'
-        }
-      }, this.$c("div", {
-        style: {
-          x: x,
-          width: width * size,
-          height: size
-        }
-      }, title), dataSource.map((rowData, rowIndex) => {
-        return this.$c("div", {
-          style: {
-            x: x,
-            y: (rowIndex + 1) * size,
-            width: width * size,
-            height: size
-          }
-        }, render ? render.call(this, rowData, data, rowIndex, index) : rowData[dataIndex]);
-      }));
-      x += width * size;
-      return rowEle;
-    });
-  }
-
-}
-
 class EnemyInfo extends KeyEventComponent {
   onKeyDown({
     code
@@ -1777,8 +1820,6 @@ class Hero extends KeyEventComponent {
     };
   }
 
-  showEnemyInfo = true;
-
   isCoincidedTerrains(heroStyle) {
     return this.props.mapTerrains.findIndex(item => item && item && isCoincided(item.props.style, heroStyle));
   }
@@ -1804,17 +1845,17 @@ class Hero extends KeyEventComponent {
       moveVector = {
         y: -step
       };
-      styleHero.sy = 96;
+      styleHero.sy = 3;
     } else if (code === 'ArrowLeft') {
       moveVector = {
         x: -step
       };
-      styleHero.sy = 32;
+      styleHero.sy = 1;
     } else if (code === 'ArrowRight') {
       moveVector = {
         x: step
       };
-      styleHero.sy = 64;
+      styleHero.sy = 2;
     } else if (code === 'KeyS') {
       saveGame(this.$data.save);
       this.$sound.play('se', 'load.mp3');
@@ -1826,7 +1867,7 @@ class Hero extends KeyEventComponent {
       this.showEnemyInfo = !this.showEnemyInfo;
     } else if (code === 'KeyB') {
       this.buying = true;
-    } else ;
+    }
 
     if (moveVector) {
       const vector = updateVector(styleHero, moveVector);
@@ -1951,7 +1992,6 @@ class Hero extends KeyEventComponent {
         this.remove(this.mapEvent);
         return;
       } else if (type === 'moveBlock') {
-        // console.log(this.mapEvent)
         this.remove(this.mapEvent);
         return;
       } else if (type === 'enemy') {
@@ -2075,10 +2115,19 @@ class Hero extends KeyEventComponent {
   };
 
   render() {
-    return this.$c("div", null, this.$c("img", {
+    return this.$c("div", null, this.$c("div", {
       style: this.styles.hero,
       src: "Characters/hero.png"
-    }), this.buying && this.$c(ShopList, {
+    }, this.$c(Animate, {
+      data: {
+        src: 'Characters/hero.png',
+        maxTick: 4,
+        width: 32,
+        height: 32,
+        maxInterval: 8,
+        sy: this.styles.hero.sy
+      }
+    })), this.buying && this.$c(ShopList, {
       onClose: this.onShopListClose,
       onConfirm: this.onShopListConfirm
     }), this.shopid && this.$c(Shop, {
@@ -2198,7 +2247,6 @@ class Map extends Component {
     this.props.map.bgm; // this.$sound.pause('bgm', bgm)
 
     this.mapBgm.pause();
-    console.info(111);
   }
 
   renderMapTerrains(status) {
@@ -2212,6 +2260,7 @@ class Map extends Component {
       return;
     }
 
+    let sx = 0;
     mapTerrains.forEach((line, y) => {
       line.forEach((value, x) => {
         if (value) {
@@ -2221,26 +2270,37 @@ class Map extends Component {
             name
           } = info;
           const detail = this.$data[type][name];
-          let sx = 0;
 
-          if (info.type === 'animates') {
+          if (type === 'animates') {
             sx = tick % 4 * 32;
+            const style = {
+              sy: detail.sy * 32,
+              sx,
+              x: x * 32,
+              y: y * 32,
+              height: 32,
+              width: 32
+            };
+            terrains.push(this.$c("img", {
+              src: type + '.png',
+              style: style
+            }));
+          } else if (type === 'terrains') {
+            const style = {
+              sy: detail.sy * 32,
+              sx: 0,
+              x: x * 32,
+              y: y * 32,
+              height: 32,
+              width: 32
+            };
+            terrains.push(this.$c("img", {
+              src: type + '.png',
+              style: style
+            }));
+          } else {
+            console.error('error type', type, info);
           }
-
-          const style = {
-            sy: detail.sy * 32,
-            sx,
-            x: x * 32,
-            y: y * 32,
-            height: 32,
-            width: 32
-          };
-          terrains.push(this.$c("img", {
-            src: type + '.png',
-            style: style
-          }));
-        } else {
-          return null;
         }
       });
     });
@@ -2263,6 +2323,10 @@ class Map extends Component {
       return mapEvents.map(event => {
         const [x, y, value, events] = event;
 
+        if (destroy[[mapId, x, y]]) {
+          return null;
+        }
+
         if (value) {
           const info = this.$data.mapping[value];
 
@@ -2271,16 +2335,12 @@ class Map extends Component {
               type,
               name
             } = info;
-            const detail = this.$data[type][name];
+            const detail = this.$data[type][name]; // terrains items icons npcs enemys
+
             let sx = 0;
 
             if (type === 'npcs' || type === 'enemys') {
               sx = tick % 2 * 32;
-            } // terrians items icons npcs enemys
-
-
-            if (destroy[[mapId, x, y]]) {
-              return null;
             }
 
             if (type === 'enemys') {
@@ -2320,7 +2380,7 @@ class Map extends Component {
   onTitle = () => {
     this.props.onTitle();
   };
-  onClick = e => {// console.log(e)
+  onClick = e => {// console.warn(e)
     // DFS BFS
   };
 
@@ -2470,10 +2530,7 @@ class Game extends Component {
       await this.$sound.load(game.sounds);
     }
 
-    this.loading = false;
-    this.onLoadMap({
-      mapId: 'MT1'
-    });
+    this.loading = false; // this.onLoadMap({ mapId: 'MT1' })
   }
 
   onLoadMap = async data => {

@@ -39,27 +39,38 @@ export default class Map extends Component {
     if (!mapTerrains) {
       return
     }
+    let sx = 0
     mapTerrains.forEach((line, y) => {
       line.forEach((value, x) => {
         if (value) {
           const info = this.$data.mapping[value]
           const { type, name } = info
           const detail = this.$data[type][name]
-          let sx = 0
-          if (info.type === 'animates') {
+
+          if (type === 'animates') {
             sx = (tick % 4) * 32
+            const style = {
+              sy: detail.sy * 32,
+              sx,
+              x: x * 32,
+              y: y * 32,
+              height: 32,
+              width: 32,
+            }
+            terrains.push(<img src={type + '.png'} style={style} />)
+          } else if (type === 'terrains') {
+            const style = {
+              sy: detail.sy * 32,
+              sx: 0,
+              x: x * 32,
+              y: y * 32,
+              height: 32,
+              width: 32,
+            }
+            terrains.push(<img src={type + '.png'} style={style} />)
+          } else {
+            console.error('error type', type, info)
           }
-          const style = {
-            sy: detail.sy * 32,
-            sx,
-            x: x * 32,
-            y: y * 32,
-            height: 32,
-            width: 32,
-          }
-          terrains.push(<img src={type + '.png'} style={style} />)
-        } else {
-          return null
         }
       })
     })
@@ -75,19 +86,20 @@ export default class Map extends Component {
     if (mapEvents) {
       return mapEvents.map((event) => {
         const [x, y, value, events] = event
+        if (destroy[[mapId, x, y]]) {
+          return null
+        }
         if (value) {
           const info = this.$data.mapping[value]
           if (info) {
             const { type, name } = info
             const detail = this.$data[type][name]
+            // terrains items icons npcs enemys
             let sx = 0
             if (type === 'npcs' || type === 'enemys') {
               sx = (tick % 2) * 32
             }
-            // terrians items icons npcs enemys
-            if (destroy[[mapId, x, y]]) {
-              return null
-            }
+
             if (type === 'enemys') {
               enemys[name] = name
             }
