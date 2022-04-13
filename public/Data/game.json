@@ -19,7 +19,17 @@
     "load": false
   },
   "title": "魔 塔",
-  "images": ["ground.png"],
+  "images": [
+    "Characters/hero.png",
+    "ground.png",
+    "Battlebacks/mota.jpg",
+    "stand.png",
+    "skill.png",
+    "run.png",
+    "fire.png",
+    "fireFlys.png",
+    "magic.jpeg"
+  ],
   "sounds": [
     "bgm/area1.mp3",
     "bgm/area2.mp3",
@@ -42,7 +52,7 @@
     "se/sell.mp3",
     "se/step.mp3"
   ],
-  "sprites" : [
+  "sprites": [
     "enemys",
     "items",
     "animates",
@@ -51,9 +61,9 @@
     "terrains",
     "boss"
   ],
-  "colors":  {
-    "yellow" : "#deb887",
-    "blue" : "#acaadc",
-    "red" : "#dc6664"
+  "colors": {
+    "yellow": "#deb887",
+    "blue": "#acaadc",
+    "red": "#dc6664"
   }
 }

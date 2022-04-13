@@ -29,7 +29,7 @@ export default class Game extends Component {
     }
     document.title = game.title
     this.loading = '加载图片'
-    await this.$images.load(game.sprite)
+    await this.$images.load(game.images, game.sprites)
     this.loading = '加载音乐'
     await this.$sound.load(game.sounds)
     this.loading = false
