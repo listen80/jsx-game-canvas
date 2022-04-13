@@ -219,7 +219,7 @@ class UI {
 
     if (props) {
       const {
-        style
+        style = {}
       } = props;
 
       if (style) {
@@ -681,7 +681,7 @@ class Sound {
 }
 
 const sprite = ['enemys', 'items', 'animates', 'icons', 'npcs', 'terrains', 'boss'];
-const radioImages = ['Characters/hero.png', 'ground.png', 'Battlebacks/mota.jpg'];
+const radioImages = ['Characters/hero.png', 'ground.png', 'Battlebacks/mota.jpg', 'stand.png', 'skill.png', 'run.png'];
 class ImageCollection {
   constructor(images) {
     this.images = images || {};
@@ -2438,6 +2438,66 @@ const loadMap = mapId => {
   return loadJSON(`Maps/${mapId}.json`);
 };
 
+const stand = {
+  src: 'stand.png',
+  maxTick: 4,
+  width: 632 / 4,
+  height: 768 / 8
+};
+const skill = {
+  src: 'skill.png',
+  maxTick: 4,
+  width: 912 / 6,
+  height: 800 / 8,
+  loop: false
+};
+
+class Animate extends Component {
+  interval = -1;
+  tick = 0;
+
+  create() {
+    this.data = skill;
+  }
+
+  render() {
+    const {
+      width,
+      height,
+      src,
+      maxTick,
+      maxInterval = 7,
+      loop
+    } = this.data;
+    this.interval++;
+
+    if (this.interval === maxInterval) {
+      this.interval = 0;
+      this.tick++;
+
+      if (this.tick === maxTick) {
+        this.tick = 0;
+
+        if (loop === false) {
+          this.data = stand;
+          return;
+        }
+      }
+    }
+
+    return this.$c("img", {
+      src: src,
+      style: {
+        sx: this.tick * width,
+        sy: height * 4,
+        width: width,
+        height: height
+      }
+    });
+  }
+
+}
+
 class Game extends Component {
   styles = {
     app: {
@@ -2478,8 +2538,29 @@ class Game extends Component {
   onTitle = () => {
     this.map = null;
   };
+  interval = -1;
+  tick = -1;
 
   render() {
+    this.interval++;
+
+    if (this.interval === 8) {
+      this.interval = 0;
+      this.tick++;
+
+      if (this.tick === 4) {
+        this.tick = 0;
+      }
+    }
+
+    if (this) {
+      if (!this.loading) {
+        return this.$c(Animate, {
+          src: "stand.png"
+        });
+      }
+    }
+
     return this.$c("div", {
       style: this.styles.app
     }, this.loading ? this.$c(Loading, {

@@ -102,7 +102,7 @@ export default class UI {
   drawImage (node, offsetX, offsetY) {
     const { props } = node
     if (props) {
-      const { style } = props
+      const { style = {} } = props
       if (style) {
         const { sx = 0, sy = 0, width = 32, height = 32, swidth, sheight } = style
         const { context } = this

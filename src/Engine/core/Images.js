@@ -14,6 +14,9 @@ const radioImages = [
   'Characters/hero.png',
   'ground.png',
   'Battlebacks/mota.jpg',
+  'stand.png',
+  'skill.png',
+  'run.png',
 ]
 
 export default class ImageCollection {
