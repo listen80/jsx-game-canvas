@@ -13,14 +13,9 @@ export default class Sound {
   }
 
   load (sounds) {
-    const loadSounds = (data) => {
-      return Promise.all(data.map(sound => loadSound(`Sound/${sound}`))).then(sounds => {
-        sounds.forEach((Sound, i) => (this.sounds[data[i]] = Sound))
-      })
-    }
-
-    const loaderMusic = () => Promise.all([loadSounds(sounds)])
-    return loaderMusic()
+    Promise.all(sounds.map(sound => loadSound(`Sound/${sound}`))).then(sounds => {
+      sounds.forEach((Sound, i) => (this.sounds[sounds[i]] = Sound))
+    })
   }
 
   play (type, name) {

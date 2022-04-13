@@ -5,7 +5,11 @@ import Title from './render/Title'
 import Map from './render/Map'
 import ScrollText from './render/ScrollText'
 import Test from './test'
-import { loadMap } from '../Engine/loader'
+import { loadJSON } from '../Engine/utils/http'
+
+const loadMap = mapId => {
+  return loadJSON(`Maps/${mapId}.json`)
+}
 
 export default class Game extends Component {
   styles = {
@@ -20,18 +24,27 @@ export default class Game extends Component {
   async create () {
     this.loading = '加载数据'
     await this.$data.load()
+
     const game = this.$data.game
+    document.title = game.title
+
     if (game.font && game.font.load !== false) {
       this.loading = '加载字体'
       const font = game.font
       await this.$font.load(font)
       this.styles.app.fontFamily = font.name
     }
-    document.title = game.title
-    this.loading = '加载图片'
-    await this.$images.load(game.images, game.sprites)
-    this.loading = '加载音乐'
-    await this.$sound.load(game.sounds)
+
+    if (game.images) {
+      this.loading = '加载图片'
+      await this.$images.load(game.images, game.sprites)
+    }
+
+    if (game.sounds) {
+      this.loading = '加载音乐'
+      await this.$sound.load(game.sounds)
+    }
+
     this.loading = false
   }
 

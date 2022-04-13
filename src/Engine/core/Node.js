@@ -13,6 +13,7 @@ export function createNode (tag, props, ...children) {
 function createInstance (next) {
   const Class = next.tag
   next.instance = new Class(next)
+
   next.instance.$images = next.$parent.$images
   next.instance.$sound = next.$parent.$sound
   next.instance.$data = next.$parent.$data

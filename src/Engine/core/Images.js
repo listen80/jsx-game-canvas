@@ -1,7 +1,7 @@
 import { loadImage } from '../utils/http'
 
 export default class ImageCollection {
-  constructor (images) {
+  constructor () {
     this.images = Object.create(null)
   }
 

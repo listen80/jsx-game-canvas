@@ -736,15 +736,9 @@ class Sound {
   }
 
   load(sounds) {
-    const loadSounds = data => {
-      return Promise.all(data.map(sound => loadSound(`Sound/${sound}`))).then(sounds => {
-        sounds.forEach((Sound, i) => this.sounds[data[i]] = Sound);
-      });
-    };
-
-    const loaderMusic = () => Promise.all([loadSounds(sounds)]);
-
-    return loaderMusic();
+    Promise.all(sounds.map(sound => loadSound(`Sound/${sound}`))).then(sounds => {
+      sounds.forEach((Sound, i) => this.sounds[sounds[i]] = Sound);
+    });
   }
 
   play(type, name) {
@@ -758,7 +752,7 @@ class Sound {
 }
 
 class ImageCollection {
-  constructor(images) {
+  constructor() {
     this.images = Object.create(null);
   }
 
@@ -2481,6 +2475,7 @@ class Game extends Component {
     this.loading = '加载数据';
     await this.$data.load();
     const game = this.$data.game;
+    document.title = game.title;
 
     if (game.font && game.font.load !== false) {
       this.loading = '加载字体';
@@ -2489,11 +2484,16 @@ class Game extends Component {
       this.styles.app.fontFamily = font.name;
     }
 
-    document.title = game.title;
-    this.loading = '加载图片';
-    await this.$images.load(game.images, game.sprites);
-    this.loading = '加载音乐';
-    await this.$sound.load(game.sounds);
+    if (game.images) {
+      this.loading = '加载图片';
+      await this.$images.load(game.images, game.sprites);
+    }
+
+    if (game.sounds) {
+      this.loading = '加载音乐';
+      await this.$sound.load(game.sounds);
+    }
+
     this.loading = false;
   }
 
