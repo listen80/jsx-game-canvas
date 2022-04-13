@@ -1,5 +1,5 @@
 import { baseStyle } from '../const/baseStyle'
-import { isPrimitive, isFunc, isArray, isUndefined } from '../utils/common'
+import { isPrimitive, isFunc, isArray, isUndefined, isBoolean } from '../utils/common'
 import { curFoucs } from './Component'
 
 const moveEvent = 'MouseMove'
@@ -218,7 +218,7 @@ export default class UI {
     } else if (tag !== 'div') {
       console.error(tag)
     }
-    this.renderRect(node.children, offsetX, offsetY, node)
+    this.renderAnything(node.children, offsetX, offsetY, node)
     context.restore()
   }
 
@@ -243,20 +243,20 @@ export default class UI {
     context.fillText(text, offsetX + width * x[textAlign], offsetY + height * y[textBaseline])
   }
 
-  renderRect (createdNode, offsetX, offsetY, parent) {
+  renderAnything (createdNode, offsetX, offsetY, parent) {
     // undefined null
     // string number
     // array
     // class component
     // div node
-    if (!isUndefined(createdNode)) {
+    if (!isUndefined(createdNode) && !isBoolean(createdNode)) {
       if (isPrimitive(createdNode)) {
         this.renderPrimitive(createdNode, offsetX, offsetY, parent)
       } else if (isArray(createdNode)) {
-        createdNode.forEach(child => this.renderRect(child, offsetX, offsetY, parent))
-      } else if (createdNode.instance) {
+        createdNode.forEach(child => this.renderAnything(child, offsetX, offsetY, parent))
+      } else if (isFunc(createdNode.tag)) {
         // tag 是 function
-        this.renderRect(createdNode.instance.$node, offsetX, offsetY, parent)
+        this.renderAnything(createdNode.instance.$node, offsetX, offsetY, parent)
       } else {
         // div node
         this.renderNode(createdNode, offsetX, offsetY, parent)
@@ -317,7 +317,7 @@ export default class UI {
 
   render (createdNode) {
     this.clearRect()
-    this.renderRect(createdNode, 0, 0, this.canvas)
+    this.renderAnything(createdNode, 0, 0, this.canvas)
     this.runEvent()
   }
 }

@@ -34,6 +34,7 @@ const isFunc = f => typeof f === 'function';
 const isArray = a => Array.isArray(a);
 const isUndefined = o => o === undefined || o === null;
 const isString = o => typeof o === 'string';
+const isBoolean = o => typeof o === 'boolean';
 
 function createNode(tag, props, ...children) {
   const $parent = this;
@@ -57,6 +58,7 @@ function createInstance(next) {
 }
 
 function destoryInstance(pre) {
+  // && isBoolean(pre)
   if (!isPrimitive(pre) && !isUndefined(pre)) {
     if (isFunc(pre.tag)) {
       destoryInstance(pre.instance.$node);
@@ -87,7 +89,7 @@ function patchNode(pre, next) {
   // array
   // class component
   // div node
-  if (isUndefined(next) || isPrimitive(next)) {
+  if (isUndefined(next) || isPrimitive(next) || isBoolean(next)) {
     destoryInstance(pre);
   } else if (isArray(next)) {
     if (isArray(pre)) {
@@ -493,7 +495,7 @@ class UI {
       console.error(tag);
     }
 
-    this.renderRect(node.children, offsetX, offsetY, node);
+    this.renderAnything(node.children, offsetX, offsetY, node);
     context.restore();
   }
 
@@ -540,20 +542,20 @@ class UI {
     context.fillText(text, offsetX + width * x[textAlign], offsetY + height * y[textBaseline]);
   }
 
-  renderRect(createdNode, offsetX, offsetY, parent) {
+  renderAnything(createdNode, offsetX, offsetY, parent) {
     // undefined null
     // string number
     // array
     // class component
     // div node
-    if (!isUndefined(createdNode)) {
+    if (!isUndefined(createdNode) && !isBoolean(createdNode)) {
       if (isPrimitive(createdNode)) {
         this.renderPrimitive(createdNode, offsetX, offsetY, parent);
       } else if (isArray(createdNode)) {
-        createdNode.forEach(child => this.renderRect(child, offsetX, offsetY, parent));
-      } else if (createdNode.instance) {
+        createdNode.forEach(child => this.renderAnything(child, offsetX, offsetY, parent));
+      } else if (isFunc(createdNode.tag)) {
         // tag 是 function
-        this.renderRect(createdNode.instance.$node, offsetX, offsetY, parent);
+        this.renderAnything(createdNode.instance.$node, offsetX, offsetY, parent);
       } else {
         // div node
         this.renderNode(createdNode, offsetX, offsetY, parent);
@@ -638,7 +640,7 @@ class UI {
 
   render(createdNode) {
     this.clearRect();
-    this.renderRect(createdNode, 0, 0, this.canvas);
+    this.renderAnything(createdNode, 0, 0, this.canvas);
     this.runEvent();
   }
 
@@ -729,15 +731,17 @@ class Sound {
   }
 
   control(type, name, control) {
-    const current = this.sounds[`${type}/${name}`].cloneNode();
+    const current = this.sounds[`${type}/${name}`].cloneNode(); // const current = new Audio()
+    // current.src = `${type}/${name}`
+
     current.loop = type === 'bgm';
     current[control]();
     return current;
   }
 
-  load(sounds) {
-    Promise.all(sounds.map(sound => loadSound(`Sound/${sound}`))).then(sounds => {
-      sounds.forEach((Sound, i) => this.sounds[sounds[i]] = Sound);
+  load(dataArray) {
+    return Promise.all(dataArray.map(sound => loadSound(`Sound/${sound}`))).then(sounds => {
+      sounds.forEach((Sound, i) => this.sounds[dataArray[i]] = Sound);
     });
   }
 
@@ -1024,6 +1028,53 @@ function saveGame(save) {
 }
 function loadGame() {
   return getStorage('game');
+}
+
+class Title extends Component {
+  styles = {
+    title: {
+      width: 32 * (13 + 5),
+      height: 32 * 13
+    },
+    gameName: {
+      y: 40,
+      width: 32 * (13 + 5),
+      height: 128,
+      font: 'bold 128px 黑体'
+    },
+    select: {
+      x: 16 * 16,
+      y: 32 * 8,
+      width: 64
+    }
+  };
+
+  create() {
+    this.activeIndex = loadGame() ? 1 : 0;
+    this.options = [{
+      text: '开始'
+    }, {
+      text: '继续'
+    }];
+  }
+
+  onConfirm = isLoad => {
+    this.props.onLoadMap(isLoad ? loadGame() : null);
+  };
+
+  render() {
+    return this.$c("div", {
+      style: this.styles.title
+    }, this.$c("div", {
+      style: this.styles.gameName
+    }, this.$data.game.title), this.$c(Select, {
+      activeIndex: this.activeIndex,
+      options: this.options,
+      style: this.styles.select,
+      onConfirm: this.onConfirm
+    }));
+  }
+
 }
 
 const options = [{
@@ -2376,87 +2427,6 @@ class ScrollText extends KeyEventComponent {
 
 }
 
-class Animate extends Component {
-  interval = -1;
-  tick = 0;
-
-  render() {
-    const {
-      x = 0,
-      y = 0,
-      width,
-      height,
-      src,
-      maxTick,
-      maxInterval = 7,
-      center,
-      sy = 0
-    } = this.props.data;
-    this.interval++;
-
-    if (this.interval === maxInterval) {
-      this.interval = 0;
-      this.tick++;
-
-      if (this.tick === maxTick) {
-        this.tick = 0;
-      }
-    }
-
-    return this.$c("img", {
-      src: src,
-      style: {
-        x: x + (center ? -width / 2 : 0),
-        y: y + (center ? -height / 2 : 0),
-        sx: this.tick * width,
-        sy: height * sy,
-        width: width,
-        height: height
-      }
-    });
-  }
-
-}
-
-const run = {
-  src: 'run.png',
-  maxTick: 6,
-  width: 996 / 6,
-  height: 824 / 8
-};
-class Test extends KeyEventComponent {
-  onKeyDown = ({
-    code
-  }) => {
-    console.log(code);
-    this.data.x = 200;
-  };
-
-  create() {
-    this.data = run;
-    this.data.x = 0;
-    this.data.sy = 2;
-  }
-
-  render() {
-    this.data.x += 3;
-
-    if (this.data.x > 400) {
-      this.data.x = 0;
-    }
-
-    return this.$c("div", null, this.$c(Animate, {
-      data: this.data
-    }));
-  }
-
-  destroy() {
-    super.destroy();
-    console.log('destory');
-  }
-
-}
-
 const loadMap = mapId => {
   return loadJSON(`Maps/${mapId}.json`);
 };
@@ -2509,7 +2479,7 @@ class Game extends Component {
   };
 
   render() {
-    const Title = Test;
+    // const Title = Test
     return this.$c("div", {
       style: this.styles.app
     }, this.loading ? this.$c(Loading, {

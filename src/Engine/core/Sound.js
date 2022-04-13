@@ -7,14 +7,16 @@ export default class Sound {
 
   control (type, name, control) {
     const current = this.sounds[`${type}/${name}`].cloneNode()
+    // const current = new Audio()
+    // current.src = `${type}/${name}`
     current.loop = type === 'bgm'
     current[control]()
     return current
   }
 
-  load (sounds) {
-    Promise.all(sounds.map(sound => loadSound(`Sound/${sound}`))).then(sounds => {
-      sounds.forEach((Sound, i) => (this.sounds[sounds[i]] = Sound))
+  load (dataArray) {
+    return Promise.all(dataArray.map(sound => loadSound(`Sound/${sound}`))).then(sounds => {
+      sounds.forEach((Sound, i) => (this.sounds[dataArray[i]] = Sound))
     })
   }
 

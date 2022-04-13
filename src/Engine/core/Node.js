@@ -1,4 +1,4 @@
-import { isFunc, isPrimitive, isArray, isUndefined, isString } from '../utils/common'
+import { isFunc, isPrimitive, isArray, isUndefined, isString, isBoolean } from '../utils/common'
 
 export function createNode (tag, props, ...children) {
   const $parent = this
@@ -24,6 +24,7 @@ function createInstance (next) {
 }
 
 function destoryInstance (pre) {
+  // && isBoolean(pre)
   if (!isPrimitive(pre) && !isUndefined(pre)) {
     if (isFunc(pre.tag)) {
       destoryInstance(pre.instance.$node)
@@ -54,7 +55,7 @@ export function patchNode (pre, next) {
   // array
   // class component
   // div node
-  if (isUndefined(next) || isPrimitive(next)) {
+  if (isUndefined(next) || isPrimitive(next) || isBoolean(next)) {
     destoryInstance(pre)
   } else if (isArray(next)) {
     if (isArray(pre)) {
