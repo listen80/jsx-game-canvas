@@ -1537,6 +1537,23 @@ class Message extends Component {
 
 }
 
+class Column extends Component {
+  constructor(argu) {
+    super(argu);
+    console.log(this);
+  }
+
+  render() {
+    return this.$c("div", {
+      style: {
+        x: 20,
+        y: 20
+      }
+    }, this.$children);
+  }
+
+}
+
 class EnemyInfo extends KeyEventComponent {
   onKeyDown({
     code
@@ -1552,6 +1569,11 @@ class EnemyInfo extends KeyEventComponent {
 
   render() {
     const enemys = Object.keys(this.props.enemys);
+
+    if (this) {
+      return this.$c(Column, null, this.$c("div", null, "ss"));
+    }
+
     return this.$c("div", {
       style: {
         textAlign: 'left',

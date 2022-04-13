@@ -1,5 +1,15 @@
-import { KeyEventComponent } from 'Engine'
+import { KeyEventComponent, Component } from 'Engine'
 
+class Column extends Component {
+  constructor (argu) {
+    super(argu)
+    console.log(this)
+  }
+
+  render () {
+    return <div style={{ x: 20, y: 20 }}>{this.$children}</div>
+  }
+}
 export default class EnemyInfo extends KeyEventComponent {
   onKeyDown ({ code }) {
     if (code === 'KeyX') {
@@ -13,6 +23,11 @@ export default class EnemyInfo extends KeyEventComponent {
 
   render () {
     const enemys = Object.keys(this.props.enemys)
+    if (this) {
+      return <Column>
+        <div>ss</div>
+      </Column>
+    }
     return (
       <div
         style={{

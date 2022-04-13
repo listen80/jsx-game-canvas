@@ -5,7 +5,6 @@ export class Component {
   constructor ({ props, children }) {
     this.props = props
     this.$children = children
-
   }
 
   $c (...argu) {
