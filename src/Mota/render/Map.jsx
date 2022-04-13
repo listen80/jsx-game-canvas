@@ -3,21 +3,22 @@ import Hero from './Hero'
 import Status from './Status'
 import Animate from './Animate'
 
+const size = 32
 export default class Map extends Component {
   tick = 0;
   interval = 10;
   styles = {
     map: {
-      height: 32 * 13,
-      width: 32 * 13,
+      height: size * 13,
+      width: size * 13,
       backgroundImage: 'ground.png',
     },
     statusBar: {
-      x: 32 * 13,
+      x: size * 13,
       y: 0,
       backgroundImage: 'ground.png',
-      width: 32 * 5,
-      height: 13 * 32,
+      width: size * 5,
+      height: 13 * size,
     },
   };
 
@@ -48,24 +49,24 @@ export default class Map extends Component {
           const detail = this.$data[type][name]
 
           if (type === 'animates') {
-            sx = (tick % 4) * 32
+            sx = (tick % 4) * size
             const style = {
-              sy: detail.sy * 32,
+              sy: detail.sy * size,
               sx,
-              x: x * 32,
-              y: y * 32,
-              height: 32,
-              width: 32,
+              x: x * size,
+              y: y * size,
+              height: size,
+              width: size,
             }
             terrains.push(<img src={type + '.png'} style={style} />)
           } else if (type === 'terrains') {
             const style = {
-              sy: detail.sy * 32,
+              sy: detail.sy * size,
               sx: 0,
-              x: x * 32,
-              y: y * 32,
-              height: 32,
-              width: 32,
+              x: x * size,
+              y: y * size,
+              height: size,
+              width: size,
             }
             terrains.push(<img src={type + '.png'} style={style} />)
           } else {
@@ -97,17 +98,17 @@ export default class Map extends Component {
             // terrains items icons npcs enemys
             let sx = 0
             if (type === 'npcs' || type === 'enemys') {
-              sx = (tick % 2) * 32
+              sx = (tick % 2) * size
             }
 
             if (type === 'enemys') {
               enemys[name] = name
             }
             return (
-              <div style={{ x: x * 32, y: y * 32, height: 32, width: 32 }}>
+              <div style={{ x: x * size, y: y * size, height: size, width: size }}>
                 <img
                   src={type + '.png'}
-                  style={{ sy: detail.sy * 32, sx, height: 32, width: 32 }}
+                  style={{ sy: detail.sy * size, sx, height: size, width: size }}
                 />
               </div>
             )

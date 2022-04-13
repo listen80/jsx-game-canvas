@@ -25,8 +25,8 @@ const columns = [
           data={{
             src: 'enemys.png',
             maxTick: 2,
-            width: 32,
-            height: 32,
+            width: size,
+            height: size,
             maxInterval: 10,
             sy: rowData.sy,
           }}

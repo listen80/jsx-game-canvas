@@ -25,12 +25,15 @@ const propertyNames = {
   def: '防御',
   exp: '经验',
 }
+
+const size = 32
+
 export default class Hero extends KeyEventComponent {
   tick = 0;
   create () {
     const hero = Object.assign(this.$data.save.position, {
-      width: 32,
-      height: 32,
+      width: size,
+      height: size,
     })
 
     this.styles = { hero }
@@ -323,8 +326,8 @@ export default class Hero extends KeyEventComponent {
             data={{
               src: 'Characters/hero.png',
               maxTick: 4,
-              width: 32,
-              height: 32,
+              width: size,
+              height: size,
               maxInterval: 8,
               sy: this.styles.hero.sy,
             }}

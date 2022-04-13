@@ -25,8 +25,8 @@ export default class Engine {
   checkChromeVersion () {
     if (location.protocol === 'file:') {
       alert('不能直接运行index.html')
-    } else if (!navigator.userAgent.match(/Chrome\/(\d+)/) || RegExp.$1 < 86) {
-      alert('需要chrome最新浏览器')
+      // } else if (!navigator.userAgent.match(/Chrome\/(\d+)/) || RegExp.$1 < 86) {
+      // alert('需要chrome最新浏览器')
     } else {
       return true
     }

@@ -167,7 +167,8 @@ class KeyEventComponent extends Component {
 }
 
 const moveEvent = 'MouseMove';
-const mouseEvents = ['ContextMenu', 'Click', 'Wheel', moveEvent]; //  "MouseDown", "MouseUp"
+const mouseEvents = ['ContextMenu', 'Click', 'Wheel', moveEvent];
+const size$d = 32; //  "MouseDown", "MouseUp"
 
 const keyEvents = ['KeyDown', 'KeyUp'];
 class UI {
@@ -177,8 +178,8 @@ class UI {
     this.context = canvas.getContext('2d');
     const {
       el,
-      width = 32 * (13 + 5),
-      height = 32 * 13
+      width = size$d * (13 + 5),
+      height = size$d * 13
     } = screen;
     this.screen = screen;
     this.canvas.width = width;
@@ -304,8 +305,8 @@ class UI {
         const {
           sx = 0,
           sy = 0,
-          width = 32,
-          height = 32,
+          width = size$d,
+          height = size$d,
           swidth,
           sheight
         } = style;
@@ -835,9 +836,8 @@ class Engine {
 
   checkChromeVersion() {
     if (location.protocol === 'file:') {
-      alert('不能直接运行index.html');
-    } else if (!navigator.userAgent.match(/Chrome\/(\d+)/) || RegExp.$1 < 86) {
-      alert('需要chrome最新浏览器');
+      alert('不能直接运行index.html'); // } else if (!navigator.userAgent.match(/Chrome\/(\d+)/) || RegExp.$1 < 86) {
+      // alert('需要chrome最新浏览器')
     } else {
       return true;
     }
@@ -864,14 +864,14 @@ class Engine {
 
 }
 
-const size$7 = 32;
+const size$c = 32;
 class FPS extends Component {
   fps = 60;
   styles = {
     fps: {
       textAlign: 'center',
-      height: size$7,
-      x: size$7 * 18 / 2
+      height: size$c,
+      x: size$c * 18 / 2
     }
   };
   timeStamp = +new Date();
@@ -890,7 +890,7 @@ class FPS extends Component {
 
 }
 
-const size$6 = 32;
+const size$b = 32;
 class Loading extends Component {
   step = 1;
   angle = -this.step;
@@ -904,8 +904,8 @@ class Loading extends Component {
 
     const sAngle = this.angle * 2 - 90;
     const eAngle = Math.sin(this.angle / 180 * Math.PI) * 45;
-    const width = size$6 * (13 + 5);
-    const height = size$6 * 13;
+    const width = size$b * (13 + 5);
+    const height = size$b * 13;
     return this.$c("div", {
       style: {
         x: 0,
@@ -916,7 +916,7 @@ class Loading extends Component {
     }, this.props.msg, this.$c("circle", {
       cx: width / 2,
       cy: height / 2,
-      r: size$6 * 3,
+      r: size$b * 3,
       sAngle: sAngle - eAngle,
       eAngle: sAngle + eAngle,
       stroke: "#4e6ef2",
@@ -1034,22 +1034,22 @@ function loadGame() {
   return getStorage('game');
 }
 
-const size$5 = 32;
+const size$a = 32;
 const styles$1 = {
   title: {
-    width: size$5 * (13 + 5),
-    height: size$5 * 13
+    width: size$a * (13 + 5),
+    height: size$a * 13
   },
   gameName: {
-    y: size$5 * 2,
-    width: size$5 * (13 + 5),
-    height: size$5 * 4,
+    y: size$a * 2,
+    width: size$a * (13 + 5),
+    height: size$a * 4,
     font: 'bold 128px 黑体'
   },
   select: {
-    x: size$5 * 8,
-    y: size$5 * 8,
-    width: size$5 * 2
+    x: size$a * 8,
+    y: size$a * 8,
+    width: size$a * 2
   }
 };
 class Title extends Component {
@@ -1081,6 +1081,7 @@ class Title extends Component {
 
 }
 
+const size$9 = 32;
 const options = [{
   text: '物品'
 }, {
@@ -1112,18 +1113,18 @@ class Menu extends Component {
   create() {
     this.styles = {
       menu: {
-        width: 32 * 18,
-        height: 32 * 13,
+        width: size$9 * 18,
+        height: size$9 * 13,
         backgroundColor: 'rgba(0,0,0,.6)'
       },
       detail: {
-        x: 32 * 4,
-        width: 32 * 9,
-        height: 32 * 13,
+        x: size$9 * 4,
+        width: size$9 * 9,
+        height: size$9 * 13,
         borderWidth: 2
       },
       select: {
-        width: 32 * 4
+        width: size$9 * 4
       }
     };
   }
@@ -1152,14 +1153,14 @@ class Menu extends Component {
 
 }
 
-const size$4 = 32;
+const size$8 = 32;
 class Shop extends Component {
   styles = {
     shop: {
-      x: 2 * size$4,
-      y: 2 * size$4,
-      height: size$4 * 7,
-      width: size$4 * 9,
+      x: 2 * size$8,
+      y: 2 * size$8,
+      height: size$8 * 7,
+      width: size$8 * 9,
       fontSize: 24,
       borderWidth: 4,
       borderColor: '#deb887',
@@ -1167,8 +1168,8 @@ class Shop extends Component {
       backgroundImage: 'ground.png'
     },
     title: {
-      x: size$4 / 2 * 9,
-      y: size$4 / 2
+      x: size$8 / 2 * 9,
+      y: size$8 / 2
     },
     text: {
       x: 0,
@@ -1176,9 +1177,9 @@ class Shop extends Component {
       fontSize: 14
     },
     select: {
-      x: size$4 * 2,
-      y: size$4 / 2 * 7,
-      width: size$4 * 5,
+      x: size$8 * 2,
+      y: size$8 / 2 * 7,
+      width: size$8 * 5,
       fontSize: 16
     }
   };
@@ -1204,8 +1205,8 @@ class Shop extends Component {
       style: this.styles.text
     }, this.shop.text.split(/\n/).map((text, index) => this.$c("div", {
       style: {
-        x: size$4 / 2 * 9,
-        y: index * size$4 / 2
+        x: size$8 / 2 * 9,
+        y: index * size$8 / 2
       }
     }, text))), this.$c(Select, {
       options: this.shop.choices,
@@ -1217,14 +1218,15 @@ class Shop extends Component {
 
 }
 
+const size$7 = 32;
 class Battle extends KeyEventComponent {
   tick = 0;
   styles = {
     battle: {
       x: 48,
       y: 48,
-      width: 32 * 15,
-      height: 32 * 10,
+      width: size$7 * 15,
+      height: size$7 * 10,
       fontSize: 16,
       borderWidth: 3,
       borderColor: '#deb887',
@@ -1233,12 +1235,12 @@ class Battle extends KeyEventComponent {
       sheight: 320
     },
     enemy: {
-      x: 32 * 1,
-      y: 32 * 1
+      x: size$7 * 1,
+      y: size$7 * 1
     },
     hero: {
-      x: 32 * 10,
-      y: 32 * 1
+      x: size$7 * 10,
+      y: size$7 * 1
     }
   };
 
@@ -1308,36 +1310,36 @@ class Battle extends KeyEventComponent {
       key: 'def'
     }];
     const heroImageStyle = {
-      x: 32,
-      y: 32 * 4.5,
-      swidth: 32,
-      sheight: 32,
+      x: size$7,
+      y: size$7 * 4.5,
+      swidth: size$7,
+      sheight: size$7,
       width: 64,
       height: 64,
       sy: 0
     };
     const enemyImageStyle = {
-      x: 32,
-      y: 32 * 4.5,
-      swidth: 32,
-      sheight: 32,
+      x: size$7,
+      y: size$7 * 4.5,
+      swidth: size$7,
+      sheight: size$7,
       width: 64,
       height: 64,
-      sy: enemy.sy * 32
+      sy: enemy.sy * size$7
     };
-    const size = 64;
+    const size64 = 64;
     const vsStyle = {
-      font: `bold ${size}px sans-serif`,
-      x: 32 * (5 + 1.5),
-      y: 32 * 2,
-      height: size,
-      width: size
+      font: `bold ${size64}px sans-serif`,
+      x: size$7 * (5 + 1.5),
+      y: size$7 * 2,
+      height: size64,
+      width: size64
     };
     const msgStyle = {
       fontSize: 24,
-      height: 32,
-      y: 32 * 8,
-      width: 32 * 15
+      height: size$7,
+      y: size$7 * 8,
+      width: size$7 * 15
     };
     return this.$c("img", {
       src: "Battlebacks/mota.jpg",
@@ -1352,20 +1354,20 @@ class Battle extends KeyEventComponent {
     }), proprety.map((item, index) => {
       return this.$c("div", {
         style: {
-          x: 0 * 32,
-          y: index * 32
+          x: 0 * size$7,
+          y: index * size$7
         }
       }, this.$c("div", {
         style: {
-          width: 32 * 4,
+          width: size$7 * 4,
           textAlign: 'left',
-          height: 32
+          height: size$7
         }
       }, item.text), this.$c("div", {
         style: {
-          width: 32 * 4,
+          width: size$7 * 4,
           textAlign: 'right',
-          height: 32
+          height: size$7
         }
       }, enemy[item.key]));
     })), this.$c("div", {
@@ -1378,20 +1380,20 @@ class Battle extends KeyEventComponent {
     }), proprety.map((item, index) => {
       return this.$c("div", {
         style: {
-          x: 0 * 32,
-          y: index * 32
+          x: 0 * size$7,
+          y: index * size$7
         }
       }, this.$c("div", {
         style: {
-          width: 32 * 4,
+          width: size$7 * 4,
           textAlign: 'left',
-          height: 32
+          height: size$7
         }
       }, hero[item.key]), this.$c("div", {
         style: {
-          width: 32 * 4,
+          width: size$7 * 4,
           textAlign: 'right',
-          height: 32
+          height: size$7
         }
       }, item.text));
     })));
@@ -1590,7 +1592,7 @@ class Table extends Component {
       const {
         title,
         dataIndex,
-        width,
+        width = 1,
         render
       } = column;
       const rowEle = this.$c("div", {
@@ -1622,16 +1624,16 @@ class Table extends Component {
 
 }
 
-const size$3 = 32;
+const size$6 = 32;
 const styles = {
   wrap: {
     textAlign: 'left',
     fontSize: 20,
     backgroundImage: 'ground.png',
-    width: size$3 * (13 + 5 - 2),
-    x: size$3,
-    y: size$3,
-    height: size$3 * (13 - 2)
+    width: size$6 * (13 + 5 - 2),
+    x: size$6,
+    y: size$6,
+    height: size$6 * (13 - 2)
   }
 };
 const columns = [{
@@ -1643,8 +1645,8 @@ const columns = [{
       data: {
         src: 'enemys.png',
         maxTick: 2,
-        width: 32,
-        height: 32,
+        width: size$6,
+        height: size$6,
         maxInterval: 10,
         sy: rowData.sy
       }
@@ -1715,13 +1717,13 @@ class EnemyInfo extends KeyEventComponent {
 
 }
 
-const size$2 = 32;
+const size$5 = 32;
 class ShopList extends Component {
   style = {
-    x: size$2 * 3,
-    y: size$2 * 2,
-    height: size$2 * 8,
-    width: size$2 * 7,
+    x: size$5 * 3,
+    y: size$5 * 2,
+    height: size$5 * 8,
+    width: size$5 * 7,
     backgroundImage: 'ground.png',
     borderWidth: 4,
     borderColor: '#deb887'
@@ -1756,13 +1758,13 @@ class ShopList extends Component {
       style: this.style
     }, this.$c("div", {
       style: {
-        height: size$2,
-        width: size$2 * 7,
+        height: size$5,
+        width: size$5 * 7,
         fontSize: 24
       }
     }, "\u5546\u5E97\u9009\u62E9"), this.$c(Select, {
       style: {
-        x: size$2,
+        x: size$5,
         y: 48,
         width: 160
       },
@@ -1800,13 +1802,14 @@ const propertyNames = {
   def: '防御',
   exp: '经验'
 };
+const size$4 = 32;
 class Hero extends KeyEventComponent {
   tick = 0;
 
   create() {
     const hero = Object.assign(this.$data.save.position, {
-      width: 32,
-      height: 32
+      width: size$4,
+      height: size$4
     });
     this.styles = {
       hero
@@ -2115,8 +2118,8 @@ class Hero extends KeyEventComponent {
       data: {
         src: 'Characters/hero.png',
         maxTick: 4,
-        width: 32,
-        height: 32,
+        width: size$4,
+        height: size$4,
         maxInterval: 8,
         sy: this.styles.hero.sy
       }
@@ -2150,6 +2153,7 @@ class Hero extends KeyEventComponent {
 
 }
 
+const size$3 = 32;
 class Status extends Component {
   create() {
     this.walls = [];
@@ -2161,11 +2165,9 @@ class Status extends Component {
             src: "terrains.png",
             style: {
               sx: 0,
-              sy: 32 * 2,
-              x: x * 32,
-              y: y * 32,
-              width: 32,
-              height: 32
+              sy: size$3 * 2,
+              x: x * size$3,
+              y: y * size$3
             }
           }));
         }
@@ -2188,24 +2190,24 @@ class Status extends Component {
     }, this.walls, rowProperty.map((value, index) => {
       return this.$c("div", {
         style: {
-          y: (index + 1) * 32,
-          width: 32,
-          height: 32
+          y: (index + 1) * size$3,
+          width: size$3,
+          height: size$3
         }
       }, this.$c("img", {
         src: "icons.png",
         style: {
-          sy: index * 32,
-          width: 32,
-          height: 32,
-          swidth: 32,
-          sheight: 32
+          sy: index * size$3,
+          width: size$3,
+          height: size$3,
+          swidth: size$3,
+          sheight: size$3
         }
       }), this.$c("div", {
         style: {
-          x: 32,
-          height: 32,
-          width: 32 * 3
+          x: size$3,
+          height: size$3,
+          width: size$3 * 3
         }
       }, value));
     }));
@@ -2213,21 +2215,22 @@ class Status extends Component {
 
 }
 
+const size$2 = 32;
 class Map extends Component {
   tick = 0;
   interval = 10;
   styles = {
     map: {
-      height: 32 * 13,
-      width: 32 * 13,
+      height: size$2 * 13,
+      width: size$2 * 13,
       backgroundImage: 'ground.png'
     },
     statusBar: {
-      x: 32 * 13,
+      x: size$2 * 13,
       y: 0,
       backgroundImage: 'ground.png',
-      width: 32 * 5,
-      height: 13 * 32
+      width: size$2 * 5,
+      height: 13 * size$2
     }
   };
 
@@ -2265,14 +2268,14 @@ class Map extends Component {
           const detail = this.$data[type][name];
 
           if (type === 'animates') {
-            sx = tick % 4 * 32;
+            sx = tick % 4 * size$2;
             const style = {
-              sy: detail.sy * 32,
+              sy: detail.sy * size$2,
               sx,
-              x: x * 32,
-              y: y * 32,
-              height: 32,
-              width: 32
+              x: x * size$2,
+              y: y * size$2,
+              height: size$2,
+              width: size$2
             };
             terrains.push(this.$c("img", {
               src: type + '.png',
@@ -2280,12 +2283,12 @@ class Map extends Component {
             }));
           } else if (type === 'terrains') {
             const style = {
-              sy: detail.sy * 32,
+              sy: detail.sy * size$2,
               sx: 0,
-              x: x * 32,
-              y: y * 32,
-              height: 32,
-              width: 32
+              x: x * size$2,
+              y: y * size$2,
+              height: size$2,
+              width: size$2
             };
             terrains.push(this.$c("img", {
               src: type + '.png',
@@ -2333,7 +2336,7 @@ class Map extends Component {
             let sx = 0;
 
             if (type === 'npcs' || type === 'enemys') {
-              sx = tick % 2 * 32;
+              sx = tick % 2 * size$2;
             }
 
             if (type === 'enemys') {
@@ -2342,18 +2345,18 @@ class Map extends Component {
 
             return this.$c("div", {
               style: {
-                x: x * 32,
-                y: y * 32,
-                height: 32,
-                width: 32
+                x: x * size$2,
+                y: y * size$2,
+                height: size$2,
+                width: size$2
               }
             }, this.$c("img", {
               src: type + '.png',
               style: {
-                sy: detail.sy * 32,
+                sy: detail.sy * size$2,
                 sx,
-                height: 32,
-                width: 32
+                height: size$2,
+                width: size$2
               }
             }));
           }

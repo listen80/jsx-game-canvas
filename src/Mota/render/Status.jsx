@@ -1,4 +1,7 @@
 import { Component } from 'Engine'
+import Table from './Table'
+
+const size = 32
 
 export default class Status extends Component {
   create () {
@@ -11,11 +14,9 @@ export default class Status extends Component {
               src="terrains.png"
               style={{
                 sx: 0,
-                sy: 32 * 2,
-                x: x * 32,
-                y: y * 32,
-                width: 32,
-                height: 32,
+                sy: size * 2,
+                x: x * size,
+                y: y * size,
               }}
             ></img>,
           )
@@ -45,18 +46,18 @@ export default class Status extends Component {
         {this.walls}
         {rowProperty.map((value, index) => {
           return (
-            <div style={{ y: (index + 1) * 32, width: 32, height: 32 }}>
+            <div style={{ y: (index + 1) * size, width: size, height: size }}>
               <img
                 src="icons.png"
                 style={{
-                  sy: index * 32,
-                  width: 32,
-                  height: 32,
-                  swidth: 32,
-                  sheight: 32,
+                  sy: index * size,
+                  width: size,
+                  height: size,
+                  swidth: size,
+                  sheight: size,
                 }}
               />
-              <div style={{ x: 32, height: 32, width: 32 * 3 }}>{value}</div>
+              <div style={{ x: size, height: size, width: size * 3 }}>{value}</div>
             </div>
           )
         })}

@@ -5,7 +5,7 @@ export default class Table extends Component {
     const { dataSource, columns, size = 32, data } = this.props
     let x = 0
     return columns.map((column, index) => {
-      const { title, dataIndex, width, render } = column
+      const { title, dataIndex, width = 1, render } = column
       const rowEle = (
         <div style={{ x: 0, y: 0, textAlign: 'start' }}>
           <div style={{ x: x, width: width * size, height: size }}>{title}</div>

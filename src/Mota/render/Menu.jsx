@@ -1,6 +1,6 @@
 import { Component } from 'Engine'
 import Select from './Select'
-
+const size = 32
 const options = [
   { text: '物品' },
   { text: '技能' },
@@ -27,18 +27,18 @@ export default class Menu extends Component {
   create () {
     this.styles = {
       menu: {
-        width: 32 * 18,
-        height: 32 * 13,
+        width: size * 18,
+        height: size * 13,
         backgroundColor: 'rgba(0,0,0,.6)',
       },
       detail: {
-        x: 32 * 4,
-        width: 32 * 9,
-        height: 32 * 13,
+        x: size * 4,
+        width: size * 9,
+        height: size * 13,
         borderWidth: 2,
       },
       select: {
-        width: 32 * 4,
+        width: size * 4,
       },
     }
   }

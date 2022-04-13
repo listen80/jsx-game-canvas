@@ -1,13 +1,15 @@
 import { Component, KeyEventComponent } from 'Engine'
 
+const size = 32
+
 export default class Battle extends KeyEventComponent {
   tick = 0;
   styles = {
     battle: {
       x: 48,
       y: 48,
-      width: 32 * 15,
-      height: 32 * 10,
+      width: size * 15,
+      height: size * 10,
       fontSize: 16,
       borderWidth: 3,
       borderColor: '#deb887',
@@ -16,12 +18,12 @@ export default class Battle extends KeyEventComponent {
       sheight: 320,
     },
     enemy: {
-      x: 32 * 1,
-      y: 32 * 1,
+      x: size * 1,
+      y: size * 1,
     },
     hero: {
-      x: 32 * 10,
-      y: 32 * 1,
+      x: size * 10,
+      y: size * 1,
     },
   };
 
@@ -75,32 +77,32 @@ export default class Battle extends KeyEventComponent {
       { text: '防御', key: 'def' },
     ]
     const heroImageStyle = {
-      x: 32,
-      y: 32 * 4.5,
-      swidth: 32,
-      sheight: 32,
+      x: size,
+      y: size * 4.5,
+      swidth: size,
+      sheight: size,
       width: 64,
       height: 64,
       sy: 0,
     }
     const enemyImageStyle = {
-      x: 32,
-      y: 32 * 4.5,
-      swidth: 32,
-      sheight: 32,
+      x: size,
+      y: size * 4.5,
+      swidth: size,
+      sheight: size,
       width: 64,
       height: 64,
-      sy: enemy.sy * 32,
+      sy: enemy.sy * size,
     }
-    const size = 64
+    const size64 = 64
     const vsStyle = {
-      font: `bold ${size}px sans-serif`,
-      x: 32 * (5 + 1.5),
-      y: 32 * 2,
-      height: size,
-      width: size,
+      font: `bold ${size64}px sans-serif`,
+      x: size * (5 + 1.5),
+      y: size * 2,
+      height: size64,
+      width: size64,
     }
-    const msgStyle = { fontSize: 24, height: 32, y: 32 * 8, width: 32 * 15 }
+    const msgStyle = { fontSize: 24, height: size, y: size * 8, width: size * 15 }
     return (
       <img src="Battlebacks/mota.jpg" style={this.styles.battle}>
         {this.battleMsg && <div style={msgStyle}>{this.battleMsg}</div>}
@@ -108,11 +110,11 @@ export default class Battle extends KeyEventComponent {
           <img src="enemys.png" style={enemyImageStyle} />
           {proprety.map((item, index) => {
             return (
-              <div style={{ x: 0 * 32, y: index * 32 }}>
-                <div style={{ width: 32 * 4, textAlign: 'left', height: 32 }}>
+              <div style={{ x: 0 * size, y: index * size }}>
+                <div style={{ width: size * 4, textAlign: 'left', height: size }}>
                   {item.text}
                 </div>
-                <div style={{ width: 32 * 4, textAlign: 'right', height: 32 }}>
+                <div style={{ width: size * 4, textAlign: 'right', height: size }}>
                   {enemy[item.key]}
                 </div>
               </div>
@@ -124,11 +126,11 @@ export default class Battle extends KeyEventComponent {
           <img src="Characters/hero.png" style={heroImageStyle} />
           {proprety.map((item, index) => {
             return (
-              <div style={{ x: 0 * 32, y: index * 32 }}>
-                <div style={{ width: 32 * 4, textAlign: 'left', height: 32 }}>
+              <div style={{ x: 0 * size, y: index * size }}>
+                <div style={{ width: size * 4, textAlign: 'left', height: size }}>
                   {hero[item.key]}
                 </div>
-                <div style={{ width: 32 * 4, textAlign: 'right', height: 32 }}>
+                <div style={{ width: size * 4, textAlign: 'right', height: size }}>
                   {item.text}
                 </div>
               </div>

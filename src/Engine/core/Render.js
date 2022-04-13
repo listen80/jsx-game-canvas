@@ -5,6 +5,7 @@ import { curFoucs } from './Component'
 const moveEvent = 'MouseMove'
 const mouseEvents = ['ContextMenu', 'Click', 'Wheel', moveEvent]
 
+const size = 32
 //  "MouseDown", "MouseUp"
 const keyEvents = ['KeyDown', 'KeyUp']
 
@@ -13,7 +14,7 @@ export default class UI {
     const canvas = document.createElement('canvas')
     this.canvas = canvas
     this.context = canvas.getContext('2d')
-    const { el, width = 32 * (13 + 5), height = 32 * 13 } = screen
+    const { el, width = size * (13 + 5), height = size * 13 } = screen
     this.screen = screen
     this.canvas.width = width
     this.canvas.height = height
@@ -104,7 +105,7 @@ export default class UI {
     if (props) {
       const { style = {} } = props
       if (style) {
-        const { sx = 0, sy = 0, width = 32, height = 32, swidth, sheight } = style
+        const { sx = 0, sy = 0, width = size, height = size, swidth, sheight } = style
         const { context } = this
         context.drawImage(this.getImage(props.src), sx, sy, swidth || width, sheight || height, offsetX, offsetY, width, height)
       }
