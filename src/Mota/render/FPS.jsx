@@ -20,7 +20,7 @@ export default class FPS extends Component {
     this.timeStamp = timeStamp
     return (
       <div style={this.styles.fps}>
-        {true ? `${this.fps.toFixed()}fps` : null}
+        {warn ? `${this.fps.toFixed()}fps` : null}
       </div>
     )
   }

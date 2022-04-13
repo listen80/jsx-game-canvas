@@ -1,5 +1,5 @@
 import { Component } from 'Engine'
-import Select from './Select'
+import Select from '../../Engine/components/Select'
 
 const size = 32
 

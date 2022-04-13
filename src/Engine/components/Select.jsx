@@ -1,4 +1,4 @@
-import { KeyEventComponent } from 'Engine'
+import { KeyEventComponent } from '../core/Component'
 
 export default class Select extends KeyEventComponent {
   styles = {

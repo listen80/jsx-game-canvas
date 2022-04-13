@@ -7,7 +7,7 @@ import Talks from './Talks'
 import Message from './Message'
 import EnemyInfo from './EnemyInfo'
 import ShopList from './ShopList'
-import Animate from './Animate'
+import Animate from '../../Engine/components/Animate'
 
 import { saveGame, loadGame } from '../../Engine/utils/sl'
 import {

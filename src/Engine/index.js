@@ -6,6 +6,10 @@ import Font from './core/Font'
 
 import { createNode, patchNode } from './core/Node'
 export { Component, KeyEventComponent } from './core/Component'
+export { default as Animate } from './components/Animate'
+export { default as Scroll } from './components/Scroll'
+export { default as Select } from './components/Select'
+export { default as Table } from './components/Table'
 
 export default class Engine {
   constructor ($game) {

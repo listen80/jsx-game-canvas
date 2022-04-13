@@ -1,5 +1,4 @@
-import { Component } from 'Engine'
-import Select from './Select'
+import { Component, Select } from 'Engine'
 const size = 32
 const options = [
   { text: '物品' },

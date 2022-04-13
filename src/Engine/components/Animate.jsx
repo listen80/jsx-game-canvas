@@ -1,4 +1,4 @@
-import { Component, KeyEventComponent } from 'Engine'
+import { Component } from '../core/Component'
 
 export default class Animate extends Component {
   interval = -1;

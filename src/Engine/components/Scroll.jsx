@@ -1,4 +1,4 @@
-import { Component } from 'Engine'
+import { Component } from '../core/Component'
 
 const size = 32
 export default class Scroll extends Component {

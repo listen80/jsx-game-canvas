@@ -1,7 +1,6 @@
-import { Component } from 'Engine'
+import { Component, Animate } from 'Engine'
 import Hero from './Hero'
 import Status from './Status'
-import Animate from './Animate'
 
 const size = 32
 export default class Map extends Component {

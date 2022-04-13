@@ -1,5 +1,5 @@
 import { Component, KeyEventComponent } from 'Engine'
-import Animate from '../render/Animate'
+import Animate from '../../Engine/components/Animate'
 
 const run = {
   src: 'run.png',

@@ -1,4 +1,4 @@
-import { Component } from 'Engine'
+import { Component } from '../core/Component'
 
 export default class Table extends Component {
   render () {

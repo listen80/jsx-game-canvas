@@ -1,5 +1,4 @@
-import { Component } from 'Engine'
-import Table from './Table'
+import { Component, Table } from 'Engine'
 
 const size = 32
 

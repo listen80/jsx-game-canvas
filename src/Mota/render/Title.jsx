@@ -1,5 +1,4 @@
-import { Component } from 'Engine'
-import Select from './Select'
+import { Component, Select } from 'Engine'
 import { loadGame } from '../../Engine/utils/sl'
 
 const size = 32

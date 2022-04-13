@@ -1,6 +1,4 @@
-import { KeyEventComponent, Component } from 'Engine'
-import Animate from './Animate'
-import Table from './Table'
+import { KeyEventComponent, Component, Animate, Table } from 'Engine'
 
 const size = 32
 const styles = {

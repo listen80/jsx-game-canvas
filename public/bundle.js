@@ -819,109 +819,44 @@ class Font {
 
 }
 
-class Engine {
-  constructor($game) {
-    if (this.checkChromeVersion()) {
-      this.$state = Object.create(null);
-      this.$data = new Data();
-      this.$sound = new Sound();
-      this.$images = new ImageCollection();
-      this.$font = new Font();
-      this.$ui = new UI(this);
-      this.$root = null;
-      this.$game = $game;
-      this.gameStart();
-    }
-  }
-
-  checkChromeVersion() {
-    if (location.protocol === 'file:') {
-      alert('不能直接运行index.html'); // } else if (!navigator.userAgent.match(/Chrome\/(\d+)/) || RegExp.$1 < 86) {
-      // alert('需要chrome最新浏览器')
-    } else {
-      return true;
-    }
-  }
-
-  gameStop() {
-    cancelAnimationFrame(this.ident);
-    this.ident = -1;
-  }
-
-  gameStart() {
-    const frame = () => {
-      this.keyFrame();
-      this.ident = requestAnimationFrame(frame);
-    };
-
-    frame();
-  }
-
-  keyFrame() {
-    this.$root = patchNode(this.$root, createNode.call(this, this.$game, null));
-    this.$ui.render(this.$root);
-  }
-
-}
-
-const size$c = 32;
-class FPS extends Component {
-  fps = 60;
-  styles = {
-    fps: {
-      textAlign: 'center',
-      height: size$c,
-      x: size$c * 18 / 2
-    }
-  };
-  timeStamp = +new Date();
+class Animate extends Component {
+  interval = -1;
+  tick = 0;
 
   render() {
-    const timeStamp = +new Date();
-    const fps = 1000 / (timeStamp - this.timeStamp);
-    const min = 30;
-    this.fps < min && fps < min;
-    this.fps = fps;
-    this.timeStamp = timeStamp;
-    return this.$c("div", {
-      style: this.styles.fps
-    }, `${this.fps.toFixed()}fps` );
-  }
+    const {
+      x = 0,
+      y = 0,
+      width,
+      height,
+      src,
+      maxTick,
+      maxInterval = 10,
+      center,
+      sy = 0
+    } = this.props.data;
+    this.interval++;
 
-}
+    if (this.interval === maxInterval) {
+      this.interval = 0;
+      this.tick++;
 
-const size$b = 32;
-class Loading extends Component {
-  step = 1;
-  angle = -this.step;
-
-  render() {
-    this.angle += this.step;
-
-    if (this.angle > 180) {
-      this.angle = 0;
-    }
-
-    const sAngle = this.angle * 2 - 90;
-    const eAngle = Math.sin(this.angle / 180 * Math.PI) * 45;
-    const width = size$b * (13 + 5);
-    const height = size$b * 13;
-    return this.$c("div", {
-      style: {
-        x: 0,
-        y: 0,
-        width,
-        height
+      if (this.tick === maxTick) {
+        this.tick = 0;
       }
-    }, this.props.msg, this.$c("circle", {
-      cx: width / 2,
-      cy: height / 2,
-      r: size$b * 3,
-      sAngle: sAngle - eAngle,
-      eAngle: sAngle + eAngle,
-      stroke: "#4e6ef2",
-      strokeWidth: 10
-    }));
+    }
+
+    return this.$c("img", {
+      src: src,
+      style: {
+        x: x + (center ? -width / 2 : 0),
+        y: y + (center ? -height / 2 : 0),
+        sx: this.tick * width,
+        sy: height * sy,
+        width: width,
+        height: height
+      }
+    });
   }
 
 }
@@ -1012,6 +947,158 @@ class Select extends KeyEventComponent {
         }
       }, text);
     }) : '空空如也');
+  }
+
+}
+
+class Table extends Component {
+  render() {
+    const {
+      dataSource,
+      columns,
+      size = 32,
+      data
+    } = this.props;
+    let x = 0;
+    return columns.map((column, index) => {
+      const {
+        title,
+        dataIndex,
+        width = 1,
+        render
+      } = column;
+      const rowEle = this.$c("div", {
+        style: {
+          x: 0,
+          y: 0,
+          textAlign: 'start'
+        }
+      }, this.$c("div", {
+        style: {
+          x: x,
+          width: width * size,
+          height: size
+        }
+      }, title), dataSource.map((rowData, rowIndex) => {
+        return this.$c("div", {
+          style: {
+            x: x,
+            y: (rowIndex + 1) * size,
+            width: width * size,
+            height: size
+          }
+        }, render ? render.call(this, rowData, data, rowIndex, index) : rowData[dataIndex]);
+      }));
+      x += width * size;
+      return rowEle;
+    });
+  }
+
+}
+
+class Engine {
+  constructor($game) {
+    if (this.checkChromeVersion()) {
+      this.$state = Object.create(null);
+      this.$data = new Data();
+      this.$sound = new Sound();
+      this.$images = new ImageCollection();
+      this.$font = new Font();
+      this.$ui = new UI(this);
+      this.$root = null;
+      this.$game = $game;
+      this.gameStart();
+    }
+  }
+
+  checkChromeVersion() {
+    if (location.protocol === 'file:') {
+      alert('不能直接运行index.html'); // } else if (!navigator.userAgent.match(/Chrome\/(\d+)/) || RegExp.$1 < 86) {
+      // alert('需要chrome最新浏览器')
+    } else {
+      return true;
+    }
+  }
+
+  gameStop() {
+    cancelAnimationFrame(this.ident);
+    this.ident = -1;
+  }
+
+  gameStart() {
+    const frame = () => {
+      this.keyFrame();
+      this.ident = requestAnimationFrame(frame);
+    };
+
+    frame();
+  }
+
+  keyFrame() {
+    this.$root = patchNode(this.$root, createNode.call(this, this.$game, null));
+    this.$ui.render(this.$root);
+  }
+
+}
+
+const size$c = 32;
+class FPS extends Component {
+  fps = 60;
+  styles = {
+    fps: {
+      textAlign: 'center',
+      height: size$c,
+      x: size$c * 18 / 2
+    }
+  };
+  timeStamp = +new Date();
+
+  render() {
+    const timeStamp = +new Date();
+    const fps = 1000 / (timeStamp - this.timeStamp);
+    const min = 30;
+    const warn = this.fps < min && fps < min;
+    this.fps = fps;
+    this.timeStamp = timeStamp;
+    return this.$c("div", {
+      style: this.styles.fps
+    }, warn ? `${this.fps.toFixed()}fps` : null);
+  }
+
+}
+
+const size$b = 32;
+class Loading extends Component {
+  step = 1;
+  angle = -this.step;
+
+  render() {
+    this.angle += this.step;
+
+    if (this.angle > 180) {
+      this.angle = 0;
+    }
+
+    const sAngle = this.angle * 2 - 90;
+    const eAngle = Math.sin(this.angle / 180 * Math.PI) * 45;
+    const width = size$b * (13 + 5);
+    const height = size$b * 13;
+    return this.$c("div", {
+      style: {
+        x: 0,
+        y: 0,
+        width,
+        height
+      }
+    }, this.props.msg, this.$c("circle", {
+      cx: width / 2,
+      cy: height / 2,
+      r: size$b * 3,
+      sAngle: sAngle - eAngle,
+      eAngle: sAngle + eAngle,
+      stroke: "#4e6ef2",
+      strokeWidth: 10
+    }));
   }
 
 }
@@ -1533,93 +1620,6 @@ class Message extends Component {
         height: 32
       }
     }, this.msg));
-  }
-
-}
-
-class Animate extends Component {
-  interval = -1;
-  tick = 0;
-
-  render() {
-    const {
-      x = 0,
-      y = 0,
-      width,
-      height,
-      src,
-      maxTick,
-      maxInterval = 10,
-      center,
-      sy = 0
-    } = this.props.data;
-    this.interval++;
-
-    if (this.interval === maxInterval) {
-      this.interval = 0;
-      this.tick++;
-
-      if (this.tick === maxTick) {
-        this.tick = 0;
-      }
-    }
-
-    return this.$c("img", {
-      src: src,
-      style: {
-        x: x + (center ? -width / 2 : 0),
-        y: y + (center ? -height / 2 : 0),
-        sx: this.tick * width,
-        sy: height * sy,
-        width: width,
-        height: height
-      }
-    });
-  }
-
-}
-
-class Table extends Component {
-  render() {
-    const {
-      dataSource,
-      columns,
-      size = 32,
-      data
-    } = this.props;
-    let x = 0;
-    return columns.map((column, index) => {
-      const {
-        title,
-        dataIndex,
-        width = 1,
-        render
-      } = column;
-      const rowEle = this.$c("div", {
-        style: {
-          x: 0,
-          y: 0,
-          textAlign: 'start'
-        }
-      }, this.$c("div", {
-        style: {
-          x: x,
-          width: width * size,
-          height: size
-        }
-      }, title), dataSource.map((rowData, rowIndex) => {
-        return this.$c("div", {
-          style: {
-            x: x,
-            y: (rowIndex + 1) * size,
-            width: width * size,
-            height: size
-          }
-        }, render ? render.call(this, rowData, data, rowIndex, index) : rowData[dataIndex]);
-      }));
-      x += width * size;
-      return rowEle;
-    });
   }
 
 }
