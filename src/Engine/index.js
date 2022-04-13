@@ -4,8 +4,7 @@ import Images from './core/Images'
 import Data from './core/Data'
 import Font from './core/Font'
 
-import { createNode } from './core/node/createNode'
-import { patchNode } from './core/node/patchNode'
+import { createNode, patchNode } from './core/Node'
 export { Component, KeyEventComponent } from './core/Component'
 
 export default class Engine {

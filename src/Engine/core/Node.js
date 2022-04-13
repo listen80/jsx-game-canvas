@@ -1,4 +1,14 @@
-import { isFunc, isPrimitive, isArray, isUndefined, isString } from '../../utils/common'
+import { isFunc, isPrimitive, isArray, isUndefined, isString } from '../utils/common'
+
+export function createNode (tag, props, ...children) {
+  const $parent = this
+  return {
+    tag,
+    props,
+    children,
+    $parent,
+  }
+}
 
 function createInstance (next) {
   const Class = next.tag

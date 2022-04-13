@@ -1,4 +1,4 @@
-import { createNode } from './node/createNode'
+import { createNode } from './Node'
 let curFoucs = null
 export { curFoucs }
 export class Component {

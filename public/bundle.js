@@ -45,6 +45,80 @@ function createNode(tag, props, ...children) {
   };
 }
 
+function createInstance(next) {
+  const Class = next.tag;
+  next.instance = new Class(next);
+  next.instance.$images = next.$parent.$images;
+  next.instance.$sound = next.$parent.$sound;
+  next.instance.$data = next.$parent.$data;
+  next.instance.$font = next.$parent.$font;
+  next.instance.create && next.instance.create();
+  renderNode(next);
+}
+
+function destoryInstance(pre) {
+  if (!isPrimitive(pre) && !isUndefined(pre)) {
+    if (isFunc(pre.tag)) {
+      destoryInstance(pre.instance.$node);
+      pre.instance.destroy && pre.instance.destroy();
+    } else if (isArray(pre)) {
+      while (pre.length) {
+        destoryInstance(pre.pop());
+      }
+    } else {
+      destoryInstance(pre.children);
+    }
+  }
+}
+
+function updateInstance(pre, next) {
+  next.instance = pre.instance;
+  next.instance.props = next.props;
+  renderNode(next);
+}
+
+function renderNode(next) {
+  next.instance.$node = patchNode(next.instance.$node, next.instance.render());
+}
+
+function patchNode(pre, next) {
+  // undefined null
+  // string number
+  // array
+  // class component
+  // div node
+  if (isUndefined(next) || isPrimitive(next)) {
+    destoryInstance(pre);
+  } else if (isArray(next)) {
+    if (isArray(pre)) {
+      for (let i = 0; i < next.length; i++) {
+        // diff array
+        patchNode(pre[i], next[i]);
+      }
+    } else {
+      destoryInstance(pre);
+
+      for (let i = 0; i < next.length; i++) {
+        patchNode(null, next[i]);
+      }
+    }
+  } else if (isFunc(next.tag)) {
+    var _pre$props, _next$props;
+
+    if (pre && pre.tag === next.tag && ((_pre$props = pre.props) === null || _pre$props === void 0 ? void 0 : _pre$props.key) === ((_next$props = next.props) === null || _next$props === void 0 ? void 0 : _next$props.key)) {
+      updateInstance(pre, next);
+    } else {
+      destoryInstance(pre);
+      createInstance(next);
+    }
+  } else if (isString(next.tag)) {
+    const preChildren = pre && pre.children;
+    patchNode(preChildren, next.children);
+  }
+
+  return next;
+}
+
 let curFoucs = null;
 class Component {
   constructor({
@@ -655,9 +729,7 @@ class Sound {
   }
 
   control(type, name, control) {
-    const current = this.sounds[`${type}/${name}`].cloneNode(); // const current = new Audio()
-    // current.src = `${type}/${name}`
-
+    const current = this.sounds[`${type}/${name}`].cloneNode();
     current.loop = type === 'bgm';
     current[control]();
     return current;
@@ -749,86 +821,14 @@ class Data {
 }
 
 class Font {
-  constructor() {}
+  constructor() {
+    this.$font = Object.create(null);
+  }
 
   load(data) {
     return loadFont(data);
   }
 
-}
-
-function createInstance(next) {
-  const Class = next.tag;
-  next.instance = new Class(next);
-  next.instance.$images = next.$parent.$images;
-  next.instance.$sound = next.$parent.$sound;
-  next.instance.$data = next.$parent.$data;
-  next.instance.$font = next.$parent.$font;
-  next.instance.create && next.instance.create();
-  renderNode(next);
-}
-
-function destoryInstance(pre) {
-  if (!isPrimitive(pre) && !isUndefined(pre)) {
-    if (isFunc(pre.tag)) {
-      destoryInstance(pre.instance.$node);
-      pre.instance.destroy && pre.instance.destroy();
-    } else if (isArray(pre)) {
-      while (pre.length) {
-        destoryInstance(pre.pop());
-      }
-    } else {
-      destoryInstance(pre.children);
-    }
-  }
-}
-
-function updateInstance(pre, next) {
-  next.instance = pre.instance;
-  next.instance.props = next.props;
-  renderNode(next);
-}
-
-function renderNode(next) {
-  next.instance.$node = patchNode(next.instance.$node, next.instance.render());
-}
-
-function patchNode(pre, next) {
-  // undefined null
-  // string number
-  // array
-  // class component
-  // div node
-  if (isUndefined(next) || isPrimitive(next)) {
-    destoryInstance(pre);
-  } else if (isArray(next)) {
-    if (isArray(pre)) {
-      for (let i = 0; i < next.length; i++) {
-        // diff array
-        patchNode(pre[i], next[i]);
-      }
-    } else {
-      destoryInstance(pre);
-
-      for (let i = 0; i < next.length; i++) {
-        patchNode(null, next[i]);
-      }
-    }
-  } else if (isFunc(next.tag)) {
-    var _pre$props, _next$props;
-
-    if (pre && pre.tag === next.tag && ((_pre$props = pre.props) === null || _pre$props === void 0 ? void 0 : _pre$props.key) === ((_next$props = next.props) === null || _next$props === void 0 ? void 0 : _next$props.key)) {
-      updateInstance(pre, next);
-    } else {
-      destoryInstance(pre);
-      createInstance(next);
-    }
-  } else if (isString(next.tag)) {
-    const preChildren = pre && pre.children;
-    patchNode(preChildren, next.children);
-  }
-
-  return next;
 }
 
 class Engine {
