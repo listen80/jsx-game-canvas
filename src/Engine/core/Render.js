@@ -215,6 +215,8 @@ export default class UI {
       this.drawCircle(node, offsetX, offsetY)
     } else if (tag === 'line') {
       this.drawLine(node, offsetX, offsetX)
+    } else if (tag !== 'div') {
+      console.error(tag)
     }
     this.renderRect(node.children, offsetX, offsetY, node)
     context.restore()
@@ -241,16 +243,23 @@ export default class UI {
     context.fillText(text, offsetX + width * x[textAlign], offsetY + height * y[textBaseline])
   }
 
-  renderRect (node, offsetX, offsetY, parent) {
-    if (!isUndefined(node)) {
-      if (isArray(node)) {
-        node.forEach(child => this.renderRect(child, offsetX, offsetY, parent))
-      } else if (isPrimitive(node)) {
-        this.renderPrimitive(node, offsetX, offsetY, parent)
-      } else if (isFunc(node.tag)) {
-        this.renderRect(node.node, offsetX, offsetY, parent)
+  renderRect (createdNode, offsetX, offsetY, parent) {
+    // undefined null
+    // string number
+    // array
+    // class component
+    // div node
+    if (!isUndefined(createdNode)) {
+      if (isPrimitive(createdNode)) {
+        this.renderPrimitive(createdNode, offsetX, offsetY, parent)
+      } else if (isArray(createdNode)) {
+        createdNode.forEach(child => this.renderRect(child, offsetX, offsetY, parent))
+      } else if (createdNode.instance) {
+        // tag 是 function
+        this.renderRect(createdNode.instance.$node, offsetX, offsetY, parent)
       } else {
-        this.renderNode(node, offsetX, offsetY, parent)
+        // div node
+        this.renderNode(createdNode, offsetX, offsetY, parent)
       }
     }
   }
@@ -258,28 +267,24 @@ export default class UI {
   renderNode (node, offsetX, offsetY, parent) {
     const { context } = this
     context.save()
-    const { props } = node
-
-    if (props) {
-      const { style } = props
-      if (style) {
-        const { x = 0, y = 0 } = style
-        offsetX += x
-        offsetY += y
-        this.mouseEvents.forEach((event) => {
-          const { name } = event
-          if (event.offsetX >= offsetX && event.offsetX < style.width + offsetX && event.offsetY >= offsetY && event.offsetY < style.height + offsetY) {
-            if (name === 'onMouseMove') {
-              this.onMouseMove = { node, event }
-            } else if (name === 'onClick') {
-              this.onMouseClick.push({ node, event })
-            }
+    const style = node?.props?.style
+    if (style) {
+      const { x = 0, y = 0 } = style
+      offsetX += x
+      offsetY += y
+      this.mouseEvents.forEach((event) => {
+        const { name } = event
+        if (event.offsetX >= offsetX && event.offsetX < style.width + offsetX && event.offsetY >= offsetY && event.offsetY < style.height + offsetY) {
+          if (name === 'onMouseMove') {
+            this.onMouseMove = { node, event }
+          } else if (name === 'onClick') {
+            this.onMouseClick.push({ node, event })
           }
-        })
-      }
+        }
+      })
     }
 
-    this.drawRect(node, offsetX, offsetY, parent)
+    this.drawRect(node, offsetX, offsetY)
 
     context.restore()
   }
@@ -310,9 +315,9 @@ export default class UI {
     this.moveEventTarget = null
   }
 
-  render (root) {
+  render (createdNode) {
     this.clearRect()
-    this.renderRect(root, 0, 0, this.canvas)
+    this.renderRect(createdNode, 0, 0, this.canvas)
     this.runEvent()
   }
 }

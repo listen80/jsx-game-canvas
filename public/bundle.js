@@ -33,6 +33,7 @@ const isPrimitive = value => {
 const isFunc = f => typeof f === 'function';
 const isArray = a => Array.isArray(a);
 const isUndefined = o => o === undefined || o === null;
+const isString = o => typeof o === 'string';
 
 function createNode(tag, props, ...children) {
   const $parent = this;
@@ -51,6 +52,7 @@ class Component {
     children
   }) {
     this.props = props;
+    this.$node = null;
     this.$children = children;
   }
 
@@ -413,6 +415,8 @@ class UI {
       this.drawCircle(node, offsetX, offsetY);
     } else if (tag === 'line') {
       this.drawLine(node, offsetX, offsetX);
+    } else if (tag !== 'div') {
+      console.error(tag);
     }
 
     this.renderRect(node.children, offsetX, offsetY, node);
@@ -462,64 +466,65 @@ class UI {
     context.fillText(text, offsetX + width * x[textAlign], offsetY + height * y[textBaseline]);
   }
 
-  renderRect(node, offsetX, offsetY, parent) {
-    if (!isUndefined(node)) {
-      if (isArray(node)) {
-        node.forEach(child => this.renderRect(child, offsetX, offsetY, parent));
-      } else if (isPrimitive(node)) {
-        this.renderPrimitive(node, offsetX, offsetY, parent);
-      } else if (isFunc(node.tag)) {
-        this.renderRect(node.node, offsetX, offsetY, parent);
+  renderRect(createdNode, offsetX, offsetY, parent) {
+    // undefined null
+    // string number
+    // array
+    // class component
+    // div node
+    if (!isUndefined(createdNode)) {
+      if (isPrimitive(createdNode)) {
+        this.renderPrimitive(createdNode, offsetX, offsetY, parent);
+      } else if (isArray(createdNode)) {
+        createdNode.forEach(child => this.renderRect(child, offsetX, offsetY, parent));
+      } else if (createdNode.instance) {
+        // tag 是 function
+        this.renderRect(createdNode.instance.$node, offsetX, offsetY, parent);
       } else {
-        this.renderNode(node, offsetX, offsetY, parent);
+        // div node
+        this.renderNode(createdNode, offsetX, offsetY, parent);
       }
     }
   }
 
   renderNode(node, offsetX, offsetY, parent) {
+    var _node$props;
+
     const {
       context
     } = this;
     context.save();
-    const {
-      props
-    } = node;
+    const style = node === null || node === void 0 ? void 0 : (_node$props = node.props) === null || _node$props === void 0 ? void 0 : _node$props.style;
 
-    if (props) {
+    if (style) {
       const {
-        style
-      } = props;
-
-      if (style) {
+        x = 0,
+        y = 0
+      } = style;
+      offsetX += x;
+      offsetY += y;
+      this.mouseEvents.forEach(event => {
         const {
-          x = 0,
-          y = 0
-        } = style;
-        offsetX += x;
-        offsetY += y;
-        this.mouseEvents.forEach(event => {
-          const {
-            name
-          } = event;
+          name
+        } = event;
 
-          if (event.offsetX >= offsetX && event.offsetX < style.width + offsetX && event.offsetY >= offsetY && event.offsetY < style.height + offsetY) {
-            if (name === 'onMouseMove') {
-              this.onMouseMove = {
-                node,
-                event
-              };
-            } else if (name === 'onClick') {
-              this.onMouseClick.push({
-                node,
-                event
-              });
-            }
+        if (event.offsetX >= offsetX && event.offsetX < style.width + offsetX && event.offsetY >= offsetY && event.offsetY < style.height + offsetY) {
+          if (name === 'onMouseMove') {
+            this.onMouseMove = {
+              node,
+              event
+            };
+          } else if (name === 'onClick') {
+            this.onMouseClick.push({
+              node,
+              event
+            });
           }
-        });
-      }
+        }
+      });
     }
 
-    this.drawRect(node, offsetX, offsetY, parent);
+    this.drawRect(node, offsetX, offsetY);
     context.restore();
   }
 
@@ -545,9 +550,9 @@ class UI {
       node,
       event
     }) => {
-      var _node$props;
+      var _node$props2;
 
-      if (node !== null && node !== void 0 && (_node$props = node.props) !== null && _node$props !== void 0 && _node$props.onClick) {
+      if (node !== null && node !== void 0 && (_node$props2 = node.props) !== null && _node$props2 !== void 0 && _node$props2.onClick) {
         node.props.onClick(event);
       }
     });
@@ -557,9 +562,9 @@ class UI {
     this.moveEventTarget = null;
   }
 
-  render(root) {
+  render(createdNode) {
     this.clearRect();
-    this.renderRect(root, 0, 0, this.canvas);
+    this.renderRect(createdNode, 0, 0, this.canvas);
     this.runEvent();
   }
 
@@ -766,7 +771,7 @@ function createInstance(next) {
 function destoryInstance(pre) {
   if (!isPrimitive(pre) && !isUndefined(pre)) {
     if (isFunc(pre.tag)) {
-      destoryInstance(pre.node);
+      destoryInstance(pre.instance.$node);
       pre.instance.destroy && pre.instance.destroy();
     } else if (isArray(pre)) {
       while (pre.length) {
@@ -780,44 +785,47 @@ function destoryInstance(pre) {
 
 function updateInstance(pre, next) {
   next.instance = pre.instance;
-  next.node = pre.node;
   next.instance.props = next.props;
   renderNode(next);
 }
 
 function renderNode(next) {
-  next.node = patchNode(next.node, next.instance.render());
+  next.instance.$node = patchNode(next.instance.$node, next.instance.render());
 }
-function patchNode(pre, next) {
-  if (pre) {
-    if (next) {
-      if (isFunc(next.tag)) {
-        var _pre$props2, _next$props2;
 
-        if (pre.tag === next.tag && ((_pre$props2 = pre.props) === null || _pre$props2 === void 0 ? void 0 : _pre$props2.key) === ((_next$props2 = next.props) === null || _next$props2 === void 0 ? void 0 : _next$props2.key)) {
-          updateInstance(pre, next);
-        } else {
-          destoryInstance(pre);
-          createInstance(next);
-        }
+function patchNode(pre, next) {
+  // undefined null
+  // string number
+  // array
+  // class component
+  // div node
+  if (isUndefined(next) || isPrimitive(next)) {
+    destoryInstance(pre);
+  } else if (isArray(next)) {
+    if (isArray(pre)) {
+      for (let i = 0; i < next.length; i++) {
+        // diff array
+        patchNode(pre[i], next[i]);
       }
     } else {
       destoryInstance(pre);
-    }
-  } else {
-    if (next) {
-      if (isFunc(next.tag)) {
-        createInstance(next);
+
+      for (let i = 0; i < next.length; i++) {
+        patchNode(null, next[i]);
       }
     }
-  }
+  } else if (isFunc(next.tag)) {
+    var _pre$props, _next$props;
 
-  const preChildren = (pre || {}).children || [];
-  const nextChildren = (next || {}).children || [];
-  const length = Math.max(preChildren.length, nextChildren.length);
-
-  for (let i = 0; i < length; i++) {
-    patchNode(preChildren[i], nextChildren[i]);
+    if (pre && pre.tag === next.tag && ((_pre$props = pre.props) === null || _pre$props === void 0 ? void 0 : _pre$props.key) === ((_next$props = next.props) === null || _next$props === void 0 ? void 0 : _next$props.key)) {
+      updateInstance(pre, next);
+    } else {
+      destoryInstance(pre);
+      createInstance(next);
+    }
+  } else if (isString(next.tag)) {
+    const preChildren = pre && pre.children;
+    patchNode(preChildren, next.children);
   }
 
   return next;
@@ -2444,20 +2452,32 @@ const stand = {
   width: 632 / 4,
   height: 768 / 8
 };
-const skill = {
-  src: 'skill.png',
-  maxTick: 4,
-  width: 912 / 6,
-  height: 800 / 8,
-  loop: false
-};
 
 class Animate extends Component {
+  styles = {
+    app: {
+      height: 32 * 13,
+      width: 32 * 18,
+      backgroundColor: '#ccc'
+    }
+  };
   interval = -1;
   tick = 0;
 
   create() {
-    this.data = skill;
+    this.data = stand;
+  }
+
+  x = 0;
+  sy = 0;
+  onClick = e => {
+    console.log(e);
+    this.sy++;
+  };
+
+  destroy() {
+    // super.destroy()
+    console.log('Animate destory');
   }
 
   render() {
@@ -2477,23 +2497,42 @@ class Animate extends Component {
 
       if (this.tick === maxTick) {
         this.tick = 0;
-
-        if (loop === false) {
-          this.data = stand;
-          return;
-        }
       }
-    }
+    } // this.x++
 
-    return this.$c("img", {
+
+    return this.$c("div", {
+      style: this.styles.app,
+      onClick: this.onClick
+    }, this.$c("img", {
       src: src,
       style: {
+        x: -width / 2 + 200 + this.x,
+        y: -height / 2 + 200,
         sx: this.tick * width,
-        sy: height * 4,
+        sy: height * this.sy,
         width: width,
         height: height
       }
-    });
+    }));
+  }
+
+}
+
+class Test extends KeyEventComponent {
+  onKeyDown = ({
+    code
+  }) => {
+    console.log(code);
+  };
+
+  render() {
+    return this.$c("div", null, this.$c(Animate, null));
+  }
+
+  destroy() {
+    super.destroy();
+    console.log('destory');
   }
 
 }
@@ -2538,26 +2577,17 @@ class Game extends Component {
   onTitle = () => {
     this.map = null;
   };
-  interval = -1;
-  tick = -1;
+  tick = false;
 
   render() {
-    this.interval++;
-
-    if (this.interval === 8) {
-      this.interval = 0;
-      this.tick++;
-
-      if (this.tick === 4) {
-        this.tick = 0;
-      }
-    }
+    // return <div style={{}}>
+    //   <div>22</div>
+    // </div>
+    this.tick = !this.tick;
 
     if (this) {
       if (!this.loading) {
-        return this.$c(Animate, {
-          src: "stand.png"
-        });
+        return this.$c(Test, null);
       }
     }
 

@@ -1,4 +1,4 @@
-import { Component } from 'Engine'
+import { Component, KeyEventComponent } from 'Engine'
 import FPS from './render/FPS'
 import Loading from './render/Loading'
 import Title from './render/Title'
@@ -28,10 +28,31 @@ const skill = {
   loop: false,
 }
 class Animate extends Component {
+  styles = {
+    app: {
+      height: 32 * 13,
+      width: 32 * 18,
+      backgroundColor: '#ccc',
+    },
+  };
+
   interval = -1
   tick = 0
   create () {
-    this.data = skill
+    this.data = stand
+  }
+
+  x = 0
+  sy = 0
+  onClick = (e) => {
+    const { offsetX, offsetY } = e
+    console.log(e)
+    this.sy++
+  }
+
+  destroy () {
+    // super.destroy()
+    console.log('Animate destory')
   }
 
   render () {
@@ -43,12 +64,43 @@ class Animate extends Component {
       if (this.tick === maxTick) {
         this.tick = 0
         if (loop === false) {
-          this.data = stand
-          return
+          // this.data = stand
+          // return
         }
       }
     }
-    return <img src={src} style={{ sx: this.tick * width, sy: height * 4, width: width, height: height }}></img>
+    // this.x++
+    return <div style={this.styles.app} onClick={this.onClick}>
+      <img
+        src={src}
+        style={{
+          x: -width / 2 + 200 + this.x,
+          y: -height / 2 + 200,
+          sx: this.tick * width,
+          sy: height * this.sy,
+          width: width,
+          height: height,
+        }}>
+        </img>
+      </div>
+  }
+}
+class Test extends KeyEventComponent {
+  onKeyDown = ({ code }) => {
+    console.log(code)
+  }
+
+  render () {
+    return <div>
+
+<Animate/>
+
+    </div>
+  }
+
+  destroy () {
+    super.destroy()
+    console.log('destory')
   }
 }
 export default class Game extends Component {
@@ -91,24 +143,16 @@ export default class Game extends Component {
     this.map = null
   }
 
-  interval = -1
-
-  tick = -1
+  tick = false
   render () {
-    const width = 158
-    const height = 96
-    this.interval++
-    if (this.interval === 8) {
-      this.interval = 0
-      this.tick++
-      if (this.tick === 4) {
-        this.tick = 0
-      }
-    }
-
+    // return <div style={{}}>
+    //   <div>22</div>
+    // </div>
+    this.tick = !this.tick
     if (this) {
       if (!this.loading) {
-        return <Animate src="stand.png"></Animate>
+        return <Test>
+          </Test>
       }
     }
     return <div style={this.styles.app}>

@@ -4,6 +4,7 @@ export { curFoucs }
 export class Component {
   constructor ({ props, children }) {
     this.props = props
+    this.$node = null
     this.$children = children
   }
 
