@@ -1,10 +1,20 @@
 import { Component, KeyEventComponent } from 'Engine'
 
 export default class Animate extends Component {
-  interval = -1
-  tick = 0
+  interval = -1;
+  tick = 0;
   render () {
-    const { x = 0, y = 0, width, height, src, maxTick, maxInterval = 10, center, sy = 0 } = this.props.data
+    const {
+      x = 0,
+      y = 0,
+      width,
+      height,
+      src,
+      maxTick,
+      maxInterval = 10,
+      center,
+      sy = 0,
+    } = this.props.data
     this.interval++
     if (this.interval === maxInterval) {
       this.interval = 0
@@ -13,7 +23,8 @@ export default class Animate extends Component {
         this.tick = 0
       }
     }
-    return <img
+    return (
+      <img
         src={src}
         style={{
           x: x + (center ? -width / 2 : 0),
@@ -22,7 +33,8 @@ export default class Animate extends Component {
           sy: height * sy,
           width: width,
           height: height,
-        }}>
-        </img>
+        }}
+      ></img>
+    )
   }
 }

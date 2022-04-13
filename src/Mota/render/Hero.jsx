@@ -10,7 +10,11 @@ import ShopList from './ShopList'
 import Animate from './Animate'
 
 import { saveGame, loadGame } from '../../Engine/utils/sl'
-import { isCoincided, updateVector, assignVector } from '../../Engine/utils/physics'
+import {
+  isCoincided,
+  updateVector,
+  assignVector,
+} from '../../Engine/utils/physics'
 import { convertPropertyStr } from '../../Engine/utils/format'
 
 const propertyNames = {
@@ -181,8 +185,7 @@ export default class Hero extends KeyEventComponent {
       } else if (type === 'openShop') {
         this.shopid = event.id
         this.$data.save.shops = this.$data.save.shops || {}
-        this.$data.save.shops[this.shopid] =
-          this.$data.shop[this.shopid].title
+        this.$data.save.shops[this.shopid] = this.$data.shop[this.shopid].title
         return
       } else if (type === 'getItems') {
         this.updateSaveData('items', data)
@@ -271,9 +274,7 @@ export default class Hero extends KeyEventComponent {
     if (Array.isArray(gets)) {
       gets.forEach(([id, value]) => this.updateSaveData(context, id, value))
     } else if (typeof gets === 'string') {
-      const saveData = context
-        ? this.$data.save[context]
-        : this.$data.save
+      const saveData = context ? this.$data.save[context] : this.$data.save
       saveData[gets] = saveData[gets] || 0
       saveData[gets] += Number(n)
     } else if (typeof gets === 'object') {
@@ -287,9 +288,7 @@ export default class Hero extends KeyEventComponent {
     if (Array.isArray(gets)) {
       return gets.some(([id, value]) => this.checkSaveData(context, id, value))
     } else if (typeof gets === 'string') {
-      const saveData = context
-        ? this.$data.save[context]
-        : this.$data.save
+      const saveData = context ? this.$data.save[context] : this.$data.save
       saveData[gets] = saveData[gets] || 0
       return saveData[gets] + Number(n) >= 0
     } else if (typeof gets === 'object') {
@@ -320,14 +319,17 @@ export default class Hero extends KeyEventComponent {
     return (
       <div>
         <div style={this.styles.hero} src="Characters/hero.png">
-          <Animate data={{
-            src: 'Characters/hero.png',
-            maxTick: 4,
-            width: 32,
-            height: 32,
-            maxInterval: 8,
-            sy: this.styles.hero.sy,
-          }}></Animate></div>
+          <Animate
+            data={{
+              src: 'Characters/hero.png',
+              maxTick: 4,
+              width: 32,
+              height: 32,
+              maxInterval: 8,
+              sy: this.styles.hero.sy,
+            }}
+          ></Animate>
+        </div>
         {this.buying && (
           <ShopList
             onClose={this.onShopListClose}
@@ -349,9 +351,7 @@ export default class Hero extends KeyEventComponent {
             onClose={this.onBattleClose}
           />
         )}
-        {this.showMenu && (
-          <Menu onClose={this.onMenuClose} />
-        )}
+        {this.showMenu && <Menu onClose={this.onMenuClose} />}
         {this.talk && (
           <Talks talk={this.talk} key={this.talk} onConfirm={this.onConfirm} />
         )}

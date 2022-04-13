@@ -7,7 +7,7 @@ export default class Select extends KeyEventComponent {
       textAlign: 'center',
       width: 320,
     },
-  }
+  };
 
   create () {
     this.activeIndex = this.props.activeIndex || 0
@@ -23,15 +23,27 @@ export default class Select extends KeyEventComponent {
       if (this.activeIndex === this.props.options.length) {
         this.activeIndex = 0
       }
-      this.props.onChange && this.props.onChange(this.activeIndex, this.props.options[this.activeIndex])
+      this.props.onChange &&
+        this.props.onChange(
+          this.activeIndex,
+          this.props.options[this.activeIndex],
+        )
     } else if (code === 'ArrowUp') {
       this.activeIndex--
       if (this.activeIndex === -1) {
         this.activeIndex += this.props.options.length
       }
-      this.props.onChange && this.props.onChange(this.activeIndex, this.props.options[this.activeIndex])
+      this.props.onChange &&
+        this.props.onChange(
+          this.activeIndex,
+          this.props.options[this.activeIndex],
+        )
     } else if (code === 'Space') {
-      this.props.onConfirm && this.props.onConfirm(this.activeIndex, this.props.options[this.activeIndex])
+      this.props.onConfirm &&
+        this.props.onConfirm(
+          this.activeIndex,
+          this.props.options[this.activeIndex],
+        )
     } else if (code === 'Escape') {
       this.props.onClose && this.props.onClose()
     } else {
@@ -41,7 +53,11 @@ export default class Select extends KeyEventComponent {
 
   onClick (index) {
     this.activeIndex = index
-    this.props.onConfirm && this.props.onConfirm(this.activeIndex, this.props.options[this.activeIndex])
+    this.props.onConfirm &&
+      this.props.onConfirm(
+        this.activeIndex,
+        this.props.options[this.activeIndex],
+      )
   }
 
   render () {
@@ -52,27 +68,32 @@ export default class Select extends KeyEventComponent {
 
     return (
       <div style={this.styles.select}>
-        {
-          this.props.options && this.props.options.length
-            ? this.props.options.map((item, index) => {
-              const { text } = item
-              const optionStyle = {
-                y: index * size,
-                height: size,
-                width: width,
-                borderWidth: this.activeIndex === index ? borderWidth : 0,
-                borderColor: '#ccc',
-              }
-              return (
-                <div style={optionStyle}
+        {this.props.options && this.props.options.length
+          ? this.props.options.map((item, index) => {
+            const { text } = item
+            const optionStyle = {
+              y: index * size,
+              height: size,
+              width: width,
+              borderWidth: this.activeIndex === index ? borderWidth : 0,
+              borderColor: '#ccc',
+            }
+            return (
+                <div
+                  style={optionStyle}
                   onClick={() => this.onClick(index)}
-                  onMouseLeave={(e) => { this.activeIndex = -1 }}
-                  onMouseEnter={(e) => { this.activeIndex = index }}>
+                  onMouseLeave={(e) => {
+                    this.activeIndex = -1
+                  }}
+                  onMouseEnter={(e) => {
+                    this.activeIndex = index
+                  }}
+                >
                   {text}
                 </div>
-              )
-            })
-            : '空空如也'}
+            )
+          })
+          : '空空如也'}
       </div>
     )
   }

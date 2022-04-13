@@ -55,7 +55,15 @@ export default class Scroll extends Component {
           }
           return (
             <div style={style} onClick={() => this.setActive(index)}>
-              <img style={{ width: 32, height: 32, sx: (this.ani ? 1 : 0) * 32, sy: index * 32 }} src="npcs.png"></img>
+              <img
+                style={{
+                  width: 32,
+                  height: 32,
+                  sx: (this.ani ? 1 : 0) * 32,
+                  sy: index * 32,
+                }}
+                src="npcs.png"
+              ></img>
             </div>
           )
         })}

@@ -864,13 +864,14 @@ class Engine {
 
 }
 
+const size$7 = 32;
 class FPS extends Component {
   fps = 60;
   styles = {
     fps: {
-      textAlign: 'left',
-      height: 32,
-      x: 0
+      textAlign: 'center',
+      height: size$7,
+      x: size$7 * 18 / 2
     }
   };
   timeStamp = +new Date();
@@ -879,16 +880,17 @@ class FPS extends Component {
     const timeStamp = +new Date();
     const fps = 1000 / (timeStamp - this.timeStamp);
     const min = 30;
-    const warn = this.fps < min && fps < min;
+    this.fps < min && fps < min;
     this.fps = fps;
     this.timeStamp = timeStamp;
     return this.$c("div", {
       style: this.styles.fps
-    }, warn ? `${this.fps.toFixed()}fps` : null);
+    }, `${this.fps.toFixed()}fps` );
   }
 
 }
 
+const size$6 = 32;
 class Loading extends Component {
   step = 1;
   angle = -this.step;
@@ -902,8 +904,8 @@ class Loading extends Component {
 
     const sAngle = this.angle * 2 - 90;
     const eAngle = Math.sin(this.angle / 180 * Math.PI) * 45;
-    const width = 32 * (13 + 5);
-    const height = 32 * 13;
+    const width = size$6 * (13 + 5);
+    const height = size$6 * 13;
     return this.$c("div", {
       style: {
         x: 0,
@@ -914,7 +916,7 @@ class Loading extends Component {
     }, this.props.msg, this.$c("circle", {
       cx: width / 2,
       cy: height / 2,
-      r: 32 * 3,
+      r: size$6 * 3,
       sAngle: sAngle - eAngle,
       eAngle: sAngle + eAngle,
       stroke: "#4e6ef2",
@@ -1032,25 +1034,25 @@ function loadGame() {
   return getStorage('game');
 }
 
+const size$5 = 32;
+const styles$1 = {
+  title: {
+    width: size$5 * (13 + 5),
+    height: size$5 * 13
+  },
+  gameName: {
+    y: size$5 * 2,
+    width: size$5 * (13 + 5),
+    height: size$5 * 4,
+    font: 'bold 128px 黑体'
+  },
+  select: {
+    x: size$5 * 8,
+    y: size$5 * 8,
+    width: size$5 * 2
+  }
+};
 class Title extends Component {
-  styles = {
-    title: {
-      width: 32 * (13 + 5),
-      height: 32 * 13
-    },
-    gameName: {
-      y: 40,
-      width: 32 * (13 + 5),
-      height: 128,
-      font: 'bold 128px 黑体'
-    },
-    select: {
-      x: 16 * 16,
-      y: 32 * 8,
-      width: 64
-    }
-  };
-
   create() {
     this.activeIndex = loadGame() ? 1 : 0;
     this.options = [{
@@ -1066,13 +1068,13 @@ class Title extends Component {
 
   render() {
     return this.$c("div", {
-      style: this.styles.title
+      style: styles$1.title
     }, this.$c("div", {
-      style: this.styles.gameName
+      style: styles$1.gameName
     }, this.$data.game.title), this.$c(Select, {
       activeIndex: this.activeIndex,
       options: this.options,
-      style: this.styles.select,
+      style: styles$1.select,
       onConfirm: this.onConfirm
     }));
   }
@@ -1150,13 +1152,14 @@ class Menu extends Component {
 
 }
 
+const size$4 = 32;
 class Shop extends Component {
   styles = {
     shop: {
-      x: 2 * 32,
-      y: 2 * 32,
-      height: 32 * 7,
-      width: 32 * 9,
+      x: 2 * size$4,
+      y: 2 * size$4,
+      height: size$4 * 7,
+      width: size$4 * 9,
       fontSize: 24,
       borderWidth: 4,
       borderColor: '#deb887',
@@ -1164,8 +1167,8 @@ class Shop extends Component {
       backgroundImage: 'ground.png'
     },
     title: {
-      x: 16 * 9,
-      y: 16
+      x: size$4 / 2 * 9,
+      y: size$4 / 2
     },
     text: {
       x: 0,
@@ -1173,9 +1176,9 @@ class Shop extends Component {
       fontSize: 14
     },
     select: {
-      x: 32 * 2,
-      y: 112,
-      width: 32 * 5,
+      x: size$4 * 2,
+      y: size$4 / 2 * 7,
+      width: size$4 * 5,
       fontSize: 16
     }
   };
@@ -1201,8 +1204,8 @@ class Shop extends Component {
       style: this.styles.text
     }, this.shop.text.split(/\n/).map((text, index) => this.$c("div", {
       style: {
-        x: 16 * 9,
-        y: index * 16
+        x: size$4 / 2 * 9,
+        y: index * size$4 / 2
       }
     }, text))), this.$c(Select, {
       options: this.shop.choices,
@@ -1619,20 +1622,16 @@ class Table extends Component {
 
 }
 
+const size$3 = 32;
 const styles = {
   wrap: {
     textAlign: 'left',
-    fontSize: 16,
-    backgroundColor: 'rgba(0,0,0,1)',
+    fontSize: 20,
     backgroundImage: 'ground.png',
-    borderColor: 'yellow',
-    borderWidth: 1,
-    width: 32 * (13 + 5),
-    height: 32 * 13
-  },
-  tableoffset: {
-    x: 32,
-    y: 32
+    width: size$3 * (13 + 5 - 2),
+    x: size$3,
+    y: size$3,
+    height: size$3 * (13 - 2)
   }
 };
 const columns = [{
@@ -1674,24 +1673,18 @@ const columns = [{
   width: 2,
 
   render(enemy, hero) {
-    let cost = 0;
-
     if (hero.atk > enemy.def) {
       if (hero.def >= enemy.atk || enemy.hp / (hero.atk - enemy.def) <= hero.hp / (enemy.atk - hero.def)) {
         if (hero.def >= enemy.atk) {
-          cost = 0;
+          return 0;
         } else {
           const atkCount = Math.floor(enemy.hp / (hero.atk - enemy.def));
-          cost = (enemy.atk - hero.def) * atkCount;
+          return (enemy.atk - hero.def) * atkCount;
         }
-      } else {
-        cost = '-';
       }
-    } else {
-      cost = '-';
     }
 
-    return cost;
+    return '-';
   }
 
 }];
@@ -1704,31 +1697,31 @@ class EnemyInfo extends KeyEventComponent {
     }
   }
 
-  onMouseDown() {
+  onClick = () => {
     this.props.onClose();
-  }
+  };
 
   render() {
     const dataSource = Object.keys(this.props.enemys).map(enemyId => this.$data.enemys[enemyId]);
     return this.$c("div", {
-      style: styles.wrap
-    }, this.$c("div", {
-      style: styles.tableoffset
+      style: styles.wrap,
+      onClick: this.onClick
     }, this.$c(Table, {
       dataSource: dataSource,
       columns: columns,
       data: this.$data.save.hero
-    })));
+    }));
   }
 
 }
 
+const size$2 = 32;
 class ShopList extends Component {
   style = {
-    x: 32 * 3,
-    y: 32 * 2,
-    height: 32 * 8,
-    width: 32 * 7,
+    x: size$2 * 3,
+    y: size$2 * 2,
+    height: size$2 * 8,
+    width: size$2 * 7,
     backgroundImage: 'ground.png',
     borderWidth: 4,
     borderColor: '#deb887'
@@ -1763,13 +1756,13 @@ class ShopList extends Component {
       style: this.style
     }, this.$c("div", {
       style: {
-        height: 32,
-        width: 32 * 7,
+        height: size$2,
+        width: size$2 * 7,
         fontSize: 24
       }
     }, "\u5546\u5E97\u9009\u62E9"), this.$c(Select, {
       style: {
-        x: 32,
+        x: size$2,
         y: 48,
         width: 160
       },
@@ -2414,6 +2407,7 @@ class Map extends Component {
 
 }
 
+const size$1 = 32;
 class ScrollText extends KeyEventComponent {
   styles = {
     text: {
@@ -2422,12 +2416,12 @@ class ScrollText extends KeyEventComponent {
       textBaseline: 'top',
       x: 0,
       y: 0,
-      width: 32 * 18,
-      height: 32 * 13
+      width: size$1 * 18,
+      height: size$1 * 13
     },
     scroll: {
-      x: 32,
-      y: 32 * 5
+      x: size$1,
+      y: size$1 * 5
     }
   };
 
@@ -2437,12 +2431,11 @@ class ScrollText extends KeyEventComponent {
       bgm
     } = this.props.map;
     this.text = text.split('\n');
-    this.$sound.play('bgm', bgm);
+    this.bgm = this.$sound.play('bgm', bgm);
   }
 
   destroy() {
-    const bgm = this.props.map.bgm;
-    this.$sound.pause('bgm', bgm);
+    this.bgm.pause();
   }
 
   onKeyDown({
@@ -2469,10 +2462,9 @@ class ScrollText extends KeyEventComponent {
   };
 
   render() {
-    const size = 32;
     const style = this.styles.scroll;
 
-    if (style.y > -32 * (this.text.length - 2)) {
+    if (style.y > -size$1 * (this.text.length - 2)) {
       const y = 1;
       style.y -= y;
     } else {
@@ -2486,7 +2478,7 @@ class ScrollText extends KeyEventComponent {
       style: this.styles.scroll
     }, this.text.map((text, index) => this.$c("div", {
       style: {
-        y: index * size
+        y: index * size$1
       }
     }, text))));
   }
@@ -2497,11 +2489,12 @@ const loadMap = mapId => {
   return loadJSON(`Maps/${mapId}.json`);
 };
 
+const size = 32;
 class Game extends Component {
   styles = {
     app: {
-      height: 32 * 13,
-      width: 32 * 18,
+      height: size * 13,
+      width: size * 18,
       textAlign: 'center',
       textBaseline: 'middle'
     }
@@ -2566,7 +2559,7 @@ class Game extends Component {
 
 }
 
-!function () {
-  this.mota = new Engine(Game);
-}();
+if (typeof window !== 'undefined') {
+  window.mota = new Engine(Game);
+}
 //# sourceMappingURL=bundle.js.map

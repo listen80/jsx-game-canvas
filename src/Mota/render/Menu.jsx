@@ -13,10 +13,17 @@ const statusOption = []
 const loadGameOption = [{ text: 12233 }]
 const saveGameOption = [{ text: 1 }, { text: 2 }, { text: 3 }, { text: 4 }]
 
-const detailOption = [itemOption, statusOption, itemOption, itemOption, loadGameOption, saveGameOption]
+const detailOption = [
+  itemOption,
+  statusOption,
+  itemOption,
+  itemOption,
+  loadGameOption,
+  saveGameOption,
+]
 export default class Menu extends Component {
-  activeIndex = -1
-  tick = 0
+  activeIndex = -1;
+  tick = 0;
   create () {
     this.styles = {
       menu: {
@@ -38,16 +45,30 @@ export default class Menu extends Component {
 
   onConfirm = (activeIndex) => {
     this.activeIndex = activeIndex
-  }
+  };
 
   render () {
-    return <div style={this.styles.menu}>
-      <Select options={options} style={this.styles.select} onConfirm={this.onConfirm} onClose={this.props.onClose} />
-      {
-        this.activeIndex === -1
+    return (
+      <div style={this.styles.menu}>
+        <Select
+          options={options}
+          style={this.styles.select}
+          onConfirm={this.onConfirm}
+          onClose={this.props.onClose}
+        />
+        {this.activeIndex === -1
           ? null
-          : <Select options={detailOption[this.activeIndex]} style={this.styles.detail} onConfirm={this.onConfirm} onClose={() => { this.activeIndex = -1 }} />
-      }
-    </div>
+          : (
+          <Select
+            options={detailOption[this.activeIndex]}
+            style={this.styles.detail}
+            onConfirm={this.onConfirm}
+            onClose={() => {
+              this.activeIndex = -1
+            }}
+          />
+            )}
+      </div>
+    )
   }
 }

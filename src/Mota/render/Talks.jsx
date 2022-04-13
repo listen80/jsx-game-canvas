@@ -1,8 +1,8 @@
 import { Component, KeyEventComponent } from 'Engine'
 
 export default class Talk extends KeyEventComponent {
-  index = 0
-  width = 7
+  index = 0;
+  width = 7;
   styles = {
     talk: {
       width: 32 * this.width,
@@ -14,7 +14,7 @@ export default class Talk extends KeyEventComponent {
       textAlign: 'left',
       textBaseline: 'middle',
     },
-  }
+  };
 
   onKeyDown ({ code }) {
     if (code === 'Space') {
@@ -56,10 +56,23 @@ export default class Talk extends KeyEventComponent {
   }
 
   render () {
-    return <div style={this.styles.talk}>
-      {this.current.map((talk, index) => {
-        return <div style={{ x: 0, y: 32 * index, width: 32 * this.width, height: 32 }}>{talk}</div>
-      })}
-    </div>
+    return (
+      <div style={this.styles.talk}>
+        {this.current.map((talk, index) => {
+          return (
+            <div
+              style={{
+                x: 0,
+                y: 32 * index,
+                width: 32 * this.width,
+                height: 32,
+              }}
+            >
+              {talk}
+            </div>
+          )
+        })}
+      </div>
+    )
   }
 }

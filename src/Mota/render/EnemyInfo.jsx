@@ -1,18 +1,18 @@
 import { KeyEventComponent, Component } from 'Engine'
 import Animate from './Animate'
 import Table from './Table'
+
+const size = 32
 const styles = {
   wrap: {
     textAlign: 'left',
-    fontSize: 16,
-    backgroundColor: 'rgba(0,0,0,1)',
+    fontSize: 20,
     backgroundImage: 'ground.png',
-    borderColor: 'yellow',
-    borderWidth: 1,
-    width: 32 * (13 + 5),
-    height: 32 * 13,
+    width: size * (13 + 5 - 2),
+    x: size,
+    y: size,
+    height: size * (13 - 2),
   },
-  tableoffset: { x: 32, y: 32 },
 }
 
 const columns = [
@@ -20,15 +20,18 @@ const columns = [
     title: null,
     width: 1,
     render (rowData) {
-      return <Animate
-        data={{
-          src: 'enemys.png',
-          maxTick: 2,
-          width: 32,
-          height: 32,
-          maxInterval: 10,
-          sy: rowData.sy,
-        }}/>
+      return (
+        <Animate
+          data={{
+            src: 'enemys.png',
+            maxTick: 2,
+            width: 32,
+            height: 32,
+            maxInterval: 10,
+            sy: rowData.sy,
+          }}
+        />
+      )
     },
   },
   {
@@ -56,24 +59,20 @@ const columns = [
     dataIndex: 'address',
     width: 2,
     render (enemy, hero) {
-      let cost = 0
       if (hero.atk > enemy.def) {
-        if (hero.def >= enemy.atk || enemy.hp / (hero.atk - enemy.def) <= hero.hp / (enemy.atk - hero.def)) {
+        if (
+          hero.def >= enemy.atk ||
+          enemy.hp / (hero.atk - enemy.def) <= hero.hp / (enemy.atk - hero.def)
+        ) {
           if (hero.def >= enemy.atk) {
-            cost = 0
+            return 0
           } else {
-            const atkCount = Math.floor(
-              enemy.hp / (hero.atk - enemy.def),
-            )
-            cost = (enemy.atk - hero.def) * atkCount
+            const atkCount = Math.floor(enemy.hp / (hero.atk - enemy.def))
+            return (enemy.atk - hero.def) * atkCount
           }
-        } else {
-          cost = '-'
         }
-      } else {
-        cost = '-'
       }
-      return cost
+      return '-'
     },
   },
 ]
@@ -85,16 +84,22 @@ export default class EnemyInfo extends KeyEventComponent {
     }
   }
 
-  onMouseDown () {
+  onClick = () => {
     this.props.onClose()
-  }
+  };
 
   render () {
-    const dataSource = Object.keys(this.props.enemys).map(enemyId => this.$data.enemys[enemyId])
-    return <div style={styles.wrap}>
-        <div style={styles.tableoffset}>
-          <Table dataSource={dataSource} columns={columns} data={this.$data.save.hero}/>
-        </div>
+    const dataSource = Object.keys(this.props.enemys).map(
+      (enemyId) => this.$data.enemys[enemyId],
+    )
+    return (
+      <div style={styles.wrap} onClick={this.onClick}>
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          data={this.$data.save.hero}
+        />
       </div>
+    )
   }
 }

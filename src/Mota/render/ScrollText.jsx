@@ -1,5 +1,7 @@
 import { KeyEventComponent } from 'Engine'
 
+const size = 32
+
 export default class ScrollText extends KeyEventComponent {
   styles = {
     text: {
@@ -8,24 +10,23 @@ export default class ScrollText extends KeyEventComponent {
       textBaseline: 'top',
       x: 0,
       y: 0,
-      width: 32 * 18,
-      height: 32 * 13,
+      width: size * 18,
+      height: size * 13,
     },
     scroll: {
-      x: 32,
-      y: 32 * 5,
+      x: size,
+      y: size * 5,
     },
   };
 
   create () {
     const { text, bgm } = this.props.map
     this.text = text.split('\n')
-    this.$sound.play('bgm', bgm)
+    this.bgm = this.$sound.play('bgm', bgm)
   }
 
   destroy () {
-    const bgm = this.props.map.bgm
-    this.$sound.pause('bgm', bgm)
+    this.bgm.pause()
   }
 
   onKeyDown ({ code }) {
@@ -43,12 +44,11 @@ export default class ScrollText extends KeyEventComponent {
         this.props.onTitle(data)
       }
     }
-  }
+  };
 
   render () {
-    const size = 32
     const style = this.styles.scroll
-    if (style.y > -32 * (this.text.length - 2)) {
+    if (style.y > -size * (this.text.length - 2)) {
       const y = 1
       style.y -= y
     } else {
@@ -57,7 +57,9 @@ export default class ScrollText extends KeyEventComponent {
     return (
       <div style={this.styles.text} onClick={this.onClick}>
         <div style={this.styles.scroll}>
-          {this.text.map((text, index) => <div style={{ y: index * size }}>{text}</div>)}
+          {this.text.map((text, index) => (
+            <div style={{ y: index * size }}>{text}</div>
+          ))}
         </div>
       </div>
     )

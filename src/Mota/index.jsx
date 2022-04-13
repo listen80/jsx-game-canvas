@@ -11,11 +11,13 @@ const loadMap = mapId => {
   return loadJSON(`Maps/${mapId}.json`)
 }
 
+const size = 32
+
 export default class Game extends Component {
   styles = {
     app: {
-      height: 32 * 13,
-      width: 32 * 18,
+      height: size * 13,
+      width: size * 18,
       textAlign: 'center',
       textBaseline: 'middle',
     },

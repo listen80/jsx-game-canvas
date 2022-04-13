@@ -2,25 +2,27 @@ import { Component } from 'Engine'
 import Select from './Select'
 import { loadGame } from '../../Engine/utils/sl'
 
-export default class Title extends Component {
-  styles = {
-    title: {
-      width: 32 * (13 + 5),
-      height: 32 * 13,
-    },
-    gameName: {
-      y: 40,
-      width: 32 * (13 + 5),
-      height: 128,
-      font: 'bold 128px 黑体',
-    },
-    select: {
-      x: 16 * 16,
-      y: 32 * 8,
-      width: 64,
-    },
-  }
+const size = 32
 
+const styles = {
+  title: {
+    width: size * (13 + 5),
+    height: size * 13,
+  },
+  gameName: {
+    y: size * 2,
+    width: size * (13 + 5),
+    height: size * 4,
+    font: 'bold 128px 黑体',
+  },
+  select: {
+    x: size * 8,
+    y: size * 8,
+    width: size * 2,
+  },
+}
+
+export default class Title extends Component {
   create () {
     this.activeIndex = loadGame() ? 1 : 0
     this.options = [
@@ -35,13 +37,18 @@ export default class Title extends Component {
 
   onConfirm = (isLoad) => {
     this.props.onLoadMap(isLoad ? loadGame() : null)
-  }
+  };
 
   render () {
     return (
-      <div style={this.styles.title}>
-        <div style={this.styles.gameName}>{this.$data.game.title}</div>
-        <Select activeIndex={this.activeIndex} options={this.options} style={this.styles.select} onConfirm={this.onConfirm}></Select>
+      <div style={styles.title}>
+        <div style={styles.gameName}>{this.$data.game.title}</div>
+        <Select
+          activeIndex={this.activeIndex}
+          options={this.options}
+          style={styles.select}
+          onConfirm={this.onConfirm}
+        ></Select>
       </div>
     )
   }
