@@ -48,7 +48,6 @@ const magic = {
 
 export default class Test extends KeyEventComponent {
   onKeyDown = ({ code }) => {
-    console.log(code)
     this.data.x = 200
   }
 
@@ -70,6 +69,5 @@ export default class Test extends KeyEventComponent {
 
   destroy () {
     super.destroy()
-    console.log('destory')
   }
 }

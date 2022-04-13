@@ -47,7 +47,7 @@ export default class Game extends Component {
 
     this.loading = false
 
-    this.onLoadMap({ mapId: 'MT1' })
+    // this.onLoadMap({ mapId: 'MT1' })
   }
 
   onLoadMap = async (data) => {

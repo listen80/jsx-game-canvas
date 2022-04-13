@@ -1,6 +1,8 @@
 import { Component } from 'Engine'
 import Hero from './Hero'
 import Status from './Status'
+import Animate from './Animate'
+
 export default class Map extends Component {
   tick = 0;
   interval = 10;
@@ -28,7 +30,6 @@ export default class Map extends Component {
     const bgm = this.props.map.bgm
     // this.$sound.pause('bgm', bgm)
     this.mapBgm.pause()
-    console.info(111)
   }
 
   renderMapTerrains (status) {
@@ -117,7 +118,7 @@ export default class Map extends Component {
   };
 
   onClick = (e) => {
-    // console.log(e)
+    // console.warn(e)
     // DFS BFS
   };
 

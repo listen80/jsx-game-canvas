@@ -7,6 +7,7 @@ import Talks from './Talks'
 import Message from './Message'
 import EnemyInfo from './EnemyInfo'
 import ShopList from './ShopList'
+import Animate from './Animate'
 
 import { saveGame, loadGame } from '../../Engine/utils/sl'
 import { isCoincided, updateVector, assignVector } from '../../Engine/utils/physics'
@@ -31,7 +32,6 @@ export default class Hero extends KeyEventComponent {
     this.styles = { hero }
   }
 
-  showEnemyInfo = true
   isCoincidedTerrains (heroStyle) {
     return this.props.mapTerrains.findIndex(
       (item) => item && item && isCoincided(item.props.style, heroStyle),
@@ -54,13 +54,13 @@ export default class Hero extends KeyEventComponent {
       styleHero.sy = 0
     } else if (code === 'ArrowUp') {
       moveVector = { y: -step }
-      styleHero.sy = 96
+      styleHero.sy = 3
     } else if (code === 'ArrowLeft') {
       moveVector = { x: -step }
-      styleHero.sy = 32
+      styleHero.sy = 1
     } else if (code === 'ArrowRight') {
       moveVector = { x: step }
-      styleHero.sy = 64
+      styleHero.sy = 2
     } else if (code === 'KeyS') {
       saveGame(this.$data.save)
       this.$sound.play('se', 'load.mp3')
@@ -72,10 +72,6 @@ export default class Hero extends KeyEventComponent {
       this.showEnemyInfo = !this.showEnemyInfo
     } else if (code === 'KeyB') {
       this.buying = true
-    } else if (code === 'PageUp') {
-      // console.log(this.props)
-    } else if (code === 'PageUp') {
-      // console.log(this.props)
     }
     if (moveVector) {
       const vector = updateVector(styleHero, moveVector)
@@ -194,7 +190,6 @@ export default class Hero extends KeyEventComponent {
         this.remove(this.mapEvent)
         return
       } else if (type === 'moveBlock') {
-        // console.log(this.mapEvent)
         this.remove(this.mapEvent)
         return
       } else if (type === 'enemy') {
@@ -324,7 +319,15 @@ export default class Hero extends KeyEventComponent {
   render () {
     return (
       <div>
-        <img style={this.styles.hero} src="Characters/hero.png"></img>
+        <div style={this.styles.hero} src="Characters/hero.png">
+          <Animate data={{
+            src: 'Characters/hero.png',
+            maxTick: 4,
+            width: 32,
+            height: 32,
+            maxInterval: 8,
+            sy: this.styles.hero.sy,
+          }}></Animate></div>
         {this.buying && (
           <ShopList
             onClose={this.onShopListClose}

@@ -1,5 +1,6 @@
 import { KeyEventComponent, Component } from 'Engine'
-
+import Animate from './Animate'
+import Table from './Table'
 const styles = {
   wrap: {
     textAlign: 'left',
@@ -16,10 +17,18 @@ const styles = {
 
 const columns = [
   {
-    title: '',
+    title: null,
     width: 1,
     render (rowData) {
-      return <img src="enemys.png" style={{ height: 32, width: 32, sy: rowData.sy * 32 }}/>
+      return <Animate
+        data={{
+          src: 'enemys.png',
+          maxTick: 2,
+          width: 32,
+          height: 32,
+          maxInterval: 10,
+          sy: rowData.sy,
+        }}/>
     },
   },
   {
@@ -69,23 +78,6 @@ const columns = [
   },
 ]
 
-class Table extends Component {
-  render () {
-    const { dataSource, columns, size = 32, data } = this.props
-    let x = 0
-    return columns.map((column, index) => {
-      const { title, dataIndex, width, render } = column
-      const rowEle = <div style={{ x: 0, y: 0, textAlign: 'start' }}>
-        <div style={{ x: x, width: width * size, height: size }}>{title}</div>
-        {dataSource.map((rowData, rowIndex) => {
-          return <div style={{ x: x, y: (rowIndex + 1) * size, width: width * size, height: size }}>{render ? render.call(this, rowData, data, rowIndex, index) : rowData[dataIndex]}</div>
-        })}
-      </div>
-      x += width * size
-      return rowEle
-    })
-  }
-}
 export default class EnemyInfo extends KeyEventComponent {
   onKeyDown ({ code }) {
     if (code === 'KeyX') {
