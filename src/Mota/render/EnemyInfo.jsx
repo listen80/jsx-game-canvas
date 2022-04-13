@@ -19,8 +19,6 @@ const columns = [
     title: '',
     width: 1,
     render (rowData) {
-      return <div src="enemys.png" style={{ height: 32, width: 32, sy: rowData.sy * 32, backgroundColor: 'red' }}/>
-
       return <img src="enemys.png" style={{ height: 32, width: 32, sy: rowData.sy * 32 }}/>
     },
   },
@@ -77,7 +75,7 @@ class Table extends Component {
     let x = 0
     return columns.map((column, index) => {
       const { title, dataIndex, width, render } = column
-      const rowEle = <div style={{ x: 0, y: 0, textAlign: 'start', textBaseline: 'top' }}>
+      const rowEle = <div style={{ x: 0, y: 0, textAlign: 'start' }}>
         <div style={{ x: x, width: width * size, height: size }}>{title}</div>
         {dataSource.map((rowData, rowIndex) => {
           return <div style={{ x: x, y: (rowIndex + 1) * size, width: width * size, height: size }}>{render ? render.call(this, rowData, data, rowIndex, index) : rowData[dataIndex]}</div>

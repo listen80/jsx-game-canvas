@@ -1553,13 +1553,12 @@ const columns = [{
   width: 1,
 
   render(rowData) {
-    return this.$c("div", {
+    return this.$c("img", {
       src: "enemys.png",
       style: {
         height: 32,
         width: 32,
-        sy: rowData.sy * 32,
-        backgroundColor: 'red'
+        sy: rowData.sy * 32
       }
     });
   }
@@ -1628,8 +1627,7 @@ class Table extends Component {
         style: {
           x: 0,
           y: 0,
-          textAlign: 'start',
-          textBaseline: 'top'
+          textAlign: 'start'
         }
       }, this.$c("div", {
         style: {
