@@ -463,42 +463,6 @@ class UI {
     context.stroke();
   }
 
-  drawRect(node, offsetX, offsetY, parent) {
-    const {
-      context
-    } = this;
-    context.save();
-    const {
-      props,
-      tag
-    } = node;
-
-    if (props) {
-      const {
-        style
-      } = props;
-      this.mergeStyle(style);
-
-      if (style) {
-        this.drawBack(node, offsetX, offsetY);
-        this.drawBorder(node, offsetX, offsetY);
-      }
-    }
-
-    if (tag === 'img') {
-      this.drawImage(node, offsetX, offsetY);
-    } else if (tag === 'circle') {
-      this.drawCircle(node, offsetX, offsetY);
-    } else if (tag === 'line') {
-      this.drawLine(node, offsetX, offsetX);
-    } else if (tag !== 'div') {
-      console.error(tag);
-    }
-
-    this.renderAnything(node.children, offsetX, offsetY, node);
-    context.restore();
-  }
-
   renderPrimitive(text, offsetX, offsetY, parent) {
     var _parent$props;
 
@@ -556,14 +520,52 @@ class UI {
       } else if (isFunc(createdNode.tag)) {
         // tag 是 function
         this.renderAnything(createdNode.instance.$node, offsetX, offsetY, parent);
-      } else {
+      } else if (isString(createdNode.tag)) {
         // div node
-        this.renderNode(createdNode, offsetX, offsetY, parent);
+        this.calcNode(createdNode, offsetX, offsetY, parent);
+      } else {
+        this.renderPrimitive(JSON.stringify(createdNode), offsetX, offsetY, parent);
       }
     }
   }
 
-  renderNode(node, offsetX, offsetY, parent) {
+  drawNode(node, offsetX, offsetY, parent) {
+    const {
+      context
+    } = this;
+    context.save();
+    const {
+      props,
+      tag
+    } = node;
+
+    if (props) {
+      const {
+        style
+      } = props;
+      this.mergeStyle(style);
+
+      if (style) {
+        this.drawBack(node, offsetX, offsetY);
+        this.drawBorder(node, offsetX, offsetY);
+      }
+    }
+
+    if (tag === 'img') {
+      this.drawImage(node, offsetX, offsetY);
+    } else if (tag === 'circle') {
+      this.drawCircle(node, offsetX, offsetY);
+    } else if (tag === 'line') {
+      this.drawLine(node, offsetX, offsetX);
+    } else if (tag !== 'div') {
+      console.error('drawNode not support, check jsx <', tag);
+    }
+
+    this.renderAnything(node.children, offsetX, offsetY, node);
+    context.restore();
+  }
+
+  calcNode(node, offsetX, offsetY, parent) {
     var _node$props;
 
     const {
@@ -600,7 +602,7 @@ class UI {
       });
     }
 
-    this.drawRect(node, offsetX, offsetY);
+    this.drawNode(node, offsetX, offsetY);
     context.restore();
   }
 
@@ -1530,19 +1532,124 @@ class Message extends Component {
 
 }
 
-class Column extends Component {
-  constructor(argu) {
-    super(argu);
-    console.log(this);
+const styles = {
+  wrap: {
+    textAlign: 'left',
+    fontSize: 16,
+    backgroundColor: 'rgba(0,0,0,1)',
+    backgroundImage: 'ground.png',
+    borderColor: 'yellow',
+    borderWidth: 1,
+    width: 32 * (13 + 5),
+    height: 32 * 13
+  },
+  tableoffset: {
+    x: 32,
+    y: 32
+  }
+};
+const columns = [{
+  title: '',
+  width: 1,
+
+  render(rowData) {
+    return this.$c("div", {
+      src: "enemys.png",
+      style: {
+        height: 32,
+        width: 32,
+        sy: rowData.sy * 32,
+        backgroundColor: 'red'
+      }
+    });
   }
 
-  render() {
-    return this.$c("div", {
-      style: {
-        x: 20,
-        y: 20
+}, {
+  title: '名字',
+  dataIndex: 'name',
+  width: 3
+}, {
+  title: '生命',
+  dataIndex: 'hp',
+  width: 2
+}, {
+  title: '攻击',
+  dataIndex: 'atk',
+  width: 2
+}, {
+  title: '防御',
+  dataIndex: 'def',
+  width: 2
+}, {
+  title: '损失',
+  dataIndex: 'address',
+  width: 2,
+
+  render(enemy, hero) {
+    let cost = 0;
+
+    if (hero.atk > enemy.def) {
+      if (hero.def >= enemy.atk || enemy.hp / (hero.atk - enemy.def) <= hero.hp / (enemy.atk - hero.def)) {
+        if (hero.def >= enemy.atk) {
+          cost = 0;
+        } else {
+          const atkCount = Math.floor(enemy.hp / (hero.atk - enemy.def));
+          cost = (enemy.atk - hero.def) * atkCount;
+        }
+      } else {
+        cost = '-';
       }
-    }, this.$children);
+    } else {
+      cost = '-';
+    }
+
+    return cost;
+  }
+
+}];
+
+class Table extends Component {
+  render() {
+    const {
+      dataSource,
+      columns,
+      size = 32,
+      data
+    } = this.props;
+    let x = 0;
+    return columns.map((column, index) => {
+      const {
+        title,
+        dataIndex,
+        width,
+        render
+      } = column;
+      const rowEle = this.$c("div", {
+        style: {
+          x: 0,
+          y: 0,
+          textAlign: 'start',
+          textBaseline: 'top'
+        }
+      }, this.$c("div", {
+        style: {
+          x: x,
+          width: width * size,
+          height: size
+        }
+      }, title), dataSource.map((rowData, rowIndex) => {
+        return this.$c("div", {
+          style: {
+            x: x,
+            y: (rowIndex + 1) * size,
+            width: width * size,
+            height: size
+          }
+        }, render ? render.call(this, rowData, data, rowIndex, index) : rowData[dataIndex]);
+      }));
+      x += width * size;
+      return rowEle;
+    });
   }
 
 }
@@ -1561,116 +1668,15 @@ class EnemyInfo extends KeyEventComponent {
   }
 
   render() {
-    const enemys = Object.keys(this.props.enemys);
-
-    if (this) {
-      return this.$c(Column, null, this.$c("div", null, "ss"));
-    }
-
+    const dataSource = Object.keys(this.props.enemys).map(enemyId => this.$data.enemys[enemyId]);
     return this.$c("div", {
-      style: {
-        textAlign: 'left',
-        fontSize: 16,
-        // backgroundColor: 'rgba(0,0,0,1)',
-        backgroundImage: 'ground.png',
-        borderColor: 'yellow',
-        borderWidth: 10,
-        x: 0,
-        y: 0,
-        width: 32 * 13,
-        height: 32 * 13
-      }
+      style: styles.wrap
     }, this.$c("div", {
-      style: {
-        x: 32,
-        y: 32
-      }
-    }, this.$c("div", {
-      style: {
-        x: 32 * 1,
-        height: 32
-      }
-    }, "\u540D\u5B57"), this.$c("div", {
-      style: {
-        x: 32 * 4,
-        height: 32
-      }
-    }, "\u751F\u547D"), this.$c("div", {
-      style: {
-        x: 32 * 6,
-        height: 32
-      }
-    }, "\u653B\u51FB"), this.$c("div", {
-      style: {
-        x: 32 * 8,
-        height: 32
-      }
-    }, "\u9632\u5FA1"), this.$c("div", {
-      style: {
-        x: 32 * 10,
-        height: 32
-      }
-    }, "\u635F\u5931"), enemys.map((enemyId, index) => {
-      const style = {
-        x: 0,
-        y: index * 32 + 32,
-        height: 32
-      };
-      const enemy = this.$data.enemys[enemyId];
-      const hero = this.$data.save.hero;
-      let cost = 0;
-
-      if (hero.atk > enemy.def) {
-        if (hero.def >= enemy.atk || enemy.hp / (hero.atk - enemy.def) <= hero.hp / (enemy.atk - hero.def)) {
-          if (hero.def >= enemy.atk) {
-            cost = 0;
-          } else {
-            const atkCount = Math.floor(enemy.hp / (hero.atk - enemy.def));
-            cost = (enemy.atk - hero.def) * atkCount;
-          }
-        } else {
-          cost = '-';
-        }
-      } else {
-        cost = '-';
-      }
-
-      return this.$c("div", {
-        style: style
-      }, this.$c("img", {
-        src: "enemys.png",
-        alt: "",
-        style: {
-          height: 32,
-          width: 32,
-          sy: enemy.sy * 32
-        }
-      }), this.$c("div", {
-        style: {
-          x: 32 * 1,
-          height: 32
-        }
-      }, enemy.name), this.$c("div", {
-        style: {
-          x: 32 * 4,
-          height: 32
-        }
-      }, enemy.hp), this.$c("div", {
-        style: {
-          x: 32 * 6,
-          height: 32
-        }
-      }, enemy.atk), this.$c("div", {
-        style: {
-          x: 32 * 8,
-          height: 32
-        }
-      }, enemy.def), this.$c("div", {
-        style: {
-          x: 32 * 10,
-          height: 32
-        }
-      }, cost));
+      style: styles.tableoffset
+    }, this.$c(Table, {
+      dataSource: dataSource,
+      columns: columns,
+      data: this.$data.save.hero
     })));
   }
 
@@ -1772,6 +1778,8 @@ class Hero extends KeyEventComponent {
       hero
     };
   }
+
+  showEnemyInfo = true;
 
   isCoincidedTerrains(heroStyle) {
     return this.props.mapTerrains.findIndex(item => item && item && isCoincided(item.props.style, heroStyle));
@@ -2465,6 +2473,9 @@ class Game extends Component {
     }
 
     this.loading = false;
+    this.onLoadMap({
+      mapId: 'MT1'
+    });
   }
 
   onLoadMap = async data => {

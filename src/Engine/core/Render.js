@@ -1,5 +1,5 @@
 import { baseStyle } from '../const/baseStyle'
-import { isPrimitive, isFunc, isArray, isUndefined, isBoolean } from '../utils/common'
+import { isPrimitive, isFunc, isArray, isUndefined, isBoolean, isString } from '../utils/common'
 import { curFoucs } from './Component'
 
 const moveEvent = 'MouseMove'
@@ -197,31 +197,6 @@ export default class UI {
     context.stroke()
   }
 
-  drawRect (node, offsetX, offsetY, parent) {
-    const { context } = this
-    context.save()
-    const { props, tag } = node
-    if (props) {
-      const { style } = props
-      this.mergeStyle(style)
-      if (style) {
-        this.drawBack(node, offsetX, offsetY)
-        this.drawBorder(node, offsetX, offsetY)
-      }
-    }
-    if (tag === 'img') {
-      this.drawImage(node, offsetX, offsetY)
-    } else if (tag === 'circle') {
-      this.drawCircle(node, offsetX, offsetY)
-    } else if (tag === 'line') {
-      this.drawLine(node, offsetX, offsetX)
-    } else if (tag !== 'div') {
-      console.error(tag)
-    }
-    this.renderAnything(node.children, offsetX, offsetY, node)
-    context.restore()
-  }
-
   renderPrimitive (text, offsetX, offsetY, parent) {
     const { context } = this
     const { textAlign, textBaseline } = context
@@ -257,14 +232,41 @@ export default class UI {
       } else if (isFunc(createdNode.tag)) {
         // tag 是 function
         this.renderAnything(createdNode.instance.$node, offsetX, offsetY, parent)
-      } else {
+      } else if (isString(createdNode.tag)) {
         // div node
-        this.renderNode(createdNode, offsetX, offsetY, parent)
+        this.calcNode(createdNode, offsetX, offsetY, parent)
+      } else {
+        this.renderPrimitive(JSON.stringify(createdNode), offsetX, offsetY, parent)
       }
     }
   }
 
-  renderNode (node, offsetX, offsetY, parent) {
+  drawNode (node, offsetX, offsetY, parent) {
+    const { context } = this
+    context.save()
+    const { props, tag } = node
+    if (props) {
+      const { style } = props
+      this.mergeStyle(style)
+      if (style) {
+        this.drawBack(node, offsetX, offsetY)
+        this.drawBorder(node, offsetX, offsetY)
+      }
+    }
+    if (tag === 'img') {
+      this.drawImage(node, offsetX, offsetY)
+    } else if (tag === 'circle') {
+      this.drawCircle(node, offsetX, offsetY)
+    } else if (tag === 'line') {
+      this.drawLine(node, offsetX, offsetX)
+    } else if (tag !== 'div') {
+      console.error('drawNode not support, check jsx <', tag)
+    }
+    this.renderAnything(node.children, offsetX, offsetY, node)
+    context.restore()
+  }
+
+  calcNode (node, offsetX, offsetY, parent) {
     const { context } = this
     context.save()
     const style = node?.props?.style
@@ -284,7 +286,7 @@ export default class UI {
       })
     }
 
-    this.drawRect(node, offsetX, offsetY)
+    this.drawNode(node, offsetX, offsetY)
 
     context.restore()
   }

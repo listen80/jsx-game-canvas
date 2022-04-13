@@ -31,6 +31,7 @@ export default class Hero extends KeyEventComponent {
     this.styles = { hero }
   }
 
+  showEnemyInfo = true
   isCoincidedTerrains (heroStyle) {
     return this.props.mapTerrains.findIndex(
       (item) => item && item && isCoincided(item.props.style, heroStyle),
