@@ -43,7 +43,7 @@ export default class Battle extends Component {
   render () {
     const enemy = this.enemy
     const hero = this.hero
-    const tick = location.hostname === 'localhost' ? 1 : 30
+    const tick = location.hostname === 'localhost' ? 1 : 25
     if (enemy.hp > 0) {
       this.tick++
       if (this.tick === tick) {

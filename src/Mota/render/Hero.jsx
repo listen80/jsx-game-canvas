@@ -80,7 +80,12 @@ export default class Hero extends Component {
       this.showEnemyInfo = !this.showEnemyInfo
     } else if (code === 'KeyB') {
       this.buying = true
+    } else if (code === 'Equal') {
+      this.updateSaveData('hero', { hp: 200, atk: 50, def: 50 })
+    } else if (code === 'Minus') {
+      this.updateSaveData('items', { yellowKey: 3, blueKey: 2, redKey: 1 })
     }
+
     if (moveVector) {
       const vector = updateVector(styleHero, moveVector)
 

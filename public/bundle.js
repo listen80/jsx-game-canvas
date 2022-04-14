@@ -1256,7 +1256,7 @@ class Battle extends Component {
   render() {
     const enemy = this.enemy;
     const hero = this.hero;
-    const tick = location.hostname === 'localhost' ? 1 : 30;
+    const tick = location.hostname === 'localhost' ? 1 : 25;
 
     if (enemy.hp > 0) {
       this.tick++;
@@ -1717,6 +1717,18 @@ class Hero extends Component {
       this.showEnemyInfo = !this.showEnemyInfo;
     } else if (code === 'KeyB') {
       this.buying = true;
+    } else if (code === 'Equal') {
+      this.updateSaveData('hero', {
+        hp: 200,
+        atk: 50,
+        def: 50
+      });
+    } else if (code === 'Minus') {
+      this.updateSaveData('items', {
+        yellowKey: 3,
+        blueKey: 2,
+        redKey: 1
+      });
     }
 
     if (moveVector) {
