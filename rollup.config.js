@@ -11,11 +11,14 @@ import replace from 'rollup-plugin-replace' // 注入环境变量
 // import vue from 'rollup-plugin-vue' // 处理vue的插件ƒ
 // import livereload from 'rollup-plugin-livereload' // 实时刷新
 
+import html2 from 'rollup-plugin-html2'
 import path from 'path'
+const date = new Date()
+
 export default {
   input: path.join('src'),
   output: {
-    file: path.join('public/bundle.js'),
+    file: 'public/bundle.js',
   },
   plugins: [
     alias({
@@ -38,14 +41,24 @@ export default {
     // }),
     // postcss(),
     // vue(),
+    html2({
+      template: 'src/index.html',
+      inject: false,
+      externals: {
+        before: [],
+        after: [{
+          tag: 'script',
+          src: 'bundle.js?' + `${date.toLocaleDateString()}-${date.toTimeString().substring(0, 9)}`,
+        }],
+      },
+    }),
     process.env.NODE_ENV === 'production'
       ? terser()
       : serve({
-        open: true,
+        // open: true,
         port: 8080,
         contentBase: 'public',
       }),
   ],
-  // sourceMap: true,
-  // sourcemap: true,
+  sourceMap: false,
 }
