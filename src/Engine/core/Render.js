@@ -42,6 +42,8 @@ export default class Render {
     this.canvas.height = height
     const dom = document.querySelector(el) || document.body
     dom && dom.appendChild(this.canvas)
+    this.canvas.$offsetWidth = canvas.offsetWidth
+    this.canvas.$offsetHeight = canvas.offsetHeight
     this.mergeStyle(baseStyle)
   }
 
@@ -55,13 +57,17 @@ export default class Render {
 
   bindEvents () {
     this.restoreEvents()
-
+    const canvas = this.canvas
+    const { $offsetWidth, $offsetHeight, width, height } = canvas
     mouseEvents.forEach((name) => {
       this.canvas.addEventListener(
         name.toLowerCase(),
         (e) => {
           e.name = `on${name}`
+          e.canvasX = e.offsetX / $offsetWidth * width
+          e.canvasY = e.offsetY / $offsetHeight * height
           this.mouseEventsCollectionKeyframe.push(e)
+
           e.preventDefault()
         },
         { passive: false },
@@ -393,11 +399,12 @@ export default class Render {
       offsetY += y
       // events of mouse
       this.mouseEventsCollectionKeyframe.forEach((event) => {
+        const { canvasX, canvasY } = event
         if (
-          event.offsetX >= offsetX &&
-          event.offsetX < style.width + offsetX &&
-          event.offsetY >= offsetY &&
-          event.offsetY < style.height + offsetY
+          canvasX >= offsetX &&
+          canvasX < style.width + offsetX &&
+          canvasY >= offsetY &&
+          canvasY < style.height + offsetY
         ) {
           event.$node = node
         }
