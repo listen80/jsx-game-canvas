@@ -75,7 +75,7 @@ export default class Hero extends Component {
       this.setMessage('存储成功')
     } else if (code === 'KeyL') {
       this.$sound.play('se', 'load.mp3')
-      this.props.oniLoadMap(loadGame())
+      this.props.onLoadMap(loadGame())
       this.setMessage('读取成功')
     } else if (code === 'KeyX') {
       this.showEnemyInfo = !this.showEnemyInfo

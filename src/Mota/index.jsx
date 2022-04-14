@@ -5,7 +5,6 @@ import Loading from './render/Loading'
 import Title from './render/Title'
 import Map from './render/Map'
 import ScrollText from './render/ScrollText'
-import Test from './test'
 import { loadJSON } from '../Engine/utils/http'
 import Message from './render/Message'
 
