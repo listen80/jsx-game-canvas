@@ -86,7 +86,7 @@ export default class Select extends Component {
                 </div>
             )
           })
-          : '空空如也'}
+          : null}
       </div>
     )
   }

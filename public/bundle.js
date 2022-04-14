@@ -384,8 +384,8 @@ class UI {
       this.drawCircle(node, offsetX, offsetY);
     } else if (tag === 'line') {
       this.drawLine(node, offsetX, offsetX);
-    } else if (tag !== 'div') {
-      console.error('drawNode not support, check jsx <', tag);
+    } else if (tag !== 'div' && tag !== 'view') {
+      console.error(`drawNode not support, check jsx <${tag} ....`, node);
     }
 
     this.renderAnything(node.children, offsetX, offsetY, node);
@@ -914,7 +914,7 @@ class Select extends Component {
         onMouseDown: () => this.onMouseDown(index),
         onMouseMove: () => this.setActiveIndex(index)
       }, text);
-    }) : '空空如也');
+    }) : null);
   }
 
 }
