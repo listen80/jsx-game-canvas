@@ -56,15 +56,19 @@ export default class Hero extends Component {
     if (code === 'ArrowDown') {
       moveVector = { y: step }
       styleHero.sy = 0
+      this.$sound.play('se', 'step.mp3')
     } else if (code === 'ArrowUp') {
       moveVector = { y: -step }
       styleHero.sy = 3
+      this.$sound.play('se', 'step.mp3')
     } else if (code === 'ArrowLeft') {
       moveVector = { x: -step }
       styleHero.sy = 1
+      this.$sound.play('se', 'step.mp3')
     } else if (code === 'ArrowRight') {
       moveVector = { x: step }
       styleHero.sy = 2
+      this.$sound.play('se', 'step.mp3')
     } else if (code === 'KeyS') {
       saveGame(this.$data.save)
       this.$sound.play('se', 'load.mp3')

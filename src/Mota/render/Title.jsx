@@ -12,7 +12,7 @@ const styles = {
     y: size * 2,
     width: size * (13 + 5),
     height: size * 4,
-    font: 'bold 128px 黑体',
+    font: '900 128px 黑体',
   },
   select: {
     x: size * 8,

@@ -1098,7 +1098,7 @@ const styles$1 = {
     y: size$9 * 2,
     width: size$9 * (13 + 5),
     height: size$9 * 4,
-    font: 'bold 128px 黑体'
+    font: '900 128px 黑体'
   },
   select: {
     x: size$9 * 8,
@@ -1687,21 +1687,25 @@ class Hero extends Component {
         y: step
       };
       styleHero.sy = 0;
+      this.$sound.play('se', 'step.mp3');
     } else if (code === 'ArrowUp') {
       moveVector = {
         y: -step
       };
       styleHero.sy = 3;
+      this.$sound.play('se', 'step.mp3');
     } else if (code === 'ArrowLeft') {
       moveVector = {
         x: -step
       };
       styleHero.sy = 1;
+      this.$sound.play('se', 'step.mp3');
     } else if (code === 'ArrowRight') {
       moveVector = {
         x: step
       };
       styleHero.sy = 2;
+      this.$sound.play('se', 'step.mp3');
     } else if (code === 'KeyS') {
       saveGame(this.$data.save);
       this.$sound.play('se', 'load.mp3');
