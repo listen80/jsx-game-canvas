@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 import { Component } from 'Engine'
 import FPS from './render/FPS'
 import Loading from './render/Loading'
@@ -6,8 +7,9 @@ import Map from './render/Map'
 import ScrollText from './render/ScrollText'
 import Test from './test'
 import { loadJSON } from '../Engine/utils/http'
+import Message from './render/Message'
 
-const loadMap = mapId => {
+const loadMap = (mapId) => {
   return loadJSON(`Maps/${mapId}.json`)
 }
 
@@ -62,26 +64,50 @@ export default class Game extends Component {
 
   onTitle = () => {
     this.map = null
-  }
+  };
+
+  onMessageClose = () => {
+    this.msg = null
+  };
+
+  onMessage = (msg) => {
+    this.msg = msg
+  };
 
   render () {
     // const Title = Test
-    return <div style={this.styles.app}>
-      {
-        this.loading
-          ? <Loading msg={this.loading} />
-          : this.map
-            ? this.map.text
-              ? <ScrollText map={this.map} onClose={this.onLoadMap} onTitle={this.onTitle}></ScrollText>
-              : <Map
-                map={this.map}
-                key={this.randMapKey}
-                onLoadMap={this.onLoadMap}
-                onEvent={this.onEvent}
-              />
-            : <Title onLoadMap={this.onLoadMap}></Title>
-      }
-      <FPS />
-    </div>
+    return (
+      <div style={this.styles.app}>
+        {this.loading ? (
+          <Loading msg={this.loading} />
+        ) : this.map ? (
+          this.map.text ? (
+            <ScrollText
+              map={this.map}
+              onClose={this.onLoadMap}
+              onTitle={this.onTitle}
+            ></ScrollText>
+          ) : (
+            <Map
+              map={this.map}
+              key={this.randMapKey}
+              onLoadMap={this.onLoadMap}
+              onMessage={this.onMessage}
+              onEvent={this.onEvent}
+            />
+          )
+        ) : (
+          <Title onLoadMap={this.onLoadMap}></Title>
+        )}
+        {this.msg && (
+          <Message
+            msg={this.msg}
+            key={this.msg}
+            onMessageClose={this.onMessageClose}
+          />
+        )}
+        <FPS />
+      </div>
+    )
   }
 }

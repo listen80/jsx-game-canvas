@@ -157,6 +157,7 @@ export default class Map extends Component {
           enemys={this.enemys}
           map={this.props.map}
           onLoadMap={this.props.onLoadMap}
+          onMessage={this.props.onMessage}
           removeMapEvent={this.onRemoveMapEvent}
           onTitle={this.onTitle}
         />

@@ -3,7 +3,6 @@ import { Component } from 'Engine'
 import Shop from './Shop'
 import Battle from './Battle'
 import Talks from './Talks'
-import Message from './Message'
 import EnemyInfo from './EnemyInfo'
 import ShopList from './ShopList'
 import Animate from '../../Engine/components/Animate'
@@ -69,10 +68,10 @@ export default class Hero extends Component {
     } else if (code === 'KeyS') {
       saveGame(this.$data.save)
       this.$sound.play('se', 'load.mp3')
-      this.msg = '存储成功'
+      this.setMessage('存储成功')
     } else if (code === 'KeyL') {
       this.$sound.play('se', 'load.mp3')
-      this.props.onLoadMap(loadGame())
+      this.setMessage('读取成功')
     } else if (code === 'KeyX') {
       this.showEnemyInfo = !this.showEnemyInfo
     } else if (code === 'KeyB') {
@@ -121,13 +120,13 @@ export default class Hero extends Component {
         if (type === '1' || type === '3') {
           this.remove(mapEvent)
           this.updateSaveData('items', name)
-          this.msg = `获得${item.name}`
+          this.setMessage(`获得${item.name}`)
           this.$sound.play('se', type === '1' ? 'item.mp3' : 'constants.mp3')
         } else if (type === '2') {
           this.remove(mapEvent)
           this.updateSaveData(...item.property)
           const [name, property] = item.property
-          this.msg = `获得${item.name}`
+          let msg = `获得${item.name}`
           property.forEach((property) => {
             const [key, value] = property
             let propertyName = key
@@ -138,7 +137,8 @@ export default class Hero extends Component {
             } else if (key === 'money') {
               propertyName = '金币'
             }
-            this.msg += ` ${propertyName}${value > 0 ? '+' : '-'}${value}`
+            msg += ` ${propertyName}${value > 0 ? '+' : '-'}${value}`
+            this.setMessage(msg)
           })
           this.$sound.play('se', 'item.mp3')
         }
@@ -210,13 +210,13 @@ export default class Hero extends Component {
           } else {
             this.mapEvent = null
             this.eventIndex = 0
-            this.msg = `你打不过${enemy.name}`
+            this.setMessage(`你打不过${enemy.name}`)
             return
           }
         } else {
           this.mapEvent = null
           this.eventIndex = 0
-          this.msg = `你的攻击比${enemy.name}的防御低`
+          this.setMessage(`你的攻击比${enemy.name}的防御低`)
           return
         }
       } else if (type === 'updateSaveData') {
@@ -263,9 +263,9 @@ export default class Hero extends Component {
     this.setEvent()
   };
 
-  onMessageClose = () => {
-    this.msg = null
-  };
+  setMessage = (msg) => {
+    this.props.onMessage(msg)
+  }
 
   updateSaveData (context, gets, n = 1) {
     if (Array.isArray(gets)) {
@@ -350,13 +350,6 @@ export default class Hero extends Component {
         )}
         {this.talk && (
           <Talks talk={this.talk} key={this.talk} onConfirm={this.onConfirm} />
-        )}
-        {this.msg && (
-          <Message
-            msg={this.msg}
-            key={this.msg}
-            onMessageClose={this.onMessageClose}
-          />
         )}
         {this.showEnemyInfo && (
           <EnemyInfo
