@@ -32,7 +32,7 @@ export default class Scroll extends KeyEventComponent {
         }}
         onWheel={this.onWheel}
       >
-        <div style={{ x: 3, y: -this.scrollTop }}>{this.$children}</div>
+        <div style={{ y: -this.scrollTop }}>{this.$children}</div>
       </div>
     )
   }

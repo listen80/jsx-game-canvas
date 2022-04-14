@@ -483,11 +483,11 @@ class UI {
           }
         }
       });
-    }
 
-    if (style && style.overflow) {
-      // debugger
-      context.clip();
+      if (style && style.overflow) {
+        // context.rect(0, 0, 33, 30)
+        context.clip();
+      }
     }
 
     this.drawNode(node, offsetX, offsetY);
@@ -855,7 +855,6 @@ class Scroll extends KeyEventComponent {
       onWheel: this.onWheel
     }, this.$c("div", {
       style: {
-        x: 3,
         y: -this.scrollTop
       }
     }, this.$children));

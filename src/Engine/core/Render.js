@@ -366,6 +366,7 @@ export default class UI {
     // div node
     const { context } = this
     context.save()
+
     const style = node?.props?.style
     if (style) {
       const { x = 0, y = 0 } = style
@@ -384,11 +385,11 @@ export default class UI {
           }
         }
       })
-    }
 
-    if (style && style.overflow) {
-      // debugger
-      context.clip()
+      if (style && style.overflow) {
+        // context.rect(0, 0, 33, 30)
+        context.clip()
+      }
     }
 
     this.drawNode(node, offsetX, offsetY)
