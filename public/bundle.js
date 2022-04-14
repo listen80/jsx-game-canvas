@@ -36,161 +36,16 @@ const isUndefined = o => o === undefined || o === null;
 const isString = o => typeof o === 'string';
 const isBoolean = o => typeof o === 'boolean';
 
-function createNode(tag, props, ...children) {
-  const $parent = this;
-  return {
-    tag,
-    props,
-    children,
-    $parent
-  };
-}
-
-function createInstance(next) {
-  const Class = next.tag;
-  next.instance = new Class(next);
-  next.instance.$images = next.$parent.$images;
-  next.instance.$sound = next.$parent.$sound;
-  next.instance.$data = next.$parent.$data;
-  next.instance.$font = next.$parent.$font;
-  next.instance.create && next.instance.create();
-  renderNode(next);
-}
-
-function destoryInstance(pre) {
-  // && isBoolean(pre)
-  if (!isPrimitive(pre) && !isUndefined(pre)) {
-    if (isFunc(pre.tag)) {
-      destoryInstance(pre.instance.$node);
-      pre.instance.destroy && pre.instance.destroy();
-    } else if (isArray(pre)) {
-      while (pre.length) {
-        destoryInstance(pre.pop());
-      }
-    } else {
-      destoryInstance(pre.children);
-    }
-  }
-}
-
-function updateInstance(pre, next) {
-  next.instance = pre.instance;
-  next.instance.props = next.props;
-  renderNode(next);
-}
-
-function renderNode(next) {
-  next.instance.$node = patchNode(next.instance.$node, next.instance.render());
-}
-
-function patchNode(pre, next) {
-  // undefined null
-  // string number
-  // array
-  // class component
-  // div node
-  if (isUndefined(next) || isPrimitive(next) || isBoolean(next)) {
-    destoryInstance(pre);
-  } else if (isArray(next)) {
-    if (isArray(pre)) {
-      for (let i = 0; i < next.length; i++) {
-        // diff array
-        patchNode(pre[i], next[i]);
-      }
-    } else {
-      destoryInstance(pre);
-
-      for (let i = 0; i < next.length; i++) {
-        patchNode(null, next[i]);
-      }
-    }
-  } else if (isFunc(next.tag)) {
-    var _pre$props, _next$props;
-
-    if (pre && pre.tag === next.tag && ((_pre$props = pre.props) === null || _pre$props === void 0 ? void 0 : _pre$props.key) === ((_next$props = next.props) === null || _next$props === void 0 ? void 0 : _next$props.key)) {
-      updateInstance(pre, next);
-    } else {
-      destoryInstance(pre);
-      createInstance(next);
-    }
-  } else if (isString(next.tag)) {
-    const preChildren = pre && pre.children;
-    patchNode(preChildren, next.children);
-  }
-
-  return next;
-}
-
-let curFoucs = null;
-class Component {
-  constructor({
-    props,
-    children
-  }) {
-    this.props = props;
-    this.$node = null;
-    this.$children = children;
-  }
-
-  $c(...argu) {
-    const node = createNode.call(this, ...argu);
-    return node;
-  }
-
-}
-class KeyEventComponent extends Component {
-  constructor(...argu) {
-    super(...argu);
-
-    if (curFoucs) {
-      curFoucs.$isFocus = false;
-      curFoucs.$nextFocus = this;
-    }
-
-    this.$isFocus = true;
-    this.$preFocus = curFoucs; // console.warn('create\n', this)
-
-    curFoucs = this;
-  }
-
-  destroy() {
-    // console.warn('destroy\n', this)
-    this.$isFocus = false;
-
-    if (this.$preFocus) {
-      this.$preFocus.$isFocus = true;
-    }
-
-    curFoucs = this.$preFocus;
-  }
-
-}
-
-const moveEvent = 'MouseMove';
-const mouseEvents = ['ContextMenu', 'Click', 'Wheel', moveEvent];
-const size$d = 32; //  "MouseDown", "MouseUp"
-
+const mouseEvents = ['ContextMenu', 'Click', 'Wheel', 'MouseDown', 'MouseUp'
+/* , 'MouseMove' */
+];
 const keyEvents = ['KeyDown', 'KeyUp'];
+const size$c = 32;
 class UI {
-  constructor(game, screen = {}) {
-    const canvas = document.createElement('canvas');
-    this.canvas = canvas;
-    this.context = canvas.getContext('2d');
-    const {
-      el,
-      width = size$d * (13 + 5),
-      height = size$d * 13
-    } = screen;
-    this.screen = screen;
-    this.canvas.width = width;
-    this.canvas.height = height;
-    const dom = document.querySelector(el) || document.body;
-    dom && dom.appendChild(this.canvas);
-    this.mergeStyle(baseStyle);
-    this.mouseEvents = [];
-    this.keyEvents = [];
-    this.onMouseClick = [];
-    this.bind();
+  constructor(game) {
+    this.initCanvas();
+    this.bindEvents();
+    this.$data = game.$data;
     this.$images = game.$images;
   }
 
@@ -198,28 +53,57 @@ class UI {
     return this.$images.images[src];
   };
 
-  bind() {
+  initCanvas(screen = {}) {
+    const canvas = document.createElement('canvas');
+    this.canvas = canvas;
+    this.context = canvas.getContext('2d');
+    const {
+      el,
+      width = size$c * (13 + 5),
+      height = size$c * 13
+    } = screen;
+    this.screen = screen;
+    this.canvas.width = width;
+    this.canvas.height = height;
+    const dom = document.querySelector(el) || document.body;
+    dom && dom.appendChild(this.canvas);
+    this.mergeStyle(baseStyle);
+  }
+
+  restoreEvents() {
+    this.mouseEventsCollectionKeyframe = [];
+    this.mouseEventsCallbackKeyframe = [];
+    this.keyEventsCallbackFunc = [];
+  }
+
+  bindEvents() {
+    this.restoreEvents();
     mouseEvents.forEach(name => {
       this.canvas.addEventListener(name.toLowerCase(), e => {
-        e.name = 'on' + name;
-        this.mouseEvents.push(e);
+        e.name = `on${name}`;
+        this.mouseEventsCollectionKeyframe.push(e);
         e.preventDefault();
       }, {
         passive: false
       });
-    }); // const name = moveEvent
-    // this.canvas.addEventListener(name.toLowerCase(), (e) => {
-    //   e.name = 'on' + name
-    //   this.moveEvent = e
-    //   e.preventDefault()
-    // }, { passive: false })
-
+    });
     keyEvents.forEach(name => {
       document.addEventListener(name.toLowerCase(), e => {
-        e.name = 'on' + name;
-        this.keyEvents = e;
+        e.name = `on${name}`;
+        this.keyEventsCallbackFunc.push(e);
       });
     });
+  }
+
+  runEvents() {
+    this.mouseEventsCallbackKeyframe.forEach(({
+      node,
+      event,
+      name
+    }) => {
+      node.props[name](event);
+    });
+    this.restoreEvents();
   }
 
   toDataURL() {
@@ -305,8 +189,8 @@ class UI {
         const {
           sx = 0,
           sy = 0,
-          width = size$d,
-          height = size$d,
+          width = size$c,
+          height = size$c,
           swidth,
           sheight
         } = style;
@@ -569,6 +453,8 @@ class UI {
   calcNode(node, offsetX, offsetY, parent) {
     var _node$props;
 
+    // 非class component
+    // div node
     const {
       context
     } = this;
@@ -582,69 +468,36 @@ class UI {
       } = style;
       offsetX += x;
       offsetY += y;
-      this.mouseEvents.forEach(event => {
+      this.mouseEventsCollectionKeyframe.forEach(event => {
         const {
           name
         } = event;
 
         if (event.offsetX >= offsetX && event.offsetX < style.width + offsetX && event.offsetY >= offsetY && event.offsetY < style.height + offsetY) {
-          if (name === 'onMouseMove') {
-            this.onMouseMove = {
+          if (node.props[name]) {
+            this.mouseEventsCallbackKeyframe.push({
               node,
-              event
-            };
-          } else if (name === 'onClick') {
-            this.onMouseClick.push({
-              node,
-              event
+              event,
+              name
             });
           }
         }
       });
     }
 
-    this.drawNode(node, offsetX, offsetY);
-    context.restore();
-  }
-
-  runEvent() {
-    if (curFoucs && this.keyEvents) {
-      const {
-        name
-      } = this.keyEvents;
-      curFoucs[name] && curFoucs[name](this.keyEvents);
+    if (style && style.overflow) {
+      // debugger
+      context.clip();
     }
 
-    this.keyEvents = null; // if (this.moveEventTarget && this.moveEvent) {
-    //   if (moveEventTarget !== this.moveEventTarget) {
-    //     if (moveEventTarget) {
-    //       moveEventTarget.props.onMouseLeave && moveEventTarget.props.onMouseLeave()
-    //     }
-    //     moveEventTarget = this.moveEventTarget
-    //     moveEventTarget.props.onMouseEnter && moveEventTarget.props.onMouseEnter()
-    //   }
-    // }
-
-    this.onMouseClick.forEach(({
-      node,
-      event
-    }) => {
-      var _node$props2;
-
-      if (node !== null && node !== void 0 && (_node$props2 = node.props) !== null && _node$props2 !== void 0 && _node$props2.onClick) {
-        node.props.onClick(event);
-      }
-    });
-    this.onMouseClick = [];
-    this.mouseEvents = [];
-    this.moveEvent = null;
-    this.moveEventTarget = null;
+    this.drawNode(node, offsetX, offsetY);
+    context.restore();
   }
 
   render(createdNode) {
     this.clearRect();
     this.renderAnything(createdNode, 0, 0, this.canvas);
-    this.runEvent();
+    this.runEvents();
   }
 
 }
@@ -819,6 +672,113 @@ class Font {
 
 }
 
+function createNode(tag, props, ...children) {
+  const $parent = this;
+  return {
+    tag,
+    props,
+    children,
+    $parent
+  };
+}
+
+function createInstance(next) {
+  const Class = next.tag;
+  next.instance = new Class(next);
+  next.instance.$images = next.$parent.$images;
+  next.instance.$sound = next.$parent.$sound;
+  next.instance.$data = next.$parent.$data;
+  next.instance.$font = next.$parent.$font;
+  next.instance.create && next.instance.create();
+  renderNode(next);
+}
+
+function destoryInstance(pre) {
+  // && isBoolean(pre)
+  if (!isPrimitive(pre) && !isUndefined(pre)) {
+    if (isFunc(pre.tag)) {
+      destoryInstance(pre.instance.$node);
+      pre.instance.destroy && pre.instance.destroy();
+    } else if (isArray(pre)) {
+      while (pre.length) {
+        destoryInstance(pre.pop());
+      }
+    } else {
+      destoryInstance(pre.children);
+    }
+  }
+}
+
+function updateInstance(pre, next) {
+  next.instance = pre.instance;
+  next.instance.props = next.props;
+  renderNode(next);
+}
+
+function renderNode(next) {
+  next.instance.$node = patchNode(next.instance.$node, next.instance.render());
+}
+
+function patchNode(pre, next) {
+  // undefined null
+  // string number
+  // array
+  // class component
+  // div node
+  if (isUndefined(next) || isPrimitive(next) || isBoolean(next)) {
+    destoryInstance(pre);
+  } else if (isArray(next)) {
+    if (isArray(pre)) {
+      for (let i = 0; i < next.length; i++) {
+        // diff array
+        patchNode(pre[i], next[i]);
+      }
+    } else {
+      destoryInstance(pre);
+
+      for (let i = 0; i < next.length; i++) {
+        patchNode(null, next[i]);
+      }
+    }
+  } else if (isFunc(next.tag)) {
+    var _pre$props, _next$props;
+
+    if (pre && pre.tag === next.tag && ((_pre$props = pre.props) === null || _pre$props === void 0 ? void 0 : _pre$props.key) === ((_next$props = next.props) === null || _next$props === void 0 ? void 0 : _next$props.key)) {
+      updateInstance(pre, next);
+    } else {
+      destoryInstance(pre);
+      createInstance(next);
+    }
+  } else if (isString(next.tag)) {
+    const preChildren = pre && pre.children;
+    patchNode(preChildren, next.children);
+  }
+
+  return next;
+}
+
+class Component {
+  constructor({
+    props,
+    children
+  }) {
+    this.props = props;
+    this.$node = null;
+    this.$children = children;
+  }
+
+  $c() {
+    return createNode.apply(this, arguments);
+  }
+
+}
+class KeyEventComponent extends Component {
+  create() {
+    debugger;
+  }
+
+}
+
 class Animate extends Component {
   interval = -1;
   tick = 0;
@@ -857,6 +817,48 @@ class Animate extends Component {
         height: height
       }
     });
+  }
+
+}
+
+class Scroll extends KeyEventComponent {
+  create() {
+    this.scrollTop = 0;
+    this.height = this.props.heigth || 0;
+    this.width = this.props.width || 100;
+    this.contentHeight = this.props.contentHeight || 0;
+  }
+
+  onWheel = event => {
+    const {
+      deltaY
+    } = event;
+    this.scrollTop += 4 * (deltaY > 0 ? Math.ceil(deltaY / 100) : Math.floor(deltaY / 100));
+
+    if (this.scrollTop > this.contentHeight - this.height) {
+      this.scrollTop = this.contentHeight - this.height;
+    } else if (this.scrollTop < 0) {
+      this.scrollTop = 0;
+    }
+
+    console.log(this.scrollTop);
+  };
+
+  render() {
+    return this.$c("div", {
+      style: {
+        height: this.height,
+        width: this.width,
+        overflow: 'hidden',
+        backgroundColor: 'white'
+      },
+      onWheel: this.onWheel
+    }, this.$c("div", {
+      style: {
+        x: 3,
+        y: -this.scrollTop
+      }
+    }, this.$children));
   }
 
 }
@@ -911,10 +913,10 @@ class Select extends KeyEventComponent {
     }
   }
 
-  onClick(index) {
+  onClick = index => {
     this.activeIndex = index;
     this.props.onConfirm && this.props.onConfirm(this.activeIndex, this.props.options[this.activeIndex]);
-  }
+  };
 
   render() {
     const size = 32;
@@ -938,7 +940,7 @@ class Select extends KeyEventComponent {
       };
       return this.$c("div", {
         style: optionStyle,
-        onClick: () => this.onClick(index),
+        onClick: this.onClick,
         onMouseLeave: e => {
           this.activeIndex = -1;
         },
@@ -1041,14 +1043,14 @@ class Engine {
 
 }
 
-const size$c = 32;
+const size$b = 32;
 class FPS extends Component {
   fps = 60;
   styles = {
     fps: {
       textAlign: 'center',
-      height: size$c,
-      x: size$c * 18 / 2
+      height: size$b,
+      x: size$b * 18 / 2
     }
   };
   timeStamp = +new Date();
@@ -1067,7 +1069,7 @@ class FPS extends Component {
 
 }
 
-const size$b = 32;
+const size$a = 32;
 class Loading extends Component {
   step = 1;
   angle = -this.step;
@@ -1081,8 +1083,8 @@ class Loading extends Component {
 
     const sAngle = this.angle * 2 - 90;
     const eAngle = Math.sin(this.angle / 180 * Math.PI) * 45;
-    const width = size$b * (13 + 5);
-    const height = size$b * 13;
+    const width = size$a * (13 + 5);
+    const height = size$a * 13;
     return this.$c("div", {
       style: {
         x: 0,
@@ -1093,7 +1095,7 @@ class Loading extends Component {
     }, this.props.msg, this.$c("circle", {
       cx: width / 2,
       cy: height / 2,
-      r: size$b * 3,
+      r: size$a * 3,
       sAngle: sAngle - eAngle,
       eAngle: sAngle + eAngle,
       stroke: "#4e6ef2",
@@ -1119,53 +1121,6 @@ function saveGame(save) {
 }
 function loadGame() {
   return getStorage('game');
-}
-
-const size$a = 32;
-const styles$1 = {
-  title: {
-    width: size$a * (13 + 5),
-    height: size$a * 13
-  },
-  gameName: {
-    y: size$a * 2,
-    width: size$a * (13 + 5),
-    height: size$a * 4,
-    font: 'bold 128px 黑体'
-  },
-  select: {
-    x: size$a * 8,
-    y: size$a * 8,
-    width: size$a * 2
-  }
-};
-class Title extends Component {
-  create() {
-    this.activeIndex = loadGame() ? 1 : 0;
-    this.options = [{
-      text: '开始'
-    }, {
-      text: '继续'
-    }];
-  }
-
-  onConfirm = isLoad => {
-    this.props.onLoadMap(isLoad ? loadGame() : null);
-  };
-
-  render() {
-    return this.$c("div", {
-      style: styles$1.title
-    }, this.$c("div", {
-      style: styles$1.gameName
-    }, this.$data.game.title), this.$c(Select, {
-      activeIndex: this.activeIndex,
-      options: this.options,
-      style: styles$1.select,
-      onConfirm: this.onConfirm
-    }));
-  }
-
 }
 
 const size$9 = 32;
@@ -2488,6 +2443,55 @@ class ScrollText extends KeyEventComponent {
 
 }
 
+const run = {
+  src: 'run.png',
+  maxTick: 6,
+  width: 996 / 6,
+  height: 824 / 8
+};
+class Test extends KeyEventComponent {
+  onKeyDown = ({
+    code
+  }) => {
+    this.data.x = 200;
+  };
+
+  create() {
+    this.data = run;
+    this.data.x = 0;
+    this.data.sy = 2;
+  }
+
+  render() {
+    this.data.x += 3;
+
+    if (this.data.x > 400) {
+      this.data.x = 0;
+    }
+
+    return this.$c("div", null, this.$c(Scroll, {
+      heigth: 4 * 32,
+      contentHeight: 13 * 32
+    }, Array(13).fill(0).map((name, index) => {
+      return this.$c("div", {
+        style: {
+          y: index * 32
+        }
+      }, this.$c("img", {
+        style: {
+          sy: index * 32
+        },
+        src: "enemys.png"
+      }));
+    })));
+  }
+
+  destroy() {
+    super.destroy();
+  }
+
+}
+
 const loadMap = mapId => {
   return loadJSON(`Maps/${mapId}.json`);
 };
@@ -2541,7 +2545,7 @@ class Game extends Component {
   };
 
   render() {
-    // const Title = Test
+    const Title = Test;
     return this.$c("div", {
       style: this.styles.app
     }, this.loading ? this.$c(Loading, {

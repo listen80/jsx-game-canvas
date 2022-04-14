@@ -1,5 +1,4 @@
-import { Component, KeyEventComponent } from 'Engine'
-import Animate from '../../Engine/components/Animate'
+import { Component, KeyEventComponent, Animate, Scroll } from 'Engine'
 
 const run = {
   src: 'run.png',
@@ -49,7 +48,7 @@ const magic = {
 export default class Test extends KeyEventComponent {
   onKeyDown = ({ code }) => {
     this.data.x = 200
-  }
+  };
 
   create () {
     this.data = run
@@ -62,9 +61,21 @@ export default class Test extends KeyEventComponent {
     if (this.data.x > 400) {
       this.data.x = 0
     }
-    return <div>
-      <Animate data={this.data}/>
-    </div>
+    return (
+      <div>
+        <Scroll heigth={4 * 32} contentHeight={13 * 32}>
+          {Array(13)
+            .fill(0)
+            .map((name, index) => {
+              return (
+                <div style={{ y: index * 32 }}>
+                  <img style={{ sy: index * 32 }} src="enemys.png"></img>
+                </div>
+              )
+            })}
+        </Scroll>
+      </div>
+    )
   }
 
   destroy () {

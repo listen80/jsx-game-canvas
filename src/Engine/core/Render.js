@@ -1,16 +1,37 @@
 import { baseStyle } from '../const/baseStyle'
-import { isPrimitive, isFunc, isArray, isUndefined, isBoolean, isString } from '../utils/common'
-import { curFoucs } from './Component'
+import {
+  isPrimitive,
+  isFunc,
+  isArray,
+  isUndefined,
+  isBoolean,
+  isString,
+} from '../utils/common'
 
-const moveEvent = 'MouseMove'
-const mouseEvents = ['ContextMenu', 'Click', 'Wheel', moveEvent]
-
-const size = 32
-//  "MouseDown", "MouseUp"
+const mouseEvents = [
+  'ContextMenu',
+  'Click',
+  'Wheel',
+  'MouseDown',
+  'MouseUp' /* , 'MouseMove' */,
+]
 const keyEvents = ['KeyDown', 'KeyUp']
 
+const size = 32
+
 export default class UI {
-  constructor (game, screen = {}) {
+  constructor (game) {
+    this.initCanvas()
+    this.bindEvents()
+    this.$data = game.$data
+    this.$images = game.$images
+  }
+
+  getImage = (src) => {
+    return this.$images.images[src]
+  };
+
+  initCanvas (screen = {}) {
     const canvas = document.createElement('canvas')
     this.canvas = canvas
     this.context = canvas.getContext('2d')
@@ -21,49 +42,59 @@ export default class UI {
     const dom = document.querySelector(el) || document.body
     dom && dom.appendChild(this.canvas)
     this.mergeStyle(baseStyle)
-
-    this.mouseEvents = []
-    this.keyEvents = []
-    this.onMouseClick = []
-    this.bind()
-    this.$images = game.$images
   }
 
-  getImage = (src) => {
-    return this.$images.images[src]
+  restoreEvents () {
+    this.mouseEventsCollectionKeyframe = []
+    this.mouseEventsCallbackKeyframe = []
+    this.keyEventsCallbackFunc = []
   }
 
-  bind () {
+  bindEvents () {
+    this.restoreEvents()
+
     mouseEvents.forEach((name) => {
-      this.canvas.addEventListener(name.toLowerCase(), (e) => {
-        e.name = 'on' + name
-        this.mouseEvents.push(e)
-        e.preventDefault()
-      }, { passive: false })
+      this.canvas.addEventListener(
+        name.toLowerCase(),
+        (e) => {
+          e.name = `on${name}`
+          this.mouseEventsCollectionKeyframe.push(e)
+          e.preventDefault()
+        },
+        { passive: false },
+      )
     })
-
-    // const name = moveEvent
-    // this.canvas.addEventListener(name.toLowerCase(), (e) => {
-    //   e.name = 'on' + name
-    //   this.moveEvent = e
-    //   e.preventDefault()
-    // }, { passive: false })
 
     keyEvents.forEach((name) => {
       document.addEventListener(name.toLowerCase(), (e) => {
-        e.name = 'on' + name
-        this.keyEvents = e
+        e.name = `on${name}`
+        this.keyEventsCallbackFunc.push(e)
       })
     })
+  }
+
+  runEvents () {
+    this.mouseEventsCallbackKeyframe.forEach(({ node, event, name }) => {
+      node.props[name](event)
+    })
+    this.restoreEvents()
   }
 
   toDataURL () {
     return this.canvas.toDataURL()
   }
 
-  mergeStyle = style => {
+  mergeStyle = (style) => {
     if (style) {
-      const { fontSize, fontFamily, font, textAlign, textBaseline, color, globalAlpha } = style
+      const {
+        fontSize,
+        fontFamily,
+        font,
+        textAlign,
+        textBaseline,
+        color,
+        globalAlpha,
+      } = style
       if (globalAlpha) {
         this.context.globalAlpha = globalAlpha
       }
@@ -83,7 +114,10 @@ export default class UI {
         this.context.font = this.context.font.replace(/\d+/, fontSize)
       }
       if (fontFamily) {
-        this.context.font = this.context.font.replace(/[\u4e00-\u9fa5]+/, fontFamily)
+        this.context.font = this.context.font.replace(
+          /[\u4e00-\u9fa5]+/,
+          fontFamily,
+        )
       }
     }
   };
@@ -105,16 +139,34 @@ export default class UI {
     if (props) {
       const { style = {} } = props
       if (style) {
-        const { sx = 0, sy = 0, width = size, height = size, swidth, sheight } = style
+        const {
+          sx = 0,
+          sy = 0,
+          width = size,
+          height = size,
+          swidth,
+          sheight,
+        } = style
         const { context } = this
-        context.drawImage(this.getImage(props.src), sx, sy, swidth || width, sheight || height, offsetX, offsetY, width, height)
+        context.drawImage(
+          this.getImage(props.src),
+          sx,
+          sy,
+          swidth || width,
+          sheight || height,
+          offsetX,
+          offsetY,
+          width,
+          height,
+        )
       }
     }
   }
 
   drawBack (node, offsetX, offsetY) {
     const { context } = this
-    const { backgroundImage, backgroundColor, height, width } = node.props.style
+    const { backgroundImage, backgroundColor, height, width } =
+      node.props.style
     if (backgroundColor) {
       context.save()
       context.beginPath()
@@ -128,7 +180,10 @@ export default class UI {
       context.save()
       context.beginPath()
       context.rect(offsetX, offsetY, width, height)
-      context.fillStyle = context.createPattern(this.getImage(backgroundImage), 'repeat')
+      context.fillStyle = context.createPattern(
+        this.getImage(backgroundImage),
+        'repeat',
+      )
       context.fill()
       context.closePath()
       context.restore()
@@ -165,7 +220,7 @@ export default class UI {
     if (rotate) {
       const { angle = 0, x = 0, y = 0 } = rotate
       context.translate(x, y)
-      context.rotate(angle * Math.PI / 180)
+      context.rotate((angle * Math.PI) / 180)
       context.translate(-x, -y)
     }
     if (scale) {
@@ -180,8 +235,24 @@ export default class UI {
     const { context } = this
     context.save()
     context.beginPath()
-    const { cx, cy, r, sAngle, eAngle, counterclockwise = false, stroke, strokeWidth } = node.props
-    context.arc(cx + offsetX, cy + offsetY, r, sAngle / 180 * Math.PI, eAngle / 180 * Math.PI, counterclockwise)
+    const {
+      cx,
+      cy,
+      r,
+      sAngle,
+      eAngle,
+      counterclockwise = false,
+      stroke,
+      strokeWidth,
+    } = node.props
+    context.arc(
+      cx + offsetX,
+      cy + offsetY,
+      r,
+      (sAngle / 180) * Math.PI,
+      (eAngle / 180) * Math.PI,
+      counterclockwise,
+    )
     context.strokeStyle = stroke
     context.lineWidth = strokeWidth
     context.stroke()
@@ -203,7 +274,14 @@ export default class UI {
     const { textAlign, textBaseline } = context
     const { width = 0, height = 0 } = parent?.props?.style || {}
     const x = { start: 0, left: 0, center: 0.5, right: 1, end: 0 }
-    const y = { alphabetic: 0, hanging: 0, ideographic: 0, top: 0, middle: 0.5, bottom: 1 }
+    const y = {
+      alphabetic: 0,
+      hanging: 0,
+      ideographic: 0,
+      top: 0,
+      middle: 0.5,
+      bottom: 1,
+    }
     // start 默认。文本在指定的位置开始。
     // end 文本在指定的位置结束。
     // center 文本的中心被放置在指定的位置。
@@ -216,7 +294,11 @@ export default class UI {
     // middle 文本基线是 em 方框的正中。
     // ideographic 文本基线是表意基线。
     // bottom 文本基线是 em 方框的底端。
-    context.fillText(text, offsetX + width * x[textAlign], offsetY + height * y[textBaseline])
+    context.fillText(
+      text,
+      offsetX + width * x[textAlign],
+      offsetY + height * y[textBaseline],
+    )
   }
 
   renderAnything (createdNode, offsetX, offsetY, parent) {
@@ -229,15 +311,27 @@ export default class UI {
       if (isPrimitive(createdNode)) {
         this.renderPrimitive(createdNode, offsetX, offsetY, parent)
       } else if (isArray(createdNode)) {
-        createdNode.forEach(child => this.renderAnything(child, offsetX, offsetY, parent))
+        createdNode.forEach((child) =>
+          this.renderAnything(child, offsetX, offsetY, parent),
+        )
       } else if (isFunc(createdNode.tag)) {
         // tag 是 function
-        this.renderAnything(createdNode.instance.$node, offsetX, offsetY, parent)
+        this.renderAnything(
+          createdNode.instance.$node,
+          offsetX,
+          offsetY,
+          parent,
+        )
       } else if (isString(createdNode.tag)) {
         // div node
         this.calcNode(createdNode, offsetX, offsetY, parent)
       } else {
-        this.renderPrimitive(JSON.stringify(createdNode), offsetX, offsetY, parent)
+        this.renderPrimitive(
+          JSON.stringify(createdNode),
+          offsetX,
+          offsetY,
+          parent,
+        )
       }
     }
   }
@@ -268,6 +362,8 @@ export default class UI {
   }
 
   calcNode (node, offsetX, offsetY, parent) {
+    // 非class component
+    // div node
     const { context } = this
     context.save()
     const style = node?.props?.style
@@ -275,16 +371,24 @@ export default class UI {
       const { x = 0, y = 0 } = style
       offsetX += x
       offsetY += y
-      this.mouseEvents.forEach((event) => {
+      this.mouseEventsCollectionKeyframe.forEach((event) => {
         const { name } = event
-        if (event.offsetX >= offsetX && event.offsetX < style.width + offsetX && event.offsetY >= offsetY && event.offsetY < style.height + offsetY) {
-          if (name === 'onMouseMove') {
-            this.onMouseMove = { node, event }
-          } else if (name === 'onClick') {
-            this.onMouseClick.push({ node, event })
+        if (
+          event.offsetX >= offsetX &&
+          event.offsetX < style.width + offsetX &&
+          event.offsetY >= offsetY &&
+          event.offsetY < style.height + offsetY
+        ) {
+          if (node.props[name]) {
+            this.mouseEventsCallbackKeyframe.push({ node, event, name })
           }
         }
       })
+    }
+
+    if (style && style.overflow) {
+      // debugger
+      context.clip()
     }
 
     this.drawNode(node, offsetX, offsetY)
@@ -292,35 +396,9 @@ export default class UI {
     context.restore()
   }
 
-  runEvent () {
-    if (curFoucs && this.keyEvents) {
-      const { name } = this.keyEvents
-      curFoucs[name] && curFoucs[name](this.keyEvents)
-    }
-    this.keyEvents = null
-    // if (this.moveEventTarget && this.moveEvent) {
-    //   if (moveEventTarget !== this.moveEventTarget) {
-    //     if (moveEventTarget) {
-    //       moveEventTarget.props.onMouseLeave && moveEventTarget.props.onMouseLeave()
-    //     }
-    //     moveEventTarget = this.moveEventTarget
-    //     moveEventTarget.props.onMouseEnter && moveEventTarget.props.onMouseEnter()
-    //   }
-    // }
-    this.onMouseClick.forEach(({ node, event }) => {
-      if (node?.props?.onClick) {
-        node.props.onClick(event)
-      }
-    })
-    this.onMouseClick = []
-    this.mouseEvents = []
-    this.moveEvent = null
-    this.moveEventTarget = null
-  }
-
   render (createdNode) {
     this.clearRect()
     this.renderAnything(createdNode, 0, 0, this.canvas)
-    this.runEvent()
+    this.runEvents()
   }
 }

@@ -1,73 +1,38 @@
-import { Component } from '../core/Component'
+import { Component, KeyEventComponent } from '../core/Component'
 
-const size = 32
-export default class Scroll extends Component {
+export default class Scroll extends KeyEventComponent {
   create () {
-    this.clientHeight = size * 5
-    this.scrollHeight = name.length * size
-    this.activeIndex = 0
-    this.offsetY = 0
-    this.ani = 1
-    this.step = 0
+    this.scrollTop = 0
+    this.height = this.props.heigth || 0
+    this.width = this.props.width || 100
+    this.contentHeight = this.props.contentHeight || 0
   }
 
-  setActive (i) {
-    this.activeIndex = i
-    this.props.onChange(i)
-  }
-
-  wheel (event) {
-    const rate = 8
-    const min = this.clientHeight - this.scrollHeight
-    this.offsetY += event.deltaY > 0 ? rate : -rate
-    if (this.offsetY > 0) {
-      this.offsetY = 0
-    } else if (this.offsetY < min) {
-      this.offsetY = min
+  onWheel = (event) => {
+    const { deltaY } = event
+    this.scrollTop +=
+      4 * (deltaY > 0 ? Math.ceil(deltaY / 100) : Math.floor(deltaY / 100))
+    if (this.scrollTop > this.contentHeight - this.height) {
+      this.scrollTop = this.contentHeight - this.height
+    } else if (this.scrollTop < 0) {
+      this.scrollTop = 0
     }
-  }
+    console.log(this.scrollTop)
+  };
 
   render () {
-    this.step++
-    if (this.step === 10) {
-      this.step = 0
-      this.ani = !this.ani
-    }
-    const style = {
-      height: this.clientHeight,
-      width: size * 9,
-      backgroundColor: '#abd',
-      overflow: 'auto',
-    }
     return (
-      <div style={style} onWheel={this.wheel}>
-        {[].map((name, index) => {
-          const height = size
-          const y = index * height + this.offsetY
-          if (y + height <= 0 || y > this.clientHeight) {
-            return null
-          }
-          const style = {
-            x: 0,
-            y,
-            height: height,
-            width: size * 5,
-            fontSize: 40,
-          }
-          return (
-            <div style={style} onClick={() => this.setActive(index)}>
-              <img
-                style={{
-                  width: size,
-                  height: size,
-                  sx: (this.ani ? 1 : 0) * size,
-                  sy: index * size,
-                }}
-                src="npcs.png"
-              ></img>
-            </div>
-          )
-        })}
+      <div
+        style={{
+          height: this.height,
+          width: this.width,
+
+          overflow: 'hidden',
+          backgroundColor: 'white',
+        }}
+        onWheel={this.onWheel}
+      >
+        <div style={{ x: 3, y: -this.scrollTop }}>{this.$children}</div>
       </div>
     )
   }

@@ -51,7 +51,7 @@ export default class Select extends KeyEventComponent {
     }
   }
 
-  onClick (index) {
+  onClick = (index) => {
     this.activeIndex = index
     this.props.onConfirm &&
       this.props.onConfirm(
@@ -81,7 +81,7 @@ export default class Select extends KeyEventComponent {
             return (
                 <div
                   style={optionStyle}
-                  onClick={() => this.onClick(index)}
+                  onClick={this.onClick}
                   onMouseLeave={(e) => {
                     this.activeIndex = -1
                   }}
