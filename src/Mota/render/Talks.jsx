@@ -24,8 +24,8 @@ export default class Talk extends Component {
       } else {
         this.next()
       }
+      this.$sound.play('se', 'dialogue.mp3')
     }
-    this.$sound.play('se', 'dialogue.mp3')
   }
 
   next () {

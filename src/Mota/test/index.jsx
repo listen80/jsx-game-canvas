@@ -16,7 +16,7 @@ const stand = {
 
 const skill = {
   src: 'skill.png',
-  maxTick: 4,
+  maxTick: 6,
   width: 912 / 6,
   height: 800 / 8,
   loop: false,
