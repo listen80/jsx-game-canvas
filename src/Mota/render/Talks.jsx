@@ -1,6 +1,6 @@
-import { Component, KeyEventComponent } from 'Engine'
+import { Component } from 'Engine'
 
-export default class Talk extends KeyEventComponent {
+export default class Talk extends Component {
   index = 0;
   width = 7;
   styles = {

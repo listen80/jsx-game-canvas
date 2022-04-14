@@ -1,8 +1,8 @@
-import { KeyEventComponent } from 'Engine'
+import { Component } from 'Engine'
 
 const size = 32
 
-export default class ScrollText extends KeyEventComponent {
+export default class ScrollText extends Component {
   styles = {
     text: {
       fontSize: 20,

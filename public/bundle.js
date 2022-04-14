@@ -109,7 +109,6 @@ class UI {
       event,
       name
     }) => {
-      console.log(instance);
       instance[name](event);
     });
     this.restoreEvents();
@@ -797,12 +796,6 @@ class Component {
   }
 
 }
-class KeyEventComponent extends Component {
-  create() {
-    debugger;
-  }
-
-}
 
 class Animate extends Component {
   interval = -1;
@@ -846,7 +839,7 @@ class Animate extends Component {
 
 }
 
-class Select extends KeyEventComponent {
+class Select extends Component {
   styles = {
     select: {
       fontSize: 24,
@@ -923,7 +916,7 @@ class Select extends KeyEventComponent {
         height: size,
         width: width,
         borderWidth: this.activeIndex === index ? borderWidth : 0,
-        borderColor: '#ccc'
+        borderColor: '#ddd'
       };
       return this.$c("div", {
         style: optionStyle,
@@ -1027,26 +1020,24 @@ class Engine {
 
 const size$c = 32;
 class FPS extends Component {
-  fps = 60;
   styles = {
     fps: {
-      textAlign: 'center',
+      fontSize: 13,
+      textAlign: 'right',
       height: size$c,
-      x: size$c * 18 / 2
+      x: size$c * 18
     }
   };
-  timeStamp = +new Date();
+  static getTime = () => performance.now();
+  timeStamp = FPS.getTime();
 
   render() {
-    const timeStamp = +new Date();
+    const timeStamp = FPS.getTime();
     const fps = 1000 / (timeStamp - this.timeStamp);
-    const min = 30;
-    const warn = this.fps < min && fps < min;
-    this.fps = fps;
     this.timeStamp = timeStamp;
     return this.$c("div", {
       style: this.styles.fps
-    }, warn ? `${this.fps.toFixed()}fps` : null);
+    }, `${fps.toFixed()}fps`);
   }
 
 }
@@ -1283,7 +1274,7 @@ class Shop extends Component {
 }
 
 const size$7 = 32;
-class Battle extends KeyEventComponent {
+class Battle extends Component {
   tick = 0;
   styles = {
     battle: {
@@ -1469,7 +1460,7 @@ class Battle extends KeyEventComponent {
 
 }
 
-class Talk extends KeyEventComponent {
+class Talk extends Component {
   index = 0;
   width = 7;
   styles = {
@@ -1671,7 +1662,7 @@ const columns = [{
   }
 
 }];
-class EnemyInfo extends KeyEventComponent {
+class EnemyInfo extends Component {
   onKeyDown({
     code
   }) {
@@ -1786,7 +1777,7 @@ const propertyNames = {
   exp: '经验'
 };
 const size$4 = 32;
-class Hero extends KeyEventComponent {
+class Hero extends Component {
   tick = 0;
 
   create() {
@@ -2396,7 +2387,7 @@ class Map extends Component {
 }
 
 const size$1 = 32;
-class ScrollText extends KeyEventComponent {
+class ScrollText extends Component {
   styles = {
     text: {
       fontSize: 20,

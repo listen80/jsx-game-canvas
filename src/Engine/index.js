@@ -5,7 +5,7 @@ import Data from './core/Data'
 import Font from './core/Font'
 
 import { createNode, patchNode } from './core/Node'
-export { Component, KeyEventComponent } from './core/Component'
+export { Component } from './core/Component'
 export { default as Animate } from './components/Animate'
 export { default as Scroll } from './components/Scroll'
 export { default as Select } from './components/Select'

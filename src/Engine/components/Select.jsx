@@ -1,6 +1,6 @@
-import { KeyEventComponent } from '../core/Component'
+import { Component } from '../core/Component'
 
-export default class Select extends KeyEventComponent {
+export default class Select extends Component {
   styles = {
     select: {
       fontSize: 24,
@@ -80,7 +80,7 @@ export default class Select extends KeyEventComponent {
               height: size,
               width: width,
               borderWidth: this.activeIndex === index ? borderWidth : 0,
-              borderColor: '#ccc',
+              borderColor: '#ddd',
             }
             return (
                 <div

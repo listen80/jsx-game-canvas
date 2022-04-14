@@ -1,4 +1,4 @@
-import { Component, KeyEventComponent } from 'Engine'
+import { Component } from 'Engine'
 import FPS from './render/FPS'
 import Loading from './render/Loading'
 import Title from './render/Title'

@@ -11,9 +11,3 @@ export class Component {
     return createNode.apply(this, arguments)
   }
 }
-
-export class KeyEventComponent extends Component {
-  create () {
-    debugger
-  }
-}

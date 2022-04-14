@@ -75,7 +75,7 @@ const columns = [
   },
 ]
 
-export default class EnemyInfo extends KeyEventComponent {
+export default class EnemyInfo extends Component {
   onKeyDown ({ code }) {
     if (code === 'KeyX') {
       this.props.onClose()

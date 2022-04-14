@@ -45,7 +45,7 @@ const magic = {
   loop: false,
 }
 
-export default class Test extends KeyEventComponent {
+export default class Test extends Component {
   onKeyDown = ({ code }) => {
     this.data.x = 200
   };

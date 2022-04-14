@@ -1,4 +1,4 @@
-import { KeyEventComponent } from 'Engine'
+import { Component } from 'Engine'
 
 import Menu from './Menu'
 import Shop from './Shop'
@@ -28,7 +28,7 @@ const propertyNames = {
 
 const size = 32
 
-export default class Hero extends KeyEventComponent {
+export default class Hero extends Component {
   tick = 0;
   create () {
     const hero = Object.assign(this.$data.save.position, {

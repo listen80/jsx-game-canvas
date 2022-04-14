@@ -1,8 +1,8 @@
-import { Component, KeyEventComponent } from 'Engine'
+import { Component } from 'Engine'
 
 const size = 32
 
-export default class Battle extends KeyEventComponent {
+export default class Battle extends Component {
   tick = 0;
   styles = {
     battle: {

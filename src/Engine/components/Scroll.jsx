@@ -1,6 +1,6 @@
-import { Component, KeyEventComponent } from '../core/Component'
+import { Component } from '../core/Component'
 
-export default class Scroll extends KeyEventComponent {
+export default class Scroll extends Component {
   create () {
     this.scrollTop = 0
     this.height = this.props.heigth || 0

@@ -83,7 +83,6 @@ export default class UI {
       node.props[name](event, node)
     })
     this.keyEventsCallbackKeyframe.forEach(({ instance, event, name }) => {
-      console.log(instance)
       instance[name](event)
     })
 
