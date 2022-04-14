@@ -26,10 +26,6 @@ export function loadText (url) {
   return fetch(url).then(data => data.text()).then(data => formatText(data))
 }
 
-export function checkFont (name, size = 16) {
-  return document.fonts.check(`${size}px ${name}`)
-}
-
 export function loadFont ({ name, url }) {
   const fontface = new FontFace(name, `url("${url}")`)
   document.fonts.add(fontface)

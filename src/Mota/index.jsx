@@ -36,7 +36,7 @@ export default class Game extends Component {
       this.loading = '加载字体'
       const font = game.font
       await this.$font.load(font)
-      this.styles.app.fontFamily = font.name
+      // this.styles.app.font = `${font.name}`
     }
 
     if (game.images) {

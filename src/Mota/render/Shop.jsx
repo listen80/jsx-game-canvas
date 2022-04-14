@@ -31,7 +31,6 @@ export default class Shop extends Component {
           height: size * 8,
           borderWidth: 4,
           borderColor: '#deb887',
-          font: '32px sans-serif',
           swidth: 500,
           sheight: 701,
         }}

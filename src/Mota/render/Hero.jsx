@@ -331,7 +331,7 @@ export default class Hero extends Component {
               maxTick: 4,
               width: size,
               height: size,
-              maxInterval: 8,
+              maxInterval: 10,
               sy: this.styles.hero.sy,
             }}
           ></Animate>

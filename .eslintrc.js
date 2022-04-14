@@ -33,5 +33,6 @@ module.exports = {
     // 'padded-blocks': 'off',
     // 'no-trailing-spaces': 'off',
     'no-new': warn,
+    'no-duplicate-imports': off,
   },
 }

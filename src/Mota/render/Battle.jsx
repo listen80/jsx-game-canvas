@@ -6,14 +6,13 @@ export default class Battle extends Component {
   tick = 0;
   styles = {
     battle: {
-      x: 48,
-      y: 48,
-      width: size * 15,
-      height: size * 10,
-      fontSize: 16,
+      x: size,
+      y: size,
+      width: size * 16,
+      height: size * 11,
+      fontSize: 20,
       borderWidth: 3,
       borderColor: '#deb887',
-      font: '32px sans-serif',
       swidth: 640,
       sheight: 320,
     },
@@ -98,7 +97,6 @@ export default class Battle extends Component {
     }
     const size64 = 64
     const vsStyle = {
-      font: `bold ${size64}px sans-serif`,
       x: size * (5 + 1.5),
       y: size * 2,
       height: size64,

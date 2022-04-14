@@ -103,6 +103,7 @@ export default class UI {
         textBaseline,
         color,
         globalAlpha,
+        fillStyle,
       } = style
       if (globalAlpha) {
         this.context.globalAlpha = globalAlpha
@@ -113,14 +114,14 @@ export default class UI {
       if (textBaseline) {
         this.context.textBaseline = textBaseline
       }
-      if (color) {
-        this.context.fillStyle = color
+      if (color || fillStyle) {
+        this.context.fillStyle = color || fillStyle
       }
       if (font) {
         this.context.font = font
       }
       if (fontSize) {
-        this.context.font = this.context.font.replace(/\d+/, fontSize)
+        this.context.font = this.context.font.replace(/\d+px/, `${fontSize}px`)
       }
       if (fontFamily) {
         this.context.font = this.context.font.replace(
