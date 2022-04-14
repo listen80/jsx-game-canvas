@@ -48,7 +48,7 @@ export default {
         before: [],
         after: [{
           tag: 'script',
-          src: 'bundle.js?' + `${date.toLocaleDateString()}-${date.toTimeString().substring(0, 9)}`,
+          src: 'bundle.js?' + `${date.toLocaleDateString()}-${date.toTimeString().substring(0, 8)}`,
         }],
       },
     }),
