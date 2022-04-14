@@ -14,7 +14,7 @@ const mouseEvents = [
   'Wheel',
   'MouseDown',
   'MouseUp',
-  'MouseMove',
+  // 'MouseMove',
 ]
 const keyEvents = ['KeyDown', 'KeyUp']
 
@@ -79,6 +79,9 @@ export default class UI {
   }
 
   runEvents () {
+    if (this.mouseEventsCallbackKeyframe.length) {
+      debugger
+    }
     this.mouseEventsCallbackKeyframe.every(({ node, event, name }) => {
       return node.props[name](event, node)
     })

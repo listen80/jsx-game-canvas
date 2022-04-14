@@ -129,10 +129,10 @@ export default class Map extends Component {
     this.props.onTitle()
   };
 
-  onMouseDown = (e) => {
-    // console.warn(e)
-    // DFS BFS
-  };
+  // onMouseDown = (e) => {
+  //   // console.warn(e)
+  //   // DFS BFS
+  // };
 
   render () {
     this.interval--

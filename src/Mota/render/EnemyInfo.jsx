@@ -4,7 +4,7 @@ const size = 32
 const styles = {
   wrap: {
     textAlign: 'left',
-    fontSize: 20,
+    fontSize: 18,
     backgroundImage: 'ground.png',
     width: size * (13 + 5 - 2),
     x: size,

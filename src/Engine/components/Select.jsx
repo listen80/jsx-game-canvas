@@ -54,6 +54,7 @@ export default class Select extends Component {
 
   onMouseDown = (index) => {
     this.activeIndex = index
+    console.log(index)
     this.props.onConfirm &&
       this.props.onConfirm(
         this.activeIndex,
@@ -79,8 +80,8 @@ export default class Select extends Component {
                     borderWidth: this.activeIndex === index ? 2 : 0,
                     borderColor: '#ddd',
                   }}
-                  onMouseDown={() => this.onMouseDown(index)}
-                  onMouseMove={() => this.setActiveIndex(index)}
+                  onMouseDown={this.onMouseDown.bind(this, index)}
+                  onMouseMove={this.setActiveIndex.bind(this, index)}
                 >
                   {text}
                 </div>

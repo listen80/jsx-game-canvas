@@ -40,7 +40,8 @@ const isUndefined = o => o === undefined || o === null;
 const isString = o => typeof o === 'string';
 const isBoolean = o => typeof o === 'boolean';
 
-const mouseEvents = ['ContextMenu', 'Click', 'Wheel', 'MouseDown', 'MouseUp', 'MouseMove'];
+const mouseEvents = ['ContextMenu', 'Click', 'Wheel', 'MouseDown', 'MouseUp' // 'MouseMove',
+];
 const keyEvents = ['KeyDown', 'KeyUp'];
 const size$e = 32;
 class UI {
@@ -101,6 +102,10 @@ class UI {
   }
 
   runEvents() {
+    if (this.mouseEventsCallbackKeyframe.length) {
+      debugger;
+    }
+
     this.mouseEventsCallbackKeyframe.every(({
       node,
       event,
@@ -895,6 +900,7 @@ class Select extends Component {
 
   onMouseDown = index => {
     this.activeIndex = index;
+    console.log(index);
     this.props.onConfirm && this.props.onConfirm(this.activeIndex, this.props.options[this.activeIndex]);
   };
 
@@ -916,8 +922,8 @@ class Select extends Component {
           borderWidth: this.activeIndex === index ? 2 : 0,
           borderColor: '#ddd'
         },
-        onMouseDown: () => this.onMouseDown(index),
-        onMouseMove: () => this.setActiveIndex(index)
+        onMouseDown: this.onMouseDown.bind(this, index),
+        onMouseMove: this.setActiveIndex.bind(this, index)
       }, text);
     }) : null);
   }
@@ -1480,7 +1486,7 @@ const size$7 = 32;
 const styles = {
   wrap: {
     textAlign: 'left',
-    fontSize: 20,
+    fontSize: 18,
     backgroundImage: 'ground.png',
     width: size$7 * (13 + 5 - 2),
     x: size$7,
@@ -2234,10 +2240,10 @@ class Map extends Component {
   };
   onTitle = () => {
     this.props.onTitle();
-  };
-  onMouseDown = e => {// console.warn(e)
-    // DFS BFS
-  };
+  }; // onMouseDown = (e) => {
+  //   // console.warn(e)
+  //   // DFS BFS
+  // };
 
   render() {
     this.interval--;
