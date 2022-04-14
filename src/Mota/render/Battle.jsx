@@ -39,6 +39,12 @@ export default class Battle extends Component {
     }
   }
 
+  onClick () {
+    if (this.battleMsg) {
+      this.props.onClose && this.props.onClose()
+    }
+  }
+
   render () {
     const enemy = this.enemy
     const hero = this.hero
@@ -105,7 +111,7 @@ export default class Battle extends Component {
     }
     const msgStyle = { fontSize: 24, height: size, y: size * 8, width: size * 15 }
     return (
-      <img src="Battlebacks/mota.jpg" style={this.styles.battle}>
+      <img src="Battlebacks/mota.jpg" style={this.styles.battle} onClick={this.onClick}>
         {this.battleMsg && <div style={msgStyle}>{this.battleMsg}</div>}
         <div style={this.styles.enemy}>
           <img src="enemys.png" style={enemyImageStyle} />

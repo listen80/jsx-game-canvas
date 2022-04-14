@@ -42,9 +42,16 @@ export default class Render {
     this.canvas.height = height
     const dom = document.querySelector(el) || document.body
     dom && dom.appendChild(this.canvas)
+    this.mergeStyle(baseStyle)
+    window.addEventListener('onresize', this.getCanvasRenderRect)
+    this.getCanvasRenderRect()
+  }
+
+  getCanvasRenderRect () {
+    const canvas = this.canvas
+
     this.canvas.$offsetWidth = canvas.offsetWidth
     this.canvas.$offsetHeight = canvas.offsetHeight
-    this.mergeStyle(baseStyle)
   }
 
   restoreEvents () {
@@ -75,7 +82,7 @@ export default class Render {
     })
 
     keyEvents.forEach((name) => {
-      document.addEventListener(name.toLowerCase(), (e) => {
+      window.addEventListener(name.toLowerCase(), (e) => {
         e.name = `on${name}`
         this.keyEventsCollectionKeyframe.push(e)
       })

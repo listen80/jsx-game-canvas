@@ -75,15 +75,22 @@ export default class Hero extends Component {
       this.setMessage('存储成功')
     } else if (code === 'KeyL') {
       this.$sound.play('se', 'load.mp3')
+      this.props.oniLoadMap(loadGame())
       this.setMessage('读取成功')
     } else if (code === 'KeyX') {
       this.showEnemyInfo = !this.showEnemyInfo
     } else if (code === 'KeyB') {
       this.buying = true
-    } else if (code === 'Equal') {
-      this.updateSaveData('hero', { hp: 200, atk: 50, def: 50 })
-    } else if (code === 'Minus') {
+    } else if (code === 'Backspace') {
+      this.updateSaveData('hero', {
+        lv: 1,
+        hp: 100,
+        atk: 100,
+        def: 100,
+        exp: 100,
+      })
       this.updateSaveData('items', { yellowKey: 3, blueKey: 2, redKey: 1 })
+      this.updateSaveData('', { money: 100 })
     }
 
     if (moveVector) {
@@ -274,7 +281,7 @@ export default class Hero extends Component {
 
   setMessage = (msg) => {
     this.props.onMessage(msg)
-  }
+  };
 
   updateSaveData (context, gets, n = 1) {
     if (Array.isArray(gets)) {
