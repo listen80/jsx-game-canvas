@@ -26,18 +26,21 @@ export default class ShopList extends Component {
 
   render () {
     return (
-      <div
+      <img
+        src="shop.webp"
         style={{
-          x: size * 3,
-          y: size * 2,
-          height: size * 8,
+          x: 3 * size,
+          y: 2 * size,
           width: size * 7,
-          backgroundImage: 'ground.png',
+          height: size * 8,
           borderWidth: 4,
           borderColor: '#deb887',
+          font: '32px sans-serif',
+          swidth: 500,
+          sheight: 701,
         }}
       >
-        <div style={{ height: size, width: size * 7, fontSize: 24 }}>
+        <div style={{ y: (size / 4) * 3, width: size * 7, fontSize: 24 }}>
           商店选择
         </div>
         <Select
@@ -46,7 +49,7 @@ export default class ShopList extends Component {
           onConfirm={this.onConfirm}
           onClose={this.props.onClose}
         />
-      </div>
+      </img>
     )
   }
 }

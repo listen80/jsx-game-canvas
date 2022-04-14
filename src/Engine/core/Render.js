@@ -79,11 +79,11 @@ export default class UI {
   }
 
   runEvents () {
-    this.mouseEventsCallbackKeyframe.forEach(({ node, event, name }) => {
-      node.props[name](event, node)
+    this.mouseEventsCallbackKeyframe.every(({ node, event, name }) => {
+      return node.props[name](event, node)
     })
-    this.keyEventsCallbackKeyframe.forEach(({ instance, event, name }) => {
-      instance[name](event)
+    this.keyEventsCallbackKeyframe.every(({ instance, event, name }) => {
+      return instance[name](event)
     })
 
     this.restoreEvents()

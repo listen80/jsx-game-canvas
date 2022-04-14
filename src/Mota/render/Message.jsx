@@ -21,18 +21,19 @@ export default class Message extends Component {
       globalAlpha = this.tick / 30
     }
     const fontSize = 18
-    const style = {
-      textAlign: 'left',
-      fontSize,
-      backgroundColor: 'rgba(0,0,0,.7)',
-      globalAlpha,
-      x: 0,
-      y: 0,
-      height: 32,
-      width: (fontSize / 2) * this.length + 10,
-    }
     return (
-      <div style={style}>
+      <div
+        style={{
+          textAlign: 'left',
+          fontSize,
+          backgroundColor: 'rgba(0,0,0,.7)',
+          globalAlpha,
+          x: 0,
+          y: 0,
+          height: 32,
+          width: (fontSize / 2) * this.length + 10,
+        }}
+      >
         <div style={{ x: 5, height: 32 }}>{this.msg}</div>
       </div>
     )

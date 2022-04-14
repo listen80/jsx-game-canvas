@@ -1,4 +1,5 @@
 import { Component } from '../core/Component'
+const size = 32
 
 export default class Select extends Component {
   styles = {
@@ -65,26 +66,19 @@ export default class Select extends Component {
   }
 
   render () {
-    const size = 32
-    const borderWidth = 2
-    const select = this.styles.select
-    const { width } = select
-
     return (
       <div style={this.styles.select}>
         {this.props.options && this.props.options.length
-          ? this.props.options.map((item, index) => {
-            const { text } = item
-            const optionStyle = {
-              y: index * size,
-              height: size,
-              width: width,
-              borderWidth: this.activeIndex === index ? borderWidth : 0,
-              borderColor: '#ddd',
-            }
+          ? this.props.options.map(({ text }, index) => {
             return (
                 <div
-                  style={optionStyle}
+                  style={{
+                    y: index * size,
+                    height: size,
+                    width: this.styles.select.width,
+                    borderWidth: this.activeIndex === index ? 2 : 0,
+                    borderColor: '#ddd',
+                  }}
                   onMouseDown={() => this.onMouseDown(index)}
                   onMouseMove={() => this.setActiveIndex(index)}
                 >

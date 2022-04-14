@@ -5,30 +5,38 @@ const size = 32
 
 export default class Shop extends Component {
   create () {
-    this.shop = this.$data.shop[this.props.shopid]
+    this.shop = JSON.parse(JSON.stringify(this.$data.shop[this.props.shopid]))
+    this.shop.choices.push({
+      text: '离开',
+    })
   }
 
   onConfirm = (index) => {
-    const { need, effect } = this.shop.choices[index]
-    this.props.onShopEvent(need, effect)
+    if (index === this.shop.choices.length - 1) {
+      this.props.onClose()
+    } else {
+      const { need, effect } = this.shop.choices[index]
+      this.props.onShopEvent(need, effect)
+    }
   };
 
   render () {
     return (
-      <div
+      <img
+        src="shop.webp"
         style={{
           x: 3 * size,
           y: 2 * size,
           width: size * 7,
           height: size * 8,
-          fontSize: 24,
           borderWidth: 4,
           borderColor: '#deb887',
-          textAlign: 'center',
-          backgroundImage: 'ground.png',
+          font: '32px sans-serif',
+          swidth: 500,
+          sheight: 701,
         }}
       >
-        <div style={{ x: (size / 2) * 7, y: size / 2 }}>{this.shop.title}</div>
+        <div style={{ y: size / 4 * 3, width: size * 7, fontSize: 24 }}>{this.shop.title}</div>
         <div style={{ x: 0, y: 48, fontSize: 14 }}>
           {this.shop.text.split(/\n/).map((text, index) => (
             <div style={{ x: (size / 2) * 7, y: (index * size) / 2 }}>
@@ -47,7 +55,7 @@ export default class Shop extends Component {
           }}
           onClose={this.props.onClose}
         ></Select>
-      </div>
+      </img>
     )
   }
 }

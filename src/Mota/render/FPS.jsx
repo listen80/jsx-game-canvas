@@ -3,8 +3,9 @@ const size = 32
 export default class FPS extends Component {
   styles = {
     fps: {
-      fontSize: 13,
+      fontSize: 14,
       textAlign: 'right',
+      textBaseline: 'top',
       height: size,
       x: size * 18,
     },

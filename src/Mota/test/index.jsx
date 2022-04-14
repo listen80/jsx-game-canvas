@@ -1,4 +1,4 @@
-import { Component, KeyEventComponent, Animate, Scroll } from 'Engine'
+import { Component, Animate, Scroll } from 'Engine'
 
 const run = {
   src: 'run.png',
@@ -63,17 +63,12 @@ export default class Test extends Component {
     }
     return (
       <div>
-        <Scroll heigth={4 * 32} contentHeight={13 * 32}>
-          {Array(13)
-            .fill(0)
-            .map((name, index) => {
-              return (
-                <div style={{ y: index * 32 }}>
-                  <img style={{ sy: index * 32 }} src="enemys.png"></img>
-                </div>
-              )
-            })}
-        </Scroll>
+        <Animate data={ {
+          src: 'run.png',
+          maxTick: 6,
+          width: 996 / 6,
+          height: 824 / 8,
+        }}></Animate>
       </div>
     )
   }

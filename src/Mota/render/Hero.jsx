@@ -1,6 +1,5 @@
 import { Component } from 'Engine'
 
-import Menu from './Menu'
 import Shop from './Shop'
 import Battle from './Battle'
 import Talks from './Talks'
@@ -55,7 +54,6 @@ export default class Hero extends Component {
     const styleHero = this.styles.hero
     const step = 32
     let moveVector = null
-    console.log({ code })
     if (code === 'ArrowDown') {
       moveVector = { y: step }
       styleHero.sy = 0
@@ -265,10 +263,6 @@ export default class Hero extends Component {
     this.setEvent()
   };
 
-  onMenuClose = () => {
-    this.showMenu = null
-  };
-
   onMessageClose = () => {
     this.msg = null
   };
@@ -354,7 +348,6 @@ export default class Hero extends Component {
             onClose={this.onBattleClose}
           />
         )}
-        {this.showMenu && <Menu onClose={this.onMenuClose} />}
         {this.talk && (
           <Talks talk={this.talk} key={this.talk} onConfirm={this.onConfirm} />
         )}

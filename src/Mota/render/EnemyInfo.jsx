@@ -1,4 +1,4 @@
-import { KeyEventComponent, Component, Animate, Table } from 'Engine'
+import { Component, Animate, Table } from 'Engine'
 
 const size = 32
 const styles = {
@@ -76,10 +76,8 @@ const columns = [
 ]
 
 export default class EnemyInfo extends Component {
-  onKeyDown ({ code }) {
-    if (code === 'KeyX') {
-      this.props.onClose()
-    }
+  onKeyDown () {
+    this.props.onClose()
   }
 
   onMouseDown = () => {

@@ -1,4 +1,4 @@
-import { Component, Select } from 'Engine'
+import { Component, Select, Animate } from 'Engine'
 import { loadGame } from '../../Engine/utils/sl'
 
 const size = 32
@@ -42,6 +42,17 @@ export default class Title extends Component {
     return (
       <div style={styles.title}>
         <div style={styles.gameName}>{this.$data.game.title}</div>
+        <Animate
+          data={{
+            src: 'stand.png',
+            maxTick: 4,
+            sy: 4,
+            x: 208,
+            y: 100,
+            width: 632 / 4,
+            height: 768 / 8,
+          }}
+        ></Animate>
         <Select
           activeIndex={this.activeIndex}
           options={this.options}

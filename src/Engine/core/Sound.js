@@ -7,8 +7,6 @@ export default class Sound {
 
   control (type, name, control) {
     const current = this.sounds[`${type}/${name}`].cloneNode()
-    // const current = new Audio()
-    // current.src = `${type}/${name}`
     current.loop = type === 'bgm'
     current[control]()
     return current

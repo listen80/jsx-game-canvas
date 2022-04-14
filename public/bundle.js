@@ -97,19 +97,19 @@ class UI {
   }
 
   runEvents() {
-    this.mouseEventsCallbackKeyframe.forEach(({
+    this.mouseEventsCallbackKeyframe.every(({
       node,
       event,
       name
     }) => {
-      node.props[name](event, node);
+      return node.props[name](event, node);
     });
-    this.keyEventsCallbackKeyframe.forEach(({
+    this.keyEventsCallbackKeyframe.every(({
       instance,
       event,
       name
     }) => {
-      instance[name](event);
+      return instance[name](event);
     });
     this.restoreEvents();
   }
@@ -611,9 +611,7 @@ class Sound {
   }
 
   control(type, name, control) {
-    const current = this.sounds[`${type}/${name}`].cloneNode(); // const current = new Audio()
-    // current.src = `${type}/${name}`
-
+    const current = this.sounds[`${type}/${name}`].cloneNode();
     current.loop = type === 'bgm';
     current[control]();
     return current;
@@ -839,6 +837,7 @@ class Animate extends Component {
 
 }
 
+const size$c = 32;
 class Select extends Component {
   styles = {
     select: {
@@ -899,27 +898,19 @@ class Select extends Component {
   }
 
   render() {
-    const size = 32;
-    const borderWidth = 2;
-    const select = this.styles.select;
-    const {
-      width
-    } = select;
     return this.$c("div", {
       style: this.styles.select
-    }, this.props.options && this.props.options.length ? this.props.options.map((item, index) => {
-      const {
-        text
-      } = item;
-      const optionStyle = {
-        y: index * size,
-        height: size,
-        width: width,
-        borderWidth: this.activeIndex === index ? borderWidth : 0,
-        borderColor: '#ddd'
-      };
+    }, this.props.options && this.props.options.length ? this.props.options.map(({
+      text
+    }, index) => {
       return this.$c("div", {
-        style: optionStyle,
+        style: {
+          y: index * size$c,
+          height: size$c,
+          width: this.styles.select.width,
+          borderWidth: this.activeIndex === index ? 2 : 0,
+          borderColor: '#ddd'
+        },
         onMouseDown: () => this.onMouseDown(index),
         onMouseMove: () => this.setActiveIndex(index)
       }, text);
@@ -1018,14 +1009,15 @@ class Engine {
 
 }
 
-const size$c = 32;
+const size$b = 32;
 class FPS extends Component {
   styles = {
     fps: {
-      fontSize: 13,
+      fontSize: 14,
       textAlign: 'right',
-      height: size$c,
-      x: size$c * 18
+      textBaseline: 'top',
+      height: size$b,
+      x: size$b * 18
     }
   };
   static getTime = () => performance.now();
@@ -1042,7 +1034,7 @@ class FPS extends Component {
 
 }
 
-const size$b = 32;
+const size$a = 32;
 class Loading extends Component {
   step = 1;
   angle = -this.step;
@@ -1056,8 +1048,8 @@ class Loading extends Component {
 
     const sAngle = this.angle * 2 - 90;
     const eAngle = Math.sin(this.angle / 180 * Math.PI) * 45;
-    const width = size$b * (13 + 5);
-    const height = size$b * 13;
+    const width = size$a * (13 + 5);
+    const height = size$a * 13;
     return this.$c("div", {
       style: {
         x: 0,
@@ -1068,7 +1060,7 @@ class Loading extends Component {
     }, this.props.msg, this.$c("circle", {
       cx: width / 2,
       cy: height / 2,
-      r: size$b * 3,
+      r: size$a * 3,
       sAngle: sAngle - eAngle,
       eAngle: sAngle + eAngle,
       stroke: "#4e6ef2",
@@ -1096,22 +1088,22 @@ function loadGame() {
   return getStorage('game');
 }
 
-const size$a = 32;
+const size$9 = 32;
 const styles$1 = {
   title: {
-    width: size$a * (13 + 5),
-    height: size$a * 13
+    width: size$9 * (13 + 5),
+    height: size$9 * 13
   },
   gameName: {
-    y: size$a * 2,
-    width: size$a * (13 + 5),
-    height: size$a * 4,
+    y: size$9 * 2,
+    width: size$9 * (13 + 5),
+    height: size$9 * 4,
     font: 'bold 128px 黑体'
   },
   select: {
-    x: size$a * 8,
-    y: size$a * 8,
-    width: size$a * 2
+    x: size$9 * 8,
+    y: size$9 * 8,
+    width: size$9 * 2
   }
 };
 class Title extends Component {
@@ -1133,7 +1125,17 @@ class Title extends Component {
       style: styles$1.title
     }, this.$c("div", {
       style: styles$1.gameName
-    }, this.$data.game.title), this.$c(Select, {
+    }, this.$data.game.title), this.$c(Animate, {
+      data: {
+        src: 'stand.png',
+        maxTick: 4,
+        sy: 4,
+        x: 208,
+        y: 100,
+        width: 632 / 4,
+        height: 768 / 8
+      }
+    }), this.$c(Select, {
       activeIndex: this.activeIndex,
       options: this.options,
       style: styles$1.select,
@@ -1143,109 +1145,46 @@ class Title extends Component {
 
 }
 
-const size$9 = 32;
-const options = [{
-  text: '物品'
-}, {
-  text: '技能'
-}, {
-  text: '装备'
-}, {
-  text: '状态'
-}];
-const itemOption = [];
-const statusOption = [];
-const loadGameOption = [{
-  text: 12233
-}];
-const saveGameOption = [{
-  text: 1
-}, {
-  text: 2
-}, {
-  text: 3
-}, {
-  text: 4
-}];
-const detailOption = [itemOption, statusOption, itemOption, itemOption, loadGameOption, saveGameOption];
-class Menu extends Component {
-  activeIndex = -1;
-  tick = 0;
-
-  create() {
-    this.styles = {
-      menu: {
-        width: size$9 * 18,
-        height: size$9 * 13,
-        backgroundColor: 'rgba(0,0,0,.6)'
-      },
-      detail: {
-        x: size$9 * 4,
-        width: size$9 * 9,
-        height: size$9 * 13,
-        borderWidth: 2
-      },
-      select: {
-        width: size$9 * 4
-      }
-    };
-  }
-
-  onConfirm = activeIndex => {
-    this.activeIndex = activeIndex;
-  };
-
-  render() {
-    return this.$c("div", {
-      style: this.styles.menu
-    }, this.$c(Select, {
-      options: options,
-      style: this.styles.select,
-      onConfirm: this.onConfirm,
-      onClose: this.props.onClose
-    }), this.activeIndex === -1 ? null : this.$c(Select, {
-      options: detailOption[this.activeIndex],
-      style: this.styles.detail,
-      onConfirm: this.onConfirm,
-      onClose: () => {
-        this.activeIndex = -1;
-      }
-    }));
-  }
-
-}
-
 const size$8 = 32;
 class Shop extends Component {
   create() {
-    this.shop = this.$data.shop[this.props.shopid];
+    this.shop = JSON.parse(JSON.stringify(this.$data.shop[this.props.shopid]));
+    this.shop.choices.push({
+      text: '离开'
+    });
   }
 
   onConfirm = index => {
-    const {
-      need,
-      effect
-    } = this.shop.choices[index];
-    this.props.onShopEvent(need, effect);
+    if (index === this.shop.choices.length - 1) {
+      this.props.onClose();
+    } else {
+      const {
+        need,
+        effect
+      } = this.shop.choices[index];
+      this.props.onShopEvent(need, effect);
+    }
   };
 
   render() {
-    return this.$c("div", {
+    return this.$c("img", {
+      src: "shop.webp",
       style: {
         x: 3 * size$8,
         y: 2 * size$8,
         width: size$8 * 7,
         height: size$8 * 8,
-        fontSize: 24,
         borderWidth: 4,
         borderColor: '#deb887',
-        textAlign: 'center',
-        backgroundImage: 'ground.png'
+        font: '32px sans-serif',
+        swidth: 500,
+        sheight: 701
       }
     }, this.$c("div", {
       style: {
-        x: size$8 / 2 * 7,
-        y: size$8 / 2
+        y: size$8 / 4 * 3,
+        width: size$8 * 7,
+        fontSize: 24
       }
     }, this.shop.title), this.$c("div", {
       style: {
@@ -1574,18 +1513,17 @@ class Message extends Component {
     }
 
     const fontSize = 18;
-    const style = {
-      textAlign: 'left',
-      fontSize,
-      backgroundColor: 'rgba(0,0,0,.7)',
-      globalAlpha,
-      x: 0,
-      y: 0,
-      height: 32,
-      width: fontSize / 2 * this.length + 10
-    };
     return this.$c("div", {
-      style: style
+      style: {
+        textAlign: 'left',
+        fontSize,
+        backgroundColor: 'rgba(0,0,0,.7)',
+        globalAlpha,
+        x: 0,
+        y: 0,
+        height: 32,
+        width: fontSize / 2 * this.length + 10
+      }
     }, this.$c("div", {
       style: {
         x: 5,
@@ -1663,12 +1601,8 @@ const columns = [{
 
 }];
 class EnemyInfo extends Component {
-  onKeyDown({
-    code
-  }) {
-    if (code === 'KeyX') {
-      this.props.onClose();
-    }
+  onKeyDown() {
+    this.props.onClose();
   }
 
   onMouseDown = () => {
@@ -1719,19 +1653,22 @@ class ShopList extends Component {
   }
 
   render() {
-    return this.$c("div", {
+    return this.$c("img", {
+      src: "shop.webp",
       style: {
-        x: size$5 * 3,
-        y: size$5 * 2,
-        height: size$5 * 8,
+        x: 3 * size$5,
+        y: 2 * size$5,
         width: size$5 * 7,
-        backgroundImage: 'ground.png',
+        height: size$5 * 8,
         borderWidth: 4,
-        borderColor: '#deb887'
+        borderColor: '#deb887',
+        font: '32px sans-serif',
+        swidth: 500,
+        sheight: 701
       }
     }, this.$c("div", {
       style: {
-        height: size$5,
+        y: size$5 / 4 * 3,
         width: size$5 * 7,
         fontSize: 24
       }
@@ -1804,9 +1741,6 @@ class Hero extends Component {
     const styleHero = this.styles.hero;
     const step = 32;
     let moveVector = null;
-    console.log({
-      code
-    });
 
     if (code === 'ArrowDown') {
       moveVector = {
@@ -2038,9 +1972,6 @@ class Hero extends Component {
     this.talk = null;
     this.setEvent();
   };
-  onMenuClose = () => {
-    this.showMenu = null;
-  };
   onMessageClose = () => {
     this.msg = null;
   };
@@ -2111,8 +2042,6 @@ class Hero extends Component {
       enemyId: this.enemyId,
       hero: this.$data.save.hero,
       onClose: this.onBattleClose
-    }), this.showMenu && this.$c(Menu, {
-      onClose: this.onMenuClose
     }), this.talk && this.$c(Talk, {
       talk: this.talk,
       key: this.talk,
