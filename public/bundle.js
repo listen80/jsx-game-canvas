@@ -1,15 +1,16 @@
 function checkFont(name, size = 16) {
   return document.fonts.check(`${size}px ${name}`);
 }
-const fontsIos = ['雅痞体-简', '魏碑体-简', '娃娃体-简', '苹方-简', '翩翩体-简', '凌慧体-简', '兰亭黑-简', '楷体-简', '黑体-简', '宋体-简'];
+const fontsIos = ['娃娃体-简', '兰亭黑-简', '凌慧体-简', '翩翩体-简', '魏碑体-简', '雅痞体-简', '苹方-简', '楷体-简', '黑体-简', '宋体-简'];
 const fontsMS = ['黑体', '楷体', '宋体'];
-fontsMS.concat(fontsIos).find(checkFont);
+const fontsAndroid = ['Roboto', 'Noto Sans', 'Droid'];
+const fontFamily = [...fontsMS, ...fontsIos, ...fontsAndroid].find(checkFont);
 const baseStyle = {
   direction: 'ltr',
   fillStyle: '#fff',
   // filter: 'grayscale(.9)',
   // filter: 'none',
-  // font: '16px ' + fontFamily,
+  font: '16px ' + fontFamily,
   globalAlpha: 1,
   globalCompositeOperation: 'source-over',
   // imageSmoothingEnabled: true,
@@ -40,11 +41,10 @@ const isUndefined = o => o === undefined || o === null;
 const isString = o => typeof o === 'string';
 const isBoolean = o => typeof o === 'boolean';
 
-const mouseEvents = ['ContextMenu', 'Click', 'Wheel', 'MouseDown', 'MouseUp' // 'MouseMove',
-];
+const mouseEvents = ['ContextMenu', 'Click', 'Wheel', 'MouseDown', 'MouseUp', 'MouseMove'];
 const keyEvents = ['KeyDown', 'KeyUp'];
 const size$e = 32;
-class UI {
+class Render {
   constructor(game) {
     this.initCanvas();
     this.bindEvents();
@@ -75,11 +75,9 @@ class UI {
 
   restoreEvents() {
     // mosue
-    this.mouseEventsCollectionKeyframe = [];
-    this.mouseEventsCallbackKeyframe = []; // key
+    this.mouseEventsCollectionKeyframe = []; // key
 
     this.keyEventsCollectionKeyframe = [];
-    this.keyEventsCallbackKeyframe = [];
   }
 
   bindEvents() {
@@ -102,23 +100,22 @@ class UI {
   }
 
   runEvents() {
-    if (this.mouseEventsCallbackKeyframe.length) {
-      debugger;
-    }
+    this.mouseEventsCollectionKeyframe.forEach(event => {
+      const {
+        $node,
+        name
+      } = event;
 
-    this.mouseEventsCallbackKeyframe.every(({
-      node,
-      event,
-      name
-    }) => {
-      return node.props[name](event, node);
+      if ($node && $node.props[name]) {
+        $node.props[name](event, $node);
+      }
     });
-    this.keyEventsCallbackKeyframe.every(({
-      instance,
-      event,
-      name
-    }) => {
-      return instance[name](event);
+    this.keyEventsCollectionKeyframe.forEach(event => {
+      const {
+        $instance,
+        name
+      } = event;
+      $instance && $instance[name] && $instance[name](event);
     });
     this.restoreEvents();
   }
@@ -457,23 +454,16 @@ class UI {
       } else if (isArray(createdNode)) {
         createdNode.forEach(child => this.renderAnything(child, offsetX, offsetY, parent));
       } else if (isFunc(createdNode.tag)) {
-        // tag 是 function
-        this.renderAnything(createdNode.instance.$node, offsetX, offsetY, createdNode.instance); // events of keyboard
-
+        // events of keyboard
         this.keyEventsCollectionKeyframe.forEach(event => {
-          const {
-            name
-          } = event;
           const instance = createdNode.instance;
 
-          if (instance[name]) {
-            this.keyEventsCallbackKeyframe.push({
-              instance,
-              event,
-              name
-            });
+          if (keyEvents.some(name => instance[`on${name}`])) {
+            event.$instance = instance;
           }
-        });
+        }); // tag 是 function
+
+        this.renderAnything(createdNode.instance.$node, offsetX, offsetY, createdNode.instance);
       } else if (isString(createdNode.tag)) {
         // div node
         this.calcNode(createdNode, offsetX, offsetY, parent);
@@ -503,18 +493,8 @@ class UI {
       offsetY += y; // events of mouse
 
       this.mouseEventsCollectionKeyframe.forEach(event => {
-        const {
-          name
-        } = event;
-
         if (event.offsetX >= offsetX && event.offsetX < style.width + offsetX && event.offsetY >= offsetY && event.offsetY < style.height + offsetY) {
-          if (node.props[name]) {
-            this.mouseEventsCallbackKeyframe.push({
-              node,
-              event,
-              name
-            });
-          }
+          event.$node = node;
         }
       });
 
@@ -900,7 +880,6 @@ class Select extends Component {
 
   onMouseDown = index => {
     this.activeIndex = index;
-    console.log(index);
     this.props.onConfirm && this.props.onConfirm(this.activeIndex, this.props.options[this.activeIndex]);
   };
 
@@ -983,7 +962,7 @@ class Engine {
       this.$sound = new Sound();
       this.$images = new ImageCollection();
       this.$font = new Font();
-      this.$ui = new UI(this);
+      this.$ui = new Render(this);
       this.$root = null;
       this.$game = $game;
       this.gameStart();
@@ -1047,35 +1026,29 @@ class FPS extends Component {
 
 const size$b = 32;
 class Loading extends Component {
-  step = 1;
-  angle = -this.step;
+  tick = 0;
 
   render() {
-    this.angle += this.step;
+    const width = size$b * 13;
+    const height = size$b;
+    this.tick += 0.001;
 
-    if (this.angle > 180) {
-      this.angle = 0;
+    if (this.tick > 1) {
+      this.tick = 1;
     }
 
-    const sAngle = this.angle * 2 - 90;
-    const eAngle = Math.sin(this.angle / 180 * Math.PI) * 45;
-    const width = size$b * (13 + 5);
-    const height = size$b * 13;
-    return this.$c("div", {
+    return this.$c("div", null, this.$c("div", {
       style: {
-        x: 0,
-        y: 0,
         width,
-        height
+        height,
+        backgroundColor: 'white'
       }
-    }, this.props.msg, this.$c("circle", {
-      cx: width / 2,
-      cy: height / 2,
-      r: size$b * 3,
-      sAngle: sAngle - eAngle,
-      eAngle: sAngle + eAngle,
-      stroke: "#4e6ef2",
-      strokeWidth: 10
+    }), this.$c("div", {
+      style: {
+        width: width * this.tick,
+        height,
+        backgroundColor: '#666'
+      }
     }));
   }
 
@@ -2240,10 +2213,11 @@ class Map extends Component {
   };
   onTitle = () => {
     this.props.onTitle();
-  }; // onMouseDown = (e) => {
-  //   // console.warn(e)
-  //   // DFS BFS
-  // };
+  };
+  onMouseDown = e => {
+    // DFS BFS
+    console.warn(e);
+  };
 
   render() {
     this.interval--;

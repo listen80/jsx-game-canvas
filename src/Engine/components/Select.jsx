@@ -1,4 +1,5 @@
 import { Component } from '../core/Component'
+
 const size = 32
 
 export default class Select extends Component {
@@ -54,7 +55,6 @@ export default class Select extends Component {
 
   onMouseDown = (index) => {
     this.activeIndex = index
-    console.log(index)
     this.props.onConfirm &&
       this.props.onConfirm(
         this.activeIndex,

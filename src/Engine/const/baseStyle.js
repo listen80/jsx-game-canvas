@@ -3,13 +3,13 @@ export function checkFont (name, size = 16) {
 }
 
 export const fontsIos = [
-  '雅痞体-简',
-  '魏碑体-简',
   '娃娃体-简',
-  '苹方-简',
-  '翩翩体-简',
-  '凌慧体-简',
   '兰亭黑-简',
+  '凌慧体-简',
+  '翩翩体-简',
+  '魏碑体-简',
+  '雅痞体-简',
+  '苹方-简',
   '楷体-简',
   '黑体-简',
   '宋体-简',
@@ -17,14 +17,16 @@ export const fontsIos = [
 
 export const fontsMS = ['黑体', '楷体', '宋体']
 
-export const fontFamily = fontsMS.concat(fontsIos).find(checkFont)
+export const fontsAndroid = ['Roboto', 'Noto Sans', 'Droid']
+
+export const fontFamily = [...fontsMS, ...fontsIos, ...fontsAndroid].find(checkFont)
 
 export const baseStyle = {
   direction: 'ltr',
   fillStyle: '#fff',
   // filter: 'grayscale(.9)',
   // filter: 'none',
-  // font: '16px ' + fontFamily,
+  font: '16px ' + fontFamily,
   globalAlpha: 1,
   globalCompositeOperation: 'source-over',
   // imageSmoothingEnabled: true,

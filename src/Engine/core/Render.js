@@ -14,13 +14,13 @@ const mouseEvents = [
   'Wheel',
   'MouseDown',
   'MouseUp',
-  // 'MouseMove',
+  'MouseMove',
 ]
 const keyEvents = ['KeyDown', 'KeyUp']
 
 const size = 32
 
-export default class UI {
+export default class Render {
   constructor (game) {
     this.initCanvas()
     this.bindEvents()
@@ -48,11 +48,9 @@ export default class UI {
   restoreEvents () {
     // mosue
     this.mouseEventsCollectionKeyframe = []
-    this.mouseEventsCallbackKeyframe = []
 
     // key
     this.keyEventsCollectionKeyframe = []
-    this.keyEventsCallbackKeyframe = []
   }
 
   bindEvents () {
@@ -79,14 +77,15 @@ export default class UI {
   }
 
   runEvents () {
-    if (this.mouseEventsCallbackKeyframe.length) {
-      debugger
-    }
-    this.mouseEventsCallbackKeyframe.every(({ node, event, name }) => {
-      return node.props[name](event, node)
+    this.mouseEventsCollectionKeyframe.forEach((event) => {
+      const { $node, name } = event
+      if ($node && $node.props[name]) {
+        $node.props[name](event, $node)
+      }
     })
-    this.keyEventsCallbackKeyframe.every(({ instance, event, name }) => {
-      return instance[name](event)
+    this.keyEventsCollectionKeyframe.forEach((event) => {
+      const { $instance, name } = event
+      $instance && $instance[name] && $instance[name](event)
     })
 
     this.restoreEvents()
@@ -353,6 +352,13 @@ export default class UI {
           this.renderAnything(child, offsetX, offsetY, parent),
         )
       } else if (isFunc(createdNode.tag)) {
+        // events of keyboard
+        this.keyEventsCollectionKeyframe.forEach((event) => {
+          const instance = createdNode.instance
+          if (keyEvents.some((name) => instance[`on${name}`])) {
+            event.$instance = instance
+          }
+        })
         // tag 是 function
         this.renderAnything(
           createdNode.instance.$node,
@@ -360,14 +366,6 @@ export default class UI {
           offsetY,
           createdNode.instance,
         )
-        // events of keyboard
-        this.keyEventsCollectionKeyframe.forEach((event) => {
-          const { name } = event
-          const instance = createdNode.instance
-          if (instance[name]) {
-            this.keyEventsCallbackKeyframe.push({ instance, event, name })
-          }
-        })
       } else if (isString(createdNode.tag)) {
         // div node
         this.calcNode(createdNode, offsetX, offsetY, parent)
@@ -395,16 +393,13 @@ export default class UI {
       offsetY += y
       // events of mouse
       this.mouseEventsCollectionKeyframe.forEach((event) => {
-        const { name } = event
         if (
           event.offsetX >= offsetX &&
           event.offsetX < style.width + offsetX &&
           event.offsetY >= offsetY &&
           event.offsetY < style.height + offsetY
         ) {
-          if (node.props[name]) {
-            this.mouseEventsCallbackKeyframe.push({ node, event, name })
-          }
+          event.$node = node
         }
       })
 
