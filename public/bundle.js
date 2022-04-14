@@ -36,11 +36,9 @@ const isUndefined = o => o === undefined || o === null;
 const isString = o => typeof o === 'string';
 const isBoolean = o => typeof o === 'boolean';
 
-const mouseEvents = ['ContextMenu', 'Click', 'Wheel', 'MouseDown', 'MouseUp'
-/* , 'MouseMove' */
-];
+const mouseEvents = ['ContextMenu', 'Click', 'Wheel', 'MouseDown', 'MouseUp', 'MouseMove'];
 const keyEvents = ['KeyDown', 'KeyUp'];
-const size$c = 32;
+const size$d = 32;
 class UI {
   constructor(game) {
     this.initCanvas();
@@ -59,8 +57,8 @@ class UI {
     this.context = canvas.getContext('2d');
     const {
       el,
-      width = size$c * (13 + 5),
-      height = size$c * 13
+      width = size$d * (13 + 5),
+      height = size$d * 13
     } = screen;
     this.screen = screen;
     this.canvas.width = width;
@@ -71,9 +69,12 @@ class UI {
   }
 
   restoreEvents() {
+    // mosue
     this.mouseEventsCollectionKeyframe = [];
-    this.mouseEventsCallbackKeyframe = [];
-    this.keyEventsCallbackFunc = [];
+    this.mouseEventsCallbackKeyframe = []; // key
+
+    this.keyEventsCollectionKeyframe = [];
+    this.keyEventsCallbackKeyframe = [];
   }
 
   bindEvents() {
@@ -90,7 +91,7 @@ class UI {
     keyEvents.forEach(name => {
       document.addEventListener(name.toLowerCase(), e => {
         e.name = `on${name}`;
-        this.keyEventsCallbackFunc.push(e);
+        this.keyEventsCollectionKeyframe.push(e);
       });
     });
   }
@@ -101,7 +102,15 @@ class UI {
       event,
       name
     }) => {
-      node.props[name](event);
+      node.props[name](event, node);
+    });
+    this.keyEventsCallbackKeyframe.forEach(({
+      instance,
+      event,
+      name
+    }) => {
+      console.log(instance);
+      instance[name](event);
     });
     this.restoreEvents();
   }
@@ -189,8 +198,8 @@ class UI {
         const {
           sx = 0,
           sy = 0,
-          width = size$c,
-          height = size$c,
+          width = size$d,
+          height = size$d,
           swidth,
           sheight
         } = style;
@@ -348,7 +357,43 @@ class UI {
     context.stroke();
   }
 
-  renderPrimitive(text, offsetX, offsetY, parent) {
+  drawNode(node, offsetX, offsetY, parent) {
+    const {
+      context
+    } = this;
+    context.save();
+    const {
+      props,
+      tag
+    } = node;
+
+    if (props) {
+      const {
+        style
+      } = props;
+      this.mergeStyle(style);
+
+      if (style) {
+        this.drawBack(node, offsetX, offsetY);
+        this.drawBorder(node, offsetX, offsetY);
+      }
+    }
+
+    if (tag === 'img') {
+      this.drawImage(node, offsetX, offsetY);
+    } else if (tag === 'circle') {
+      this.drawCircle(node, offsetX, offsetY);
+    } else if (tag === 'line') {
+      this.drawLine(node, offsetX, offsetX);
+    } else if (tag !== 'div') {
+      console.error('drawNode not support, check jsx <', tag);
+    }
+
+    this.renderAnything(node.children, offsetX, offsetY, node);
+    context.restore();
+  }
+
+  drawPrimitive(text, offsetX, offsetY, parent) {
     var _parent$props;
 
     const {
@@ -399,55 +444,34 @@ class UI {
     // div node
     if (!isUndefined(createdNode) && !isBoolean(createdNode)) {
       if (isPrimitive(createdNode)) {
-        this.renderPrimitive(createdNode, offsetX, offsetY, parent);
+        this.drawPrimitive(createdNode, offsetX, offsetY, parent);
       } else if (isArray(createdNode)) {
         createdNode.forEach(child => this.renderAnything(child, offsetX, offsetY, parent));
       } else if (isFunc(createdNode.tag)) {
         // tag 是 function
-        this.renderAnything(createdNode.instance.$node, offsetX, offsetY, parent);
+        this.renderAnything(createdNode.instance.$node, offsetX, offsetY, createdNode.instance); // events of keyboard
+
+        this.keyEventsCollectionKeyframe.forEach(event => {
+          const {
+            name
+          } = event;
+          const instance = createdNode.instance;
+
+          if (instance[name]) {
+            this.keyEventsCallbackKeyframe.push({
+              instance,
+              event,
+              name
+            });
+          }
+        });
       } else if (isString(createdNode.tag)) {
         // div node
         this.calcNode(createdNode, offsetX, offsetY, parent);
       } else {
-        this.renderPrimitive(JSON.stringify(createdNode), offsetX, offsetY, parent);
+        this.drawPrimitive(JSON.stringify(createdNode), offsetX, offsetY, parent);
       }
     }
-  }
-
-  drawNode(node, offsetX, offsetY, parent) {
-    const {
-      context
-    } = this;
-    context.save();
-    const {
-      props,
-      tag
-    } = node;
-
-    if (props) {
-      const {
-        style
-      } = props;
-      this.mergeStyle(style);
-
-      if (style) {
-        this.drawBack(node, offsetX, offsetY);
-        this.drawBorder(node, offsetX, offsetY);
-      }
-    }
-
-    if (tag === 'img') {
-      this.drawImage(node, offsetX, offsetY);
-    } else if (tag === 'circle') {
-      this.drawCircle(node, offsetX, offsetY);
-    } else if (tag === 'line') {
-      this.drawLine(node, offsetX, offsetX);
-    } else if (tag !== 'div') {
-      console.error('drawNode not support, check jsx <', tag);
-    }
-
-    this.renderAnything(node.children, offsetX, offsetY, node);
-    context.restore();
   }
 
   calcNode(node, offsetX, offsetY, parent) {
@@ -467,7 +491,8 @@ class UI {
         y = 0
       } = style;
       offsetX += x;
-      offsetY += y;
+      offsetY += y; // events of mouse
+
       this.mouseEventsCollectionKeyframe.forEach(event => {
         const {
           name
@@ -821,47 +846,6 @@ class Animate extends Component {
 
 }
 
-class Scroll extends KeyEventComponent {
-  create() {
-    this.scrollTop = 0;
-    this.height = this.props.heigth || 0;
-    this.width = this.props.width || 100;
-    this.contentHeight = this.props.contentHeight || 0;
-  }
-
-  onWheel = event => {
-    const {
-      deltaY
-    } = event;
-    this.scrollTop += 4 * (deltaY > 0 ? Math.ceil(deltaY / 100) : Math.floor(deltaY / 100));
-
-    if (this.scrollTop > this.contentHeight - this.height) {
-      this.scrollTop = this.contentHeight - this.height;
-    } else if (this.scrollTop < 0) {
-      this.scrollTop = 0;
-    }
-
-    console.log(this.scrollTop);
-  };
-
-  render() {
-    return this.$c("div", {
-      style: {
-        height: this.height,
-        width: this.width,
-        overflow: 'hidden',
-        backgroundColor: 'white'
-      },
-      onWheel: this.onWheel
-    }, this.$c("div", {
-      style: {
-        y: -this.scrollTop
-      }
-    }, this.$children));
-  }
-
-}
-
 class Select extends KeyEventComponent {
   styles = {
     select: {
@@ -912,10 +896,14 @@ class Select extends KeyEventComponent {
     }
   }
 
-  onClick = index => {
+  onMouseDown = index => {
     this.activeIndex = index;
     this.props.onConfirm && this.props.onConfirm(this.activeIndex, this.props.options[this.activeIndex]);
   };
+
+  setActiveIndex(index) {
+    this.activeIndex = index;
+  }
 
   render() {
     const size = 32;
@@ -939,13 +927,8 @@ class Select extends KeyEventComponent {
       };
       return this.$c("div", {
         style: optionStyle,
-        onClick: this.onClick,
-        onMouseLeave: e => {
-          this.activeIndex = -1;
-        },
-        onMouseEnter: e => {
-          this.activeIndex = index;
-        }
+        onMouseDown: () => this.onMouseDown(index),
+        onMouseMove: () => this.setActiveIndex(index)
       }, text);
     }) : '空空如也');
   }
@@ -1042,14 +1025,14 @@ class Engine {
 
 }
 
-const size$b = 32;
+const size$c = 32;
 class FPS extends Component {
   fps = 60;
   styles = {
     fps: {
       textAlign: 'center',
-      height: size$b,
-      x: size$b * 18 / 2
+      height: size$c,
+      x: size$c * 18 / 2
     }
   };
   timeStamp = +new Date();
@@ -1068,7 +1051,7 @@ class FPS extends Component {
 
 }
 
-const size$a = 32;
+const size$b = 32;
 class Loading extends Component {
   step = 1;
   angle = -this.step;
@@ -1082,8 +1065,8 @@ class Loading extends Component {
 
     const sAngle = this.angle * 2 - 90;
     const eAngle = Math.sin(this.angle / 180 * Math.PI) * 45;
-    const width = size$a * (13 + 5);
-    const height = size$a * 13;
+    const width = size$b * (13 + 5);
+    const height = size$b * 13;
     return this.$c("div", {
       style: {
         x: 0,
@@ -1094,7 +1077,7 @@ class Loading extends Component {
     }, this.props.msg, this.$c("circle", {
       cx: width / 2,
       cy: height / 2,
-      r: size$a * 3,
+      r: size$b * 3,
       sAngle: sAngle - eAngle,
       eAngle: sAngle + eAngle,
       stroke: "#4e6ef2",
@@ -1120,6 +1103,53 @@ function saveGame(save) {
 }
 function loadGame() {
   return getStorage('game');
+}
+
+const size$a = 32;
+const styles$1 = {
+  title: {
+    width: size$a * (13 + 5),
+    height: size$a * 13
+  },
+  gameName: {
+    y: size$a * 2,
+    width: size$a * (13 + 5),
+    height: size$a * 4,
+    font: 'bold 128px 黑体'
+  },
+  select: {
+    x: size$a * 8,
+    y: size$a * 8,
+    width: size$a * 2
+  }
+};
+class Title extends Component {
+  create() {
+    this.activeIndex = loadGame() ? 1 : 0;
+    this.options = [{
+      text: '开始'
+    }, {
+      text: '继续'
+    }];
+  }
+
+  onConfirm = isLoad => {
+    this.props.onLoadMap(isLoad ? loadGame() : null);
+  };
+
+  render() {
+    return this.$c("div", {
+      style: styles$1.title
+    }, this.$c("div", {
+      style: styles$1.gameName
+    }, this.$data.game.title), this.$c(Select, {
+      activeIndex: this.activeIndex,
+      options: this.options,
+      style: styles$1.select,
+      onConfirm: this.onConfirm
+    }));
+  }
+
 }
 
 const size$9 = 32;
@@ -1196,35 +1226,6 @@ class Menu extends Component {
 
 const size$8 = 32;
 class Shop extends Component {
-  styles = {
-    shop: {
-      x: 2 * size$8,
-      y: 2 * size$8,
-      height: size$8 * 7,
-      width: size$8 * 9,
-      fontSize: 24,
-      borderWidth: 4,
-      borderColor: '#deb887',
-      textAlign: 'center',
-      backgroundImage: 'ground.png'
-    },
-    title: {
-      x: size$8 / 2 * 9,
-      y: size$8 / 2
-    },
-    text: {
-      x: 0,
-      y: 48,
-      fontSize: 14
-    },
-    select: {
-      x: size$8 * 2,
-      y: size$8 / 2 * 7,
-      width: size$8 * 5,
-      fontSize: 16
-    }
-  };
-
   create() {
     this.shop = this.$data.shop[this.props.shopid];
   }
@@ -1239,20 +1240,42 @@ class Shop extends Component {
 
   render() {
     return this.$c("div", {
-      style: this.styles.shop
+      style: {
+        x: 3 * size$8,
+        y: 2 * size$8,
+        width: size$8 * 7,
+        height: size$8 * 8,
+        fontSize: 24,
+        borderWidth: 4,
+        borderColor: '#deb887',
+        textAlign: 'center',
+        backgroundImage: 'ground.png'
+      }
     }, this.$c("div", {
-      style: this.styles.title
+      style: {
+        x: size$8 / 2 * 7,
+        y: size$8 / 2
+      }
     }, this.shop.title), this.$c("div", {
-      style: this.styles.text
+      style: {
+        x: 0,
+        y: 48,
+        fontSize: 14
+      }
     }, this.shop.text.split(/\n/).map((text, index) => this.$c("div", {
       style: {
-        x: size$8 / 2 * 9,
+        x: size$8 / 2 * 7,
         y: index * size$8 / 2
       }
     }, text))), this.$c(Select, {
       options: this.shop.choices,
       onConfirm: this.onConfirm,
-      style: this.styles.select,
+      style: {
+        x: size$8 * 1,
+        y: size$8 / 2 * 7,
+        width: size$8 * 5,
+        fontSize: 16
+      },
       onClose: this.props.onClose
     }));
   }
@@ -1290,9 +1313,13 @@ class Battle extends KeyEventComponent {
     this.hero = this.props.hero;
   }
 
-  onKeyDown() {
-    if (this.battleMsg) {
-      this.props.onClose && this.props.onClose();
+  onKeyDown({
+    code
+  }) {
+    if (code === 'Space') {
+      if (this.battleMsg) {
+        this.props.onClose && this.props.onClose();
+      }
     }
   }
 
@@ -1653,7 +1680,7 @@ class EnemyInfo extends KeyEventComponent {
     }
   }
 
-  onClick = () => {
+  onMouseDown = () => {
     this.props.onClose();
   };
 
@@ -1661,7 +1688,7 @@ class EnemyInfo extends KeyEventComponent {
     const dataSource = Object.keys(this.props.enemys).map(enemyId => this.$data.enemys[enemyId]);
     return this.$c("div", {
       style: styles.wrap,
-      onClick: this.onClick
+      onMouseDown: this.onMouseDown
     }, this.$c(Table, {
       dataSource: dataSource,
       columns: columns,
@@ -1673,16 +1700,6 @@ class EnemyInfo extends KeyEventComponent {
 
 const size$5 = 32;
 class ShopList extends Component {
-  style = {
-    x: size$5 * 3,
-    y: size$5 * 2,
-    height: size$5 * 8,
-    width: size$5 * 7,
-    backgroundImage: 'ground.png',
-    borderWidth: 4,
-    borderColor: '#deb887'
-  };
-
   create() {
     const shops = this.$data.save.shops || [];
     this.options = Object.entries(shops).map(([shopid, text]) => {
@@ -1694,22 +1711,33 @@ class ShopList extends Component {
   }
 
   onConfirm = index => {
-    const {
-      shopid
-    } = this.options[index];
-    this.props.onConfirm(shopid);
-  };
-  onKeyDown = ({
-    code
-  }) => {
-    if (code === 'KeyB') {
-      this.props.onClose();
+    if (index > -1) {
+      const {
+        shopid
+      } = this.options[index];
+      this.props.onConfirm(shopid);
     }
   };
 
+  onKeyDown({
+    code
+  }) {
+    if (code === 'KeyB') {
+      this.props.onClose();
+    }
+  }
+
   render() {
     return this.$c("div", {
-      style: this.style
+      style: {
+        x: size$5 * 3,
+        y: size$5 * 2,
+        height: size$5 * 8,
+        width: size$5 * 7,
+        backgroundImage: 'ground.png',
+        borderWidth: 4,
+        borderColor: '#deb887'
+      }
     }, this.$c("div", {
       style: {
         height: size$5,
@@ -1720,7 +1748,8 @@ class ShopList extends Component {
       style: {
         x: size$5,
         y: 48,
-        width: 160
+        width: size$5 * 5,
+        fontSize: 16
       },
       options: this.options,
       onConfirm: this.onConfirm,
@@ -1778,13 +1807,15 @@ class Hero extends KeyEventComponent {
     return this.props.mapEvents.findIndex(item => item && item && isCoincided(item.props.style, heroStyle));
   }
 
-  onKeyDown(e) {
-    const {
-      code
-    } = e;
+  onKeyDown({
+    code
+  }) {
     const styleHero = this.styles.hero;
     const step = 32;
     let moveVector = null;
+    console.log({
+      code
+    });
 
     if (code === 'ArrowDown') {
       moveVector = {
@@ -2330,7 +2361,7 @@ class Map extends Component {
   onTitle = () => {
     this.props.onTitle();
   };
-  onClick = e => {// console.warn(e)
+  onMouseDown = e => {// console.warn(e)
     // DFS BFS
   };
 
@@ -2346,7 +2377,7 @@ class Map extends Component {
     const mapEvents = this.renderMapEvents();
     return this.$c("div", null, this.$c("div", {
       style: this.styles.map,
-      onClick: this.onClick
+      onMouseDown: this.onMouseDown
     }, mapTerrains, mapEvents), this.$c("div", {
       style: this.styles.statusBar
     }, this.$c(Status, {
@@ -2399,11 +2430,11 @@ class ScrollText extends KeyEventComponent {
     code
   }) {
     if (code === 'Space') {
-      this.onClick();
+      this.onMouseDown();
     }
   }
 
-  onClick = () => {
+  onMouseDown = () => {
     if (this.ready) {
       const {
         type,
@@ -2430,7 +2461,7 @@ class ScrollText extends KeyEventComponent {
 
     return this.$c("div", {
       style: this.styles.text,
-      onClick: this.onClick
+      onMouseDown: this.onMouseDown
     }, this.$c("div", {
       style: this.styles.scroll
     }, this.text.map((text, index) => this.$c("div", {
@@ -2438,55 +2469,6 @@ class ScrollText extends KeyEventComponent {
         y: index * size$1
       }
     }, text))));
-  }
-
-}
-
-const run = {
-  src: 'run.png',
-  maxTick: 6,
-  width: 996 / 6,
-  height: 824 / 8
-};
-class Test extends KeyEventComponent {
-  onKeyDown = ({
-    code
-  }) => {
-    this.data.x = 200;
-  };
-
-  create() {
-    this.data = run;
-    this.data.x = 0;
-    this.data.sy = 2;
-  }
-
-  render() {
-    this.data.x += 3;
-
-    if (this.data.x > 400) {
-      this.data.x = 0;
-    }
-
-    return this.$c("div", null, this.$c(Scroll, {
-      heigth: 4 * 32,
-      contentHeight: 13 * 32
-    }, Array(13).fill(0).map((name, index) => {
-      return this.$c("div", {
-        style: {
-          y: index * 32
-        }
-      }, this.$c("img", {
-        style: {
-          sy: index * 32
-        },
-        src: "enemys.png"
-      }));
-    })));
-  }
-
-  destroy() {
-    super.destroy();
   }
 
 }
@@ -2544,7 +2526,7 @@ class Game extends Component {
   };
 
   render() {
-    const Title = Test;
+    // const Title = Test
     return this.$c("div", {
       style: this.styles.app
     }, this.loading ? this.$c(Loading, {

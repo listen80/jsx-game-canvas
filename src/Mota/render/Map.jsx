@@ -129,7 +129,7 @@ export default class Map extends Component {
     this.props.onTitle()
   };
 
-  onClick = (e) => {
+  onMouseDown = (e) => {
     // console.warn(e)
     // DFS BFS
   };
@@ -144,7 +144,7 @@ export default class Map extends Component {
     const mapEvents = this.renderMapEvents()
     return (
       <div>
-        <div style={this.styles.map} onClick={this.onClick}>
+        <div style={this.styles.map} onMouseDown={this.onMouseDown}>
           {mapTerrains}
           {mapEvents}
         </div>

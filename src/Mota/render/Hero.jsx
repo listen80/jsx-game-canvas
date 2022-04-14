@@ -51,11 +51,11 @@ export default class Hero extends KeyEventComponent {
     )
   }
 
-  onKeyDown (e) {
-    const { code } = e
+  onKeyDown ({ code }) {
     const styleHero = this.styles.hero
     const step = 32
     let moveVector = null
+    console.log({ code })
     if (code === 'ArrowDown') {
       moveVector = { y: step }
       styleHero.sy = 0

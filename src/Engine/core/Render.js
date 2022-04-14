@@ -13,7 +13,8 @@ const mouseEvents = [
   'Click',
   'Wheel',
   'MouseDown',
-  'MouseUp' /* , 'MouseMove' */,
+  'MouseUp',
+  'MouseMove',
 ]
 const keyEvents = ['KeyDown', 'KeyUp']
 
@@ -45,9 +46,13 @@ export default class UI {
   }
 
   restoreEvents () {
+    // mosue
     this.mouseEventsCollectionKeyframe = []
     this.mouseEventsCallbackKeyframe = []
-    this.keyEventsCallbackFunc = []
+
+    // key
+    this.keyEventsCollectionKeyframe = []
+    this.keyEventsCallbackKeyframe = []
   }
 
   bindEvents () {
@@ -68,15 +73,20 @@ export default class UI {
     keyEvents.forEach((name) => {
       document.addEventListener(name.toLowerCase(), (e) => {
         e.name = `on${name}`
-        this.keyEventsCallbackFunc.push(e)
+        this.keyEventsCollectionKeyframe.push(e)
       })
     })
   }
 
   runEvents () {
     this.mouseEventsCallbackKeyframe.forEach(({ node, event, name }) => {
-      node.props[name](event)
+      node.props[name](event, node)
     })
+    this.keyEventsCallbackKeyframe.forEach(({ instance, event, name }) => {
+      console.log(instance)
+      instance[name](event)
+    })
+
     this.restoreEvents()
   }
 
@@ -269,7 +279,32 @@ export default class UI {
     context.stroke()
   }
 
-  renderPrimitive (text, offsetX, offsetY, parent) {
+  drawNode (node, offsetX, offsetY, parent) {
+    const { context } = this
+    context.save()
+    const { props, tag } = node
+    if (props) {
+      const { style } = props
+      this.mergeStyle(style)
+      if (style) {
+        this.drawBack(node, offsetX, offsetY)
+        this.drawBorder(node, offsetX, offsetY)
+      }
+    }
+    if (tag === 'img') {
+      this.drawImage(node, offsetX, offsetY)
+    } else if (tag === 'circle') {
+      this.drawCircle(node, offsetX, offsetY)
+    } else if (tag === 'line') {
+      this.drawLine(node, offsetX, offsetX)
+    } else if (tag !== 'div') {
+      console.error('drawNode not support, check jsx <', tag)
+    }
+    this.renderAnything(node.children, offsetX, offsetY, node)
+    context.restore()
+  }
+
+  drawPrimitive (text, offsetX, offsetY, parent) {
     const { context } = this
     const { textAlign, textBaseline } = context
     const { width = 0, height = 0 } = parent?.props?.style || {}
@@ -309,7 +344,7 @@ export default class UI {
     // div node
     if (!isUndefined(createdNode) && !isBoolean(createdNode)) {
       if (isPrimitive(createdNode)) {
-        this.renderPrimitive(createdNode, offsetX, offsetY, parent)
+        this.drawPrimitive(createdNode, offsetX, offsetY, parent)
       } else if (isArray(createdNode)) {
         createdNode.forEach((child) =>
           this.renderAnything(child, offsetX, offsetY, parent),
@@ -320,13 +355,21 @@ export default class UI {
           createdNode.instance.$node,
           offsetX,
           offsetY,
-          parent,
+          createdNode.instance,
         )
+        // events of keyboard
+        this.keyEventsCollectionKeyframe.forEach((event) => {
+          const { name } = event
+          const instance = createdNode.instance
+          if (instance[name]) {
+            this.keyEventsCallbackKeyframe.push({ instance, event, name })
+          }
+        })
       } else if (isString(createdNode.tag)) {
         // div node
         this.calcNode(createdNode, offsetX, offsetY, parent)
       } else {
-        this.renderPrimitive(
+        this.drawPrimitive(
           JSON.stringify(createdNode),
           offsetX,
           offsetY,
@@ -334,31 +377,6 @@ export default class UI {
         )
       }
     }
-  }
-
-  drawNode (node, offsetX, offsetY, parent) {
-    const { context } = this
-    context.save()
-    const { props, tag } = node
-    if (props) {
-      const { style } = props
-      this.mergeStyle(style)
-      if (style) {
-        this.drawBack(node, offsetX, offsetY)
-        this.drawBorder(node, offsetX, offsetY)
-      }
-    }
-    if (tag === 'img') {
-      this.drawImage(node, offsetX, offsetY)
-    } else if (tag === 'circle') {
-      this.drawCircle(node, offsetX, offsetY)
-    } else if (tag === 'line') {
-      this.drawLine(node, offsetX, offsetX)
-    } else if (tag !== 'div') {
-      console.error('drawNode not support, check jsx <', tag)
-    }
-    this.renderAnything(node.children, offsetX, offsetY, node)
-    context.restore()
   }
 
   calcNode (node, offsetX, offsetY, parent) {
@@ -372,6 +390,7 @@ export default class UI {
       const { x = 0, y = 0 } = style
       offsetX += x
       offsetY += y
+      // events of mouse
       this.mouseEventsCollectionKeyframe.forEach((event) => {
         const { name } = event
         if (

@@ -82,7 +82,7 @@ export default class EnemyInfo extends KeyEventComponent {
     }
   }
 
-  onClick = () => {
+  onMouseDown = () => {
     this.props.onClose()
   };
 
@@ -91,7 +91,7 @@ export default class EnemyInfo extends KeyEventComponent {
       (enemyId) => this.$data.enemys[enemyId],
     )
     return (
-      <div style={styles.wrap} onClick={this.onClick}>
+      <div style={styles.wrap} onMouseDown={this.onMouseDown}>
         <Table
           dataSource={dataSource}
           columns={columns}

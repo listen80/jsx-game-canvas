@@ -31,11 +31,11 @@ export default class ScrollText extends KeyEventComponent {
 
   onKeyDown ({ code }) {
     if (code === 'Space') {
-      this.onClick()
+      this.onMouseDown()
     }
   }
 
-  onClick = () => {
+  onMouseDown = () => {
     if (this.ready) {
       const { type, data } = this.props.map.event
       if (type === 'mapLoad') {
@@ -55,7 +55,7 @@ export default class ScrollText extends KeyEventComponent {
       this.ready = true
     }
     return (
-      <div style={this.styles.text} onClick={this.onClick}>
+      <div style={this.styles.text} onMouseDown={this.onMouseDown}>
         <div style={this.styles.scroll}>
           {this.text.map((text, index) => (
             <div style={{ y: index * size }}>{text}</div>

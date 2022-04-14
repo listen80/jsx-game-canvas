@@ -32,9 +32,11 @@ export default class Battle extends KeyEventComponent {
     this.hero = this.props.hero
   }
 
-  onKeyDown () {
-    if (this.battleMsg) {
-      this.props.onClose && this.props.onClose()
+  onKeyDown ({ code }) {
+    if (code === 'Space') {
+      if (this.battleMsg) {
+        this.props.onClose && this.props.onClose()
+      }
     }
   }
 

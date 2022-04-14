@@ -65,7 +65,7 @@ export default class Game extends Component {
   }
 
   render () {
-    const Title = Test
+    // const Title = Test
     return <div style={this.styles.app}>
       {
         this.loading
