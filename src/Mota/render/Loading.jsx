@@ -4,7 +4,7 @@ const size = 32
 export default class Loading extends Component {
   tick = 0;
   render () {
-    const width = size * 13
+    const width = size * 18
     const height = size
     this.tick += 0.001
     if (this.tick > 1) {

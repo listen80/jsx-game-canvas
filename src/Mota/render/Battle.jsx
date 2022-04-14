@@ -42,11 +42,12 @@ export default class Battle extends Component {
   render () {
     const enemy = this.enemy
     const hero = this.hero
-    const tick = location.hostname === 'localhost' ? 1 : 25
+    const isDev = location.hostname === 'localhost'
+    const tick = isDev ? 3 : 25
     if (enemy.hp > 0) {
       this.tick++
       if (this.tick === tick) {
-        this.$sound.play('se', 'attack.mp3')
+        isDev || this.$sound.play('se', 'attack.mp3')
 
         if (this.turn) {
           const atk = enemy.atk - hero.def
