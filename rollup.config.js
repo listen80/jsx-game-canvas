@@ -7,19 +7,35 @@ import { terser } from 'rollup-plugin-terser' // 压缩代码
 import serve from 'rollup-plugin-serve' // 启动服务
 
 import replace from 'rollup-plugin-replace' // 注入环境变量
+import html2 from 'rollup-plugin-html2'
+
 // import postcss from 'rollup-plugin-postcss';
 // import vue from 'rollup-plugin-vue' // 处理vue的插件ƒ
 // import livereload from 'rollup-plugin-livereload' // 实时刷新
 
-import html2 from 'rollup-plugin-html2'
-import path from 'path'
-
-const date = new Date()
+const p = new Proxy(
+  {
+    tag: 'script',
+    src: 'bundle.js',
+  },
+  {
+    get (target, prop) {
+      const date = new Date()
+      if (prop === 'src') {
+        return target[prop] + `?${date.toLocaleDateString()}@${date.toTimeString().substring(0, 8)}`
+      }
+      return target[prop]
+    },
+    set (obj, prop, value) {
+      obj[prop] = value
+    },
+  },
+)
 
 const plugins = [
   alias({
     entries: {
-      Engine: path.resolve('src/Engine'),
+      Engine: require('path').resolve('src/Engine'),
     },
   }),
   commonjs(),
@@ -41,26 +57,27 @@ const plugins = [
     template: 'src/index.html',
     inject: false,
     externals: {
-      after: [{
-        tag: 'script',
-        src: 'bundle.js?' + `${date.toLocaleDateString()}-${date.toTimeString().substring(0, 8)}`,
-      }],
+      after: [
+        p,
+      ],
     },
   }),
   terser(),
 ]
 
 if (process.env.NODE_ENV === 'development') {
-  plugins.push(serve({
-    open: true,
-    port: 8080,
-    contentBase: 'public',
-  }))
+  plugins.push(
+    serve({
+      // open: true,
+      port: 8080,
+      contentBase: 'public',
+    }),
+  )
 }
 
 export default {
   plugins,
-  input: path.join('src'),
+  input: 'src',
   output: {
     file: 'public/bundle.js',
   },
