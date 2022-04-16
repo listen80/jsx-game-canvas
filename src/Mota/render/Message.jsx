@@ -28,7 +28,8 @@ export default class Message extends Component {
         style={{
           backgroundColor: 'rgba(0,0,0,.7)',
           globalAlpha,
-          x: (size * 13 - width) / 2,
+          x: (size * 18 - width) / 2,
+          y: size * 2,
           height: size,
           width: width,
         }}

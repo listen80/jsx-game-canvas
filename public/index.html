@@ -141,7 +141,7 @@
         el.classList.add('btn')
         el.textContent = title || code
         el.style.transform = `translate(${x * 100}%, ${y * 100}%)`
-        el.onclick = function () {
+        el.onmousedown = function (e) {
           var event = document.createEvent('Event');
           // var event = new Event('keydown');
           event.code = code
@@ -149,6 +149,8 @@
           event.initEvent('keydown', true, true);
           // The form element listens for the custom "awesome" event and then consoles the output of the passed text() method
           document.dispatchEvent(event);
+          e.preventDefault()
+          e.stopPropagation()
         }
         root.appendChild(el)
       });
@@ -158,6 +160,6 @@
   </script>
 
 
-  <script src="bundle.js?2022/4/16@23:27:05" ></script></body>
+  <script src="bundle.js?2022/4/16@23:34:01" ></script></body>
 
 </html>
