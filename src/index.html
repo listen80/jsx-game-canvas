@@ -1,48 +1,125 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" /> 
-    <!-- 禁止点击telephone，email --> 
-    <meta name="format-detection" content="telephone=no, email=no" /> 
-    <!-- 启用360浏览器的极速模式(webkit) --> 
-    <meta name="renderer" content="webkit" /> 
-    <!-- 删除默认的苹果工具栏和菜单栏 --> 
-    <meta name="apple-mobile-web-app-capable" content="yes" /> 
-    <!-- 避免IE使用兼容模式 --> 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
-    <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 --> 
-    <meta name="HandheldFriendly" content="true" /> 
-    <!-- 微软的老式浏览器 --> 
-    <meta name="MobileOptimized" content="320" /> 
-    <!-- UC强制全屏 --> 
-    <meta name="full-screen" content="yes" /> 
-    <!-- QQ强制全屏 --> 
-    <meta name="x5-fullscreen" content="true" /> 
-    <!-- UC应用模式 --> 
-    <meta name="browsermode" content="application" /> 
-    <!-- QQ应用模式 --> 
-    <meta name="x5-page-mode" content="app" /> 
-    <!-- windows phone 点击无高光 --> 
-    <meta name="msapplication-tap-highlight" content="no" /> 
-    
-    <link rel="shortcut icon" href="favicon.png" />
-    <title>Game</title>
-    <style>
-      body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        margin: 0;
-        height: 100vh;
-        background: black;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta id="viewport" name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <!-- 禁止点击telephone，email -->
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <!-- 启用360浏览器的极速模式(webkit) -->
+  <meta name="renderer" content="webkit" />
+  <!-- 删除默认的苹果工具栏和菜单栏 -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <!-- 避免IE使用兼容模式 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
+  <meta name="HandheldFriendly" content="true" />
+  <!-- 微软的老式浏览器 -->
+  <meta name="MobileOptimized" content="320" />
+  <!-- UC强制全屏 -->
+  <meta name="full-screen" content="yes" />
+  <!-- QQ强制全屏 -->
+  <meta name="x5-fullscreen" content="true" />
+  <!-- UC应用模式 -->
+  <meta name="browsermode" content="application" />
+  <!-- QQ应用模式 -->
+  <meta name="x5-page-mode" content="app" />
+  <!-- windows phone 点击无高光 -->
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <link rel="shortcut icon" href="favicon.png" />
+  <title>Game</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 0;
+      height: 100vh;
+      background: black;
+    }
+
+    canvas {
+      max-width: 100vw;
+      max-height: 100vh;
+    }
+  </style>
+  <style>
+    .direction {
+      position: fixed;
+      top: 40%;
+      left: 50px;
+    }
+
+    .btn {
+      position: absolute;
+      z-index: 1;
+      border: 8px solid #474f51;
+      background: #857b7a;
+      color: transparent;
+      border-radius: 15px;
+      box-sizing: border-box;
+      outline: 0;
+      width: 40px;
+      height: 40px;
+      left: 50%;
+      top: 50%;
+      user-select: none;
+    }
+
+    .control {
+      position: fixed;
+      top: 40%;
+      right: 50px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="direction">
+    <div class="btn"></div>
+    <div class="btn"></div>
+    <div class="btn"></div>
+    <div class="btn"></div>
+  </div>
+  <div class="control">
+    <div class="btn"></div>
+    <div class="btn"></div>
+  </div>
+  <script>
+    [...document.querySelector('.direction').children].forEach((el, index) => {
+      if (index % 2 === 0) {
+        el.style.transform = `translate(${(index % 4 ? -100 : 100)}%, 0%)`
+      } else {
+        el.style.transform = `translate(0%, ${index % 2 * (index === 1 ? -100 : 100)}%)`
       }
-      canvas {
-        max-width: 100vw;
-        max-height: 100vh;
+      el.onclick = function () {
+        // var event = document.createEvent('Event');
+        var event = new Event('keydown');
+        event.code = ['ArrowRight', 'ArrowUp', 'ArrowLeft', 'ArrowDown'][index]
+        // Define that the event name is 'build'.
+        event.initEvent('keydown', true, true);
+        // The form element listens for the custom "awesome" event and then consoles the output of the passed text() method
+        document.dispatchEvent(event);
       }
-    </style>
-  </head>
-  <body></body>
+    });
+
+    [...document.querySelector('.control').children].forEach((el, index) => {
+      el.style.transform = `translate(${(index * -150) - 20}%, 0%)`
+      el.onclick = function () {
+        // var event = document.createEvent('Event');
+        var event = new Event('keydown');
+        event.code = ['Space', 'Escape'][index]
+        // Define that the event name is 'build'.
+        event.initEvent('keydown', true, true);
+        // The form element listens for the custom "awesome" event and then consoles the output of the passed text() method
+        document.dispatchEvent(event);
+      }
+    })
+  </script>
+
+</body>
+
 </html>
