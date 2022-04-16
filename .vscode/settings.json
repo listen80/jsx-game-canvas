@@ -11,10 +11,10 @@
   "git.autofetch": true,
   "files.autoSave": "afterDelay",
   "terminal.integrated.persistentSessionReviveProcess": "never",
-  "[javascript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
   "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

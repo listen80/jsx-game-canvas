@@ -1,68 +1,125 @@
 import { baseStyle } from '../const/baseStyle'
-import { isPrimitive, isFunc, isArray, isUndefined } from '../utils/common'
-import { curFoucs } from './Component'
+import {
+  isPrimitive,
+  isFunc,
+  isArray,
+  isUndefined,
+  isBoolean,
+  isString,
+} from '../utils/common'
 
-const moveEvent = 'MouseMove'
-const mouseEvents = ['ContextMenu', 'Click', 'Wheel', moveEvent]
-
-//  "MouseDown", "MouseUp"
+const mouseEvents = [
+  'ContextMenu',
+  'Click',
+  'Wheel',
+  'MouseDown',
+  'MouseUp',
+  'MouseMove',
+]
 const keyEvents = ['KeyDown', 'KeyUp']
 
-export default class UI {
-  constructor (game, screen = {}) {
+const size = 32
+
+export default class Render {
+  constructor (game) {
+    this.initCanvas()
+    this.bindEvents()
+    this.$data = game.$data
+    this.$images = game.$images
+  }
+
+  getImage = (src) => {
+    return this.$images.images[src]
+  };
+
+  initCanvas (screen = {}) {
     const canvas = document.createElement('canvas')
     this.canvas = canvas
     this.context = canvas.getContext('2d')
-    const { el, width = 32 * (13 + 5), height = 32 * 13 } = screen
+    const { el, width = size * (13 + 5), height = size * 13 } = screen
     this.screen = screen
     this.canvas.width = width
     this.canvas.height = height
     const dom = document.querySelector(el) || document.body
     dom && dom.appendChild(this.canvas)
     this.mergeStyle(baseStyle)
-
-    this.mouseEvents = []
-    this.keyEvents = []
-    this.onMouseClick = []
-    this.bind()
-    this.$images = game.$images
+    window.addEventListener('onresize', this.getCanvasRenderRect)
+    this.getCanvasRenderRect()
   }
 
-  getImage = (src) => {
-    return this.$images.images[src]
+  getCanvasRenderRect () {
+    const canvas = this.canvas
+
+    this.canvas.$offsetWidth = canvas.offsetWidth
+    this.canvas.$offsetHeight = canvas.offsetHeight
   }
 
-  bind () {
+  restoreEvents () {
+    // mosue
+    this.mouseEventsCollectionKeyframe = []
+
+    // key
+    this.keyEventsCollectionKeyframe = []
+  }
+
+  bindEvents () {
+    this.restoreEvents()
+    const canvas = this.canvas
+    const { $offsetWidth, $offsetHeight, width, height } = canvas
     mouseEvents.forEach((name) => {
-      this.canvas.addEventListener(name.toLowerCase(), (e) => {
-        e.name = 'on' + name
-        this.mouseEvents.push(e)
-        e.preventDefault()
-      }, { passive: false })
-    })
+      this.canvas.addEventListener(
+        name.toLowerCase(),
+        (e) => {
+          e.name = `on${name}`
+          e.canvasX = e.offsetX / $offsetWidth * width
+          e.canvasY = e.offsetY / $offsetHeight * height
+          this.mouseEventsCollectionKeyframe.push(e)
 
-    // const name = moveEvent
-    // this.canvas.addEventListener(name.toLowerCase(), (e) => {
-    //   e.name = 'on' + name
-    //   this.moveEvent = e
-    //   e.preventDefault()
-    // }, { passive: false })
+          e.preventDefault()
+        },
+        { passive: false },
+      )
+    })
 
     keyEvents.forEach((name) => {
-      document.addEventListener(name.toLowerCase(), (e) => {
-        e.name = 'on' + name
-        this.keyEvents = e
+      window.addEventListener(name.toLowerCase(), (e) => {
+        e.name = `on${name}`
+        this.keyEventsCollectionKeyframe.push(e)
       })
     })
+  }
+
+  runEvents () {
+    this.mouseEventsCollectionKeyframe.forEach((event) => {
+      const { $node, name } = event
+      if ($node && $node.props[name]) {
+        $node.props[name](event, $node)
+      }
+    })
+    this.keyEventsCollectionKeyframe.forEach((event) => {
+      const { $instance, name } = event
+      $instance && $instance[name] && $instance[name](event)
+    })
+
+    this.restoreEvents()
   }
 
   toDataURL () {
     return this.canvas.toDataURL()
   }
 
-  mergeStyle = style => {
+  mergeStyle = (style) => {
     if (style) {
-      const { fontSize, fontFamily, font, textAlign, textBaseline, color, globalAlpha } = style
+      const {
+        fontSize,
+        fontFamily,
+        font,
+        textAlign,
+        textBaseline,
+        color,
+        globalAlpha,
+        fillStyle,
+      } = style
       if (globalAlpha) {
         this.context.globalAlpha = globalAlpha
       }
@@ -72,17 +129,20 @@ export default class UI {
       if (textBaseline) {
         this.context.textBaseline = textBaseline
       }
-      if (color) {
-        this.context.fillStyle = color
+      if (color || fillStyle) {
+        this.context.fillStyle = color || fillStyle
       }
       if (font) {
         this.context.font = font
       }
       if (fontSize) {
-        this.context.font = this.context.font.replace(/\d+/, fontSize)
+        this.context.font = this.context.font.replace(/\d+px/, `${fontSize}px`)
       }
       if (fontFamily) {
-        this.context.font = this.context.font.replace(/[\u4e00-\u9fa5]+/, fontFamily)
+        this.context.font = this.context.font.replace(
+          /[\u4e00-\u9fa5]+/,
+          fontFamily,
+        )
       }
     }
   };
@@ -102,18 +162,36 @@ export default class UI {
   drawImage (node, offsetX, offsetY) {
     const { props } = node
     if (props) {
-      const { style } = props
+      const { style = {} } = props
       if (style) {
-        const { sx = 0, sy = 0, width = 32, height = 32, swidth, sheight } = style
+        const {
+          sx = 0,
+          sy = 0,
+          width = size,
+          height = size,
+          swidth,
+          sheight,
+        } = style
         const { context } = this
-        context.drawImage(this.getImage(props.src), sx, sy, swidth || width, sheight || height, offsetX, offsetY, width, height)
+        context.drawImage(
+          this.getImage(props.src),
+          sx,
+          sy,
+          swidth || width,
+          sheight || height,
+          offsetX,
+          offsetY,
+          width,
+          height,
+        )
       }
     }
   }
 
   drawBack (node, offsetX, offsetY) {
     const { context } = this
-    const { backgroundImage, backgroundColor, height, width } = node.props.style
+    const { backgroundImage, backgroundColor, height, width } =
+      node.props.style
     if (backgroundColor) {
       context.save()
       context.beginPath()
@@ -127,7 +205,10 @@ export default class UI {
       context.save()
       context.beginPath()
       context.rect(offsetX, offsetY, width, height)
-      context.fillStyle = context.createPattern(this.getImage(backgroundImage), 'repeat')
+      context.fillStyle = context.createPattern(
+        this.getImage(backgroundImage),
+        'repeat',
+      )
       context.fill()
       context.closePath()
       context.restore()
@@ -164,7 +245,7 @@ export default class UI {
     if (rotate) {
       const { angle = 0, x = 0, y = 0 } = rotate
       context.translate(x, y)
-      context.rotate(angle * Math.PI / 180)
+      context.rotate((angle * Math.PI) / 180)
       context.translate(-x, -y)
     }
     if (scale) {
@@ -179,8 +260,24 @@ export default class UI {
     const { context } = this
     context.save()
     context.beginPath()
-    const { cx, cy, r, sAngle, eAngle, counterclockwise = false, stroke, strokeWidth } = node.props
-    context.arc(cx + offsetX, cy + offsetY, r, sAngle / 180 * Math.PI, eAngle / 180 * Math.PI, counterclockwise)
+    const {
+      cx,
+      cy,
+      r,
+      sAngle,
+      eAngle,
+      counterclockwise = false,
+      stroke,
+      strokeWidth,
+    } = node.props
+    context.arc(
+      cx + offsetX,
+      cy + offsetY,
+      r,
+      (sAngle / 180) * Math.PI,
+      (eAngle / 180) * Math.PI,
+      counterclockwise,
+    )
     context.strokeStyle = stroke
     context.lineWidth = strokeWidth
     context.stroke()
@@ -197,7 +294,7 @@ export default class UI {
     context.stroke()
   }
 
-  drawRect (node, offsetX, offsetY, parent) {
+  drawNode (node, offsetX, offsetY, parent) {
     const { context } = this
     context.save()
     const { props, tag } = node
@@ -215,17 +312,26 @@ export default class UI {
       this.drawCircle(node, offsetX, offsetY)
     } else if (tag === 'line') {
       this.drawLine(node, offsetX, offsetX)
+    } else if (tag !== 'div' && tag !== 'view') {
+      console.error(`drawNode not support, check jsx <${tag} ....`, node)
     }
-    this.renderRect(node.children, offsetX, offsetY, node)
+    this.renderAnything(node.children, offsetX, offsetY, node)
     context.restore()
   }
 
-  renderPrimitive (text, offsetX, offsetY, parent) {
+  drawPrimitive (text, offsetX, offsetY, parent) {
     const { context } = this
     const { textAlign, textBaseline } = context
     const { width = 0, height = 0 } = parent?.props?.style || {}
     const x = { start: 0, left: 0, center: 0.5, right: 1, end: 0 }
-    const y = { alphabetic: 0, hanging: 0, ideographic: 0, top: 0, middle: 0.5, bottom: 1 }
+    const y = {
+      alphabetic: 0,
+      hanging: 0,
+      ideographic: 0,
+      top: 0,
+      middle: 0.5,
+      bottom: 1,
+    }
     // start 默认。文本在指定的位置开始。
     // end 文本在指定的位置结束。
     // center 文本的中心被放置在指定的位置。
@@ -238,82 +344,93 @@ export default class UI {
     // middle 文本基线是 em 方框的正中。
     // ideographic 文本基线是表意基线。
     // bottom 文本基线是 em 方框的底端。
-    context.fillText(text, offsetX + width * x[textAlign], offsetY + height * y[textBaseline])
+    context.fillText(
+      text,
+      offsetX + width * x[textAlign],
+      offsetY + height * y[textBaseline],
+    )
   }
 
-  renderRect (node, offsetX, offsetY, parent) {
-    if (!isUndefined(node)) {
-      if (isArray(node)) {
-        node.forEach(child => this.renderRect(child, offsetX, offsetY, parent))
-      } else if (isPrimitive(node)) {
-        this.renderPrimitive(node, offsetX, offsetY, parent)
-      } else if (isFunc(node.tag)) {
-        this.renderRect(node.node, offsetX, offsetY, parent)
-      } else {
-        this.renderNode(node, offsetX, offsetY, parent)
-      }
-    }
-  }
-
-  renderNode (node, offsetX, offsetY, parent) {
-    const { context } = this
-    context.save()
-    const { props } = node
-
-    if (props) {
-      const { style } = props
-      if (style) {
-        const { x = 0, y = 0 } = style
-        offsetX += x
-        offsetY += y
-        this.mouseEvents.forEach((event) => {
-          const { name } = event
-          if (event.offsetX >= offsetX && event.offsetX < style.width + offsetX && event.offsetY >= offsetY && event.offsetY < style.height + offsetY) {
-            if (name === 'onMouseMove') {
-              this.onMouseMove = { node, event }
-            } else if (name === 'onClick') {
-              this.onMouseClick.push({ node, event })
-            }
+  renderAnything (createdNode, offsetX, offsetY, parent) {
+    // undefined null
+    // string number
+    // array
+    // class component
+    // div node
+    if (!isUndefined(createdNode) && !isBoolean(createdNode)) {
+      if (isPrimitive(createdNode)) {
+        this.drawPrimitive(createdNode, offsetX, offsetY, parent)
+      } else if (isArray(createdNode)) {
+        createdNode.forEach((child) =>
+          this.renderAnything(child, offsetX, offsetY, parent),
+        )
+      } else if (isFunc(createdNode.tag)) {
+        // events of keyboard
+        this.keyEventsCollectionKeyframe.forEach((event) => {
+          const instance = createdNode.instance
+          if (keyEvents.some((name) => instance[`on${name}`])) {
+            event.$instance = instance
           }
         })
+        // tag 是 function
+        this.renderAnything(
+          createdNode.instance.$node,
+          offsetX,
+          offsetY,
+          createdNode.instance,
+        )
+      } else if (isString(createdNode.tag)) {
+        // div node
+        this.calcNode(createdNode, offsetX, offsetY, parent)
+      } else {
+        this.drawPrimitive(
+          JSON.stringify(createdNode),
+          offsetX,
+          offsetY,
+          parent,
+        )
+      }
+    }
+  }
+
+  calcNode (node, offsetX, offsetY, parent) {
+    // 非class component
+    // div node
+    const { context } = this
+    context.save()
+
+    const style = node?.props?.style
+    if (style) {
+      const { x = 0, y = 0 } = style
+      offsetX += x
+      offsetY += y
+      // events of mouse
+      this.mouseEventsCollectionKeyframe.forEach((event) => {
+        const { canvasX, canvasY } = event
+        if (
+          canvasX >= offsetX &&
+          canvasX < style.width + offsetX &&
+          canvasY >= offsetY &&
+          canvasY < style.height + offsetY
+        ) {
+          event.$node = node
+        }
+      })
+
+      if (style && style.overflow) {
+        // context.rect(0, 0, 33, 30)
+        context.clip()
       }
     }
 
-    this.drawRect(node, offsetX, offsetY, parent)
+    this.drawNode(node, offsetX, offsetY)
 
     context.restore()
   }
 
-  runEvent () {
-    if (curFoucs && this.keyEvents) {
-      const { name } = this.keyEvents
-      curFoucs[name] && curFoucs[name](this.keyEvents)
-    }
-    this.keyEvents = null
-    // if (this.moveEventTarget && this.moveEvent) {
-    //   if (moveEventTarget !== this.moveEventTarget) {
-    //     if (moveEventTarget) {
-    //       moveEventTarget.props.onMouseLeave && moveEventTarget.props.onMouseLeave()
-    //     }
-    //     moveEventTarget = this.moveEventTarget
-    //     moveEventTarget.props.onMouseEnter && moveEventTarget.props.onMouseEnter()
-    //   }
-    // }
-    this.onMouseClick.forEach(({ node, event }) => {
-      if (node?.props?.onClick) {
-        node.props.onClick(event)
-      }
-    })
-    this.onMouseClick = []
-    this.mouseEvents = []
-    this.moveEvent = null
-    this.moveEventTarget = null
-  }
-
-  render (root) {
+  render (createdNode) {
     this.clearRect()
-    this.renderRect(root, 0, 0, this.canvas)
-    this.runEvent()
-    self.$root = root
+    this.renderAnything(createdNode, 0, 0, this.canvas)
+    this.runEvents()
   }
 }

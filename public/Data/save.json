@@ -22,5 +22,6 @@
     "redKey": 0
   },
   "shops": {},
-  "flags": {}
+  "flags": {},
+  "destroy": {}
 }

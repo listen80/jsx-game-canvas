@@ -1,6 +1,8 @@
-import { KeyEventComponent } from 'Engine'
+import { Component } from 'Engine'
 
-export default class ScrollText extends KeyEventComponent {
+const size = 32
+
+export default class ScrollText extends Component {
   styles = {
     text: {
       fontSize: 20,
@@ -8,12 +10,12 @@ export default class ScrollText extends KeyEventComponent {
       textBaseline: 'top',
       x: 0,
       y: 0,
-      width: 32 * 18,
-      height: 32 * 13,
+      width: size * 18,
+      height: size * 13,
     },
     scroll: {
-      x: 32,
-      y: 32 * 5,
+      x: size,
+      y: size * 5,
     },
   };
 
@@ -29,11 +31,11 @@ export default class ScrollText extends KeyEventComponent {
 
   onKeyDown ({ code }) {
     if (code === 'Space') {
-      this.onClick()
+      this.onMouseDown()
     }
   }
 
-  onClick = () => {
+  onMouseDown = () => {
     if (this.ready) {
       const { type, data } = this.props.map.event
       if (type === 'mapLoad') {
@@ -42,21 +44,22 @@ export default class ScrollText extends KeyEventComponent {
         this.props.onTitle(data)
       }
     }
-  }
+  };
 
   render () {
-    const size = 32
     const style = this.styles.scroll
-    if (style.y > -32 * (this.text.length - 2)) {
+    if (style.y > -size * (this.text.length - 2)) {
       const y = 1
       style.y -= y
     } else {
       this.ready = true
     }
     return (
-      <div style={this.styles.text} onClick={this.onClick}>
+      <div style={this.styles.text} onMouseDown={this.onMouseDown}>
         <div style={this.styles.scroll}>
-          {this.text.map((text, index) => <div style={{ y: index * size }}>{text}</div>)}
+          {this.text.map((text, index) => (
+            <div style={{ y: index * size }}>{text}</div>
+          ))}
         </div>
       </div>
     )

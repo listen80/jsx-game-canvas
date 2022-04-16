@@ -1,48 +1,87 @@
-import { Component } from 'Engine'
-import Select from './Select'
-import { loadGame } from '../../Engine/utils/sl'
+import { Component, Select, Animate } from "Engine";
+import { loadGame } from "../../Engine/utils/sl";
+
+const size = 32;
+
+const styles = {
+  title: {
+    width: size * (13 + 5),
+    height: size * 13,
+  },
+  gameName: {
+    y: size * 2,
+    width: size * (13 + 5),
+    height: size * 4,
+    fontSize: 128,
+  },
+  select: {
+    x: size * 8,
+    y: size * 8,
+    width: size * 2,
+  },
+};
 
 export default class Title extends Component {
-  styles = {
-    title: {
-      width: 32 * (13 + 5),
-      height: 32 * 13,
-    },
-    gameName: {
-      y: 40,
-      width: 32 * (13 + 5),
-      height: 128,
-      font: 'bold 128px 黑体',
-    },
-    select: {
-      x: 16 * 16,
-      y: 32 * 8,
-      width: 64,
-    },
-  }
-
-  create () {
-    this.activeIndex = loadGame() ? 1 : 0
+  create() {
+    this.activeIndex = loadGame() ? 1 : 0;
     this.options = [
       {
-        text: '开始',
+        text: "开始",
       },
       {
-        text: '继续',
+        text: "继续",
       },
-    ]
+    ];
   }
 
   onConfirm = (isLoad) => {
-    this.props.onLoadMap(isLoad ? loadGame() : null)
-  }
+    this.props.onLoadMap(isLoad ? loadGame() : null);
+  };
 
-  render () {
+  render() {
     return (
-      <div style={this.styles.title}>
-        <div style={this.styles.gameName}>{this.$data.game.title}</div>
-        <Select activeIndex={this.activeIndex} options={this.options} style={this.styles.select} onConfirm={this.onConfirm}></Select>
+      <div style={styles.title}>
+        <div style={styles.gameName}>{this.$data.game.title}</div>
+        <Animate
+          data={{
+            src: "stand.png",
+            maxTick: 4,
+            sy: 4,
+            x: 208,
+            y: 100,
+            width: 632 / 4,
+            height: 768 / 8,
+          }}
+        ></Animate>
+        <Animate
+          data={{
+            src: "skill.png",
+            maxTick: 6,
+            sy: 4,
+            width: 912 / 6,
+            height: 800 / 8,
+            x: 308,
+            y: 200,
+          }}
+        ></Animate>
+        <Animate
+          data={{
+            src: "run.png",
+            maxTick: 6,
+            width: 996 / 6,
+            height: 824 / 8,
+            sy: 4,
+            x: 108,
+            y: 200,
+          }}
+        ></Animate>
+        <Select
+          activeIndex={this.activeIndex}
+          options={this.options}
+          style={styles.select}
+          onConfirm={this.onConfirm}
+        ></Select>
       </div>
-    )
+    );
   }
 }

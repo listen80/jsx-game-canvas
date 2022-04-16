@@ -1,15 +1,18 @@
-import { KeyEventComponent } from 'Engine'
+import { Component } from 'Engine'
 
-import Menu from './Menu'
 import Shop from './Shop'
 import Battle from './Battle'
 import Talks from './Talks'
-import Message from './Message'
 import EnemyInfo from './EnemyInfo'
 import ShopList from './ShopList'
+import Animate from '../../Engine/components/Animate'
 
 import { saveGame, loadGame } from '../../Engine/utils/sl'
-import { isCoincided, updateVector, assignVector } from '../../Engine/utils/physics'
+import {
+  isCoincided,
+  updateVector,
+  assignVector,
+} from '../../Engine/utils/physics'
 import { convertPropertyStr } from '../../Engine/utils/format'
 
 const propertyNames = {
@@ -20,12 +23,15 @@ const propertyNames = {
   def: '防御',
   exp: '经验',
 }
-export default class Hero extends KeyEventComponent {
+
+const size = 32
+
+export default class Hero extends Component {
   tick = 0;
   create () {
-    const hero = Object.assign(this.props.saveData.position, {
-      width: 32,
-      height: 32,
+    const hero = Object.assign(this.$data.save.position, {
+      width: size,
+      height: size,
     })
 
     this.styles = { hero }
@@ -43,39 +49,50 @@ export default class Hero extends KeyEventComponent {
     )
   }
 
-  onKeyDown (e) {
-    const { code } = e
+  onKeyDown ({ code }) {
     const styleHero = this.styles.hero
     const step = 32
     let moveVector = null
     if (code === 'ArrowDown') {
       moveVector = { y: step }
       styleHero.sy = 0
+      this.$sound.play('se', 'step.mp3')
     } else if (code === 'ArrowUp') {
       moveVector = { y: -step }
-      styleHero.sy = 96
+      styleHero.sy = 3
+      this.$sound.play('se', 'step.mp3')
     } else if (code === 'ArrowLeft') {
       moveVector = { x: -step }
-      styleHero.sy = 32
+      styleHero.sy = 1
+      this.$sound.play('se', 'step.mp3')
     } else if (code === 'ArrowRight') {
       moveVector = { x: step }
-      styleHero.sy = 64
+      styleHero.sy = 2
+      this.$sound.play('se', 'step.mp3')
     } else if (code === 'KeyS') {
-      saveGame(this.props.saveData)
+      saveGame(this.$data.save)
       this.$sound.play('se', 'load.mp3')
-      this.msg = '存储成功'
+      this.setMessage('存储成功')
     } else if (code === 'KeyL') {
       this.$sound.play('se', 'load.mp3')
       this.props.onLoadMap(loadGame())
+      this.setMessage('读取成功')
     } else if (code === 'KeyX') {
       this.showEnemyInfo = !this.showEnemyInfo
     } else if (code === 'KeyB') {
       this.buying = true
-    } else if (code === 'PageUp') {
-      // console.log(this.props)
-    } else if (code === 'PageUp') {
-      // console.log(this.props)
+    } else if (code === 'Backspace') {
+      this.updateSaveData('hero', {
+        lv: 1,
+        hp: 100,
+        atk: 100,
+        def: 100,
+        exp: 100,
+      })
+      this.updateSaveData('items', { yellowKey: 3, blueKey: 2, redKey: 1 })
+      this.updateSaveData('', { money: 100 })
     }
+
     if (moveVector) {
       const vector = updateVector(styleHero, moveVector)
 
@@ -119,13 +136,13 @@ export default class Hero extends KeyEventComponent {
         if (type === '1' || type === '3') {
           this.remove(mapEvent)
           this.updateSaveData('items', name)
-          this.msg = `获得${item.name}`
+          this.setMessage(`获得${item.name}`)
           this.$sound.play('se', type === '1' ? 'item.mp3' : 'constants.mp3')
         } else if (type === '2') {
           this.remove(mapEvent)
           this.updateSaveData(...item.property)
           const [name, property] = item.property
-          this.msg = `获得${item.name}`
+          let msg = `获得${item.name}`
           property.forEach((property) => {
             const [key, value] = property
             let propertyName = key
@@ -136,7 +153,8 @@ export default class Hero extends KeyEventComponent {
             } else if (key === 'money') {
               propertyName = '金币'
             }
-            this.msg += ` ${propertyName}${value > 0 ? '+' : '-'}${value}`
+            msg += ` ${propertyName}${value > 0 ? '+' : '-'}${value}`
+            this.setMessage(msg)
           })
           this.$sound.play('se', 'item.mp3')
         }
@@ -161,8 +179,8 @@ export default class Hero extends KeyEventComponent {
           ].includes(name)
         ) {
           const key = name.slice(0, -4) + 'Key'
-          if (this.props.saveData.items[key]) {
-            this.props.saveData.items[key]--
+          if (this.$data.save.items[key]) {
+            this.$data.save.items[key]--
             this.remove(mapEvent)
             this.$sound.play('se', 'door.mp3')
             return true
@@ -183,9 +201,8 @@ export default class Hero extends KeyEventComponent {
         this.props.onLoadMap(data)
       } else if (type === 'openShop') {
         this.shopid = event.id
-        this.props.saveData.shops = this.props.saveData.shops || {}
-        this.props.saveData.shops[this.shopid] =
-          this.$data.shop[this.shopid].title
+        this.$data.save.shops = this.$data.save.shops || {}
+        this.$data.save.shops[this.shopid] = this.$data.shop[this.shopid].title
         return
       } else if (type === 'getItems') {
         this.updateSaveData('items', data)
@@ -193,12 +210,11 @@ export default class Hero extends KeyEventComponent {
         this.remove(this.mapEvent)
         return
       } else if (type === 'moveBlock') {
-        // console.log(this.mapEvent)
         this.remove(this.mapEvent)
         return
       } else if (type === 'enemy') {
         const enemy = this.$data.enemys[data]
-        const hero = this.props.saveData.hero
+        const hero = this.$data.save.hero
         if (hero.atk > enemy.def) {
           if (
             hero.def >= enemy.atk ||
@@ -210,13 +226,13 @@ export default class Hero extends KeyEventComponent {
           } else {
             this.mapEvent = null
             this.eventIndex = 0
-            this.msg = `你打不过${enemy.name}`
+            this.setMessage(`你打不过${enemy.name}`)
             return
           }
         } else {
           this.mapEvent = null
           this.eventIndex = 0
-          this.msg = `你的攻击比${enemy.name}的防御低`
+          this.setMessage(`你的攻击比${enemy.name}的防御低`)
           return
         }
       } else if (type === 'updateSaveData') {
@@ -228,7 +244,7 @@ export default class Hero extends KeyEventComponent {
       } else if (type === 'removeMapBlock') {
         const { mapId, position } = data
         const { x, y } = position
-        this.props.saveData.destroy[[mapId, x, y]] = true
+        this.$data.save.destroy[[mapId, x, y]] = true
       } else if (type === 'if') {
         const { condition, true: trueEvent, false: falseEvent } = event
         this.mapEvent = null
@@ -263,21 +279,15 @@ export default class Hero extends KeyEventComponent {
     this.setEvent()
   };
 
-  onMenuClose = () => {
-    this.showMenu = null
-  };
-
-  onMessageClose = () => {
-    this.msg = null
+  setMessage = (msg) => {
+    this.props.onMessage(msg)
   };
 
   updateSaveData (context, gets, n = 1) {
     if (Array.isArray(gets)) {
       gets.forEach(([id, value]) => this.updateSaveData(context, id, value))
     } else if (typeof gets === 'string') {
-      const saveData = context
-        ? this.props.saveData[context]
-        : this.props.saveData
+      const saveData = context ? this.$data.save[context] : this.$data.save
       saveData[gets] = saveData[gets] || 0
       saveData[gets] += Number(n)
     } else if (typeof gets === 'object') {
@@ -291,9 +301,7 @@ export default class Hero extends KeyEventComponent {
     if (Array.isArray(gets)) {
       return gets.some(([id, value]) => this.checkSaveData(context, id, value))
     } else if (typeof gets === 'string') {
-      const saveData = context
-        ? this.props.saveData[context]
-        : this.props.saveData
+      const saveData = context ? this.$data.save[context] : this.$data.save
       saveData[gets] = saveData[gets] || 0
       return saveData[gets] + Number(n) >= 0
     } else if (typeof gets === 'object') {
@@ -323,10 +331,20 @@ export default class Hero extends KeyEventComponent {
   render () {
     return (
       <div>
-        <img style={this.styles.hero} src="Characters/hero.png"></img>
+        <div style={this.styles.hero} src="Characters/hero.png">
+          <Animate
+            data={{
+              src: 'Characters/hero.png',
+              maxTick: 4,
+              width: size,
+              height: size,
+              maxInterval: 10,
+              sy: this.styles.hero.sy,
+            }}
+          ></Animate>
+        </div>
         {this.buying && (
           <ShopList
-            saveData={this.props.saveData}
             onClose={this.onShopListClose}
             onConfirm={this.onShopListConfirm}
           />
@@ -334,7 +352,6 @@ export default class Hero extends KeyEventComponent {
         {this.shopid && (
           <Shop
             shopid={this.shopid}
-            saveData={this.props.saveData}
             onClose={this.onShopClose}
             onShopEvent={this.onShopEvent}
           />
@@ -343,28 +360,16 @@ export default class Hero extends KeyEventComponent {
           <Battle
             enemy={this.enemy}
             enemyId={this.enemyId}
-            hero={this.props.saveData.hero}
-            saveData={this.props.saveData}
+            hero={this.$data.save.hero}
             onClose={this.onBattleClose}
           />
-        )}
-        {this.showMenu && (
-          <Menu saveData={this.props.saveData} onClose={this.onMenuClose} />
         )}
         {this.talk && (
           <Talks talk={this.talk} key={this.talk} onConfirm={this.onConfirm} />
         )}
-        {this.msg && (
-          <Message
-            msg={this.msg}
-            key={this.msg}
-            onMessageClose={this.onMessageClose}
-          />
-        )}
         {this.showEnemyInfo && (
           <EnemyInfo
             enemys={this.props.enemys}
-            saveData={this.props.saveData}
             onClose={() => (this.showEnemyInfo = false)}
           />
         )}

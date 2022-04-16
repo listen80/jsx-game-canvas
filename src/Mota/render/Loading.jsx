@@ -1,19 +1,26 @@
 import { Component } from 'Engine'
+const size = 32
+
 export default class Loading extends Component {
-  step = 1
-  angle = -this.step
+  tick = 0;
   render () {
-    this.angle += this.step
-    if (this.angle > 180) {
-      this.angle = 0
+    const width = size * (18 - 2 * 2)
+    const height = size
+    this.tick += 0.01
+    if (this.tick > 0.95) {
+      this.tick = 0.95
     }
-    const sAngle = this.angle * 2 - 90
-    const eAngle = Math.sin(this.angle / 180 * Math.PI) * 45
-    const width = 32 * (13 + 5)
-    const height = 32 * 13
-    return <div style={{ x: 0, y: 0, width, height }}>
-      {this.props.msg}
-      <circle cx={width / 2} cy={height / 2} r={32 * 3} sAngle={sAngle - eAngle} eAngle={sAngle + eAngle} stroke="#4e6ef2" strokeWidth={10} />
-    </div>
+    return (
+      <div style={{ x: size * 2, y: size * 2 }}>
+        <div style={{ width, height, backgroundColor: 'white' }}></div>
+        <div
+          style={{
+            width: width * this.tick,
+            height,
+            backgroundColor: '#666',
+          }}
+        ></div>
+      </div>
+    )
   }
 }

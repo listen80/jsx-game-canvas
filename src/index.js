@@ -1,5 +1,6 @@
 import Engine from './Engine'
 import Mota from './Mota'
-!function () {
-  this.mota = new Engine(Mota)
-}()
+
+if (typeof window !== 'undefined') {
+  window.mota = new Engine(Mota)
+}
