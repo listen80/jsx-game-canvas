@@ -87,20 +87,24 @@
   <script>
     const directions = [{
       code: 'ArrowRight',
-      x: 2,
+      x: 1.5,
       y: 0,
+      title: '右'
     }, {
       code: 'ArrowUp',
-      x: 1,
-      y: -1,
+      x: 0.75,
+      y: -0.75,
+      title: '上'
     }, {
       code: 'ArrowLeft',
       x: 0,
       y: 0,
+      title: '左'
     }, {
       code: 'ArrowDown',
-      x: 1,
-      y: 1,
+      x: 0.75,
+      y: 0.75,
+      title: '下'
     }];
 
     const controls = [{
@@ -114,20 +118,28 @@
     }, {
       code: 'Escape',
       x: -2.5,
-      y: 0.75,
+      y: 0.5,
     }, {
       code: 'Space',
       x: -1,
-      y: 0.75,
+      y: 0.5,
+    }, {
+      code: 'KeyB',
+      x: -1,
+      y: 1.75,
+    }, {
+      code: 'KeyX',
+      x: -2.5,
+      y: 1.75,
     }];
 
     function createElement(array, root) {
       root = document.querySelector(root)
       array.forEach((item, index) => {
-        const { x, y, code } = item
+        const { x, y, code, title } = item
         const el = document.createElement('div')
         el.classList.add('btn')
-        el.textContent = code
+        el.textContent = title || code
         el.style.transform = `translate(${x * 100}%, ${y * 100}%)`
         el.onclick = function () {
           var event = document.createEvent('Event');
@@ -146,6 +158,6 @@
   </script>
 
 
-  <script src="bundle.js?2022/4/16@18:57:27" ></script></body>
+  <script src="bundle.js?2022/4/16@23:27:05" ></script></body>
 
 </html>
