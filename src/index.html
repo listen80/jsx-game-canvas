@@ -50,7 +50,13 @@
     .direction {
       position: fixed;
       top: 40%;
-      left: 50px;
+      left: 0px;
+    }
+
+    .control {
+      position: fixed;
+      top: 40%;
+      right: 0px;
     }
 
     .btn {
@@ -58,66 +64,84 @@
       z-index: 1;
       border: 8px solid #474f51;
       background: #857b7a;
-      color: transparent;
-      border-radius: 15px;
-      box-sizing: border-box;
+      /* color: transparent; */
+      border-radius: 16px;
       outline: 0;
-      width: 60px;
-      height: 60px;
+      width: 44px;
+      height: 44px;
+      line-height: 44px;
+      text-align: center;
+      overflow: hidden;
       left: 50%;
       top: 50%;
       user-select: none;
-    }
-
-    .control {
-      position: fixed;
-      top: 40%;
-      right: 50px;
+      opacity: 0.7;
     }
   </style>
 </head>
 
 <body>
-  <div class="direction">
-    <div class="btn"></div>
-    <div class="btn"></div>
-    <div class="btn"></div>
-    <div class="btn"></div>
-  </div>
-  <div class="control">
-    <div class="btn"></div>
-    <div class="btn"></div>
-  </div>
+  <div class="direction"></div>
+  <div class="control"></div>
   <script>
-    [...document.querySelector('.direction').children].forEach((el, index) => {
-      if (index % 2 === 0) {
-        el.style.transform = `translate(${(index % 4 ? -100 : 100)}%, 0%)`
-      } else {
-        el.style.transform = `translate(0%, ${index % 2 * (index === 1 ? -100 : 100)}%)`
-      }
-      el.onclick = function () {
-        // var event = document.createEvent('Event');
-        var event = new Event('keydown');
-        event.code = ['ArrowRight', 'ArrowUp', 'ArrowLeft', 'ArrowDown'][index]
-        // Define that the event name is 'build'.
-        event.initEvent('keydown', true, true);
-        // The form element listens for the custom "awesome" event and then consoles the output of the passed text() method
-        document.dispatchEvent(event);
-      }
-    });
+    const directions = [{
+      code: 'ArrowRight',
+      x: 2,
+      y: 0,
+    }, {
+      code: 'ArrowUp',
+      x: 1,
+      y: -1,
+    }, {
+      code: 'ArrowLeft',
+      x: 0,
+      y: 0,
+    }, {
+      code: 'ArrowDown',
+      x: 1,
+      y: 1,
+    }];
 
-    [...document.querySelector('.control').children].forEach((el, index) => {
-      el.style.transform = `translate(${(index * -150) - 20}%, 0%)`
-      el.onclick = function () {
-        // var event = document.createEvent('Event');
-        var event = new Event('keydown');
-        event.code = ['Space', 'Escape'][index]
-        // Define that the event name is 'build'.
-        event.initEvent('keydown', true, true);
-        // The form element listens for the custom "awesome" event and then consoles the output of the passed text() method
-        document.dispatchEvent(event);
-      }
-    })
+    const controls = [{
+      code: 'KeyS',
+      x: -1,
+      y: -0.75,
+    }, {
+      code: 'KeyL',
+      x: -2.5,
+      y: -0.75,
+    }, {
+      code: 'Escape',
+      x: -2.5,
+      y: 0.75,
+    }, {
+      code: 'Space',
+      x: -1,
+      y: 0.75,
+    }];
+
+    function createElement(array, root) {
+      root = document.querySelector(root)
+      array.forEach((item, index) => {
+        const { x, y, code } = item
+        const el = document.createElement('div')
+        el.classList.add('btn')
+        el.textContent = code
+        el.style.transform = `translate(${x * 100}%, ${y * 100}%)`
+        el.onclick = function () {
+          var event = document.createEvent('Event');
+          // var event = new Event('keydown');
+          event.code = code
+          // Define that the event name is 'build'.
+          event.initEvent('keydown', true, true);
+          // The form element listens for the custom "awesome" event and then consoles the output of the passed text() method
+          document.dispatchEvent(event);
+        }
+        root.appendChild(el)
+      });
+    }
+    createElement(directions, '.direction')
+    createElement(controls, '.control')
   </script>
 
 </body>
