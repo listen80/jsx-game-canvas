@@ -80,5 +80,6 @@ export default {
   input: 'src',
   output: {
     file: 'public/bundle.js',
+    // dir: 'public/'
   },
 }

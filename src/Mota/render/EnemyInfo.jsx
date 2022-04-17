@@ -1,27 +1,27 @@
-import { Component, Animate, Table } from 'Engine'
+import { Component, Animate, Table } from "Engine";
 
-const size = 32
+const size = 32;
 const styles = {
   wrap: {
-    textAlign: 'left',
+    textAlign: "left",
     fontSize: 18,
-    backgroundImage: 'ground.png',
+    backgroundImage: "ground.png",
     width: size * (13 + 5 - 2),
     x: size,
     y: size,
     height: size * (13 - 2),
   },
-}
+};
 
 const columns = [
   {
     title: null,
     width: 1,
-    render (rowData) {
+    render(rowData) {
       return (
         <Animate
           data={{
-            src: 'enemys.png',
+            src: "enemys.png",
             maxTick: 2,
             width: size,
             height: size,
@@ -29,65 +29,62 @@ const columns = [
             sy: rowData.sy,
           }}
         />
-      )
+      );
     },
   },
   {
-    title: '名字',
-    dataIndex: 'name',
+    title: "名字",
+    dataIndex: "name",
     width: 3,
   },
   {
-    title: '生命',
-    dataIndex: 'hp',
+    title: "生命",
+    dataIndex: "hp",
     width: 2,
   },
   {
-    title: '攻击',
-    dataIndex: 'atk',
+    title: "攻击",
+    dataIndex: "atk",
     width: 2,
   },
   {
-    title: '防御',
-    dataIndex: 'def',
+    title: "防御",
+    dataIndex: "def",
     width: 2,
   },
   {
-    title: '损失',
-    dataIndex: 'address',
+    title: "损失",
+    dataIndex: "address",
     width: 2,
-    render (enemy, hero) {
+    render(enemy, hero) {
       if (hero.atk > enemy.def) {
-        if (
-          hero.def >= enemy.atk ||
-          enemy.hp / (hero.atk - enemy.def) <= hero.hp / (enemy.atk - hero.def)
-        ) {
-          if (hero.def >= enemy.atk) {
-            return 0
-          } else {
-            const atkCount = Math.floor(enemy.hp / (hero.atk - enemy.def))
-            return (enemy.atk - hero.def) * atkCount
-          }
+        if (hero.def >= enemy.atk) {
+          return 0;
+        } else {
+          const atkCount = Math.floor(enemy.hp / (hero.atk - enemy.def));
+          const needHp = (enemy.atk - hero.def) * atkCount;
+          return hero.hp > needHp ? needHp : <div style={{color: 'red', height: size}}>{needHp}</div>
         }
+      } else {
+        return "-";
       }
-      return '-'
     },
   },
-]
+];
 
 export default class EnemyInfo extends Component {
-  onKeyDown () {
-    this.props.onClose()
+  onKeyDown() {
+    this.props.onClose();
   }
 
   onMouseDown = () => {
-    this.props.onClose()
+    this.props.onClose();
   };
 
-  render () {
+  render() {
     const dataSource = Object.keys(this.props.enemys).map(
-      (enemyId) => this.$data.enemys[enemyId],
-    )
+      (enemyId) => this.$data.enemys[enemyId]
+    );
     return (
       <div style={styles.wrap} onMouseDown={this.onMouseDown}>
         <Table
@@ -96,6 +93,6 @@ export default class EnemyInfo extends Component {
           data={this.$data.save.hero}
         />
       </div>
-    )
+    );
   }
 }

@@ -97,6 +97,7 @@ export default class Render {
       }
     })
     this.keyEventsCollectionKeyframe.forEach((event) => {
+      console.log(event)
       const { $instance, name } = event
       $instance && $instance[name] && $instance[name](event)
     })
