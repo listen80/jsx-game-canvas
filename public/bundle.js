@@ -1,2 +1,2535 @@
-const t=["黑体","楷体","宋体","娃娃体-简","兰亭黑-简","凌慧体-简","翩翩体-简","魏碑体-简","雅痞体-简","苹方-简","楷体-简","黑体-简","宋体-简","Roboto","Noto Sans","Droid"].find((function(t,e=16){return document.fonts.check(`${e}px ${t}`)})),e={direction:"ltr",fillStyle:"#fff",font:"16px "+t,globalAlpha:1,globalCompositeOperation:"source-over",imageSmoothingEnabled:!1,lineCap:"butt",lineDashOffset:0,lineJoin:"miter",lineWidth:1,miterLimit:10,shadowBlur:0,shadowColor:"rgba(0, 0, 0, 0)",shadowOffsetX:0,shadowOffsetY:0,strokeStyle:"white",textAlign:"start",textBaseline:"top"},s=t=>{const e=typeof t;return"string"===e||"number"===e},i=t=>"function"==typeof t,n=t=>Array.isArray(t),o=t=>null==t,h=t=>"string"==typeof t,a=t=>"boolean"==typeof t,r=["ContextMenu","Click","Wheel","MouseDown","MouseUp","MouseMove"],l=["KeyDown","KeyUp"],c=32;class d{constructor(t){this.initCanvas(),this.bindEvents(),this.$data=t.$data,this.$images=t.$images}getImage=t=>this.$images.images[t];initCanvas(t={}){const s=document.createElement("canvas");this.canvas=s,this.context=s.getContext("2d");const{el:i,width:n=18*c,height:o=13*c}=t;this.screen=t,this.canvas.width=n,this.canvas.height=o;const h=document.querySelector(i)||document.body;h&&h.appendChild(this.canvas),this.mergeStyle(e),window.addEventListener("onresize",this.getCanvasRenderRect),this.getCanvasRenderRect()}getCanvasRenderRect(){const t=this.canvas;this.canvas.$offsetWidth=t.offsetWidth,this.canvas.$offsetHeight=t.offsetHeight}restoreEvents(){this.mouseEventsCollectionKeyframe=[],this.keyEventsCollectionKeyframe=[]}bindEvents(){this.restoreEvents();const t=this.canvas,{$offsetWidth:e,$offsetHeight:s,width:i,height:n}=t;r.forEach((t=>{this.canvas.addEventListener(t.toLowerCase(),(o=>{o.name=`on${t}`,o.canvasX=o.offsetX/e*i,o.canvasY=o.offsetY/s*n,this.mouseEventsCollectionKeyframe.push(o),o.preventDefault()}),{passive:!1})})),l.forEach((t=>{window.addEventListener(t.toLowerCase(),(e=>{e.name=`on${t}`,this.keyEventsCollectionKeyframe.push(e)}))}))}runEvents(){this.mouseEventsCollectionKeyframe.forEach((t=>{const{$node:e,name:s}=t;e&&e.props[s]&&e.props[s](t,e)})),this.keyEventsCollectionKeyframe.forEach((t=>{console.log(t);const{$instance:e,name:s}=t;e&&e[s]&&e[s](t)})),this.restoreEvents()}toDataURL(){return this.canvas.toDataURL()}mergeStyle=t=>{if(t){const{fontSize:e,fontFamily:s,font:i,textAlign:n,textBaseline:o,color:h,globalAlpha:a,fillStyle:r}=t;a&&(this.context.globalAlpha=a),n&&(this.context.textAlign=n),o&&(this.context.textBaseline=o),(h||r)&&(this.context.fillStyle=h||r),i&&(this.context.font=i),e&&(this.context.font=this.context.font.replace(/\d+px/,`${e}px`)),s&&(this.context.font=this.context.font.replace(/[\u4e00-\u9fa5]+/,s))}};clearRect(){const{context:t,canvas:e}=this;t.clearRect(0,0,e.width,e.height)}drawText(t,e,s){const{style:i,text:n}=t,{context:o}=this,{x:h=0,y:a=0}=i;o.fillText(n,e+h,s+a)}drawImage(t,e,s){const{props:i}=t;if(i){const{style:t={}}=i;if(t){const{sx:n=0,sy:o=0,width:h=c,height:a=c,swidth:r,sheight:l}=t,{context:d}=this;d.drawImage(this.getImage(i.src),n,o,r||h,l||a,e,s,h,a)}}}drawBack(t,e,s){const{context:i}=this,{backgroundImage:n,backgroundColor:o,height:h,width:a}=t.props.style;o&&(i.save(),i.beginPath(),i.rect(e,s,a,h),i.fillStyle=o,i.fill(),i.closePath(),i.restore()),n&&(i.save(),i.beginPath(),i.rect(e,s,a,h),i.fillStyle=i.createPattern(this.getImage(n),"repeat"),i.fill(),i.closePath(),i.restore())}drawBorder(t,e,s){const{context:i}=this,{borderWidth:n,borderColor:o,height:h,width:a}=t.props.style;n&&(i.save(),i.lineWidth=n,i.beginPath(),i.rect(e,s,a,h),o&&(i.strokeStyle=o),i.stroke(),i.closePath(),i.restore())}translate(t){const{context:e}=this,{style:s}=t,{x:i=0,y:n=0}=s;e.translate(i,n)}transform(t){const{context:e}=this,{rotate:s,scale:i}=t;if(s){const{angle:t=0,x:i=0,y:n=0}=s;e.translate(i,n),e.rotate(t*Math.PI/180),e.translate(-i,-n)}if(i){const{x:t=0,y:s=0,scaleX:n=1,scaleY:o=1}=i;e.translate(t,s),e.scale(n,o),e.translate(-t,-s)}}drawCircle(t,e,s){const{context:i}=this;i.save(),i.beginPath();const{cx:n,cy:o,r:h,sAngle:a,eAngle:r,counterclockwise:l=!1,stroke:c,strokeWidth:d}=t.props;i.arc(n+e,o+s,h,a/180*Math.PI,r/180*Math.PI,l),i.strokeStyle=c,i.lineWidth=d,i.stroke(),i.closePath(),i.restore()}drawLine(t){const{context:e}=this,{x1:s=0,y1:i=0,x2:n=200,y2:o=200}=t.props;e.beginPath(),e.moveTo(s,i),e.lineTo(n,o),e.stroke()}drawNode(t,e,s,i){const{context:n}=this;n.save();const{props:o,tag:h}=t;if(o){const{style:i}=o;this.mergeStyle(i),i&&(this.drawBack(t,e,s),this.drawBorder(t,e,s))}"img"===h?this.drawImage(t,e,s):"circle"===h?this.drawCircle(t,e,s):"line"===h?this.drawLine(t,e,e):"div"!==h&&"view"!==h&&console.error(`drawNode not support, check jsx <${h} ....`,t),this.renderAnything(t.children,e,s,t),n.restore()}drawPrimitive(t,e,s,i){var n;const{context:o}=this,{textAlign:h,textBaseline:a}=o,{width:r=0,height:l=0}=(null==i||null===(n=i.props)||void 0===n?void 0:n.style)||{};o.fillText(t,e+r*{start:0,left:0,center:.5,right:1,end:0}[h],s+l*{alphabetic:0,hanging:0,ideographic:0,top:0,middle:.5,bottom:1}[a])}renderAnything(t,e,r,c){o(t)||a(t)||(s(t)?this.drawPrimitive(t,e,r,c):n(t)?t.forEach((t=>this.renderAnything(t,e,r,c))):i(t.tag)?(this.keyEventsCollectionKeyframe.forEach((e=>{const s=t.instance;l.some((t=>s[`on${t}`]))&&(e.$instance=s)})),this.renderAnything(t.instance.$node,e,r,t.instance)):h(t.tag)?this.calcNode(t,e,r,c):this.drawPrimitive(JSON.stringify(t),e,r,c))}calcNode(t,e,s,i){var n;const{context:o}=this;o.save();const h=null==t||null===(n=t.props)||void 0===n?void 0:n.style;if(h){const{x:i=0,y:n=0}=h;e+=i,s+=n,this.mouseEventsCollectionKeyframe.forEach((i=>{const{canvasX:n,canvasY:o}=i;n>=e&&n<h.width+e&&o>=s&&o<h.height+s&&(i.$node=t)})),h&&h.overflow&&o.clip()}this.drawNode(t,e,s),o.restore()}render(t){this.clearRect(),this.renderAnything(t,0,0,this.canvas),this.runEvents()}}function p(t){const e=t.split(".");1===e.length&&e.unshift("");const[s,i]=e;return[s,i.split(";").map((t=>t.split(":")))]}function m(t){return fetch(t).then((t=>t.json()))}function y(t){return fetch(t).then((t=>t.text())).then((t=>(t=>{const e=[],s=(t=t.split(/\r?\n/)).shift().split(",");return t.forEach(((i,n)=>{if(!i.trim())return;const o=i.split(","),[h]=o,a={sy:n};return s.forEach(((t,e)=>{const s=o[e];s&&("property"===t?a[t]=p(s):["id","name","type"].includes(t)?a[t]=s:a[t]=isNaN(s)?s:Number(s))})),e[h]=a,e.push(a),t})),e})(t)))}class g{constructor(t){this.sounds=t||Object.create(null)}control(t,e,s){const i=this.sounds[`${t}/${e}`].cloneNode();return i.loop="bgm"===t,i[s](),i}load(t){return Promise.all(t.map((t=>{return e=`Sound/${t}`,new Promise((function(t,s){const i=new Audio;i.addEventListener("canplay",(()=>t(i))),i.addEventListener("error",(()=>s(i))),i.src=e}));var e}))).then((e=>{e.forEach(((e,s)=>this.sounds[t[s]]=e))}))}play(t,e){return this.control(t,e,"play")}pause(t,e){return this.control(t,e,"pause")}}class v{constructor(){this.images=Object.create(null)}load(t,e){return Promise.all([...e.map((t=>`Sprite/${t}.png`)),...t.map((t=>`Graph/${t}`))].map((t=>new Promise((e=>{(t=>new Promise((function(e,s){const i=new Image;i.addEventListener("load",(()=>e(i))),i.addEventListener("error",(()=>s(i))),i.src=t})))(`${t}`).then((s=>{t=t.replace("Graph/","").replace("Sprite/",""),this.images[t]=s,e()}))})))))}}const u=t=>t.endsWith(".dat")?y(`${t}`):m(`${t}`);class f{load(){return Promise.all(["game.json","save.json","shop.json","mapping.dat"].map((t=>u(`Data/${t}`)))).then((([t,e,s,i])=>{Object.assign(this,{game:t,save:e,shop:s,mapping:i});const n=t.sprites;Promise.all(n.map((t=>u(`Sprite/${t}.dat`)))).then((([t,e,s,i,n,o,h])=>{Object.assign(this,{enemys:t,items:e,animates:s,icons:i,npcs:n,terrains:o,boss:h})}))}))}}class x{constructor(){this.$font=Object.create(null)}load(t){return function({name:t,url:e}){const s=new FontFace(t,`url("${e}")`);return document.fonts.add(s),s.load(),s.loaded}(t)}}function $(t,e,...s){return{tag:t,props:e,children:s,$parent:this}}function w(t){if(!s(t)&&!o(t))if(i(t.tag))w(t.instance.$node),t.instance.destroy&&t.instance.destroy();else if(n(t))for(;t.length;)w(t.pop());else w(t.children)}function k(t){t.instance.$node=C(t.instance.$node,t.instance.render())}function C(t,e){if(o(e)||s(e)||a(e))w(t);else if(n(e))if(n(t))for(let s=0;s<e.length;s++)C(t[s],e[s]);else{w(t);for(let t=0;t<e.length;t++)C(null,e[t])}else if(i(e.tag)){var r,l;t&&t.tag===e.tag&&(null===(r=t.props)||void 0===r?void 0:r.key)===(null===(l=e.props)||void 0===l?void 0:l.key)?function(t,e){e.instance=t.instance,e.instance.props=e.props,k(e)}(t,e):(w(t),function(t){const e=t.tag;t.instance=new e(t),t.instance.$images=t.$parent.$images,t.instance.$sound=t.$parent.$sound,t.instance.$data=t.$parent.$data,t.instance.$font=t.$parent.$font,t.instance.create&&t.instance.create(),k(t)}(e))}else if(h(e.tag)){C(t&&t.children,e.children)}return e}class b{constructor({props:t,children:e}){this.props=t,this.$node=null,this.$children=e}$c(){return $.apply(this,arguments)}}class E extends b{interval=-1;tick=0;render(){const{x:t=0,y:e=0,width:s,height:i,src:n,maxTick:o,maxInterval:h=10,center:a,sy:r=0}=this.props.data;return this.interval++,this.interval===h&&(this.interval=0,this.tick++,this.tick===o&&(this.tick=0)),this.$c("img",{src:n,style:{x:t+(a?-s/2:0),y:e+(a?-i/2:0),sx:this.tick*s,sy:i*r,width:s,height:i}})}}class S extends b{styles={select:{fontSize:24,textAlign:"center",width:320}};create(){this.activeIndex=this.props.activeIndex||0;const{style:t}=this.props;t&&Object.assign(this.styles.select,t)}onKeyDown({code:t}){"ArrowDown"===t?(this.activeIndex++,this.activeIndex===this.props.options.length&&(this.activeIndex=0),this.props.onChange&&this.props.onChange(this.activeIndex,this.props.options[this.activeIndex])):"ArrowUp"===t?(this.activeIndex--,-1===this.activeIndex&&(this.activeIndex+=this.props.options.length),this.props.onChange&&this.props.onChange(this.activeIndex,this.props.options[this.activeIndex])):"Space"===t&&this.props.onConfirm&&this.props.onConfirm(this.activeIndex,this.props.options[this.activeIndex])}onMouseDown=t=>{this.activeIndex=t,this.props.onConfirm&&this.props.onConfirm(this.activeIndex,this.props.options[this.activeIndex])};setActiveIndex(t){this.activeIndex=t}render(){return this.$c("div",{style:this.styles.select},this.props.options.map((({text:t},e)=>this.$c("div",{style:{y:32*e,height:32,width:this.styles.select.width,borderWidth:this.activeIndex===e?2:0,borderColor:"#ddd"},onMouseDown:this.onMouseDown.bind(this,e),onMouseMove:this.setActiveIndex.bind(this,e)},t))))}}class M extends b{render(){const{dataSource:t,columns:e,size:s=32,data:i}=this.props;let n=0;return e.map(((e,o)=>{const{title:h,dataIndex:a,width:r=1,render:l}=e,c=this.$c("div",{style:{x:0,y:0,textAlign:"start"}},this.$c("div",{style:{x:n,width:r*s,height:s}},h),t.map(((t,e)=>this.$c("div",{style:{x:n,y:(e+1)*s,width:r*s,height:s}},l?l.call(this,t,i,e,o):t[a]))));return n+=r*s,c}))}}class I{constructor(t){this.checkChromeVersion()&&(this.$state=Object.create(null),this.$data=new f,this.$sound=new g,this.$images=new v,this.$font=new x,this.$ui=new d(this),this.$root=null,this.$game=t,this.gameStart())}checkChromeVersion(){if("file:"!==location.protocol)return!0;alert("不能直接运行index.html")}gameStop(){cancelAnimationFrame(this.ident),this.ident=-1}gameStart(){const t=()=>{this.keyFrame(),this.ident=requestAnimationFrame(t)};t()}keyFrame(){this.$root=C(this.$root,$.call(this,this.$game,null)),this.$ui.render(this.$root)}}class D extends b{styles={fps:{fontSize:14,textAlign:"right",textBaseline:"top",height:32,x:576}};static getTime=()=>performance.now();timeStamp=D.getTime();render(){const t=D.getTime(),e=1e3/(t-this.timeStamp);return this.timeStamp=t,this.$c("div",{style:this.styles.fps},`${e.toFixed()}fps`)}}class A extends b{tick=0;render(){return this.tick+=.01,this.tick>.95&&(this.tick=.95),this.$c("div",{style:{x:64,y:64}},this.$c("div",{style:{width:448,height:32,backgroundColor:"white"}}),this.$c("div",{style:{width:448*this.tick,height:32,backgroundColor:"#666"}}))}}function L(t){return e="game",s=t,localStorage.setItem(e,JSON.stringify(s));var e,s}function K(){return function(t){try{return JSON.parse(localStorage.getItem(t))}catch(t){return null}}("game")}const T={title:{width:576,height:416},gameName:{y:64,width:576,height:128,fontSize:128},select:{x:256,y:256,width:64}};class O extends b{create(){this.activeIndex=K()?1:0,this.options=[{text:"开始"},{text:"继续"}]}onConfirm=t=>{this.props.onLoadMap(t?K():null)};render(){return this.$c("div",{style:T.title},this.$c("div",{style:T.gameName},this.$data.game.title),this.$c(E,{data:{src:"stand.png",maxTick:4,sy:4,x:208,y:100,width:158,height:96}}),this.$c(E,{data:{src:"skill.png",maxTick:6,sy:4,width:152,height:100,x:308,y:200}}),this.$c(E,{data:{src:"run.png",maxTick:6,width:166,height:103,sy:4,x:108,y:200}}),this.$c(S,{activeIndex:this.activeIndex,options:this.options,style:T.select,onConfirm:this.onConfirm}))}}class B extends b{create(){this.shop=JSON.parse(JSON.stringify(this.$data.shop[this.props.shopid])),this.shop.choices.push({text:"离开"})}onConfirm=t=>{if(t===this.shop.choices.length-1)this.props.onClose();else{const{need:e,effect:s}=this.shop.choices[t];this.props.onShopEvent(e,s)}};render(){return this.$c("img",{src:"shop.webp",style:{x:96,y:64,width:224,height:256,borderWidth:4,borderColor:"#deb887",swidth:500,sheight:701}},this.$c("div",{style:{y:24,width:224,fontSize:24}},this.shop.title),this.$c("div",{style:{x:0,y:48,fontSize:14}},this.shop.text.split(/\n/).map(((t,e)=>this.$c("div",{style:{x:112,y:32*e/2}},t)))),this.$c(S,{options:this.shop.choices,onConfirm:this.onConfirm,style:{x:32,y:112,width:160,fontSize:16},onClose:this.props.onClose}))}}class j extends b{tick=0;styles={battle:{x:32,y:32,width:512,height:352,fontSize:20,borderWidth:3,borderColor:"#deb887",swidth:640,sheight:320},enemy:{x:32,y:32},hero:{x:320,y:32}};create(){this.enemy=JSON.parse(JSON.stringify(this.props.enemy)),this.hero=this.props.hero}onKeyDown({code:t}){"Space"===t&&this.battleMsg&&this.props.onClose&&this.props.onClose()}onClick(){this.battleMsg&&this.props.onClose&&this.props.onClose()}render(){const t=this.enemy,e=this.hero;location.hostname;if(t.hp>0&&(this.tick++,3===this.tick)){if(this.turn){const s=t.atk-e.def;s>0&&(e.hp-=s)}else{const s=e.atk-t.def;if(s>0&&(t.hp-=s),t.hp<=0){t.hp=0;const{exp:s,money:i}=t;e.exp+=s,this.$data.save.money+=i,this.battleMsg=`战斗胜利，获得${i}金币，${s}经验`}}this.turn=!this.turn,this.tick=0}const s=[{text:"名称",key:"name"},{text:"生命",key:"hp"},{text:"攻击",key:"atk"},{text:"防御",key:"def"}],i={x:32,y:144,swidth:32,sheight:32,width:64,height:64,sy:0},n={x:32,y:144,swidth:32,sheight:32,width:64,height:64,sy:32*t.sy},o={x:208,y:64,height:64,width:64},h={fontSize:24,height:32,y:256,width:480};return this.$c("img",{src:"Battlebacks/mota.jpg",style:this.styles.battle,onClick:this.onClick},this.battleMsg&&this.$c("div",{style:h},this.battleMsg),this.$c("div",{style:this.styles.enemy},this.$c("img",{src:"enemys.png",style:n}),s.map(((e,s)=>this.$c("div",{style:{x:0,y:32*s}},this.$c("div",{style:{width:128,textAlign:"left",height:32}},e.text),this.$c("div",{style:{width:128,textAlign:"right",height:32}},t[e.key]))))),this.$c("div",{style:o},"VS"),this.$c("div",{style:this.styles.hero},this.$c("img",{src:"Characters/hero.png",style:i}),s.map(((t,s)=>this.$c("div",{style:{x:0,y:32*s}},this.$c("div",{style:{width:128,textAlign:"left",height:32}},e[t.key]),this.$c("div",{style:{width:128,textAlign:"right",height:32}},t.text))))))}}class P extends b{index=0;width=7;styles={talk:{width:32*this.width,height:32,backgroundColor:"black",borderWidth:2,borderColor:"white",fontSize:16,textAlign:"left",textBaseline:"middle"}};onKeyDown({code:t}){"Space"===t&&(this.index++,this.index===this.props.talk.length?this.props.onConfirm():this.next(),this.$sound.play("se","dialogue.mp3"))}next(){const t=this.props.talk[this.index].split(/\n/);this.current=[],t.forEach((t=>{for(let e=0;e<t.length;e+=14)this.current.push(t.substr(e,14))}));const e={x:64,y:64,height:32*this.current.length},s={x:128,y:192,height:32*this.current.length};this.turn=!this.turn,Object.assign(this.styles.talk,this.turn?e:s)}create(){this.next()}render(){return this.$c("div",{style:this.styles.talk},this.current.map(((t,e)=>this.$c("div",{style:{x:0,y:32*e,width:32*this.width,height:32}},t))))}}const N={wrap:{textAlign:"left",fontSize:18,backgroundImage:"ground.png",width:512,x:32,y:32,height:352}},z=[{title:null,width:1,render(t){return this.$c(E,{data:{src:"enemys.png",maxTick:2,width:32,height:32,maxInterval:10,sy:t.sy}})}},{title:"名字",dataIndex:"name",width:3},{title:"生命",dataIndex:"hp",width:2},{title:"攻击",dataIndex:"atk",width:2},{title:"防御",dataIndex:"def",width:2},{title:"损失",dataIndex:"address",width:2,render(t,e){if(e.atk>t.def){if(e.def>=t.atk)return 0;{const s=Math.floor(t.hp/(e.atk-t.def)),i=(t.atk-e.def)*s;return e.hp>i?i:this.$c("div",{style:{color:"red",height:32}},i)}}return"-"}}];class R extends b{onKeyDown(){this.props.onClose()}onMouseDown=()=>{this.props.onClose()};render(){const t=Object.keys(this.props.enemys).map((t=>this.$data.enemys[t]));return this.$c("div",{style:N.wrap,onMouseDown:this.onMouseDown},this.$c(M,{dataSource:t,columns:z,data:this.$data.save.hero}))}}class W extends b{create(){const t=this.$data.save.shops||[];this.options=Object.entries(t).map((([t,e])=>({text:e,shopid:t})))}onConfirm=t=>{if(t>-1){const{shopid:e}=this.options[t];this.props.onConfirm(e)}};onKeyDown({code:t}){"KeyB"===t&&this.props.onClose()}render(){return this.$c("img",{src:"shop.webp",style:{x:96,y:64,width:224,height:256,borderWidth:4,borderColor:"#deb887",swidth:500,sheight:701}},this.$c("div",{style:{y:24,width:224,fontSize:24}},"商店选择"),this.$c(S,{style:{x:32,y:48,width:160,fontSize:16},options:this.options,onConfirm:this.onConfirm,onClose:this.props.onClose}))}}function F(t,e){return!(t.x>=e.x+e.width||t.x+t.width<=e.x||t.y>=e.y+e.height||t.y+t.height<=e.y)}function J(t,e){return Object.assign(t,e)}const U={lv:"等级",money:"金币",hp:"生命",atk:"攻击",def:"防御",exp:"经验"};class X extends b{tick=0;create(){const t=Object.assign(this.$data.save.position,{width:32,height:32});this.styles={hero:t}}isCoincidedTerrains(t){return this.props.mapTerrains.findIndex((e=>e&&e&&F(e.props.style,t)))}isCoincidedEvents(t){return this.props.mapEvents.findIndex((e=>e&&e&&F(e.props.style,t)))}onKeyDown({code:t}){const e=this.styles.hero;let s=null;if("ArrowDown"===t?(s={y:32},e.sy=0):"ArrowUp"===t?(s={y:-32},e.sy=3):"ArrowLeft"===t?(s={x:-32},e.sy=1):"ArrowRight"===t?(s={x:32},e.sy=2):"KeyS"===t?(L(this.$data.save),this.$sound.play("se","load.mp3"),this.setMessage("存储成功")):"KeyL"===t?(this.$sound.play("se","load.mp3"),this.props.onLoadMap(K()),this.setMessage("读取成功")):"KeyX"===t?this.showEnemyInfo=!this.showEnemyInfo:"KeyB"===t?this.buying=!0:"Backspace"===t&&(this.updateSaveData("hero",{lv:1,hp:100,atk:100,def:100,exp:100}),this.updateSaveData("items",{yellowKey:3,blueKey:2,redKey:1}),this.updateSaveData("",{money:100})),s){const t=function(t,e){return t=Object.assign(Object.create(null),t),Object.entries(e).forEach((([e,s])=>{t[e]+=s})),t}(e,s);if(-1!==this.isCoincidedTerrains(t))return;const i=this.isCoincidedEvents(t);if(-1!==i)return void(this.handleEvents(this.props.map.mapEvents[i])&&J(e,t));J(e,t)}}onShopClose=()=>{this.shopid=null,this.setEvent()};handleEvents(t){if(!this.mapEvent)if(t[3])this.mapEvent=t,this.eventIndex=0,this.setEvent();else{const e=this.$data.mapping[t[2]],{name:s,type:i}=e;if("items"===i){const e=this.$data.items[s],{type:i}=e;if("1"===i||"3"===i)this.remove(t),this.updateSaveData("items",s),this.setMessage(`获得${e.name}`),this.$sound.play("se","1"===i?"item.mp3":"constants.mp3");else if("2"===i){this.remove(t),this.updateSaveData(...e.property);const[s,i]=e.property;let n=`获得${e.name}`;i.forEach((t=>{const[e,i]=t;let o=e;"hero"===s?o=U[e]:"items"===s?o=this.$data.items[e].name:"money"===e&&(o="金币"),n+=` ${o}${i>0?"+":"-"}${i}`,this.setMessage(n)})),this.$sound.play("se","item.mp3")}return!0}if("enemys"===i)return t[3]=[{type:"enemy",data:s}],this.handleEvents(t),!1;if("terrains"===i&&["yellowDoor","redDoor","blueDoor","steelDoor","specialDoor"].includes(s)){const e=s.slice(0,-4)+"Key";if(this.$data.save.items[e])return this.$data.save.items[e]--,this.remove(t),this.$sound.play("se","door.mp3"),!0}}}setEvent=()=>{if(this.eventIndex<this.mapEvent[3].length){const t=this.mapEvent[3][this.eventIndex++],{type:e,data:s}=t;if("talk"===e)return void(this.talk=s);if("mapLoad"===e)this.props.onLoadMap(s);else{if("openShop"===e)return this.shopid=t.id,this.$data.save.shops=this.$data.save.shops||{},void(this.$data.save.shops[this.shopid]=this.$data.shop[this.shopid].title);if("getItems"===e)this.updateSaveData("items",s);else{if("removeSelf"===e)return void this.remove(this.mapEvent);if("moveBlock"===e)return void this.remove(this.mapEvent);if("enemy"===e){const t=this.$data.enemys[s],e=this.$data.save.hero;return e.atk>t.def?e.def>=t.atk||t.hp/(e.atk-t.def)<=e.hp/(t.atk-e.def)?void(this.enemy=t):(this.mapEvent=null,this.eventIndex=0,void this.setMessage(`你打不过${t.name}`)):(this.mapEvent=null,this.eventIndex=0,void this.setMessage(`你的攻击比${t.name}的防御低`))}if("updateSaveData"===e)this.updateSaveData(...p(s));else if("removeBlock"===e)this.props.removeMapEvent(s);else if("title"===e)this.props.onTitle();else if("removeMapBlock"===e){const{mapId:t,position:e}=s,{x:i,y:n}=e;this.$data.save.destroy[[t,i,n]]=!0}else if("if"===e){const{condition:e,true:s,false:i}=t;this.mapEvent=null,this.eventIndex=0,this.checkSaveData(...p(e))?this.mapEvent=[0,0,0,s]:this.mapEvent=[0,0,0,i]}}}this.setEvent()}else this.mapEvent=null};remove(t){this.props.removeMapEvent(t),this.mapEvent=null}onBattleClose=()=>{this.enemy=null,this.props.removeMapEvent(this.mapEvent),this.setEvent()};onConfirm=()=>{this.talk=null,this.setEvent()};setMessage=t=>{this.props.onMessage(t)};updateSaveData(t,e,s=1){if(Array.isArray(e))e.forEach((([e,s])=>this.updateSaveData(t,e,s)));else if("string"==typeof e){const i=t?this.$data.save[t]:this.$data.save;i[e]=i[e]||0,i[e]+=Number(s)}else"object"==typeof e&&this.updateSaveData(t,Object.entries(e))}checkSaveData(t,e,s=1){if(Array.isArray(e))return e.some((([e,s])=>this.checkSaveData(t,e,s)));if("string"==typeof e){const i=t?this.$data.save[t]:this.$data.save;return i[e]=i[e]||0,i[e]+Number(s)>=0}return"object"==typeof e&&this.checkSaveData(t,Object.entries(e),null,0)}onShopEvent=(t,e)=>{this.checkSaveData(...p(t))&&(this.updateSaveData(...p(t)),this.updateSaveData(...p(e)))};onShopListClose=()=>{this.buying=!1};onShopListConfirm=t=>{this.buying=!1,this.shopid=t,this.mapEvent=[0,0,0,[]]};render(){return this.$c("div",null,this.$c("div",{style:this.styles.hero,src:"Characters/hero.png"},this.$c(E,{data:{src:"Characters/hero.png",maxTick:4,width:32,height:32,maxInterval:10,sy:this.styles.hero.sy}})),this.buying&&this.$c(W,{onClose:this.onShopListClose,onConfirm:this.onShopListConfirm}),this.shopid&&this.$c(B,{shopid:this.shopid,onClose:this.onShopClose,onShopEvent:this.onShopEvent}),this.enemy&&this.$c(j,{enemy:this.enemy,enemyId:this.enemyId,hero:this.$data.save.hero,onClose:this.onBattleClose}),this.talk&&this.$c(P,{talk:this.talk,key:this.talk,onConfirm:this.onConfirm}),this.showEnemyInfo&&this.$c(R,{enemys:this.props.enemys,onClose:()=>this.showEnemyInfo=!1}))}}class Y extends b{create(){this.walls=[];for(let t=0;t<5;t++)for(let e=0;e<13;e++)4!==t&&0!==e&&12!==e||this.walls.push(this.$c("img",{src:"terrains.png",style:{sx:0,sy:64,x:32*t,y:32*e}}))}render(){const{map:t}=this.props,{save:e}=this.$data,s=[this.$data.game.title,t.name,e.hero.lv,e.hero.hp,e.hero.atk,e.hero.def,e.hero.exp,e.money,e.items.yellowKey,e.items.blueKey,e.items.redKey];return this.$c("div",{style:{fontSize:24}},this.walls,s.map(((t,e)=>this.$c("div",{style:{y:32*(e+1),width:32,height:32}},this.$c("img",{src:"icons.png",style:{sy:32*e,width:32,height:32,swidth:32,sheight:32}}),this.$c("div",{style:{x:32,height:32,width:96}},t)))))}}class H extends b{tick=0;interval=10;styles={map:{height:416,width:416,backgroundImage:"ground.png"},statusBar:{x:416,y:0,backgroundImage:"ground.png",width:160,height:416}};create(){const t=this.props.map.bgm;this.mapBgm=this.$sound.play("bgm",t)}destroy(){this.props.map.bgm,this.mapBgm.pause()}renderMapTerrains(t){const{mapTerrains:e}=this.props.map,s=this.tick,i=[];if(!e)return;let n=0;return e.forEach(((t,e)=>{t.forEach(((t,o)=>{if(t){const h=this.$data.mapping[t],{type:a,name:r}=h,l=this.$data[a][r];if("animates"===a){n=s%4*32;const t={sy:32*l.sy,sx:n,x:32*o,y:32*e,height:32,width:32};i.push(this.$c("img",{src:a+".png",style:t}))}else if("terrains"===a){const t={sy:32*l.sy,sx:0,x:32*o,y:32*e,height:32,width:32};i.push(this.$c("img",{src:a+".png",style:t}))}else console.error("error type",a,h)}}))})),i}renderMapEvents(){const{mapId:t,destroy:e={}}=this.$data.save,{mapEvents:s}=this.props.map,i=this.tick,n={};if(this.enemys=n,s)return s.map((s=>{const[o,h,a,r]=s;if(e[[t,o,h]])return null;if(a){const t=this.$data.mapping[a];if(t){const{type:e,name:s}=t,a=this.$data[e][s];let r=0;return"npcs"!==e&&"enemys"!==e||(r=i%2*32),"enemys"===e&&(n[s]=s),this.$c("div",{style:{x:32*o,y:32*h,height:32,width:32}},this.$c("img",{src:e+".png",style:{sy:32*a.sy,sx:r,height:32,width:32}}))}}return null}))}onRemoveMapEvent=t=>{const[e,s]=t,i=this.$data.save.mapId;this.$data.save.destroy=this.$data.save.destroy||{},this.$data.save.destroy[[i,e,s]]=1};onTitle=()=>{this.props.onTitle()};onMouseDown=t=>{console.warn(t)};render(){this.interval--,0===this.interval&&(this.tick++,this.interval=10);const t=this.renderMapTerrains(),e=this.renderMapEvents();return this.$c("div",null,this.$c("div",{style:this.styles.map,onMouseDown:this.onMouseDown},t,e),this.$c("div",{style:this.styles.statusBar},this.$c(Y,{map:this.props.map})),this.$c(X,{mapTerrains:t,mapEvents:e,enemys:this.enemys,map:this.props.map,onLoadMap:this.props.onLoadMap,onMessage:this.props.onMessage,removeMapEvent:this.onRemoveMapEvent,onTitle:this.onTitle}))}}class V extends b{styles={text:{fontSize:20,textAlign:"left",textBaseline:"top",x:0,y:0,width:576,height:416},scroll:{x:32,y:160}};create(){const{text:t,bgm:e}=this.props.map;this.text=t.split("\n"),this.mapBgm=this.$sound.play("bgm",e)}destroy(){this.mapBgm.pause()}onKeyDown({code:t}){"Space"===t&&this.onMouseDown()}onMouseDown=()=>{if(this.ready){const{type:t,data:e}=this.props.map.event;"mapLoad"===t?this.props.onClose(e):"title"===t&&this.props.onTitle(e)}};render(){const t=this.styles.scroll;if(t.y>-32*(this.text.length-2)){const e=1;t.y-=e}else this.ready=!0;return this.$c("div",{style:this.styles.text,onMouseDown:this.onMouseDown},this.$c("div",{style:this.styles.scroll},this.text.map(((t,e)=>this.$c("div",{style:{y:32*e}},t)))))}}class q extends b{create(){this.props&&(this.tick=this.props.tick||90),this.length=function(t){let e=0;for(let s=0;s<t.length;s++)t.charCodeAt(s)>127?e+=2:e+=1;return e}(this.props.msg),this.msg=this.props.msg}render(){if(this.tick--,0===this.tick)return this.props.onMessageClose(),null;let t=1;this.tick<15&&(t=this.tick/15);const e=10*this.length+20;return this.$c("div",{style:{backgroundColor:"rgba(0,0,0,.7)",globalAlpha:t,x:(576-e)/2,y:64,height:32,width:e}},this.$c("div",{style:{textAlign:"center",fontSize:20,x:e/2,height:32}},this.msg))}}class G extends b{styles={app:{height:416,width:576,textAlign:"center",textBaseline:"middle"}};async create(){this.loading="加载数据",await this.$data.load();const t=this.$data.game;if(document.title=t.title,t.font&&!1!==t.font.load){this.loading="加载字体";const e=t.font;await this.$font.load(e)}t.images&&(this.loading="加载图片",await this.$images.load(t.images,t.sprites)),t.sounds&&(this.loading="加载音乐",await this.$sound.load(t.sounds)),this.loading=!1}onLoadMap=async t=>{var e;this.loading="加载地图",Object.assign(this.$data.save,t),this.map=await(e=this.$data.save.mapId,m(`Maps/${e}.json`)),this.loading=!1,this.randMapKey=`${this.$data.save.mapId} ${new Date}`};onTitle=()=>{this.map=null};onMessageClose=()=>{this.msg=null};onMessage=t=>{this.msg=t};render(){return this.$c("div",{style:this.styles.app},this.loading?this.$c(A,{msg:this.loading}):this.map?this.map.text?this.$c(V,{map:this.map,onClose:this.onLoadMap,onTitle:this.onTitle}):this.$c(H,{map:this.map,key:this.randMapKey,onLoadMap:this.onLoadMap,onMessage:this.onMessage,onEvent:this.onEvent}):this.$c(O,{onLoadMap:this.onLoadMap}),this.msg&&this.$c(q,{msg:this.msg,key:this.msg,onMessageClose:this.onMessageClose}),this.$c(D,null))}}"undefined"!=typeof window&&(window.mota=new I(G));
+function checkFont(name, size = 16) {
+  return document.fonts.check(`${size}px ${name}`);
+}
+const fontsIos = ['娃娃体-简', '兰亭黑-简', '凌慧体-简', '翩翩体-简', '魏碑体-简', '雅痞体-简', '苹方-简', '楷体-简', '黑体-简', '宋体-简'];
+const fontsMS = ['黑体', '楷体', '宋体'];
+const fontsAndroid = ['Roboto', 'Noto Sans', 'Droid'];
+const fontFamily = [...fontsMS, ...fontsIos, ...fontsAndroid].find(checkFont);
+const baseStyle = {
+  direction: 'ltr',
+  fillStyle: '#fff',
+  // filter: 'grayscale(.9)',
+  // filter: 'none',
+  font: '16px ' + fontFamily,
+  globalAlpha: 1,
+  globalCompositeOperation: 'source-over',
+  // imageSmoothingEnabled: true,
+  // imageSmoothingQuality: 'low',
+  imageSmoothingEnabled: false,
+  lineCap: 'butt',
+  lineDashOffset: 0,
+  lineJoin: 'miter',
+  lineWidth: 1,
+  miterLimit: 10,
+  shadowBlur: 0,
+  shadowColor: 'rgba(0, 0, 0, 0)',
+  shadowOffsetX: 0,
+  shadowOffsetY: 0,
+  strokeStyle: 'white',
+  textAlign: 'start',
+  // textBaseline: "alphabetic",
+  textBaseline: 'top'
+};
+
+const isPrimitive = value => {
+  const type = typeof value;
+  return type === 'string' || type === 'number';
+};
+const isFunc = f => typeof f === 'function';
+const isArray = a => Array.isArray(a);
+const isUndefined = o => o === undefined || o === null;
+const isString = o => typeof o === 'string';
+const isBoolean = o => typeof o === 'boolean';
+
+const mouseEvents = ['ContextMenu', 'Click', 'Wheel', 'MouseDown', 'MouseUp', 'MouseMove'];
+const keyEvents = ['KeyDown', 'KeyUp'];
+const size$e = 32;
+class Render {
+  constructor(game) {
+    this.initCanvas();
+    this.bindEvents();
+    this.$data = game.$data;
+    this.$images = game.$images;
+  }
+
+  getImage = src => {
+    return this.$images.images[src];
+  };
+
+  initCanvas(screen = {}) {
+    const canvas = document.createElement('canvas');
+    this.canvas = canvas;
+    this.context = canvas.getContext('2d');
+    const {
+      el,
+      width = size$e * (13 + 5),
+      height = size$e * 13
+    } = screen;
+    this.screen = screen;
+    this.canvas.width = width;
+    this.canvas.height = height;
+    const dom = document.querySelector(el) || document.body;
+    dom && dom.appendChild(this.canvas);
+    this.mergeStyle(baseStyle);
+    window.addEventListener('onresize', this.getCanvasRenderRect);
+    this.getCanvasRenderRect();
+  }
+
+  getCanvasRenderRect() {
+    const canvas = this.canvas;
+    this.canvas.$offsetWidth = canvas.offsetWidth;
+    this.canvas.$offsetHeight = canvas.offsetHeight;
+  }
+
+  restoreEvents() {
+    // mosue
+    this.mouseEventsCollectionKeyframe = []; // key
+
+    this.keyEventsCollectionKeyframe = [];
+  }
+
+  bindEvents() {
+    this.restoreEvents();
+    const canvas = this.canvas;
+    const {
+      $offsetWidth,
+      $offsetHeight,
+      width,
+      height
+    } = canvas;
+    mouseEvents.forEach(name => {
+      this.canvas.addEventListener(name.toLowerCase(), e => {
+        e.name = `on${name}`;
+        e.canvasX = e.offsetX / $offsetWidth * width;
+        e.canvasY = e.offsetY / $offsetHeight * height;
+        this.mouseEventsCollectionKeyframe.push(e);
+        e.preventDefault();
+      }, {
+        passive: false
+      });
+    });
+    keyEvents.forEach(name => {
+      window.addEventListener(name.toLowerCase(), e => {
+        e.name = `on${name}`;
+        e.$key = this.$data.game.control[e.code];
+        this.keyEventsCollectionKeyframe.push(e);
+      });
+    });
+  }
+
+  runEvents() {
+    this.mouseEventsCollectionKeyframe.forEach(event => {
+      const {
+        $node,
+        name
+      } = event;
+
+      if ($node && $node.props[name]) {
+        $node.props[name](event, $node);
+      }
+    });
+    this.keyEventsCollectionKeyframe.forEach(event => {
+      const {
+        $context,
+        name
+      } = event;
+      $context && $context[name] && $context[name](event);
+    });
+    this.restoreEvents();
+  }
+
+  toDataURL() {
+    return this.canvas.toDataURL();
+  }
+
+  mergeStyle = style => {
+    if (style) {
+      const {
+        fontSize,
+        fontFamily,
+        font,
+        textAlign,
+        textBaseline,
+        color,
+        globalAlpha,
+        fillStyle
+      } = style;
+
+      if (globalAlpha) {
+        this.context.globalAlpha = globalAlpha;
+      }
+
+      if (textAlign) {
+        this.context.textAlign = textAlign;
+      }
+
+      if (textBaseline) {
+        this.context.textBaseline = textBaseline;
+      }
+
+      if (color || fillStyle) {
+        this.context.fillStyle = color || fillStyle;
+      }
+
+      if (font) {
+        this.context.font = font;
+      }
+
+      if (fontSize) {
+        this.context.font = this.context.font.replace(/\d+px/, `${fontSize}px`);
+      }
+
+      if (fontFamily) {
+        this.context.font = this.context.font.replace(/[\u4e00-\u9fa5]+/, fontFamily);
+      }
+    }
+  };
+
+  clearRect() {
+    const {
+      context,
+      canvas
+    } = this;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  drawText(node, offsetX, offsetY) {
+    const {
+      style,
+      text
+    } = node;
+    const {
+      context
+    } = this;
+    const {
+      x = 0,
+      y = 0
+    } = style;
+    context.fillText(text, offsetX + x, offsetY + y);
+  }
+
+  drawImage(node, offsetX, offsetY) {
+    const {
+      props
+    } = node;
+
+    if (props) {
+      const {
+        style = {}
+      } = props;
+
+      if (style) {
+        const {
+          sx = 0,
+          sy = 0,
+          width = size$e,
+          height = size$e,
+          swidth,
+          sheight
+        } = style;
+        const {
+          context
+        } = this;
+        context.drawImage(this.getImage(props.src), sx, sy, swidth || width, sheight || height, offsetX, offsetY, width, height);
+      }
+    }
+  }
+
+  drawBack(node, offsetX, offsetY) {
+    const {
+      context
+    } = this;
+    const {
+      backgroundImage,
+      backgroundColor,
+      height,
+      width
+    } = node.props.style;
+
+    if (backgroundColor) {
+      context.save();
+      context.beginPath();
+      context.rect(offsetX, offsetY, width, height);
+      context.fillStyle = backgroundColor;
+      context.fill();
+      context.closePath();
+      context.restore();
+    }
+
+    if (backgroundImage) {
+      context.save();
+      context.beginPath();
+      context.rect(offsetX, offsetY, width, height);
+      context.fillStyle = context.createPattern(this.getImage(backgroundImage), 'repeat');
+      context.fill();
+      context.closePath();
+      context.restore();
+    }
+  }
+
+  drawBorder(node, offsetX, offsetY) {
+    const {
+      context
+    } = this;
+    const {
+      borderWidth,
+      borderColor,
+      height,
+      width
+    } = node.props.style;
+
+    if (borderWidth) {
+      context.save();
+      context.lineWidth = borderWidth;
+      context.beginPath();
+      context.rect(offsetX, offsetY, width, height);
+
+      if (borderColor) {
+        context.strokeStyle = borderColor;
+      }
+
+      context.stroke();
+      context.closePath();
+      context.restore();
+    }
+  }
+
+  translate(box) {
+    const {
+      context
+    } = this;
+    const {
+      style
+    } = box;
+    const {
+      x = 0,
+      y = 0
+    } = style;
+    context.translate(x, y);
+  }
+
+  transform(box) {
+    const {
+      context
+    } = this;
+    const {
+      rotate,
+      scale
+    } = box;
+
+    if (rotate) {
+      const {
+        angle = 0,
+        x = 0,
+        y = 0
+      } = rotate;
+      context.translate(x, y);
+      context.rotate(angle * Math.PI / 180);
+      context.translate(-x, -y);
+    }
+
+    if (scale) {
+      const {
+        x = 0,
+        y = 0,
+        scaleX = 1,
+        scaleY = 1
+      } = scale;
+      context.translate(x, y);
+      context.scale(scaleX, scaleY);
+      context.translate(-x, -y);
+    }
+  }
+
+  drawCircle(node, offsetX, offsetY) {
+    const {
+      context
+    } = this;
+    context.save();
+    context.beginPath();
+    const {
+      cx,
+      cy,
+      r,
+      sAngle,
+      eAngle,
+      counterclockwise = false,
+      stroke,
+      strokeWidth
+    } = node.props;
+    context.arc(cx + offsetX, cy + offsetY, r, sAngle / 180 * Math.PI, eAngle / 180 * Math.PI, counterclockwise);
+    context.strokeStyle = stroke;
+    context.lineWidth = strokeWidth;
+    context.stroke();
+    context.closePath();
+    context.restore();
+  }
+
+  drawLine(node) {
+    const {
+      context
+    } = this;
+    const {
+      x1 = 0,
+      y1 = 0,
+      x2 = 200,
+      y2 = 200
+    } = node.props;
+    context.beginPath();
+    context.moveTo(x1, y1);
+    context.lineTo(x2, y2);
+    context.stroke();
+  }
+
+  drawNode(node, offsetX, offsetY, parent) {
+    const {
+      context
+    } = this;
+    context.save();
+    const {
+      props,
+      tag
+    } = node;
+
+    if (props) {
+      const {
+        style
+      } = props;
+      this.mergeStyle(style);
+
+      if (style) {
+        this.drawBack(node, offsetX, offsetY);
+        this.drawBorder(node, offsetX, offsetY);
+      }
+    }
+
+    if (tag === 'img') {
+      this.drawImage(node, offsetX, offsetY);
+    } else if (tag === 'circle') {
+      this.drawCircle(node, offsetX, offsetY);
+    } else if (tag === 'line') {
+      this.drawLine(node, offsetX, offsetX);
+    } else if (tag !== 'div' && tag !== 'view') {
+      console.error(`drawNode not support, check jsx <${tag} ....`, node);
+    }
+
+    this.renderAnything(node.children, offsetX, offsetY, node);
+    context.restore();
+  }
+
+  drawPrimitive(text, offsetX, offsetY, parent) {
+    var _parent$props;
+
+    const {
+      context
+    } = this;
+    const {
+      textAlign,
+      textBaseline
+    } = context;
+    const {
+      width = 0,
+      height = 0
+    } = (parent === null || parent === void 0 ? void 0 : (_parent$props = parent.props) === null || _parent$props === void 0 ? void 0 : _parent$props.style) || {};
+    const x = {
+      start: 0,
+      left: 0,
+      center: 0.5,
+      right: 1,
+      end: 0
+    };
+    const y = {
+      alphabetic: 0,
+      hanging: 0,
+      ideographic: 0,
+      top: 0,
+      middle: 0.5,
+      bottom: 1
+    }; // start 默认。文本在指定的位置开始。
+    // end 文本在指定的位置结束。
+    // center 文本的中心被放置在指定的位置。
+    // left 文本在指定的位置开始。
+    // right 文本在指定的位置结束。
+    // alphabetic 默认。文本基线是普通的字母基线。
+    // top 文本基线是 em 方框的顶端。
+    // hanging 文本基线是悬挂基线。
+    // middle 文本基线是 em 方框的正中。
+    // ideographic 文本基线是表意基线。
+    // bottom 文本基线是 em 方框的底端。
+
+    context.fillText(text, offsetX + width * x[textAlign], offsetY + height * y[textBaseline]);
+  }
+
+  renderAnything(createdNode, offsetX, offsetY, parent) {
+    // undefined null
+    // string number
+    // array
+    // class component
+    // div node
+    if (!isUndefined(createdNode) && !isBoolean(createdNode)) {
+      if (isPrimitive(createdNode)) {
+        this.drawPrimitive(createdNode, offsetX, offsetY, parent);
+      } else if (isArray(createdNode)) {
+        createdNode.forEach(child => this.renderAnything(child, offsetX, offsetY, parent));
+      } else if (isFunc(createdNode.tag)) {
+        // events of keyboard
+        this.keyEventsCollectionKeyframe.forEach(event => {
+          const $context = createdNode.$context;
+
+          if (keyEvents.some(name => $context[`on${name}`])) {
+            event.$context = $context;
+          }
+        }); // tag 是 function
+
+        this.renderAnything(createdNode.$context.$node, offsetX, offsetY, createdNode.$context);
+      } else if (isString(createdNode.tag)) {
+        // div node
+        this.calcNode(createdNode, offsetX, offsetY, parent);
+      } else {
+        this.drawPrimitive(JSON.stringify(createdNode), offsetX, offsetY, parent);
+      }
+    }
+  }
+
+  calcNode(node, offsetX, offsetY, parent) {
+    var _node$props;
+
+    // 非class component
+    // div node
+    const {
+      context
+    } = this;
+    context.save();
+    const style = node === null || node === void 0 ? void 0 : (_node$props = node.props) === null || _node$props === void 0 ? void 0 : _node$props.style;
+
+    if (style) {
+      const {
+        x = 0,
+        y = 0
+      } = style;
+      offsetX += x;
+      offsetY += y; // events of mouse
+
+      this.mouseEventsCollectionKeyframe.forEach(event => {
+        const {
+          canvasX,
+          canvasY
+        } = event;
+
+        if (canvasX >= offsetX && canvasX < style.width + offsetX && canvasY >= offsetY && canvasY < style.height + offsetY) {
+          event.$node = node;
+        }
+      });
+
+      if (style && style.overflow) {
+        // context.rect(0, 0, 33, 30)
+        context.clip();
+      }
+    }
+
+    this.drawNode(node, offsetX, offsetY);
+    context.restore();
+  }
+
+  render(createdNode) {
+    this.clearRect();
+    this.renderAnything(createdNode, 0, 0, this.canvas);
+    this.runEvents();
+  }
+
+}
+
+function convertPropertyStr(str) {
+  const arr = str.split('.');
+
+  if (arr.length === 1) {
+    arr.unshift('');
+  }
+
+  const [key, propertyStr] = arr;
+  const properties = propertyStr.split(';').map(v => v.split(':'));
+  return [key, properties];
+}
+const formatText = data => {
+  const o = [];
+  data = data.split(/\r?\n/);
+  const keys = data.shift().split(',');
+  data.forEach((row, index) => {
+    if (!row.trim()) {
+      return;
+    }
+
+    const properties = row.split(',');
+    const [id] = properties;
+    const item = {
+      sy: index
+    };
+    keys.forEach((key, index) => {
+      const value = properties[index];
+
+      if (!value) {
+        return;
+      }
+
+      if (key === 'property') {
+        item[key] = convertPropertyStr(value);
+      } else if (['id', 'name', 'type'].includes(key)) {
+        item[key] = value;
+      } else {
+        item[key] = isNaN(value) ? value : Number(value);
+      }
+    });
+    o[id] = item;
+    o.push(item);
+    return data;
+  });
+  return o;
+};
+
+const loadImage = src => {
+  return new Promise(function (resolve, reject) {
+    const img = new Image();
+    img.addEventListener('load', () => resolve(img));
+    img.addEventListener('error', () => reject(img));
+    img.src = src;
+  });
+};
+const loadSound = src => {
+  return new Promise(function (resolve, reject) {
+    const audio = new Audio();
+    audio.addEventListener('canplay', () => resolve(audio));
+    audio.addEventListener('error', () => reject(audio));
+    audio.src = src;
+  });
+};
+function loadJSON(url) {
+  return fetch(url).then(data => data.json());
+}
+function loadText(url) {
+  return fetch(url).then(data => data.text()).then(data => formatText(data));
+}
+function loadFont({
+  name,
+  url
+}) {
+  const fontface = new FontFace(name, `url("${url}")`);
+  document.fonts.add(fontface);
+  fontface.load();
+  return fontface.loaded;
+}
+
+class Sound {
+  constructor(sounds) {
+    this.sounds = sounds || Object.create(null);
+  }
+
+  control(type, name, control) {
+    const current = this.sounds[`${type}/${name}`].cloneNode();
+    current.loop = type === 'bgm';
+    current[control]();
+    return current;
+  }
+
+  load(dataArray) {
+    return Promise.all(dataArray.map(sound => loadSound(`Sound/${sound}`))).then(sounds => {
+      sounds.forEach((Sound, i) => this.sounds[dataArray[i]] = Sound);
+    });
+  }
+
+  play(type, name) {
+    return this.control(type, name, 'play');
+  }
+
+  pause(type, name) {
+    return this.control(type, name, 'pause');
+  }
+
+}
+
+class ImageCollection {
+  constructor() {
+    this.images = Object.create(null);
+  }
+
+  load(images, sprite) {
+    return Promise.all([...sprite.map(v => `Sprite/${v}.png`), ...images.map(v => `Graph/${v}`)].map(src => {
+      return new Promise(resolve => {
+        loadImage(`${src}`).then(img => {
+          src = src.replace('Graph/', '').replace('Sprite/', '');
+          this.images[src] = img;
+          resolve();
+        });
+      });
+    }));
+  }
+
+}
+
+const load = url => url.endsWith('.dat') ? loadText(`${url}`) : loadJSON(`${url}`);
+
+class Data {
+  load() {
+    const loaderMap = ['game.json', 'save.json', 'shop.json', 'mapping.dat'];
+    return Promise.all(loaderMap.map(url => {
+      return load(`Data/${url}`);
+    })).then(([game, save, shop, mapping]) => {
+      Object.assign(this, {
+        game,
+        save,
+        shop,
+        mapping
+      });
+      const sprites = game.sprites;
+      Promise.all(sprites.map(url => load(`Sprite/${url}.dat`))).then(([enemys, items, animates, icons, npcs, terrains, boss]) => {
+        Object.assign(this, {
+          enemys,
+          items,
+          animates,
+          icons,
+          npcs,
+          terrains,
+          boss
+        });
+      });
+    });
+  }
+
+}
+
+class Font {
+  constructor() {
+    this.$font = Object.create(null);
+  }
+
+  load(data) {
+    return loadFont(data);
+  }
+
+}
+
+function createNode(tag, props, ...children) {
+  const $parent = this;
+  return {
+    tag,
+    props,
+    children,
+    $parent
+  };
+}
+
+function createInstance(next) {
+  const Class = next.tag;
+  next.$context = new Class(next);
+  next.$context.$images = next.$parent.$images;
+  next.$context.$sound = next.$parent.$sound;
+  next.$context.$data = next.$parent.$data;
+  next.$context.$font = next.$parent.$font;
+  next.$context.create && next.$context.create();
+  renderNode(next);
+}
+
+function destoryInstance(pre) {
+  // && isBoolean(pre)
+  if (!isPrimitive(pre) && !isUndefined(pre)) {
+    if (isFunc(pre.tag)) {
+      destoryInstance(pre.$context.$node);
+      pre.$context.destroy && pre.$context.destroy();
+    } else if (isArray(pre)) {
+      while (pre.length) {
+        destoryInstance(pre.pop());
+      }
+    } else {
+      destoryInstance(pre.children);
+    }
+  }
+}
+
+function updateInstance(pre, next) {
+  next.$context = pre.$context;
+  next.$context.props = next.props;
+  renderNode(next);
+}
+
+function renderNode(next) {
+  next.$context.$node = patchNode(next.$context.$node, next.$context.render());
+}
+
+function patchNode(pre, next) {
+  // undefined null
+  // string number
+  // array
+  // class component
+  // div node
+  if (isUndefined(next) || isPrimitive(next) || isBoolean(next)) {
+    destoryInstance(pre);
+  } else if (isArray(next)) {
+    if (isArray(pre)) {
+      for (let i = 0; i < next.length; i++) {
+        // diff array
+        patchNode(pre[i], next[i]);
+      }
+    } else {
+      destoryInstance(pre);
+
+      for (let i = 0; i < next.length; i++) {
+        patchNode(null, next[i]);
+      }
+    }
+  } else if (isFunc(next.tag)) {
+    var _pre$props, _next$props;
+
+    if (pre && pre.tag === next.tag && ((_pre$props = pre.props) === null || _pre$props === void 0 ? void 0 : _pre$props.key) === ((_next$props = next.props) === null || _next$props === void 0 ? void 0 : _next$props.key)) {
+      updateInstance(pre, next);
+    } else {
+      destoryInstance(pre);
+      createInstance(next);
+    }
+  } else if (isString(next.tag)) {
+    const preChildren = pre && pre.children;
+    patchNode(preChildren, next.children);
+  }
+
+  return next;
+}
+
+class Component {
+  constructor({
+    props,
+    children
+  }) {
+    this.props = props;
+    this.$node = null;
+    this.$children = children;
+  }
+
+  $c() {
+    return createNode.apply(this, arguments);
+  }
+
+}
+
+class Animate extends Component {
+  interval = -1;
+  tick = 0;
+
+  render() {
+    const {
+      x = 0,
+      y = 0,
+      width,
+      height,
+      src,
+      maxTick,
+      maxInterval = 10,
+      center,
+      sy = 0
+    } = this.props.data;
+    this.interval++;
+
+    if (this.interval === maxInterval) {
+      this.interval = 0;
+      this.tick++;
+
+      if (this.tick === maxTick) {
+        this.tick = 0;
+      }
+    }
+
+    return this.$c("img", {
+      src: src,
+      style: {
+        x: x + (center ? -width / 2 : 0),
+        y: y + (center ? -height / 2 : 0),
+        sx: this.tick * width,
+        sy: height * sy,
+        width: width,
+        height: height
+      }
+    });
+  }
+
+}
+
+const size$d = 32;
+class Select extends Component {
+  styles = {
+    select: {
+      fontSize: 24,
+      textAlign: "center",
+      width: 320
+    }
+  };
+
+  create() {
+    this.activeIndex = this.props.activeIndex || 0;
+    const {
+      style
+    } = this.props;
+
+    if (style) {
+      Object.assign(this.styles.select, style);
+    }
+  }
+
+  onKeyDown({
+    code
+  }) {
+    if (code === "ArrowDown") {
+      this.activeIndex++;
+
+      if (this.activeIndex === this.props.options.length) {
+        this.activeIndex = 0;
+      }
+
+      this.props.onChange && this.props.onChange(this.activeIndex, this.props.options[this.activeIndex]);
+    } else if (code === "ArrowUp") {
+      this.activeIndex--;
+
+      if (this.activeIndex === -1) {
+        this.activeIndex += this.props.options.length;
+      }
+
+      this.props.onChange && this.props.onChange(this.activeIndex, this.props.options[this.activeIndex]);
+    } else if (code === "Space") {
+      this.props.onConfirm && this.props.onConfirm(this.activeIndex, this.props.options[this.activeIndex]);
+    } // return true
+
+  }
+
+  onMouseDown = index => {
+    this.activeIndex = index;
+    this.props.onConfirm && this.props.onConfirm(this.activeIndex, this.props.options[this.activeIndex]);
+  };
+
+  setActiveIndex(index) {
+    this.activeIndex = index;
+  }
+
+  render() {
+    return this.$c("div", {
+      style: this.styles.select
+    }, this.props.options.map(({
+      text
+    }, index) => {
+      return this.$c("div", {
+        style: {
+          y: index * size$d,
+          height: size$d,
+          width: this.styles.select.width,
+          borderWidth: this.activeIndex === index ? 2 : 0,
+          borderColor: "#ddd"
+        },
+        onMouseDown: this.onMouseDown.bind(this, index),
+        onMouseMove: this.setActiveIndex.bind(this, index)
+      }, text);
+    }));
+  }
+
+}
+
+class Table extends Component {
+  render() {
+    const {
+      dataSource,
+      columns,
+      size = 32,
+      data
+    } = this.props;
+    let x = 0;
+    return columns.map((column, index) => {
+      const {
+        title,
+        dataIndex,
+        width = 1,
+        render
+      } = column;
+      const rowEle = this.$c("div", {
+        style: {
+          x: 0,
+          y: 0,
+          textAlign: 'start'
+        }
+      }, this.$c("div", {
+        style: {
+          x: x,
+          width: width * size,
+          height: size
+        }
+      }, title), dataSource.map((rowData, rowIndex) => {
+        return this.$c("div", {
+          style: {
+            x: x,
+            y: (rowIndex + 1) * size,
+            width: width * size,
+            height: size
+          }
+        }, render ? render.call(this, rowData, data, rowIndex, index) : rowData[dataIndex]);
+      }));
+      x += width * size;
+      return rowEle;
+    });
+  }
+
+}
+
+class Engine {
+  constructor($game) {
+    if (this.checkChromeVersion()) {
+      this.$state = Object.create(null);
+      this.$data = new Data();
+      this.$sound = new Sound();
+      this.$images = new ImageCollection();
+      this.$font = new Font();
+      this.$ui = new Render(this);
+      this.$root = null;
+      this.$game = $game;
+      this.gameStart();
+    }
+  }
+
+  checkChromeVersion() {
+    if (location.protocol === 'file:') {
+      alert('不能直接运行index.html'); // } else if (!navigator.userAgent.match(/Chrome\/(\d+)/) || RegExp.$1 < 86) {
+      // alert('需要chrome最新浏览器')
+    } else {
+      return true;
+    }
+  }
+
+  gameStop() {
+    cancelAnimationFrame(this.ident);
+    this.ident = -1;
+  }
+
+  gameStart() {
+    const frame = () => {
+      this.keyFrame();
+      this.ident = requestAnimationFrame(frame);
+    };
+
+    frame();
+  }
+
+  keyFrame() {
+    this.$root = patchNode(this.$root, createNode.call(this, this.$game, null));
+    this.$ui.render(this.$root);
+  }
+
+}
+
+const size$c = 32;
+class FPS extends Component {
+  styles = {
+    fps: {
+      fontSize: 14,
+      textAlign: 'right',
+      textBaseline: 'top',
+      height: size$c,
+      x: size$c * 18
+    }
+  };
+  static getTime = () => performance.now();
+  timeStamp = FPS.getTime();
+
+  render() {
+    const timeStamp = FPS.getTime();
+    const fps = 1000 / (timeStamp - this.timeStamp);
+    this.timeStamp = timeStamp;
+    return this.$c("div", {
+      style: this.styles.fps
+    }, `${fps.toFixed()}fps`);
+  }
+
+}
+
+const size$b = 32;
+class Loading extends Component {
+  render() {
+    const width = size$b * (18 - 2 * 2);
+    const height = size$b;
+    return this.$c("div", {
+      style: {
+        x: size$b * 2,
+        y: size$b * 2
+      }
+    }, this.$c("div", {
+      style: {
+        width,
+        height,
+        backgroundColor: 'white'
+      }
+    }), this.$c("div", {
+      style: {
+        width: width * this.props.tick / 100,
+        height,
+        backgroundColor: '#666'
+      }
+    }));
+  }
+
+}
+
+function setStorage(key, value) {
+  return localStorage.setItem(key, JSON.stringify(value));
+}
+function getStorage(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key));
+  } catch (e) {
+    return null;
+  }
+}
+
+function saveGame(save) {
+  return setStorage('game', save);
+}
+function loadGame() {
+  return getStorage('game');
+}
+
+const size$a = 32;
+const styles$1 = {
+  title: {
+    width: size$a * (13 + 5),
+    height: size$a * 13
+  },
+  gameName: {
+    y: size$a * 2,
+    width: size$a * (13 + 5),
+    height: size$a * 4,
+    fontSize: 128
+  },
+  select: {
+    x: size$a * 8,
+    y: size$a * 8,
+    width: size$a * 2
+  }
+};
+class Title extends Component {
+  create() {
+    this.activeIndex = loadGame() ? 1 : 0;
+    this.options = [{
+      text: "开始"
+    }, {
+      text: "继续"
+    }];
+  }
+
+  onConfirm = isLoad => {
+    this.props.onLoadMap(isLoad ? loadGame() : null);
+  };
+
+  render() {
+    return this.$c("div", {
+      style: styles$1.title
+    }, this.$c("div", {
+      style: styles$1.gameName
+    }, this.$data.game.title), this.$c(Animate, {
+      data: {
+        src: "stand.png",
+        maxTick: 4,
+        sy: 4,
+        x: 208,
+        y: 100,
+        width: 632 / 4,
+        height: 768 / 8
+      }
+    }), this.$c(Animate, {
+      data: {
+        src: "skill.png",
+        maxTick: 6,
+        sy: 4,
+        width: 912 / 6,
+        height: 800 / 8,
+        x: 308,
+        y: 200
+      }
+    }), this.$c(Animate, {
+      data: {
+        src: "run.png",
+        maxTick: 6,
+        width: 996 / 6,
+        height: 824 / 8,
+        sy: 4,
+        x: 108,
+        y: 200
+      }
+    }), this.$c(Select, {
+      activeIndex: this.activeIndex,
+      options: this.options,
+      style: styles$1.select,
+      onConfirm: this.onConfirm
+    }));
+  }
+
+}
+
+const size$9 = 32;
+class Shop extends Component {
+  create() {
+    this.shop = JSON.parse(JSON.stringify(this.$data.shop[this.props.shopid]));
+    this.shop.choices.push({
+      text: '离开'
+    });
+  }
+
+  onConfirm = index => {
+    if (index === this.shop.choices.length - 1) {
+      this.props.onClose();
+    } else {
+      const {
+        need,
+        effect
+      } = this.shop.choices[index];
+      this.props.onShopEvent(need, effect);
+    }
+  };
+
+  render() {
+    return this.$c("img", {
+      src: "shop.webp",
+      style: {
+        x: 3 * size$9,
+        y: 2 * size$9,
+        width: size$9 * 7,
+        height: size$9 * 8,
+        borderWidth: 4,
+        borderColor: '#deb887',
+        swidth: 500,
+        sheight: 701
+      }
+    }, this.$c("div", {
+      style: {
+        y: size$9 / 4 * 3,
+        width: size$9 * 7,
+        fontSize: 24
+      }
+    }, this.shop.title), this.$c("div", {
+      style: {
+        x: 0,
+        y: 48,
+        fontSize: 14
+      }
+    }, this.shop.text.split(/\n/).map((text, index) => this.$c("div", {
+      style: {
+        x: size$9 / 2 * 7,
+        y: index * size$9 / 2
+      }
+    }, text))), this.$c(Select, {
+      options: this.shop.choices,
+      onConfirm: this.onConfirm,
+      style: {
+        x: size$9 * 1,
+        y: size$9 / 2 * 7,
+        width: size$9 * 5,
+        fontSize: 16
+      },
+      onClose: this.props.onClose
+    }));
+  }
+
+}
+
+const size$8 = 32;
+class Battle extends Component {
+  tick = 0;
+  styles = {
+    battle: {
+      x: size$8,
+      y: size$8,
+      width: size$8 * 16,
+      height: size$8 * 11,
+      fontSize: 20,
+      borderWidth: 3,
+      borderColor: '#deb887',
+      swidth: 640,
+      sheight: 320
+    },
+    enemy: {
+      x: size$8 * 1,
+      y: size$8 * 1
+    },
+    hero: {
+      x: size$8 * 10,
+      y: size$8 * 1
+    }
+  };
+
+  create() {
+    this.enemy = JSON.parse(JSON.stringify(this.props.enemy));
+    this.hero = this.props.hero;
+  }
+
+  onKeyDown({
+    code
+  }) {
+    if (code === 'Space') {
+      if (this.battleMsg) {
+        this.props.onClose && this.props.onClose();
+      }
+    }
+  }
+
+  onClick() {
+    if (this.battleMsg) {
+      this.props.onClose && this.props.onClose();
+    }
+  }
+
+  render() {
+    const enemy = this.enemy;
+    const hero = this.hero;
+    const isDev = location.hostname === 'localhost';
+    const tick = isDev ? 3 : 3;
+
+    if (enemy.hp > 0) {
+      this.tick++;
+
+      if (this.tick === tick) {
+        // isDev || this.$sound.play('se', 'attack.mp3')
+        if (this.turn) {
+          const atk = enemy.atk - hero.def;
+
+          if (atk > 0) {
+            hero.hp -= atk;
+          }
+        } else {
+          const atk = hero.atk - enemy.def;
+
+          if (atk > 0) {
+            enemy.hp -= atk;
+          }
+
+          if (enemy.hp <= 0) {
+            enemy.hp = 0;
+            const {
+              exp,
+              money
+            } = enemy;
+            hero.exp += exp;
+            this.$data.save.money += money;
+            this.battleMsg = `战斗胜利，获得${money}金币，${exp}经验`;
+          }
+        }
+
+        this.turn = !this.turn;
+        this.tick = 0;
+      }
+    }
+
+    const proprety = [{
+      text: '名称',
+      key: 'name'
+    }, {
+      text: '生命',
+      key: 'hp'
+    }, {
+      text: '攻击',
+      key: 'atk'
+    }, {
+      text: '防御',
+      key: 'def'
+    }];
+    const heroImageStyle = {
+      x: size$8,
+      y: size$8 * 4.5,
+      swidth: size$8,
+      sheight: size$8,
+      width: 64,
+      height: 64,
+      sy: 0
+    };
+    const enemyImageStyle = {
+      x: size$8,
+      y: size$8 * 4.5,
+      swidth: size$8,
+      sheight: size$8,
+      width: 64,
+      height: 64,
+      sy: enemy.sy * size$8
+    };
+    const size64 = 64;
+    const vsStyle = {
+      x: size$8 * (5 + 1.5),
+      y: size$8 * 2,
+      height: size64,
+      width: size64
+    };
+    const msgStyle = {
+      fontSize: 24,
+      height: size$8,
+      y: size$8 * 8,
+      width: size$8 * 15
+    };
+    return this.$c("img", {
+      src: "Battlebacks/mota.jpg",
+      style: this.styles.battle,
+      onClick: this.onClick
+    }, this.battleMsg && this.$c("div", {
+      style: msgStyle
+    }, this.battleMsg), this.$c("div", {
+      style: this.styles.enemy
+    }, this.$c("img", {
+      src: "enemys.png",
+      style: enemyImageStyle
+    }), proprety.map((item, index) => {
+      return this.$c("div", {
+        style: {
+          x: 0 * size$8,
+          y: index * size$8
+        }
+      }, this.$c("div", {
+        style: {
+          width: size$8 * 4,
+          textAlign: 'left',
+          height: size$8
+        }
+      }, item.text), this.$c("div", {
+        style: {
+          width: size$8 * 4,
+          textAlign: 'right',
+          height: size$8
+        }
+      }, enemy[item.key]));
+    })), this.$c("div", {
+      style: vsStyle
+    }, "VS"), this.$c("div", {
+      style: this.styles.hero
+    }, this.$c("img", {
+      src: "Characters/hero.png",
+      style: heroImageStyle
+    }), proprety.map((item, index) => {
+      return this.$c("div", {
+        style: {
+          x: 0 * size$8,
+          y: index * size$8
+        }
+      }, this.$c("div", {
+        style: {
+          width: size$8 * 4,
+          textAlign: 'left',
+          height: size$8
+        }
+      }, hero[item.key]), this.$c("div", {
+        style: {
+          width: size$8 * 4,
+          textAlign: 'right',
+          height: size$8
+        }
+      }, item.text));
+    })));
+  }
+
+}
+
+class Talk extends Component {
+  index = 0;
+  width = 7;
+  styles = {
+    talk: {
+      width: 32 * this.width,
+      height: 32 * 1,
+      backgroundColor: 'black',
+      borderWidth: 2,
+      borderColor: 'white',
+      fontSize: 16,
+      textAlign: 'left',
+      textBaseline: 'middle'
+    }
+  };
+
+  onKeyDown({
+    code
+  }) {
+    if (code === 'Space') {
+      this.index++;
+
+      if (this.index === this.props.talk.length) {
+        this.props.onConfirm();
+      } else {
+        this.next();
+      }
+
+      this.$sound.play('se', 'dialogue.mp3');
+    }
+  }
+
+  next() {
+    const talks = this.props.talk[this.index].split(/\n/);
+    this.current = [];
+    talks.forEach(talk => {
+      for (let i = 0; i < talk.length; i = i + 7 * 2) {
+        this.current.push(talk.substr(i, 7 * 2));
+      }
+    });
+    const leftStyle = {
+      x: 32 * 2,
+      y: 32 * 2,
+      height: 32 * this.current.length
+    };
+    const rightStyle = {
+      x: 32 * 4,
+      y: 32 * 6,
+      height: 32 * this.current.length
+    };
+    this.turn = !this.turn;
+    Object.assign(this.styles.talk, this.turn ? leftStyle : rightStyle);
+  }
+
+  create() {
+    this.next();
+  }
+
+  render() {
+    return this.$c("div", {
+      style: this.styles.talk
+    }, this.current.map((talk, index) => {
+      return this.$c("div", {
+        style: {
+          x: 0,
+          y: 32 * index,
+          width: 32 * this.width,
+          height: 32
+        }
+      }, talk);
+    }));
+  }
+
+}
+
+const size$7 = 32;
+const styles = {
+  wrap: {
+    textAlign: "left",
+    fontSize: 18,
+    backgroundImage: "ground.png",
+    width: size$7 * (13 + 5 - 2),
+    x: size$7,
+    y: size$7,
+    height: size$7 * (13 - 2)
+  }
+};
+const columns = [{
+  title: null,
+  width: 1,
+
+  render(rowData) {
+    return this.$c(Animate, {
+      data: {
+        src: "enemys.png",
+        maxTick: 2,
+        width: size$7,
+        height: size$7,
+        maxInterval: 10,
+        sy: rowData.sy
+      }
+    });
+  }
+
+}, {
+  title: "名字",
+  dataIndex: "name",
+  width: 3
+}, {
+  title: "生命",
+  dataIndex: "hp",
+  width: 2
+}, {
+  title: "攻击",
+  dataIndex: "atk",
+  width: 2
+}, {
+  title: "防御",
+  dataIndex: "def",
+  width: 2
+}, {
+  title: "损失",
+  dataIndex: "address",
+  width: 2,
+
+  render(enemy, hero) {
+    if (hero.atk > enemy.def) {
+      if (hero.def >= enemy.atk) {
+        return 0;
+      } else {
+        const atkCount = Math.floor(enemy.hp / (hero.atk - enemy.def));
+        const needHp = (enemy.atk - hero.def) * atkCount;
+        return hero.hp > needHp ? needHp : this.$c("div", {
+          style: {
+            color: 'red',
+            height: size$7
+          }
+        }, needHp);
+      }
+    } else {
+      return "-";
+    }
+  }
+
+}];
+class EnemyInfo extends Component {
+  onKeyDown({
+    $key
+  }) {
+    if ($key === 'confirm') {
+      this.props.onClose();
+    }
+  }
+
+  onMouseDown = () => {
+    this.props.onClose();
+  };
+
+  render() {
+    const dataSource = Object.keys(this.props.enemys).map(enemyId => this.$data.enemys[enemyId]);
+    return this.$c("div", {
+      style: styles.wrap,
+      onMouseDown: this.onMouseDown
+    }, this.$c(Table, {
+      dataSource: dataSource,
+      columns: columns,
+      data: this.$data.save.hero
+    }));
+  }
+
+}
+
+const size$6 = 32;
+class ShopList extends Component {
+  create() {
+    const shops = this.$data.save.shops || [];
+    this.options = Object.entries(shops).map(([shopid, text]) => {
+      return {
+        text,
+        shopid
+      };
+    });
+  }
+
+  onConfirm = index => {
+    if (index > -1) {
+      const {
+        shopid
+      } = this.options[index];
+      this.props.onConfirm(shopid);
+    }
+  };
+
+  onKeyDown({
+    code
+  }) {
+    if (code === 'KeyB') {
+      this.props.onClose();
+    }
+  }
+
+  render() {
+    return this.$c("img", {
+      src: "shop.webp",
+      style: {
+        x: 3 * size$6,
+        y: 2 * size$6,
+        width: size$6 * 7,
+        height: size$6 * 8,
+        borderWidth: 4,
+        borderColor: '#deb887',
+        swidth: 500,
+        sheight: 701
+      }
+    }, this.$c("div", {
+      style: {
+        y: size$6 / 4 * 3,
+        width: size$6 * 7,
+        fontSize: 24
+      }
+    }, "\u5546\u5E97\u9009\u62E9"), this.$c(Select, {
+      style: {
+        x: size$6,
+        y: 48,
+        width: size$6 * 5,
+        fontSize: 16
+      },
+      options: this.options,
+      onConfirm: this.onConfirm,
+      onClose: this.props.onClose
+    }));
+  }
+
+}
+
+function isCoincided(A, B) {
+  if (A.x >= B.x + B.width || A.x + A.width <= B.x || A.y >= B.y + B.height || A.y + A.height <= B.y) {
+    return false;
+  }
+
+  return true;
+}
+function updateVector(vector, obj) {
+  vector = Object.assign(Object.create(null), vector);
+  Object.entries(obj).forEach(([key, value]) => {
+    vector[key] += value;
+  });
+  return vector;
+}
+function assignVector(vector, obj) {
+  return Object.assign(vector, obj);
+}
+
+const propertyNames = {
+  lv: "等级",
+  money: "金币",
+  hp: "生命",
+  atk: "攻击",
+  def: "防御",
+  exp: "经验"
+};
+const size$5 = 32;
+
+class Hero extends Component {
+  tick = 0;
+
+  create() {
+    const hero = Object.assign(this.$data.save.position, {
+      width: size$5,
+      height: size$5
+    });
+    this.styles = {
+      hero
+    };
+  }
+
+  isCoincidedTerrains(heroStyle) {
+    return this.props.mapTerrains.findIndex(item => item && item && isCoincided(item.props.style, heroStyle));
+  }
+
+  isCoincidedEvents(heroStyle) {
+    return this.props.mapEvents.findIndex(item => item && item && isCoincided(item.props.style, heroStyle));
+  }
+
+  onKeyDown({
+    code,
+    $key
+  }) {
+    const styleHero = this.styles.hero;
+    const step = 32;
+    let moveVector = null;
+
+    if ($key === "down") {
+      moveVector = {
+        y: step
+      };
+      styleHero.sy = 0; // this.$sound.play('se', 'step.mp3')
+    } else if ($key === "up") {
+      moveVector = {
+        y: -step
+      };
+      styleHero.sy = 3; // this.$sound.play('se', 'step.mp3')
+    } else if ($key === "left") {
+      moveVector = {
+        x: -step
+      };
+      styleHero.sy = 1; // this.$sound.play('se', 'step.mp3')
+    } else if ($key === "right") {
+      moveVector = {
+        x: step
+      };
+      styleHero.sy = 2; // this.$sound.play('se', 'step.mp3')
+    } else if (code === "KeyS") {
+      saveGame(this.$data.save);
+      this.$sound.play("se", "load.mp3");
+      this.setMessage("存储成功");
+    } else if (code === "KeyL") {
+      this.$sound.play("se", "load.mp3");
+      this.props.onLoadMap(loadGame());
+      this.setMessage("读取成功");
+    } else if (code === "KeyX") {
+      console.log("1111");
+      this.showEnemyInfo = !this.showEnemyInfo;
+    } else if (code === "KeyB") {
+      this.buying = true;
+    } else if (code === "Backspace") {
+      this.updateSaveData("hero", {
+        lv: 1,
+        hp: 100,
+        atk: 100,
+        def: 100,
+        exp: 100
+      });
+      this.updateSaveData("items", {
+        yellowKey: 3,
+        blueKey: 2,
+        redKey: 1
+      });
+      this.updateSaveData("", {
+        money: 100
+      });
+    }
+
+    if (moveVector) {
+      const vector = updateVector(styleHero, moveVector);
+      const terrain = this.isCoincidedTerrains(vector);
+
+      if (terrain !== -1) {
+        return;
+      }
+
+      const eventIndex = this.isCoincidedEvents(vector);
+
+      if (eventIndex !== -1) {
+        if (this.handleEvents(this.props.map.mapEvents[eventIndex])) {
+          assignVector(styleHero, vector);
+        }
+
+        return;
+      }
+
+      assignVector(styleHero, vector);
+    }
+  }
+
+  onShopClose = () => {
+    this.shopid = null;
+    this.setEvent();
+  };
+
+  handleEvents(mapEvent) {
+    if (this.mapEvent) {
+      return;
+    }
+
+    if (mapEvent[3]) {
+      this.mapEvent = mapEvent;
+      this.eventIndex = 0;
+      this.setEvent();
+    } else {
+      const info = this.$data.mapping[mapEvent[2]];
+      const {
+        name,
+        type
+      } = info;
+
+      if (type === "items") {
+        const item = this.$data.items[name];
+        const {
+          type
+        } = item;
+
+        if (type === "1" || type === "3") {
+          this.remove(mapEvent);
+          this.updateSaveData("items", name);
+          this.setMessage(`获得${item.name}`);
+          this.$sound.play("se", type === "1" ? "item.mp3" : "constants.mp3");
+        } else if (type === "2") {
+          this.remove(mapEvent);
+          this.updateSaveData(...item.property);
+          const [name, property] = item.property;
+          let msg = `获得${item.name}`;
+          property.forEach(property => {
+            const [key, value] = property;
+            let propertyName = key;
+
+            if (name === "hero") {
+              propertyName = propertyNames[key];
+            } else if (name === "items") {
+              propertyName = this.$data.items[key].name;
+            } else if (key === "money") {
+              propertyName = "金币";
+            }
+
+            msg += ` ${propertyName}${value > 0 ? "+" : "-"}${value}`;
+            this.setMessage(msg);
+          });
+          this.$sound.play("se", "item.mp3");
+        }
+
+        return true;
+      } else if (type === "enemys") {
+        mapEvent[3] = [{
+          type: "enemy",
+          data: name
+        }];
+        this.handleEvents(mapEvent);
+        return false;
+      } else if (type === "terrains") {
+        if (["yellowDoor", "redDoor", "blueDoor", "steelDoor", "specialDoor"].includes(name)) {
+          const key = name.slice(0, -4) + "Key";
+
+          if (this.$data.save.items[key]) {
+            this.$data.save.items[key]--;
+            this.remove(mapEvent);
+            this.$sound.play("se", "door.mp3");
+            return true;
+          }
+        }
+      }
+    }
+  }
+
+  setEvent = () => {
+    if (this.eventIndex < this.mapEvent[3].length) {
+      const event = this.mapEvent[3][this.eventIndex++];
+      const {
+        type,
+        data
+      } = event;
+
+      if (type === "talk") {
+        this.talk = data;
+        return;
+      } else if (type === "mapLoad") {
+        this.props.onLoadMap(data);
+      } else if (type === "openShop") {
+        this.shopid = event.id;
+        this.$data.save.shops = this.$data.save.shops || {};
+        this.$data.save.shops[this.shopid] = this.$data.shop[this.shopid].title;
+        return;
+      } else if (type === "getItems") {
+        this.updateSaveData("items", data);
+      } else if (type === "removeSelf") {
+        this.remove(this.mapEvent);
+        return;
+      } else if (type === "moveBlock") {
+        this.remove(this.mapEvent);
+        return;
+      } else if (type === "enemy") {
+        const enemy = this.$data.enemys[data];
+        const hero = this.$data.save.hero;
+
+        if (hero.atk > enemy.def) {
+          if (hero.def >= enemy.atk || enemy.hp / (hero.atk - enemy.def) <= hero.hp / (enemy.atk - hero.def)) {
+            this.enemy = enemy;
+            return;
+          } else {
+            this.mapEvent = null;
+            this.eventIndex = 0;
+            this.setMessage(`你打不过${enemy.name}`);
+            return;
+          }
+        } else {
+          this.mapEvent = null;
+          this.eventIndex = 0;
+          this.setMessage(`你的攻击比${enemy.name}的防御低`);
+          return;
+        }
+      } else if (type === "updateSaveData") {
+        this.updateSaveData(...convertPropertyStr(data));
+      } else if (type === "removeBlock") {
+        this.props.removeMapEvent(data);
+      } else if (type === "title") {
+        this.props.onTitle();
+      } else if (type === "removeMapBlock") {
+        const {
+          mapId,
+          position
+        } = data;
+        const {
+          x,
+          y
+        } = position;
+        this.$data.save.destroy[[mapId, x, y]] = true;
+      } else if (type === "if") {
+        const {
+          condition,
+          true: trueEvent,
+          false: falseEvent
+        } = event;
+        this.mapEvent = null;
+        this.eventIndex = 0;
+
+        if (this.checkSaveData(...convertPropertyStr(condition))) {
+          this.mapEvent = [0, 0, 0, trueEvent];
+        } else {
+          this.mapEvent = [0, 0, 0, falseEvent];
+        }
+      } else ;
+
+      this.setEvent();
+    } else {
+      this.mapEvent = null;
+    }
+  };
+
+  remove(mapEvent) {
+    this.props.removeMapEvent(mapEvent);
+    this.mapEvent = null;
+  }
+
+  onBattleClose = () => {
+    this.enemy = null;
+    this.props.removeMapEvent(this.mapEvent);
+    this.setEvent();
+  };
+  onConfirm = () => {
+    this.talk = null;
+    this.setEvent();
+  };
+  setMessage = msg => {
+    this.props.onMessage(msg);
+  };
+
+  updateSaveData(context, gets, n = 1) {
+    if (Array.isArray(gets)) {
+      gets.forEach(([id, value]) => this.updateSaveData(context, id, value));
+    } else if (typeof gets === "string") {
+      const saveData = context ? this.$data.save[context] : this.$data.save;
+      saveData[gets] = saveData[gets] || 0;
+      saveData[gets] += Number(n);
+    } else if (typeof gets === "object") {
+      this.updateSaveData(context, Object.entries(gets));
+    } else ;
+  }
+
+  checkSaveData(context, gets, n = 1) {
+    if (Array.isArray(gets)) {
+      return gets.some(([id, value]) => this.checkSaveData(context, id, value));
+    } else if (typeof gets === "string") {
+      const saveData = context ? this.$data.save[context] : this.$data.save;
+      saveData[gets] = saveData[gets] || 0;
+      return saveData[gets] + Number(n) >= 0;
+    } else if (typeof gets === "object") {
+      return this.checkSaveData(context, Object.entries(gets), null, 0);
+    } else {
+      return false;
+    }
+  }
+
+  onShopEvent = (need, effect) => {
+    if (this.checkSaveData(...convertPropertyStr(need))) {
+      this.updateSaveData(...convertPropertyStr(need));
+      this.updateSaveData(...convertPropertyStr(effect));
+    }
+  };
+  onShopListClose = () => {
+    this.buying = false;
+  };
+  onShopListConfirm = shopid => {
+    this.buying = false;
+    this.shopid = shopid;
+    this.mapEvent = [0, 0, 0, []];
+  };
+
+  render() {
+    return this.$c("div", null, this.$c("div", {
+      style: this.styles.hero
+    }, this.$c(Animate, {
+      data: {
+        src: "Characters/hero.png",
+        width: size$5,
+        height: size$5,
+        maxTick: 4,
+        maxInterval: 10,
+        sy: this.styles.hero.sy
+      }
+    })), this.buying && this.$c(ShopList, {
+      onClose: this.onShopListClose,
+      onConfirm: this.onShopListConfirm
+    }), this.shopid && this.$c(Shop, {
+      shopid: this.shopid,
+      onClose: this.onShopClose,
+      onShopEvent: this.onShopEvent
+    }), this.enemy && this.$c(Battle, {
+      enemy: this.enemy,
+      enemyId: this.enemyId,
+      hero: this.$data.save.hero,
+      onClose: this.onBattleClose
+    }), this.talk && this.$c(Talk, {
+      talk: this.talk,
+      key: this.talk,
+      onConfirm: this.onConfirm
+    }), this.showEnemyInfo && this.$c(EnemyInfo, {
+      enemys: this.props.enemys,
+      onClose: () => this.showEnemyInfo = false
+    }));
+  }
+
+}
+
+const size$4 = 32;
+class Status extends Component {
+  create() {
+    this.walls = [];
+
+    for (let x = 0; x < 5; x++) {
+      for (let y = 0; y < 13; y++) {
+        if (x === 4 || y === 0 || y === 12) {
+          this.walls.push(this.$c("img", {
+            src: "terrains.png",
+            style: {
+              sx: 0,
+              sy: size$4 * 2,
+              x: x * size$4,
+              y: y * size$4
+            }
+          }));
+        }
+      }
+    }
+  }
+
+  render() {
+    const {
+      map
+    } = this.props;
+    const {
+      save
+    } = this.$data;
+    const rowProperty = [this.$data.game.title, map.name, save.hero.lv, save.hero.hp, save.hero.atk, save.hero.def, save.hero.exp, save.money, save.items.yellowKey, save.items.blueKey, save.items.redKey];
+    return this.$c("div", {
+      style: {
+        fontSize: 24
+      }
+    }, this.walls, rowProperty.map((value, index) => {
+      return this.$c("div", {
+        style: {
+          y: (index + 1) * size$4,
+          width: size$4,
+          height: size$4
+        }
+      }, this.$c("img", {
+        src: "icons.png",
+        style: {
+          sy: index * size$4,
+          width: size$4,
+          height: size$4,
+          swidth: size$4,
+          sheight: size$4
+        }
+      }), this.$c("div", {
+        style: {
+          x: size$4,
+          height: size$4,
+          width: size$4 * 3
+        }
+      }, value));
+    }));
+  }
+
+}
+
+const size$3 = 32;
+class Map extends Component {
+  tick = 0;
+  interval = 10;
+  styles = {
+    map: {
+      height: size$3 * 13,
+      width: size$3 * 13,
+      backgroundImage: 'ground.png'
+    },
+    statusBar: {
+      x: size$3 * 13,
+      y: 0,
+      backgroundImage: 'ground.png',
+      width: size$3 * 5,
+      height: 13 * size$3
+    }
+  };
+
+  create() {
+    const bgm = this.props.map.bgm;
+    this.mapBgm = this.$sound.play('bgm', bgm);
+  }
+
+  destroy() {
+    this.props.map.bgm; // this.$sound.pause('bgm', bgm)
+
+    this.mapBgm.pause();
+  }
+
+  renderMapTerrains(status) {
+    const {
+      mapTerrains
+    } = this.props.map;
+    const tick = this.tick;
+    const terrains = [];
+
+    if (!mapTerrains) {
+      return;
+    }
+
+    let sx = 0;
+    mapTerrains.forEach((line, y) => {
+      line.forEach((value, x) => {
+        if (value) {
+          const info = this.$data.mapping[value];
+          const {
+            type,
+            name
+          } = info;
+          const detail = this.$data[type][name];
+
+          if (type === 'animates') {
+            sx = tick % 4 * size$3;
+            const style = {
+              sy: detail.sy * size$3,
+              sx,
+              x: x * size$3,
+              y: y * size$3,
+              height: size$3,
+              width: size$3
+            };
+            terrains.push(this.$c("img", {
+              src: type + '.png',
+              style: style
+            }));
+          } else if (type === 'terrains') {
+            const style = {
+              sy: detail.sy * size$3,
+              sx: 0,
+              x: x * size$3,
+              y: y * size$3,
+              height: size$3,
+              width: size$3
+            };
+            terrains.push(this.$c("img", {
+              src: type + '.png',
+              style: style
+            }));
+          } else {
+            console.error('error type', type, info);
+          }
+        }
+      });
+    });
+    return terrains;
+  }
+
+  renderMapEvents() {
+    const {
+      mapId,
+      destroy = {}
+    } = this.$data.save;
+    const {
+      mapEvents
+    } = this.props.map;
+    const tick = this.tick;
+    const enemys = {};
+    this.enemys = enemys;
+
+    if (mapEvents) {
+      return mapEvents.map(event => {
+        const [x, y, value, events] = event;
+
+        if (destroy[[mapId, x, y]]) {
+          return null;
+        }
+
+        if (value) {
+          const info = this.$data.mapping[value];
+
+          if (info) {
+            const {
+              type,
+              name
+            } = info;
+            const detail = this.$data[type][name]; // terrains items icons npcs enemys
+
+            let sx = 0;
+
+            if (type === 'npcs' || type === 'enemys') {
+              sx = tick % 2 * size$3;
+            }
+
+            if (type === 'enemys') {
+              enemys[name] = name;
+            }
+
+            return this.$c("div", {
+              style: {
+                x: x * size$3,
+                y: y * size$3,
+                height: size$3,
+                width: size$3
+              }
+            }, this.$c("img", {
+              src: type + '.png',
+              style: {
+                sy: detail.sy * size$3,
+                sx,
+                height: size$3,
+                width: size$3
+              }
+            }));
+          }
+        }
+
+        return null;
+      });
+    }
+  }
+
+  onRemoveMapEvent = mapEvent => {
+    const [x, y] = mapEvent;
+    const mapId = this.$data.save.mapId;
+    this.$data.save.destroy = this.$data.save.destroy || {};
+    this.$data.save.destroy[[mapId, x, y]] = 1;
+  };
+  onTitle = () => {
+    this.props.onTitle();
+  };
+  onMouseDown = e => {
+    // DFS BFS
+    console.warn(e);
+  };
+
+  render() {
+    this.interval--;
+
+    if (this.interval === 0) {
+      this.tick++;
+      this.interval = 10;
+    }
+
+    const mapTerrains = this.renderMapTerrains();
+    const mapEvents = this.renderMapEvents();
+    return this.$c("div", null, this.$c("div", {
+      style: this.styles.map,
+      onMouseDown: this.onMouseDown
+    }, mapTerrains, mapEvents), this.$c("div", {
+      style: this.styles.statusBar
+    }, this.$c(Status, {
+      map: this.props.map
+    })), this.$c(Hero, {
+      mapTerrains: mapTerrains,
+      mapEvents: mapEvents,
+      enemys: this.enemys,
+      map: this.props.map,
+      onLoadMap: this.props.onLoadMap,
+      onMessage: this.props.onMessage,
+      removeMapEvent: this.onRemoveMapEvent,
+      onTitle: this.onTitle
+    }));
+  }
+
+}
+
+const size$2 = 32;
+class ScrollText extends Component {
+  styles = {
+    text: {
+      fontSize: 20,
+      textAlign: 'left',
+      textBaseline: 'top',
+      x: 0,
+      y: 0,
+      width: size$2 * 18,
+      height: size$2 * 13
+    },
+    scroll: {
+      x: size$2,
+      y: size$2 * 5
+    }
+  };
+
+  create() {
+    const {
+      text,
+      bgm
+    } = this.props.map;
+    this.text = text.split('\n');
+    this.mapBgm = this.$sound.play('bgm', bgm);
+  }
+
+  destroy() {
+    this.mapBgm.pause();
+  }
+
+  onKeyDown({
+    code
+  }) {
+    if (code === 'Space') {
+      this.onMouseDown();
+    }
+  }
+
+  onMouseDown = () => {
+    if (this.ready) {
+      const {
+        type,
+        data
+      } = this.props.map.event;
+
+      if (type === 'mapLoad') {
+        this.props.onClose(data);
+      } else if (type === 'title') {
+        this.props.onTitle(data);
+      }
+    }
+  };
+
+  render() {
+    const style = this.styles.scroll;
+
+    if (style.y > -size$2 * (this.text.length - 2)) {
+      const y = 1;
+      style.y -= y;
+    } else {
+      this.ready = true;
+    }
+
+    return this.$c("div", {
+      style: this.styles.text,
+      onMouseDown: this.onMouseDown
+    }, this.$c("div", {
+      style: this.styles.scroll
+    }, this.text.map((text, index) => this.$c("div", {
+      style: {
+        y: index * size$2
+      }
+    }, text))));
+  }
+
+}
+
+function calcLength(str) {
+  let len = 0;
+
+  for (let i = 0; i < str.length; i++) {
+    if (str.charCodeAt(i) > 127) {
+      len += 2;
+    } else {
+      len += 1;
+    }
+  }
+
+  return len;
+}
+
+const size$1 = 32;
+class Message extends Component {
+  create() {
+    if (this.props) {
+      this.tick = this.props.tick || 90;
+    }
+
+    this.length = calcLength(this.props.msg);
+    this.msg = this.props.msg;
+  }
+
+  render() {
+    this.tick--;
+
+    if (this.tick === 0) {
+      this.props.onMessageClose();
+      return null;
+    }
+
+    let globalAlpha = 1;
+
+    if (this.tick < 15) {
+      globalAlpha = this.tick / 15;
+    }
+
+    const fontSize = 20;
+    const width = fontSize / 2 * this.length + fontSize;
+    return this.$c("div", {
+      style: {
+        backgroundColor: 'rgba(0,0,0,.7)',
+        globalAlpha,
+        x: (size$1 * 18 - width) / 2,
+        y: size$1 * 2,
+        height: size$1,
+        width: width
+      }
+    }, this.$c("div", {
+      style: {
+        textAlign: 'center',
+        fontSize,
+        x: width / 2,
+        height: size$1
+      }
+    }, this.msg));
+  }
+
+}
+
+/* eslint-disable multiline-ternary */
+
+const loadMap = mapId => {
+  return loadJSON(`Maps/${mapId}.json`);
+};
+
+const size = 32;
+class Game extends Component {
+  styles = {
+    app: {
+      height: size * 13,
+      width: size * 18,
+      textAlign: 'center',
+      textBaseline: 'middle'
+    }
+  };
+
+  async create() {
+    this.loading = '加载数据';
+    await this.$data.load();
+    const game = this.$data.game;
+    document.title = game.title;
+
+    if (game.font && game.font.load !== false) {
+      this.loading = '加载字体';
+      const font = game.font;
+      await this.$font.load(font); // this.styles.app.font = `${font.name}`
+    }
+
+    if (game.images) {
+      this.loading = '加载图片';
+      await this.$images.load(game.images, game.sprites);
+    }
+
+    if (game.sounds) {
+      this.loading = '加载音乐';
+      await this.$sound.load(game.sounds);
+    }
+
+    this.loading = false; // this.onLoadMap({ mapId: 'MT1' })
+  }
+
+  onLoadMap = async data => {
+    this.loading = '加载地图';
+    Object.assign(this.$data.save, data);
+    this.map = await loadMap(this.$data.save.mapId);
+    this.loading = false;
+    this.randMapKey = `${this.$data.save.mapId} ${new Date()}`;
+  };
+  onTitle = () => {
+    this.map = null;
+  };
+  onMessageClose = () => {
+    this.msg = null;
+  };
+  onMessage = msg => {
+    this.msg = msg;
+  };
+
+  render() {
+    // const Title = Test
+    return this.$c("div", {
+      style: this.styles.app
+    }, this.loading ? this.$c(Loading, {
+      msg: this.loading
+    }) : this.map ? this.map.text ? this.$c(ScrollText, {
+      map: this.map,
+      onClose: this.onLoadMap,
+      onTitle: this.onTitle
+    }) : this.$c(Map, {
+      map: this.map,
+      key: this.randMapKey,
+      onLoadMap: this.onLoadMap,
+      onMessage: this.onMessage,
+      onEvent: this.onEvent
+    }) : this.$c(Title, {
+      onLoadMap: this.onLoadMap
+    }), this.msg && this.$c(Message, {
+      msg: this.msg,
+      key: this.msg,
+      onMessageClose: this.onMessageClose
+    }), this.$c(FPS, null));
+  }
+
+}
+
+if (typeof window !== 'undefined') {
+  window.mota = new Engine(Game);
+}
 //# sourceMappingURL=bundle.js.map

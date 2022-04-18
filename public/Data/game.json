@@ -4,14 +4,12 @@
     "height": 416
   },
   "control": {
-    "direction": {
-      "down": "ArrowDown",
-      "up": "ArrowUp",
-      "left": "ArrowLeft",
-      "right": "ArrowRight"
-    },
-    "confirm": "Space",
-    "cancel": "Escape"
+    "ArrowDown": "down",
+    "ArrowUp": "up",
+    "ArrowLeft": "left",
+    "ArrowRight": "right",
+    "Space": "confirm",
+    "Escape": "cancel"
   },
   "font": {
     "name": "华文行楷",

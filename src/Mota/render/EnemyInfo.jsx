@@ -73,8 +73,10 @@ const columns = [
 ];
 
 export default class EnemyInfo extends Component {
-  onKeyDown() {
-    this.props.onClose();
+  onKeyDown({ $key }) {
+    if ($key === 'confirm') {
+      this.props.onClose();
+    }
   }
 
   onMouseDown = () => {

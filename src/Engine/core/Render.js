@@ -84,6 +84,7 @@ export default class Render {
     keyEvents.forEach((name) => {
       window.addEventListener(name.toLowerCase(), (e) => {
         e.name = `on${name}`
+        e.$key = this.$data.game.control[e.code]
         this.keyEventsCollectionKeyframe.push(e)
       })
     })
@@ -97,9 +98,8 @@ export default class Render {
       }
     })
     this.keyEventsCollectionKeyframe.forEach((event) => {
-      console.log(event)
-      const { $instance, name } = event
-      $instance && $instance[name] && $instance[name](event)
+      const { $context, name } = event
+      $context && $context[name] && $context[name](event)
     })
 
     this.restoreEvents()
@@ -368,17 +368,17 @@ export default class Render {
       } else if (isFunc(createdNode.tag)) {
         // events of keyboard
         this.keyEventsCollectionKeyframe.forEach((event) => {
-          const instance = createdNode.instance
-          if (keyEvents.some((name) => instance[`on${name}`])) {
-            event.$instance = instance
+          const $context = createdNode.$context
+          if (keyEvents.some((name) => $context[`on${name}`])) {
+            event.$context = $context
           }
         })
         // tag 是 function
         this.renderAnything(
-          createdNode.instance.$node,
+          createdNode.$context.$node,
           offsetX,
           offsetY,
-          createdNode.instance,
+          createdNode.$context,
         )
       } else if (isString(createdNode.tag)) {
         // div node

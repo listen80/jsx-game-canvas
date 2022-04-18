@@ -12,14 +12,14 @@ export function createNode (tag, props, ...children) {
 
 function createInstance (next) {
   const Class = next.tag
-  next.instance = new Class(next)
+  next.$context = new Class(next)
 
-  next.instance.$images = next.$parent.$images
-  next.instance.$sound = next.$parent.$sound
-  next.instance.$data = next.$parent.$data
-  next.instance.$font = next.$parent.$font
+  next.$context.$images = next.$parent.$images
+  next.$context.$sound = next.$parent.$sound
+  next.$context.$data = next.$parent.$data
+  next.$context.$font = next.$parent.$font
 
-  next.instance.create && next.instance.create()
+  next.$context.create && next.$context.create()
   renderNode(next)
 }
 
@@ -27,8 +27,8 @@ function destoryInstance (pre) {
   // && isBoolean(pre)
   if (!isPrimitive(pre) && !isUndefined(pre)) {
     if (isFunc(pre.tag)) {
-      destoryInstance(pre.instance.$node)
-      pre.instance.destroy && pre.instance.destroy()
+      destoryInstance(pre.$context.$node)
+      pre.$context.destroy && pre.$context.destroy()
     } else if (isArray(pre)) {
       while (pre.length) {
         destoryInstance(pre.pop())
@@ -40,13 +40,13 @@ function destoryInstance (pre) {
 }
 
 function updateInstance (pre, next) {
-  next.instance = pre.instance
-  next.instance.props = next.props
+  next.$context = pre.$context
+  next.$context.props = next.props
   renderNode(next)
 }
 
 function renderNode (next) {
-  next.instance.$node = patchNode(next.instance.$node, next.instance.render())
+  next.$context.$node = patchNode(next.$context.$node, next.$context.render())
 }
 
 export function patchNode (pre, next) {

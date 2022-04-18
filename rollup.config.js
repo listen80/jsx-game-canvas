@@ -62,7 +62,7 @@ const plugins = [
       ],
     },
   }),
-  terser(),
+  // terser(),
 ]
 
 if (process.env.NODE_ENV === 'development') {
