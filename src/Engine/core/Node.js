@@ -1,6 +1,6 @@
 import { isFunc, isPrimitive, isArray, isUndefined, isString, isBoolean } from '../utils/common'
 
-export function createNode (tag, props, ...children) {
+export function createNode (tag, props = {}, ...children) {
   const $parent = this
   return {
     tag,
@@ -18,7 +18,7 @@ function createInstance (next) {
   next.$context.$sound = next.$parent.$sound
   next.$context.$data = next.$parent.$data
   next.$context.$font = next.$parent.$font
-
+  next.$context.$parent = next.$parent
   next.$context.create && next.$context.create()
   renderNode(next)
 }

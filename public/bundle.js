@@ -2,9 +2,10 @@ function checkFont(name, size = 16) {
   return document.fonts.check(`${size}px ${name}`);
 }
 const fontsIos = ['娃娃体-简', '兰亭黑-简', '凌慧体-简', '翩翩体-简', '魏碑体-简', '雅痞体-简', '苹方-简', '楷体-简', '黑体-简', '宋体-简'];
-const fontsMS = ['黑体', '楷体', '宋体'];
+const fontsMS = ['楷体', '仿宋', '微软雅黑', '黑体', '宋体'];
 const fontsAndroid = ['Roboto', 'Noto Sans', 'Droid'];
 const fontFamily = [...fontsMS, ...fontsIos, ...fontsAndroid].find(checkFont);
+console.log(fontFamily);
 const baseStyle = {
   direction: 'ltr',
   fillStyle: '#fff',
@@ -707,7 +708,7 @@ class Font {
 
 }
 
-function createNode(tag, props, ...children) {
+function createNode(tag, props = {}, ...children) {
   const $parent = this;
   return {
     tag,
@@ -724,6 +725,7 @@ function createInstance(next) {
   next.$context.$sound = next.$parent.$sound;
   next.$context.$data = next.$parent.$data;
   next.$context.$font = next.$parent.$font;
+  next.$context.$parent = next.$parent;
   next.$context.create && next.$context.create();
   renderNode(next);
 }
@@ -1091,7 +1093,8 @@ const size$a = 32;
 const styles$1 = {
   title: {
     width: size$a * (13 + 5),
-    height: size$a * 13
+    height: size$a * 13,
+    textAlign: 'center'
   },
   gameName: {
     y: size$a * 2,
@@ -2454,9 +2457,7 @@ class Game extends Component {
   styles = {
     app: {
       height: size * 13,
-      width: size * 18,
-      textAlign: 'center',
-      textBaseline: 'middle'
+      width: size * 18
     }
   };
 
@@ -2464,16 +2465,17 @@ class Game extends Component {
     this.loading = '加载数据';
     await this.$data.load();
     const game = this.$data.game;
-    document.title = game.title;
-
-    if (game.font && game.font.load !== false) {
-      this.loading = '加载字体';
-      const font = game.font;
-      await this.$font.load(font); // this.styles.app.font = `${font.name}`
-    }
+    document.title = game.title; // if (game.font && game.font.load !== false) {
+    //   this.loading = '加载字体'
+    //   const font = game.font
+    //   await this.$font.load(font)
+    //   // this.styles.app.font = `${font.name}`
+    // }
 
     if (game.images) {
       this.loading = '加载图片';
+      const all = [].concat(game.images, game.sprites);
+      console.log(all);
       await this.$images.load(game.images, game.sprites);
     }
 

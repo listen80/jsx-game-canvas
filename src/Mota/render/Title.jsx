@@ -7,6 +7,7 @@ const styles = {
   title: {
     width: size * (13 + 5),
     height: size * 13,
+    textAlign: 'center',
   },
   gameName: {
     y: size * 2,

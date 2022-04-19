@@ -19,8 +19,6 @@ export default class Game extends Component {
     app: {
       height: size * 13,
       width: size * 18,
-      textAlign: 'center',
-      textBaseline: 'middle',
     },
   };
 
@@ -31,15 +29,17 @@ export default class Game extends Component {
     const game = this.$data.game
     document.title = game.title
 
-    if (game.font && game.font.load !== false) {
-      this.loading = '加载字体'
-      const font = game.font
-      await this.$font.load(font)
-      // this.styles.app.font = `${font.name}`
-    }
+    // if (game.font && game.font.load !== false) {
+    //   this.loading = '加载字体'
+    //   const font = game.font
+    //   await this.$font.load(font)
+    //   // this.styles.app.font = `${font.name}`
+    // }
 
     if (game.images) {
       this.loading = '加载图片'
+      const all = [].concat(game.images, game.sprites)
+      console.log(all)
       await this.$images.load(game.images, game.sprites)
     }
 
