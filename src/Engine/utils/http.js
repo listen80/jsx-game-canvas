@@ -16,7 +16,7 @@ export const loadSound = (src, callback) => {
   return new Promise(function (resolve, reject) {
     const audio = new Audio();
     audio.addEventListener("canplay", () => {
-      callback && callback(src, img);
+      callback && callback(src, audio);
       resolve(audio);
     });
     audio.addEventListener("error", () => reject(audio));

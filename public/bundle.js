@@ -602,7 +602,7 @@ const loadSound = (src, callback) => {
   return new Promise(function (resolve, reject) {
     const audio = new Audio();
     audio.addEventListener("canplay", () => {
-      callback && callback(src, img);
+      callback && callback(src, audio);
       resolve(audio);
     });
     audio.addEventListener("error", () => reject(audio));
@@ -641,10 +641,10 @@ class Sound {
 
   load(dataArray) {
     this.total = dataArray.length;
-    return Promise.all(dataArray.map(sound => loadSound(`Sound/${sound}`)), sounds => {
+    return Promise.all(dataArray.map(sound => loadSound(`Sound/${sound}`, (src, el) => {
       this.loaded++;
-      sounds.forEach((Sound, i) => this.sounds[dataArray[i]] = Sound);
-    });
+      this.sounds[sound] = el; // sounds.forEach((Sound, i) => (this.sounds[dataArray[i]] = Sound));
+    })));
   }
 
   play(type, name) {
@@ -1108,7 +1108,7 @@ const styles$1 = {
   title: {
     width: size$a * (13 + 5),
     height: size$a * 13,
-    textAlign: 'center'
+    textAlign: "center"
   },
   gameName: {
     y: size$a * 2,
@@ -1141,37 +1141,7 @@ class Title extends Component {
       style: styles$1.title
     }, this.$c("div", {
       style: styles$1.gameName
-    }, this.$data.game.title), this.$c(Animate, {
-      data: {
-        src: "stand.png",
-        maxTick: 4,
-        sy: 4,
-        x: 208,
-        y: 100,
-        width: 632 / 4,
-        height: 768 / 8
-      }
-    }), this.$c(Animate, {
-      data: {
-        src: "skill.png",
-        maxTick: 6,
-        sy: 4,
-        width: 912 / 6,
-        height: 800 / 8,
-        x: 308,
-        y: 200
-      }
-    }), this.$c(Animate, {
-      data: {
-        src: "run.png",
-        maxTick: 6,
-        width: 996 / 6,
-        height: 824 / 8,
-        sy: 4,
-        x: 108,
-        y: 200
-      }
-    }), this.$c(Select, {
+    }, this.$data.game.title), this.$c(Select, {
       activeIndex: this.activeIndex,
       options: this.options,
       style: styles$1.select,
@@ -1179,7 +1149,39 @@ class Title extends Component {
     }));
   }
 
-}
+} // <Animate
+// data={{
+//   src: "stand.png",
+//   maxTick: 4,
+//   sy: 4,
+//   x: 208,
+//   y: 100,
+//   width: 632 / 4,
+//   height: 768 / 8,
+// }}
+// ></Animate>
+// <Animate
+// data={{
+//   src: "skill.png",
+//   maxTick: 6,
+//   sy: 4,
+//   width: 912 / 6,
+//   height: 800 / 8,
+//   x: 308,
+//   y: 200,
+// }}
+// ></Animate>
+// <Animate
+// data={{
+//   src: "run.png",
+//   maxTick: 6,
+//   width: 996 / 6,
+//   height: 824 / 8,
+//   sy: 4,
+//   x: 108,
+//   y: 200,
+// }}
+// ></Animate>
 
 const size$9 = 32;
 class Shop extends Component {
