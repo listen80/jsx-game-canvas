@@ -2,7 +2,10 @@ import { Component } from 'Engine'
 const size = 32
 
 export default class Loading extends Component {
-  
+  constructor() {
+    super(...arguments)
+    console.log(this.$images)
+  }
   render () {
     const width = size * (18 - 2 * 2)
     const height = size

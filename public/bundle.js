@@ -587,19 +587,22 @@ const formatText = data => {
   return o;
 };
 
-const loadImage = src => {
+const loadImage = (src, callback) => {
   return new Promise(function (resolve, reject) {
     const img = new Image();
-    img.addEventListener('load', () => resolve(img));
-    img.addEventListener('error', () => reject(img));
+    img.addEventListener("load", () => {
+      callback && callback(src, img);
+      resolve(img);
+    });
+    img.addEventListener("error", () => reject(img));
     img.src = src;
   });
 };
 const loadSound = src => {
   return new Promise(function (resolve, reject) {
     const audio = new Audio();
-    audio.addEventListener('canplay', () => resolve(audio));
-    audio.addEventListener('error', () => reject(audio));
+    audio.addEventListener("canplay", () => resolve(audio));
+    audio.addEventListener("error", () => reject(audio));
     audio.src = src;
   });
 };
@@ -650,12 +653,17 @@ class Sound {
 class ImageCollection {
   constructor() {
     this.images = Object.create(null);
+    this.total = Infinity;
+    this.loaded = 0;
   }
 
   load(images, sprite) {
-    return Promise.all([...sprite.map(v => `Sprite/${v}.png`), ...images.map(v => `Graph/${v}`)].map(src => {
+    const total = [...sprite.map(v => `Sprite/${v}.png`), ...images.map(v => `Graph/${v}`)];
+    this.total = total.length;
+    return Promise.all(total.map(src => {
       return new Promise(resolve => {
-        loadImage(`${src}`).then(img => {
+        loadImage(`${src}`, (src, img) => {
+          this.loaded++;
           src = src.replace('Graph/', '').replace('Sprite/', '');
           this.images[src] = img;
           resolve();
@@ -1046,6 +1054,11 @@ class FPS extends Component {
 
 const size$b = 32;
 class Loading extends Component {
+  constructor() {
+    super(...arguments);
+    console.log(this.$images);
+  }
+
   render() {
     const width = size$b * (18 - 2 * 2);
     const height = size$b;
