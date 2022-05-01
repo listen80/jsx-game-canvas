@@ -24,10 +24,10 @@ export default class Game extends Component {
 
   async create () {
     this.loading = '加载数据'
-    await this.$data.load()
+    // await this.$data.load()
 
-    const game = this.$data.game
-    document.title = game.title
+    // const game = this.$data.game
+    // document.title = game.title
 
     // if (game.font && game.font.load !== false) {
     //   this.loading = '加载字体'
@@ -36,17 +36,17 @@ export default class Game extends Component {
     //   // this.styles.app.font = `${font.name}`
     // }
 
-    if (game.images) {
-      this.loading = '加载图片'
-      await this.$images.load(game.images, game.sprites)
-    }
+    // if (game.images) {
+    //   this.loading = '加载图片'
+    //   await this.$images.load(game.images, game.sprites)
+    // }
 
-    if (game.sounds) {
-      this.loading = '加载音乐'
-      await this.$sound.load(game.sounds)
-    }
+    // if (game.sounds) {
+    //   this.loading = '加载音乐'
+    //   await this.$sound.load(game.sounds)
+    // }
 
-    this.loading = false
+    // this.loading = false
 
     // this.onLoadMap({ mapId: 'MT1' })
   }
@@ -71,13 +71,12 @@ export default class Game extends Component {
     this.msg = msg
   };
   renderLoading() {
-    const rate = (this.$images.loaded / this.$images.total)
-    return <Loading msg={this.loading} rate={rate}/>
+    return <Loading msg={this.loading} rate={this.$res.loaded / this.$res.total}/>
   }
   render () {
     return (
       <div style={this.styles.app}>
-        {this.loading ? (
+        {this.$res.loading ? (
           this.renderLoading()
         ) : this.map ? (
           this.map.text ? (

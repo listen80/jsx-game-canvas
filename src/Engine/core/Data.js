@@ -4,7 +4,6 @@ const load = url => url.endsWith('.dat') ? loadText(`${url}`) : loadJSON(`${url}
 export default class Data {
   load () {
     const loaderMap = [
-      'game.json',
       'save.json',
       'shop.json',
       'mapping.dat',

@@ -63,5 +63,6 @@
     "yellow": "#deb887",
     "blue": "#acaadc",
     "red": "#dc6664"
-  }
+  },
+  "json": ["save.json", "shop.json", "mapping.dat"]
 }

@@ -5,7 +5,6 @@ const fontsIos = ['娃娃体-简', '兰亭黑-简', '凌慧体-简', '翩翩体-
 const fontsMS = ['楷体', '仿宋', '微软雅黑', '黑体', '宋体'];
 const fontsAndroid = ['Roboto', 'Noto Sans', 'Droid'];
 const fontFamily = [...fontsMS, ...fontsIos, ...fontsAndroid].find(checkFont);
-console.log(fontFamily);
 const baseStyle = {
   direction: 'ltr',
   fillStyle: '#fff',
@@ -598,128 +597,65 @@ const loadImage = (src, callback) => {
     img.src = src;
   });
 };
-const loadSound = (src, callback) => {
-  return new Promise(function (resolve, reject) {
-    const audio = new Audio();
-    audio.addEventListener("canplay", () => {
-      callback && callback(src, audio);
-      resolve(audio);
-    });
-    audio.addEventListener("error", () => reject(audio));
-    audio.src = src;
-  });
-};
 function loadJSON(url) {
   return fetch(url).then(data => data.json());
 }
 function loadText(url) {
   return fetch(url).then(data => data.text()).then(data => formatText(data));
 }
-function loadFont({
-  name,
-  url
-}) {
-  const fontface = new FontFace(name, `url("${url}")`);
-  document.fonts.add(fontface);
-  fontface.load();
-  return fontface.loaded;
-}
 
-class Sound {
-  constructor(sounds) {
-    this.sounds = sounds || Object.create(null);
+class Resource {
+  constructor(game) {
     this.loaded = 0;
-    this.total = Infinity;
-  }
-
-  control(type, name, control) {
-    const current = this.sounds[`${type}/${name}`].cloneNode();
-    current.loop = type === "bgm";
-    current[control]();
-    return current;
-  }
-
-  load(dataArray) {
-    this.total = dataArray.length;
-    return Promise.all(dataArray.map(sound => loadSound(`Sound/${sound}`, (src, el) => {
-      this.loaded++;
-      this.sounds[sound] = el; // sounds.forEach((Sound, i) => (this.sounds[dataArray[i]] = Sound));
-    })));
-  }
-
-  play(type, name) {
-    return this.control(type, name, "play");
-  }
-
-  pause(type, name) {
-    return this.control(type, name, "pause");
-  }
-
-}
-
-class ImageCollection {
-  constructor() {
-    this.images = Object.create(null);
-    this.total = Infinity;
-    this.loaded = 0;
-  }
-
-  load(images, sprite) {
-    const total = [...sprite.map(v => `Sprite/${v}.png`), ...images.map(v => `Graph/${v}`)];
-    this.total = total.length;
-    return Promise.all(total.map(src => {
-      return new Promise(resolve => {
-        loadImage(`${src}`, (src, img) => {
-          this.loaded++;
-          src = src.replace('Graph/', '').replace('Sprite/', '');
-          this.images[src] = img;
-          resolve();
-        });
-      });
-    }));
-  }
-
-}
-
-const load = url => url.endsWith('.dat') ? loadText(`${url}`) : loadJSON(`${url}`);
-
-class Data {
-  load() {
-    const loaderMap = ['game.json', 'save.json', 'shop.json', 'mapping.dat'];
-    return Promise.all(loaderMap.map(url => {
-      return load(`Data/${url}`);
-    })).then(([game, save, shop, mapping]) => {
-      Object.assign(this, {
-        game,
-        save,
-        shop,
-        mapping
-      });
-      const sprites = game.sprites;
-      Promise.all(sprites.map(url => load(`Sprite/${url}.dat`))).then(([enemys, items, animates, icons, npcs, terrains, boss]) => {
-        Object.assign(this, {
-          enemys,
-          items,
-          animates,
-          icons,
-          npcs,
-          terrains,
-          boss
-        });
-      });
-    });
-  }
-
-}
-
-class Font {
-  constructor() {
-    this.$font = Object.create(null);
+    this.total = 0;
+    this.game = game;
+    this.loading = false;
+    this.load(game.json.map(v => `Data/${v}`));
+    this.load(game.sprites.map(v => `Sprite/${v}.png`));
+    this.load(game.images.map(v => `Graph/${v}`));
   }
 
   load(data) {
-    return loadFont(data);
+    this.loading = true;
+    data.forEach(item => {
+      this.total++;
+      this.loadOne(item).then(data => {
+        this.loaded++;
+
+        if (this.loaded === this.total) {
+          setTimeout(() => {
+            this.loading = false;
+          }, 200);
+        }
+      });
+    }); // return Promise.all(loaderMap.map((url) => {
+    //   return load(`Data/${url}`)
+    // })).then(([game, save, shop, mapping]) => {
+    //   Object.assign(this, { game, save, shop, mapping })
+    //   const sprites = game.sprites
+    //   Promise.all(sprites.map(url => load(`Sprite/${url}.dat`))).then(([enemys, items, animates, icons, npcs, terrains, boss]) => {
+    //     Object.assign(this, { enemys, items, animates, icons, npcs, terrains, boss })
+    //   })
+    // })
   }
+
+  loadOne(url) {
+    if (url.endsWith(".dat")) {
+      return loadText(`${url}`);
+    }
+
+    if (url.endsWith(".json")) {
+      return loadJSON(`${url}`);
+    }
+
+    if (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".webp")) {
+      return loadImage(`${url}`);
+    }
+  }
+
+  loadSprite() {}
+
+  loadMap() {}
 
 }
 
@@ -736,9 +672,7 @@ function createNode(tag, props = {}, ...children) {
 function createInstance(next) {
   const Class = next.tag;
   next.$context = new Class(next);
-  next.$context.$images = next.$parent.$images;
-  next.$context.$sound = next.$parent.$sound;
-  next.$context.$data = next.$parent.$data;
+  next.$context.$res = next.$parent.$res;
   next.$context.$parent = next.$parent;
   next.$context.create && next.$context.create();
   renderNode(next);
@@ -988,24 +922,112 @@ class Table extends Component {
 
 }
 
+const directions = [{
+  code: 'ArrowRight',
+  x: 1.5,
+  y: 0,
+  title: '右'
+}, {
+  code: 'ArrowUp',
+  x: 0.75,
+  y: -0.75,
+  title: '上'
+}, {
+  code: 'ArrowLeft',
+  x: 0,
+  y: 0,
+  title: '左'
+}, {
+  code: 'ArrowDown',
+  x: 0.75,
+  y: 0.75,
+  title: '下'
+}];
+const controls = [{
+  code: 'KeyS',
+  x: -1,
+  y: -0.75
+}, {
+  code: 'KeyL',
+  x: -2.5,
+  y: -0.75
+}, {
+  code: 'Escape',
+  x: -2.5,
+  y: 0.5
+}, {
+  code: 'Space',
+  x: -1,
+  y: 0.5
+}, {
+  code: 'KeyB',
+  x: -1,
+  y: 1.75
+}, {
+  code: 'KeyX',
+  x: -2.5,
+  y: 1.75
+}];
+
+function createElement(array, root) {
+  root = document.querySelector(root);
+  array.forEach((item, index) => {
+    const {
+      x,
+      y,
+      code,
+      title
+    } = item;
+    const el = document.createElement('div');
+    el.classList.add('btn');
+    el.textContent = title || code;
+    el.style.transform = `translate(${x * 100}%, ${y * 100}%)`;
+
+    el.onmousedown = function (e) {
+      var event = document.createEvent('Event'); // var event = new Event('keydown');
+
+      event.code = code; // Define that the event name is 'build'.
+
+      event.initEvent('keydown', true, true);
+      console.log('in'); // The form element listens for the custom "awesome" event and then consoles the output of the passed text() method
+
+      document.dispatchEvent(event);
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    root.appendChild(el);
+  });
+}
+
+createElement(directions, '.direction');
+createElement(controls, '.control');
+
 class Engine {
   constructor($game) {
+    this.$game = $game;
+
     if (this.checkChromeVersion()) {
-      this.$state = Object.create(null);
-      this.$data = new Data();
-      this.$sound = new Sound();
-      this.$images = new ImageCollection();
-      this.$font = new Font();
-      this.$ui = new Render(this);
-      this.$root = null;
-      this.$game = $game;
-      this.gameStart();
+      loadJSON("game.json").then(game => {
+        this.init(game);
+      });
     }
   }
 
+  init(game) {
+    this.game = game;
+    this.$res = new Resource(game); // this.$sound = new Sound();
+    // this.$images = new Images();
+    // this.$font = new Font();
+
+    this.$ui = new Render(this);
+    this.$root = null;
+    this.gameStart();
+  }
+
   checkChromeVersion() {
-    if (location.protocol === 'file:') {
-      alert('不能直接运行index.html'); // } else if (!navigator.userAgent.match(/Chrome\/(\d+)/) || RegExp.$1 < 86) {
+    if (location.protocol === "file:") {
+      alert("不能直接运行index.html"); // } else if (!navigator.userAgent.match(/Chrome\/(\d+)/) || RegExp.$1 < 86) {
       // alert('需要chrome最新浏览器')
     } else {
       return true;
@@ -2478,27 +2500,25 @@ class Game extends Component {
   };
 
   async create() {
-    this.loading = '加载数据';
-    await this.$data.load();
-    const game = this.$data.game;
-    document.title = game.title; // if (game.font && game.font.load !== false) {
+    this.loading = '加载数据'; // await this.$data.load()
+    // const game = this.$data.game
+    // document.title = game.title
+    // if (game.font && game.font.load !== false) {
     //   this.loading = '加载字体'
     //   const font = game.font
     //   await this.$font.load(font)
     //   // this.styles.app.font = `${font.name}`
     // }
-
-    if (game.images) {
-      this.loading = '加载图片';
-      await this.$images.load(game.images, game.sprites);
-    }
-
-    if (game.sounds) {
-      this.loading = '加载音乐';
-      await this.$sound.load(game.sounds);
-    }
-
-    this.loading = false; // this.onLoadMap({ mapId: 'MT1' })
+    // if (game.images) {
+    //   this.loading = '加载图片'
+    //   await this.$images.load(game.images, game.sprites)
+    // }
+    // if (game.sounds) {
+    //   this.loading = '加载音乐'
+    //   await this.$sound.load(game.sounds)
+    // }
+    // this.loading = false
+    // this.onLoadMap({ mapId: 'MT1' })
   }
 
   onLoadMap = async data => {
@@ -2519,17 +2539,16 @@ class Game extends Component {
   };
 
   renderLoading() {
-    const rate = this.$images.loaded / this.$images.total;
     return this.$c(Loading, {
       msg: this.loading,
-      rate: rate
+      rate: this.$res.loaded / this.$res.total
     });
   }
 
   render() {
     return this.$c("div", {
       style: this.styles.app
-    }, this.loading ? this.renderLoading() : this.map ? this.map.text ? this.$c(ScrollText, {
+    }, this.$res.loading ? this.renderLoading() : this.map ? this.map.text ? this.$c(ScrollText, {
       map: this.map,
       onClose: this.onLoadMap,
       onTitle: this.onTitle

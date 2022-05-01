@@ -21,7 +21,6 @@ export const fontsAndroid = ['Roboto', 'Noto Sans', 'Droid']
 
 export const fontFamily = [...fontsMS, ...fontsIos, ...fontsAndroid].find(checkFont)
 
-console.log(fontFamily)
 export const baseStyle = {
   direction: 'ltr',
   fillStyle: '#fff',
