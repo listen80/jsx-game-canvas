@@ -1,0 +1,8 @@
+{
+  "ArrowDown": "down",
+  "ArrowUp": "up",
+  "ArrowLeft": "left",
+  "ArrowRight": "right",
+  "Space": "confirm",
+  "Escape": "cancel"
+}

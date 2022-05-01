@@ -1,22 +1,14 @@
 {
+  "title": "魔 塔",
   "screen": {
     "width": 416,
     "height": 416
-  },
-  "control": {
-    "ArrowDown": "down",
-    "ArrowUp": "up",
-    "ArrowLeft": "left",
-    "ArrowRight": "right",
-    "Space": "confirm",
-    "Escape": "cancel"
   },
   "font": {
     "name": "华文行楷",
     "url": "Fonts/华文行楷.ttf",
     "load": false
   },
-  "title": "魔 塔",
   "images": [
     "Characters/hero.png",
     "ground.png",
@@ -64,5 +56,5 @@
     "blue": "#acaadc",
     "red": "#dc6664"
   },
-  "json": ["save.json", "shop.json", "mapping.dat"]
+  "json": ["control.json", "save.json", "shop.json", "mapping.dat"]
 }

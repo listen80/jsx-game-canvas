@@ -40,6 +40,7 @@ export default class Title extends Component {
   };
 
   render() {
+    console.log(this)
     return (
       <div style={styles.title}>
         <div style={styles.gameName}>{this.$data.game.title}</div>

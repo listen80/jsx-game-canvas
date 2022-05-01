@@ -21,13 +21,13 @@ export default class Engine {
     }
   }
 
-  init(game) {
-    this.game = game
-    this.$res = new Resource(game);
+  init(config) {
+    this.$config = config
+    this.$res = new Resource(config);
     // this.$sound = new Sound();
     // this.$images = new Images();
     // this.$font = new Font();
-    this.$ui = new Render(this);
+    this.$render = new Render(this);
     this.$root = null;
     this.gameStart();
   }
@@ -57,6 +57,6 @@ export default class Engine {
 
   keyFrame() {
     this.$root = patchNode(this.$root, createNode.call(this, this.$game, null));
-    this.$ui.render(this.$root);
+    this.$render.render(this.$root);
   }
 }

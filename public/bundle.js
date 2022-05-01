@@ -1014,13 +1014,13 @@ class Engine {
     }
   }
 
-  init(game) {
-    this.game = game;
-    this.$res = new Resource(game); // this.$sound = new Sound();
+  init(config) {
+    this.$config = config;
+    this.$res = new Resource(config); // this.$sound = new Sound();
     // this.$images = new Images();
     // this.$font = new Font();
 
-    this.$ui = new Render(this);
+    this.$render = new Render(this);
     this.$root = null;
     this.gameStart();
   }
@@ -1050,7 +1050,7 @@ class Engine {
 
   keyFrame() {
     this.$root = patchNode(this.$root, createNode.call(this, this.$game, null));
-    this.$ui.render(this.$root);
+    this.$render.render(this.$root);
   }
 
 }
@@ -1159,6 +1159,7 @@ class Title extends Component {
   };
 
   render() {
+    console.log(this);
     return this.$c("div", {
       style: styles$1.title
     }, this.$c("div", {
