@@ -64,5 +64,9 @@ export default class Resource {
 
   loadSprite() {}
 
-  loadMap() {}
+  loadMap() {
+    if (this.$data) {
+      
+    }
+  }
 }
