@@ -15,6 +15,8 @@ function createInstance (next) {
   next.$context = new Class(next)
 
   next.$context.$res = next.$parent.$res
+  next.$context.$config = next.$parent.$config
+  next.$context.$data = next.$parent.$data
   next.$context.$parent = next.$parent
   next.$context.create && next.$context.create()
   renderNode(next)

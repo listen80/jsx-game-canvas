@@ -605,26 +605,40 @@ function loadText(url) {
 }
 
 class Resource {
-  constructor(game) {
+  constructor(config) {
     this.loaded = 0;
     this.total = 0;
-    this.game = game;
+    this.config = config;
     this.loading = false;
-    this.load(game.json.map(v => `Data/${v}`));
-    this.load(game.sprites.map(v => `Sprite/${v}.png`));
-    this.load(game.images.map(v => `Graph/${v}`));
+    this.$data = Object.create(null);
+    this.$images = Object.create(null);
+    this.$sounds = Object.create(null);
+    this.load(config.json.map(v => `Data/${v}`), "data");
+    this.load(config.sprites.map(v => `Sprite/${v}.png`), "sprite");
+    this.load(config.images.map(v => `Graph/${v}`), "graph");
   }
 
-  load(data) {
+  load(data, type) {
     this.loading = true;
     data.forEach(item => {
       this.total++;
       this.loadOne(item).then(data => {
         this.loaded++;
 
+        if (type === "data") {
+          this.$data[item] = data;
+        } else if (type === "sprite") {
+          this.$data[item] = data;
+        } else if (type === "graph") {
+          this.$images[item] = data;
+        } else if (type === "audio") {
+          this.$images[item] = data;
+        }
+
         if (this.loaded === this.total) {
-          setTimeout(() => {
+          const timer = setTimeout(() => {
             this.loading = false;
+            clearTimeout(timer);
           }, 200);
         }
       });
@@ -673,6 +687,8 @@ function createInstance(next) {
   const Class = next.tag;
   next.$context = new Class(next);
   next.$context.$res = next.$parent.$res;
+  next.$context.$config = next.$parent.$config;
+  next.$context.$data = next.$parent.$data;
   next.$context.$parent = next.$parent;
   next.$context.create && next.$context.create();
   renderNode(next);
@@ -1016,12 +1032,22 @@ class Engine {
 
   init(config) {
     this.$config = config;
-    this.$res = new Resource(config); // this.$sound = new Sound();
+    this.$data = Object.create(null);
+    this.$res = new Resource(config);
+    this.$root = this;
+
+    this.$event = (key, id) => {
+      if (key === 'loadmap') {
+        this.$res.loadMap(id); // this.map = await loadMap(this.$data.save.mapId)
+        // this.randMapKey = `${this.$data.save.mapId} ${new Date()}`
+      }
+    }; // this.$sound = new Sound();
     // this.$images = new Images();
     // this.$font = new Font();
 
+
     this.$render = new Render(this);
-    this.$root = null;
+    this.$node = null;
     this.gameStart();
   }
 
@@ -1049,8 +1075,8 @@ class Engine {
   }
 
   keyFrame() {
-    this.$root = patchNode(this.$root, createNode.call(this, this.$game, null));
-    this.$render.render(this.$root);
+    this.$node = patchNode(this.$node, createNode.call(this, this.$game, null));
+    this.$render.render(this.$node);
   }
 
 }
@@ -1148,9 +1174,11 @@ class Title extends Component {
   create() {
     this.activeIndex = loadGame() ? 1 : 0;
     this.options = [{
-      text: "开始"
+      text: "开始",
+      event: "startGame"
     }, {
-      text: "继续"
+      text: "继续",
+      event: "loadGame"
     }];
   }
 
@@ -1159,12 +1187,11 @@ class Title extends Component {
   };
 
   render() {
-    console.log(this);
     return this.$c("div", {
       style: styles$1.title
     }, this.$c("div", {
       style: styles$1.gameName
-    }, this.$data.game.title), this.$c(Select, {
+    }, this.$config.title), this.$c(Select, {
       activeIndex: this.activeIndex,
       options: this.options,
       style: styles$1.select,

@@ -23,12 +23,21 @@ export default class Engine {
 
   init(config) {
     this.$config = config
+    this.$data = Object.create(null)
     this.$res = new Resource(config);
+    this.$root = this
+    this.$event = (key, id) => {
+      if (key === 'loadmap') {
+        this.$res.loadMap(id)
+        // this.map = await loadMap(this.$data.save.mapId)
+        // this.randMapKey = `${this.$data.save.mapId} ${new Date()}`
+      }
+    }
     // this.$sound = new Sound();
     // this.$images = new Images();
     // this.$font = new Font();
     this.$render = new Render(this);
-    this.$root = null;
+    this.$node = null;
     this.gameStart();
   }
 
@@ -56,7 +65,7 @@ export default class Engine {
   }
 
   keyFrame() {
-    this.$root = patchNode(this.$root, createNode.call(this, this.$game, null));
-    this.$render.render(this.$root);
+    this.$node = patchNode(this.$node, createNode.call(this, this.$game, null));
+    this.$render.render(this.$node);
   }
 }

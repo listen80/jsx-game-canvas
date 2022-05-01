@@ -28,9 +28,11 @@ export default class Title extends Component {
     this.options = [
       {
         text: "开始",
+        event: "startGame",
       },
       {
         text: "继续",
+        event: "loadGame",
       },
     ];
   }
@@ -40,10 +42,9 @@ export default class Title extends Component {
   };
 
   render() {
-    console.log(this)
     return (
       <div style={styles.title}>
-        <div style={styles.gameName}>{this.$data.game.title}</div>
+        <div style={styles.gameName}>{this.$config.title}</div>
         <Select
           activeIndex={this.activeIndex}
           options={this.options}

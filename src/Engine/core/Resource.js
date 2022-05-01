@@ -1,29 +1,43 @@
 import { loadJSON, loadText, loadImage } from "../utils/http";
 
 export default class Resource {
-  constructor(game) {
+  constructor(config) {
     this.loaded = 0;
     this.total = 0;
-    this.game = game;
+    this.config = config;
     this.loading = false;
-    this.load(game.json.map(v => `Data/${v}`));
-    this.load(game.sprites.map(v => `Sprite/${v}.png`));
-    this.load(game.images.map(v => `Graph/${v}`));
 
+    this.$data = Object.create(null);
+    this.$images = Object.create(null);
+    this.$sounds = Object.create(null);
+
+    this.load(config.json.map((v) => `Data/${v}`), "data");
+    this.load(config.sprites.map((v) => `Sprite/${v}.png`), "sprite");
+    this.load(config.images.map((v) => `Graph/${v}`), "graph");
   }
 
-  load(data) {
+  load(data, type) {
     this.loading = true;
     data.forEach((item) => {
       this.total++;
       this.loadOne(item).then((data) => {
         this.loaded++;
-        if (this.loaded === this.total) {
-          setTimeout(() => {
-            this.loading = false
-          }, 200)
+        if (type === "data") {
+          this.$data[item] = data;
+        } else if (type === "sprite") {
+          this.$data[item] = data;
+        } else if (type === "graph") {
+          this.$images[item] = data;
+        } else if (type === "audio") {
+          this.$images[item] = data;
         }
-      })
+        if (this.loaded === this.total) {
+          const timer = setTimeout(() => {
+            this.loading = false;
+            clearTimeout(timer)
+          }, 200);
+        }
+      });
     });
     // return Promise.all(loaderMap.map((url) => {
     //   return load(`Data/${url}`)

@@ -56,5 +56,5 @@
     "blue": "#acaadc",
     "red": "#dc6664"
   },
-  "json": ["control.json", "save.json", "shop.json", "mapping.dat"]
+  "json": ["control.json", "save.json", "shop.json"]
 }
