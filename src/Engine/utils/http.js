@@ -15,7 +15,10 @@ export const loadImage = (src, callback) => {
 export const loadSound = (src) => {
   return new Promise(function (resolve, reject) {
     const audio = new Audio();
-    audio.addEventListener("canplay", () => resolve(audio));
+    audio.addEventListener("canplay", () => {
+      callback && callback(src, img);
+      resolve(audio);
+    });
     audio.addEventListener("error", () => reject(audio));
     audio.src = src;
   });

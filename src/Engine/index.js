@@ -16,7 +16,7 @@ export default class Engine {
     if (this.checkChromeVersion()) {
       this.$state = Object.create(null)
       this.$data = new Data()
-      this.$sound = new Sound()  
+      this.$sound = new Sound()
       this.$images = new Images()
       this.$font = new Font()
       this.$ui = new Render(this)

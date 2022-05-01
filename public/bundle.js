@@ -601,7 +601,10 @@ const loadImage = (src, callback) => {
 const loadSound = src => {
   return new Promise(function (resolve, reject) {
     const audio = new Audio();
-    audio.addEventListener("canplay", () => resolve(audio));
+    audio.addEventListener("canplay", () => {
+      callback && callback(src, img);
+      resolve(audio);
+    });
     audio.addEventListener("error", () => reject(audio));
     audio.src = src;
   });
@@ -732,7 +735,6 @@ function createInstance(next) {
   next.$context.$images = next.$parent.$images;
   next.$context.$sound = next.$parent.$sound;
   next.$context.$data = next.$parent.$data;
-  next.$context.$font = next.$parent.$font;
   next.$context.$parent = next.$parent;
   next.$context.create && next.$context.create();
   renderNode(next);
@@ -1054,14 +1056,10 @@ class FPS extends Component {
 
 const size$b = 32;
 class Loading extends Component {
-  constructor() {
-    super(...arguments);
-    console.log(this.$images);
-  }
-
   render() {
     const width = size$b * (18 - 2 * 2);
     const height = size$b;
+    const rate = this.$images.loaded / this.$images.total;
     return this.$c("div", {
       style: {
         x: size$b * 2,
@@ -1075,7 +1073,7 @@ class Loading extends Component {
       }
     }), this.$c("div", {
       style: {
-        width: width * this.props.tick / 100,
+        width: width * rate,
         height,
         backgroundColor: '#666'
       }
@@ -2487,8 +2485,6 @@ class Game extends Component {
 
     if (game.images) {
       this.loading = '加载图片';
-      const all = [].concat(game.images, game.sprites);
-      console.log(all);
       await this.$images.load(game.images, game.sprites);
     }
 
@@ -2517,13 +2513,17 @@ class Game extends Component {
     this.msg = msg;
   };
 
+  renderLoading() {
+    return this.$c(Loading, {
+      msg: this.loading
+    });
+  }
+
   render() {
     // const Title = Test
     return this.$c("div", {
       style: this.styles.app
-    }, this.loading ? this.$c(Loading, {
-      msg: this.loading
-    }) : this.map ? this.map.text ? this.$c(ScrollText, {
+    }, this.loading ? this.renderLoading() : this.map ? this.map.text ? this.$c(ScrollText, {
       map: this.map,
       onClose: this.onLoadMap,
       onTitle: this.onTitle

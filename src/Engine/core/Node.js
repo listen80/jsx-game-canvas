@@ -17,7 +17,6 @@ function createInstance (next) {
   next.$context.$images = next.$parent.$images
   next.$context.$sound = next.$parent.$sound
   next.$context.$data = next.$parent.$data
-  next.$context.$font = next.$parent.$font
   next.$context.$parent = next.$parent
   next.$context.create && next.$context.create()
   renderNode(next)

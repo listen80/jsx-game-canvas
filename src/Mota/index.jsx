@@ -38,8 +38,6 @@ export default class Game extends Component {
 
     if (game.images) {
       this.loading = '加载图片'
-      const all = [].concat(game.images, game.sprites)
-      console.log(all)
       await this.$images.load(game.images, game.sprites)
     }
 
@@ -72,13 +70,15 @@ export default class Game extends Component {
   onMessage = (msg) => {
     this.msg = msg
   };
-
+  renderLoading() {
+    return <Loading msg={this.loading} />
+  }
   render () {
     // const Title = Test
     return (
       <div style={this.styles.app}>
         {this.loading ? (
-          <Loading msg={this.loading} />
+          this.renderLoading()
         ) : this.map ? (
           this.map.text ? (
             <ScrollText
