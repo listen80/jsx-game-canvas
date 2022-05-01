@@ -12,7 +12,7 @@ export const loadImage = (src, callback) => {
   });
 };
 
-export const loadSound = (src) => {
+export const loadSound = (src, callback) => {
   return new Promise(function (resolve, reject) {
     const audio = new Audio();
     audio.addEventListener("canplay", () => {

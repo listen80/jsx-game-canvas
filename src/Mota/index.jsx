@@ -71,10 +71,10 @@ export default class Game extends Component {
     this.msg = msg
   };
   renderLoading() {
-    return <Loading msg={this.loading} />
+    const rate = (this.$images.loaded / this.$images.total)
+    return <Loading msg={this.loading} rate={rate}/>
   }
   render () {
-    // const Title = Test
     return (
       <div style={this.styles.app}>
         {this.loading ? (

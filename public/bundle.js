@@ -598,7 +598,7 @@ const loadImage = (src, callback) => {
     img.src = src;
   });
 };
-const loadSound = src => {
+const loadSound = (src, callback) => {
   return new Promise(function (resolve, reject) {
     const audio = new Audio();
     audio.addEventListener("canplay", () => {
@@ -628,27 +628,31 @@ function loadFont({
 class Sound {
   constructor(sounds) {
     this.sounds = sounds || Object.create(null);
+    this.loaded = 0;
+    this.total = Infinity;
   }
 
   control(type, name, control) {
     const current = this.sounds[`${type}/${name}`].cloneNode();
-    current.loop = type === 'bgm';
+    current.loop = type === "bgm";
     current[control]();
     return current;
   }
 
   load(dataArray) {
-    return Promise.all(dataArray.map(sound => loadSound(`Sound/${sound}`))).then(sounds => {
+    this.total = dataArray.length;
+    return Promise.all(dataArray.map(sound => loadSound(`Sound/${sound}`)), sounds => {
+      this.loaded++;
       sounds.forEach((Sound, i) => this.sounds[dataArray[i]] = Sound);
     });
   }
 
   play(type, name) {
-    return this.control(type, name, 'play');
+    return this.control(type, name, "play");
   }
 
   pause(type, name) {
-    return this.control(type, name, 'pause');
+    return this.control(type, name, "pause");
   }
 
 }
@@ -1059,7 +1063,6 @@ class Loading extends Component {
   render() {
     const width = size$b * (18 - 2 * 2);
     const height = size$b;
-    const rate = this.$images.loaded / this.$images.total;
     return this.$c("div", {
       style: {
         x: size$b * 2,
@@ -1073,7 +1076,7 @@ class Loading extends Component {
       }
     }), this.$c("div", {
       style: {
-        width: width * rate,
+        width: width * this.props.rate || 0,
         height,
         backgroundColor: '#666'
       }
@@ -2514,13 +2517,14 @@ class Game extends Component {
   };
 
   renderLoading() {
+    const rate = this.$images.loaded / this.$images.total;
     return this.$c(Loading, {
-      msg: this.loading
+      msg: this.loading,
+      rate: rate
     });
   }
 
   render() {
-    // const Title = Test
     return this.$c("div", {
       style: this.styles.app
     }, this.loading ? this.renderLoading() : this.map ? this.map.text ? this.$c(ScrollText, {
