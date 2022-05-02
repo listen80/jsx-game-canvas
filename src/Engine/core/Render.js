@@ -81,13 +81,13 @@ export default class Render {
       )
     })
 
-    keyEvents.forEach((name) => {
-      window.addEventListener(name.toLowerCase(), (e) => {
-        e.name = `on${name}`
-        e.$key = this.$data.game.control[e.code]
-        this.keyEventsCollectionKeyframe.push(e)
-      })
-    })
+    // keyEvents.forEach((name) => {
+    //   window.addEventListener(name.toLowerCase(), (e) => {
+    //     e.name = `on${name}`
+    //     e.$key = this.$data.game.control[e.code]
+    //     this.keyEventsCollectionKeyframe.push(e)
+    //   })
+    // })
   }
 
   runEvents () {

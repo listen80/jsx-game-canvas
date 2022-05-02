@@ -53,6 +53,7 @@ export default class Game extends Component {
 
   onLoadMap = async (data) => {
     this.loading = '加载地图'
+    debugger
     Object.assign(this.$data.save, data)
     this.map = await loadMap(this.$data.save.mapId)
     this.loading = false
@@ -78,8 +79,8 @@ export default class Game extends Component {
       <div style={this.styles.app}>
         {this.$res.loading ? (
           this.renderLoading()
-        ) : this.map ? (
-          this.map.text ? (
+        ) : this.$state.map ? (
+          this.$state.map.text ? (
             <ScrollText
               map={this.map}
               onClose={this.onLoadMap}

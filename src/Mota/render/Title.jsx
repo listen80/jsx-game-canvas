@@ -37,8 +37,11 @@ export default class Title extends Component {
     ];
   }
 
-  onConfirm = (isLoad) => {
-    this.props.onLoadMap(isLoad ? loadGame() : null);
+  onConfirm = (index) => {
+    const event = this.options[index].event
+    this.$event(event)
+    // console.log(index)
+    // this.props.onLoadMap(isLoad ? loadGame() : null);
   };
 
   render() {

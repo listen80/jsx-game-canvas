@@ -107,14 +107,13 @@ class Render {
       }, {
         passive: false
       });
-    });
-    keyEvents.forEach(name => {
-      window.addEventListener(name.toLowerCase(), e => {
-        e.name = `on${name}`;
-        e.$key = this.$data.game.control[e.code];
-        this.keyEventsCollectionKeyframe.push(e);
-      });
-    });
+    }); // keyEvents.forEach((name) => {
+    //   window.addEventListener(name.toLowerCase(), (e) => {
+    //     e.name = `on${name}`
+    //     e.$key = this.$data.game.control[e.code]
+    //     this.keyEventsCollectionKeyframe.push(e)
+    //   })
+    // })
   }
 
   runEvents() {
@@ -597,6 +596,17 @@ const loadImage = (src, callback) => {
     img.src = src;
   });
 };
+const loadSound = (src, callback) => {
+  return new Promise(function (resolve, reject) {
+    const audio = new Audio();
+    audio.addEventListener("canplay", () => {
+      callback && callback(src, audio);
+      resolve(audio);
+    });
+    audio.addEventListener("error", () => reject(audio));
+    audio.src = src;
+  });
+};
 function loadJSON(url) {
   return fetch(url).then(data => data.json());
 }
@@ -608,7 +618,7 @@ class Resource {
   constructor(config) {
     this.loaded = 0;
     this.total = 0;
-    this.config = config;
+    this.$config = config;
     this.loading = false;
     this.$data = Object.create(null);
     this.$images = Object.create(null);
@@ -616,6 +626,7 @@ class Resource {
     this.load(config.json.map(v => `Data/${v}`), "data");
     this.load(config.sprites.map(v => `Sprite/${v}.png`), "sprite");
     this.load(config.images.map(v => `Graph/${v}`), "graph");
+    this.load(config.sounds.map(v => `Sound/${v}`), "audio");
   }
 
   load(data, type) {
@@ -624,9 +635,10 @@ class Resource {
       this.total++;
       this.loadOne(item).then(data => {
         this.loaded++;
+        item = item.replace(/\w+\//, '').replace(/\.\w+/, '');
 
         if (type === "data") {
-          this.$data[item] = data;
+          this.$config[item] = data;
         } else if (type === "sprite") {
           this.$data[item] = data;
         } else if (type === "graph") {
@@ -664,13 +676,17 @@ class Resource {
 
     if (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".webp")) {
       return loadImage(`${url}`);
+    } else {
+      return loadSound(`${url}`);
     }
   }
 
-  loadSprite() {}
+  loadJSON() {}
 
-  loadMap() {
-    if (this.$data) ;
+  loadSprite(sprites) {}
+
+  loadMap(id) {
+    return loadJSON(`Maps/${id}.json`);
   }
 
 }
@@ -690,7 +706,8 @@ function createInstance(next) {
   next.$context = new Class(next);
   next.$context.$res = next.$parent.$res;
   next.$context.$config = next.$parent.$config;
-  next.$context.$data = next.$parent.$data;
+  next.$context.$state = next.$parent.$state;
+  next.$context.$event = next.$parent.$event;
   next.$context.$parent = next.$parent;
   next.$context.create && next.$context.create();
   renderNode(next);
@@ -1021,6 +1038,24 @@ function createElement(array, root) {
 createElement(directions, '.direction');
 createElement(controls, '.control');
 
+function setStorage(key, value) {
+  return localStorage.setItem(key, JSON.stringify(value));
+}
+function getStorage(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key));
+  } catch (e) {
+    return null;
+  }
+}
+
+function saveGame(save) {
+  return setStorage('game', save);
+}
+function loadGame() {
+  return getStorage('game');
+}
+
 class Engine {
   constructor($game) {
     this.$game = $game;
@@ -1034,14 +1069,22 @@ class Engine {
 
   init(config) {
     this.$config = config;
-    this.$data = Object.create(null);
+    document.title = config.title;
+    this.$state = Object.create(null);
+    this.$save = Object.create(null);
     this.$res = new Resource(config);
     this.$root = this;
 
-    this.$event = (key, id) => {
-      if (key === 'loadmap') {
-        this.$res.loadMap(id); // this.map = await loadMap(this.$data.save.mapId)
+    this.$event = (key, data) => {
+      console.log(key, data);
+
+      if (key === 'loadMap') {
+        this.$res.loadMap(data); // this.map = await loadMap(this.$data.save.mapId)
         // this.randMapKey = `${this.$data.save.mapId} ${new Date()}`
+      } else if (key === 'loadGame') {
+        this.$res.loadMap('MT_START').then(data => {
+          this.$state.map = data;
+        });
       }
     }; // this.$sound = new Sound();
     // this.$images = new Images();
@@ -1135,24 +1178,6 @@ class Loading extends Component {
 
 }
 
-function setStorage(key, value) {
-  return localStorage.setItem(key, JSON.stringify(value));
-}
-function getStorage(key) {
-  try {
-    return JSON.parse(localStorage.getItem(key));
-  } catch (e) {
-    return null;
-  }
-}
-
-function saveGame(save) {
-  return setStorage('game', save);
-}
-function loadGame() {
-  return getStorage('game');
-}
-
 const size$a = 32;
 const styles$1 = {
   title: {
@@ -1184,8 +1209,10 @@ class Title extends Component {
     }];
   }
 
-  onConfirm = isLoad => {
-    this.props.onLoadMap(isLoad ? loadGame() : null);
+  onConfirm = index => {
+    const event = this.options[index].event;
+    this.$event(event); // console.log(index)
+    // this.props.onLoadMap(isLoad ? loadGame() : null);
   };
 
   render() {
@@ -2381,8 +2408,6 @@ class ScrollText extends Component {
       fontSize: 20,
       textAlign: 'left',
       textBaseline: 'top',
-      x: 0,
-      y: 0,
       width: size$2 * 18,
       height: size$2 * 13
     },
@@ -2396,9 +2421,8 @@ class ScrollText extends Component {
     const {
       text,
       bgm
-    } = this.props.map;
-    this.text = text.split('\n');
-    this.mapBgm = this.$sound.play('bgm', bgm);
+    } = this.$state.map;
+    this.text = text.split('\n'); // this.mapBgm = this.$sound.play('bgm', bgm)
   }
 
   destroy() {
@@ -2553,6 +2577,7 @@ class Game extends Component {
 
   onLoadMap = async data => {
     this.loading = '加载地图';
+    debugger;
     Object.assign(this.$data.save, data);
     this.map = await loadMap(this.$data.save.mapId);
     this.loading = false;
@@ -2578,7 +2603,7 @@ class Game extends Component {
   render() {
     return this.$c("div", {
       style: this.styles.app
-    }, this.$res.loading ? this.renderLoading() : this.map ? this.map.text ? this.$c(ScrollText, {
+    }, this.$res.loading ? this.renderLoading() : this.$state.map ? this.$state.map.text ? this.$c(ScrollText, {
       map: this.map,
       onClose: this.onLoadMap,
       onTitle: this.onTitle

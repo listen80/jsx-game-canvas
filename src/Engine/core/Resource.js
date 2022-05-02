@@ -1,19 +1,32 @@
-import { loadJSON, loadText, loadImage } from "../utils/http";
+import { loadJSON, loadText, loadImage, loadSound } from "../utils/http";
 
 export default class Resource {
   constructor(config) {
     this.loaded = 0;
     this.total = 0;
-    this.config = config;
+    this.$config = config;
     this.loading = false;
 
     this.$data = Object.create(null);
     this.$images = Object.create(null);
     this.$sounds = Object.create(null);
 
-    this.load(config.json.map((v) => `Data/${v}`), "data");
-    this.load(config.sprites.map((v) => `Sprite/${v}.png`), "sprite");
-    this.load(config.images.map((v) => `Graph/${v}`), "graph");
+    this.load(
+      config.json.map((v) => `Data/${v}`),
+      "data"
+    );
+    this.load(
+      config.sprites.map((v) => `Sprite/${v}.png`),
+      "sprite"
+    );
+    this.load(
+      config.images.map((v) => `Graph/${v}`),
+      "graph"
+    );
+    this.load(
+      config.sounds.map((v) => `Sound/${v}`),
+      "audio"
+    );
   }
 
   load(data, type) {
@@ -22,8 +35,9 @@ export default class Resource {
       this.total++;
       this.loadOne(item).then((data) => {
         this.loaded++;
+        item = item.replace(/\w+\//, '').replace(/\.\w+/, '')
         if (type === "data") {
-          this.$data[item] = data;
+          this.$config[item] = data;
         } else if (type === "sprite") {
           this.$data[item] = data;
         } else if (type === "graph") {
@@ -34,7 +48,7 @@ export default class Resource {
         if (this.loaded === this.total) {
           const timer = setTimeout(() => {
             this.loading = false;
-            clearTimeout(timer)
+            clearTimeout(timer);
           }, 200);
         }
       });
@@ -59,14 +73,15 @@ export default class Resource {
     }
     if (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".webp")) {
       return loadImage(`${url}`);
+    } else {
+      return loadSound(`${url}`)
     }
   }
 
-  loadSprite() {}
+  loadJSON() {}
+  loadSprite(sprites) {}
 
-  loadMap() {
-    if (this.$data) {
-      
-    }
+  loadMap(id) {
+    return loadJSON(`Maps/${id}.json`)
   }
 }

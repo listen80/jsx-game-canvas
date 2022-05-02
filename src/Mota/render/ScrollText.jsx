@@ -8,8 +8,6 @@ export default class ScrollText extends Component {
       fontSize: 20,
       textAlign: 'left',
       textBaseline: 'top',
-      x: 0,
-      y: 0,
       width: size * 18,
       height: size * 13,
     },
@@ -20,9 +18,9 @@ export default class ScrollText extends Component {
   };
 
   create () {
-    const { text, bgm } = this.props.map
+    const { text, bgm } = this.$state.map
     this.text = text.split('\n')
-    this.mapBgm = this.$sound.play('bgm', bgm)
+    // this.mapBgm = this.$sound.play('bgm', bgm)
   }
 
   destroy () {

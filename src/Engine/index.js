@@ -13,6 +13,8 @@ export { default as Select } from "./components/Select";
 export { default as Table } from "./components/Table";
 import { loadJSON, loadText } from "./utils/http";
 import "./core/Control"
+import { loadGame } from "./utils/sl";
+
 export default class Engine {
   constructor($game) {
     this.$game = $game;
@@ -23,14 +25,21 @@ export default class Engine {
 
   init(config) {
     this.$config = config
-    this.$data = Object.create(null)
+    document.title = config.title
+    this.$state = Object.create(null)
+    this.$save = Object.create(null)
     this.$res = new Resource(config);
     this.$root = this
-    this.$event = (key, id) => {
-      if (key === 'loadmap') {
-        this.$res.loadMap(id)
+    this.$event = (key, data) => {
+      console.log(key, data)
+      if (key === 'loadMap') {
+        this.$res.loadMap(data)
         // this.map = await loadMap(this.$data.save.mapId)
         // this.randMapKey = `${this.$data.save.mapId} ${new Date()}`
+      } else if (key === 'loadGame') {
+        this.$res.loadMap('MT_START').then((data) => {
+          this.$state.map = data
+        })
       }
     }
     // this.$sound = new Sound();
