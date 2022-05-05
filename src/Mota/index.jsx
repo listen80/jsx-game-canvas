@@ -1,18 +1,18 @@
 /* eslint-disable multiline-ternary */
-import { Component } from 'Engine'
-import FPS from './render/FPS'
-import Loading from './render/Loading'
-import Title from './render/Title'
-import Map from './render/Map'
-import ScrollText from './render/ScrollText'
-import { loadJSON } from '../Engine/utils/http'
-import Message from './render/Message'
+import { Component } from "Engine";
+import FPS from "./render/FPS";
+import Loading from "./render/Loading";
+import Title from "./render/Title";
+import Map from "./render/Map";
+import ScrollText from "./render/ScrollText";
+import { loadJSON } from "../Engine/utils/http";
+import Message from "./render/Message";
 
 const loadMap = (mapId) => {
-  return loadJSON(`Maps/${mapId}.json`)
-}
+  return loadJSON(`Maps/${mapId}.json`);
+};
 
-const size = 32
+const size = 32;
 
 export default class Game extends Component {
   styles = {
@@ -22,8 +22,8 @@ export default class Game extends Component {
     },
   };
 
-  async create () {
-    this.loading = '加载数据'
+  async create() {
+    this.loading = "加载数据";
     // await this.$data.load()
 
     // const game = this.$data.game
@@ -51,35 +51,39 @@ export default class Game extends Component {
     // this.onLoadMap({ mapId: 'MT1' })
   }
 
-  onLoadMap = async (data) => {
-    this.loading = '加载地图'
-    debugger
-    Object.assign(this.$data.save, data)
-    this.map = await loadMap(this.$data.save.mapId)
-    this.loading = false
-    this.randMapKey = `${this.$data.save.mapId} ${new Date()}`
-  };
+  // onLoadMap = async (data) => {
+  //   this.loading = "加载地图";
+  //   debugger;
+  //   Object.assign(this.$data.save, data);
+  //   this.map = await loadMap(this.$data.save.mapId);
+  //   this.loading = false;
+  //   this.randMapKey = `${this.$data.save.mapId} ${new Date()}`;
+  // };
 
   onTitle = () => {
-    this.map = null
+    this.map = null;
   };
 
   onMessageClose = () => {
-    this.msg = null
+    this.msg = null;
   };
 
   onMessage = (msg) => {
-    this.msg = msg
+    this.msg = msg;
   };
   renderLoading() {
-    return <Loading msg={this.loading} rate={this.$res.loaded / this.$res.total}/>
+    return (
+      <Loading msg={this.loading} rate={this.$res.loaded / this.$res.total} />
+    );
   }
-  render () {
+  render() {
+    if (this.$res.loading) {
+      return this.renderLoading();
+    }
+    // console.log(this.$state.map)
     return (
       <div style={this.styles.app}>
-        {this.$res.loading ? (
-          this.renderLoading()
-        ) : this.$state.map ? (
+        {this.$state.map ? (
           this.$state.map.text ? (
             <ScrollText
               map={this.map}
@@ -88,7 +92,7 @@ export default class Game extends Component {
             ></ScrollText>
           ) : (
             <Map
-              map={this.map}
+              map={this.$state.map}
               key={this.randMapKey}
               onLoadMap={this.onLoadMap}
               onMessage={this.onMessage}
@@ -107,6 +111,6 @@ export default class Game extends Component {
         )}
         <FPS />
       </div>
-    )
+    );
   }
 }

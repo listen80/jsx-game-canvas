@@ -1082,8 +1082,9 @@ class Engine {
         this.$res.loadMap(data); // this.map = await loadMap(this.$data.save.mapId)
         // this.randMapKey = `${this.$data.save.mapId} ${new Date()}`
       } else if (key === 'loadGame') {
-        this.$res.loadMap('MT_START').then(data => {
+        this.$res.loadMap('MT0').then(data => {
           this.$state.map = data;
+          this.$save;
         });
       }
     }; // this.$sound = new Sound();
@@ -2224,8 +2225,7 @@ class Map extends Component {
   };
 
   create() {
-    const bgm = this.props.map.bgm;
-    this.mapBgm = this.$sound.play('bgm', bgm);
+    this.props.map.bgm; // this.mapBgm = this.$sound.play('bgm', bgm)
   }
 
   destroy() {
@@ -2439,16 +2439,12 @@ class ScrollText extends Component {
 
   onMouseDown = () => {
     if (this.ready) {
-      const {
-        type,
-        data
-      } = this.props.map.event;
-
-      if (type === 'mapLoad') {
-        this.props.onClose(data);
-      } else if (type === 'title') {
-        this.props.onTitle(data);
-      }
+      // const { type, data } = this.props.map.event
+      this.$event('mapLoad'); // if (type === 'mapLoad') {
+      //   this.props.onClose(data)
+      // } else if (type === 'title') {
+      //   this.props.onTitle(data)
+      // }
     }
   };
 
@@ -2456,7 +2452,7 @@ class ScrollText extends Component {
     const style = this.styles.scroll;
 
     if (style.y > -size$2 * (this.text.length - 2)) {
-      const y = 1;
+      const y = 100;
       style.y -= y;
     } else {
       this.ready = true;
@@ -2540,10 +2536,6 @@ class Message extends Component {
 
 /* eslint-disable multiline-ternary */
 
-const loadMap = mapId => {
-  return loadJSON(`Maps/${mapId}.json`);
-};
-
 const size = 32;
 class Game extends Component {
   styles = {
@@ -2554,7 +2546,7 @@ class Game extends Component {
   };
 
   async create() {
-    this.loading = '加载数据'; // await this.$data.load()
+    this.loading = "加载数据"; // await this.$data.load()
     // const game = this.$data.game
     // document.title = game.title
     // if (game.font && game.font.load !== false) {
@@ -2573,16 +2565,16 @@ class Game extends Component {
     // }
     // this.loading = false
     // this.onLoadMap({ mapId: 'MT1' })
-  }
+  } // onLoadMap = async (data) => {
+  //   this.loading = "加载地图";
+  //   debugger;
+  //   Object.assign(this.$data.save, data);
+  //   this.map = await loadMap(this.$data.save.mapId);
+  //   this.loading = false;
+  //   this.randMapKey = `${this.$data.save.mapId} ${new Date()}`;
+  // };
 
-  onLoadMap = async data => {
-    this.loading = '加载地图';
-    debugger;
-    Object.assign(this.$data.save, data);
-    this.map = await loadMap(this.$data.save.mapId);
-    this.loading = false;
-    this.randMapKey = `${this.$data.save.mapId} ${new Date()}`;
-  };
+
   onTitle = () => {
     this.map = null;
   };
@@ -2601,14 +2593,19 @@ class Game extends Component {
   }
 
   render() {
+    if (this.$res.loading) {
+      return this.renderLoading();
+    } // console.log(this.$state.map)
+
+
     return this.$c("div", {
       style: this.styles.app
-    }, this.$res.loading ? this.renderLoading() : this.$state.map ? this.$state.map.text ? this.$c(ScrollText, {
+    }, this.$state.map ? this.$state.map.text ? this.$c(ScrollText, {
       map: this.map,
       onClose: this.onLoadMap,
       onTitle: this.onTitle
     }) : this.$c(Map, {
-      map: this.map,
+      map: this.$state.map,
       key: this.randMapKey,
       onLoadMap: this.onLoadMap,
       onMessage: this.onMessage,

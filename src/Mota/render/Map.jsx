@@ -23,7 +23,7 @@ export default class Map extends Component {
 
   create () {
     const bgm = this.props.map.bgm
-    this.mapBgm = this.$sound.play('bgm', bgm)
+    // this.mapBgm = this.$sound.play('bgm', bgm)
   }
 
   destroy () {

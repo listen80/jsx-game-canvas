@@ -37,8 +37,9 @@ export default class Engine {
         // this.map = await loadMap(this.$data.save.mapId)
         // this.randMapKey = `${this.$data.save.mapId} ${new Date()}`
       } else if (key === 'loadGame') {
-        this.$res.loadMap('MT_START').then((data) => {
+        this.$res.loadMap('MT0').then((data) => {
           this.$state.map = data
+          this.$save
         })
       }
     }

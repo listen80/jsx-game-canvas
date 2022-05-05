@@ -35,19 +35,20 @@ export default class ScrollText extends Component {
 
   onMouseDown = () => {
     if (this.ready) {
-      const { type, data } = this.props.map.event
-      if (type === 'mapLoad') {
-        this.props.onClose(data)
-      } else if (type === 'title') {
-        this.props.onTitle(data)
-      }
+      // const { type, data } = this.props.map.event
+      this.$event('mapLoad')
+      // if (type === 'mapLoad') {
+      //   this.props.onClose(data)
+      // } else if (type === 'title') {
+      //   this.props.onTitle(data)
+      // }
     }
   };
 
   render () {
     const style = this.styles.scroll
     if (style.y > -size * (this.text.length - 2)) {
-      const y = 1
+      const y = 100
       style.y -= y
     } else {
       this.ready = true
