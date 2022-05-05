@@ -12,37 +12,59 @@ export { default as Scroll } from "./components/Scroll";
 export { default as Select } from "./components/Select";
 export { default as Table } from "./components/Table";
 import { loadJSON, loadText } from "./utils/http";
-import "./core/Control"
+import "./core/Control";
 import { loadGame } from "./utils/sl";
 
 export default class Engine {
   constructor($game) {
     this.$game = $game;
     if (this.checkChromeVersion()) {
-      loadJSON("game.json").then((game) => {this.init(game)});
+      loadJSON("game.json").then((game) => {
+        this.init(game);
+      });
     }
   }
 
   init(config) {
-    this.$config = config
-    document.title = config.title
-    this.$state = Object.create(null)
-    this.$save = Object.create(null)
+    this.$config = config;
+    document.title = config.title;
+    this.$state = Object.create(null);
+    this.$save = Object.create(null);
     this.$res = new Resource(config);
-    this.$root = this
+    this.$root = this;
     this.$event = (key, data) => {
-      console.log(key, data)
-      if (key === 'loadMap') {
-        this.$res.loadMap(data)
+      console.log(key, data);
+      if (key === "loadMap") {
+        this.$res.loadMap(data);
         // this.map = await loadMap(this.$data.save.mapId)
         // this.randMapKey = `${this.$data.save.mapId} ${new Date()}`
-      } else if (key === 'loadGame') {
-        this.$res.loadMap('MT0').then((data) => {
-          this.$state.map = data
-          this.$save
-        })
+      } else if (key === "loadGame") {
+        this.$res.loadMap("MT0").then((data) => {
+          this.$state.map = data;
+          this.$save;
+        });
       }
-    }
+
+      switch (key) {
+        case "toTitle":
+          this.$state.map = null;
+          break;
+
+        case "loadMap":
+          this.$res.load(data).then((map) => {
+            this.$state.map = map;
+          });
+          break;
+
+        case "message":
+          this.$state.message = data;
+          break;
+
+        case "messageClose":
+          this.$state.message = null;
+          break;
+      }
+    };
     // this.$sound = new Sound();
     // this.$images = new Images();
     // this.$font = new Font();

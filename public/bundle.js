@@ -1078,14 +1078,34 @@ class Engine {
     this.$event = (key, data) => {
       console.log(key, data);
 
-      if (key === 'loadMap') {
+      if (key === "loadMap") {
         this.$res.loadMap(data); // this.map = await loadMap(this.$data.save.mapId)
         // this.randMapKey = `${this.$data.save.mapId} ${new Date()}`
-      } else if (key === 'loadGame') {
-        this.$res.loadMap('MT0').then(data => {
+      } else if (key === "loadGame") {
+        this.$res.loadMap("MT0").then(data => {
           this.$state.map = data;
           this.$save;
         });
+      }
+
+      switch (key) {
+        case "toTitle":
+          this.$state.map = null;
+          break;
+
+        case "loadMap":
+          this.$res.load(data).then(map => {
+            this.$state.map = map;
+          });
+          break;
+
+        case "message":
+          this.$state.message = data;
+          break;
+
+        case "messageClose":
+          this.$state.message = null;
+          break;
       }
     }; // this.$sound = new Sound();
     // this.$images = new Images();
