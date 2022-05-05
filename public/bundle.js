@@ -1076,8 +1076,6 @@ class Engine {
     this.$root = this;
 
     this.$event = (key, data) => {
-      console.log(key, data);
-
       if (key === "loadMap") {
         this.$res.loadMap(data); // this.map = await loadMap(this.$data.save.mapId)
         // this.randMapKey = `${this.$data.save.mapId} ${new Date()}`
@@ -1089,6 +1087,12 @@ class Engine {
       }
 
       switch (key) {
+        case "startGame":
+          this.$res.load([]).then(map => {
+            this.$state.map = map;
+          });
+          break;
+
         case "toTitle":
           this.$state.map = null;
           break;
@@ -1107,6 +1111,8 @@ class Engine {
           this.$state.message = null;
           break;
       }
+
+      console.log(key, data);
     }; // this.$sound = new Sound();
     // this.$images = new Images();
     // this.$font = new Font();
@@ -2460,7 +2466,7 @@ class ScrollText extends Component {
   onMouseDown = () => {
     if (this.ready) {
       // const { type, data } = this.props.map.event
-      this.$event('mapLoad'); // if (type === 'mapLoad') {
+      this.$event('loadMap'); // if (type === 'mapLoad') {
       //   this.props.onClose(data)
       // } else if (type === 'title') {
       //   this.props.onTitle(data)

@@ -29,7 +29,6 @@ export default class Engine {
     this.$res = new Resource(config);
     this.$root = this;
     this.$event = (key, data) => {
-      console.log(key, data);
       if (key === "loadMap") {
         this.$res.loadMap(data);
         // this.map = await loadMap(this.$data.save.mapId)
@@ -39,9 +38,14 @@ export default class Engine {
           this.$state.map = data;
           this.$save;
         });
-      }
+      } 
 
       switch (key) {
+        case "startGame":
+          this.$res.load([]).then((map) => {
+            this.$state.map = map;
+          });
+          break;
         case "toTitle":
           this.$state.map = null;
           break;
@@ -60,6 +64,8 @@ export default class Engine {
           this.$state.message = null;
           break;
       }
+
+      console.log(key, data);
     };
     // this.$sound = new Sound();
     // this.$images = new Images();
