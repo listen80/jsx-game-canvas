@@ -1,6 +1,6 @@
 import { createNode } from './Node'
 
-export class Component {
+export default class Component {
   constructor ({ props, children }) {
     this.props = props
     this.$node = null

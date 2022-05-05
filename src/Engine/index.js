@@ -1,12 +1,8 @@
 import Render from "./core/Render";
-import Sound from "./core/Sound";
-import Images from "./core/Images";
-import Data from "./core/Data";
-import Font from "./core/Font";
 import Resource from "./core/Resource";
 
 import { createNode, patchNode } from "./core/Node";
-export { Component } from "./core/Component";
+export { default as Component } from "./core/Component";
 export { default as Animate } from "./components/Animate";
 export { default as Scroll } from "./components/Scroll";
 export { default as Select } from "./components/Select";

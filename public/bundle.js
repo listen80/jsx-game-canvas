@@ -2555,7 +2555,6 @@ class Message extends Component {
 }
 
 /* eslint-disable multiline-ternary */
-
 const size = 32;
 class Game extends Component {
   styles = {
@@ -2566,25 +2565,7 @@ class Game extends Component {
   };
 
   async create() {
-    this.loading = "加载数据"; // await this.$data.load()
-    // const game = this.$data.game
-    // document.title = game.title
-    // if (game.font && game.font.load !== false) {
-    //   this.loading = '加载字体'
-    //   const font = game.font
-    //   await this.$font.load(font)
-    //   // this.styles.app.font = `${font.name}`
-    // }
-    // if (game.images) {
-    //   this.loading = '加载图片'
-    //   await this.$images.load(game.images, game.sprites)
-    // }
-    // if (game.sounds) {
-    //   this.loading = '加载音乐'
-    //   await this.$sound.load(game.sounds)
-    // }
-    // this.loading = false
-    // this.onLoadMap({ mapId: 'MT1' })
+    this.loading = "加载数据";
   } // onLoadMap = async (data) => {
   //   this.loading = "加载地图";
   //   debugger;
