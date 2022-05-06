@@ -769,7 +769,12 @@ class Component {
     this.$node = null;
     this.$children = children;
 
-    this.$sound.play = () => {};
+    this.$sound.play = () => {
+      return {
+        pause() {}
+
+      };
+    };
 
     this.$sound.pause = () => {};
   }
@@ -1808,10 +1813,7 @@ class Hero extends Component {
   tick = 0;
 
   create() {
-    const hero = Object.assign(this.$state.save.position, {
-      width: size$5,
-      height: size$5
-    });
+    const hero = Object.assign(this.$state.save.position, {});
     this.styles = {
       hero
     };
@@ -2126,7 +2128,7 @@ class Hero extends Component {
 
   render() {
     return this.$c("div", null, this.$c("div", {
-      style: this.styles.hero
+      style: this.$state.save.position
     }, this.$c(Animate, {
       data: {
         src: "Characters/hero.png",
@@ -2228,12 +2230,12 @@ class Map extends Component {
     map: {
       height: size$3 * 13,
       width: size$3 * 13,
-      backgroundImage: 'ground.png'
+      backgroundImage: "ground.png"
     },
     statusBar: {
       x: size$3 * 13,
       y: 0,
-      backgroundImage: 'ground.png',
+      backgroundImage: "ground.png",
       width: size$3 * 5,
       height: 13 * size$3
     }
@@ -2271,7 +2273,7 @@ class Map extends Component {
           } = info;
           const detail = this.$state[type][name];
 
-          if (type === 'animates') {
+          if (type === "animates") {
             sx = tick % 4 * size$3;
             const style = {
               sy: detail.sy * size$3,
@@ -2285,7 +2287,7 @@ class Map extends Component {
               src: type,
               style: style
             }));
-          } else if (type === 'terrains') {
+          } else if (type === "terrains") {
             const style = {
               sy: detail.sy * size$3,
               sx: 0,
@@ -2299,7 +2301,7 @@ class Map extends Component {
               style: style
             }));
           } else {
-            console.error('error type', type, info);
+            console.error("error type", type, info);
           }
         }
       });
@@ -2339,11 +2341,11 @@ class Map extends Component {
 
             let sx = 0;
 
-            if (type === 'npcs' || type === 'enemys') {
+            if (type === "npcs" || type === "enemys") {
               sx = tick % 2 * size$3;
             }
 
-            if (type === 'enemys') {
+            if (type === "enemys") {
               enemys[name] = name;
             }
 
@@ -2382,7 +2384,14 @@ class Map extends Component {
   };
   onMouseDown = e => {
     // DFS BFS
-    console.warn(e);
+    const {
+      canvasX,
+      canvasY
+    } = e;
+    const x = canvasX / size$3 | 0;
+    const y = canvasY / size$3 | 0;
+    this.$state.save.position.x = x * size$3;
+    this.$state.save.position.y = y * size$3;
   };
 
   render() {

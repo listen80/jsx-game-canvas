@@ -66,8 +66,7 @@ export default class Hero extends Component {
   tick = 0;
   create() {
     const hero = Object.assign(this.$state.save.position, {
-      width: size,
-      height: size,
+      
     });
 
     this.styles = { hero };
@@ -367,7 +366,7 @@ export default class Hero extends Component {
   render() {
     return (
       <div>
-        <div style={this.styles.hero}>
+        <div style={this.$state.save.position}>
           <Animate
             data={{
               src: "Characters/hero.png",

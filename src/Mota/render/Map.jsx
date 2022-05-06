@@ -1,8 +1,8 @@
-import { Component, Animate } from 'Engine'
-import Hero from './Hero'
-import Status from './Status'
+import { Component, Animate } from "Engine";
+import Hero from "./Hero";
+import Status from "./Status";
 
-const size = 32
+const size = 32;
 export default class Map extends Component {
   tick = 0;
   interval = 10;
@@ -10,45 +10,45 @@ export default class Map extends Component {
     map: {
       height: size * 13,
       width: size * 13,
-      backgroundImage: 'ground.png',
+      backgroundImage: "ground.png",
     },
     statusBar: {
       x: size * 13,
       y: 0,
-      backgroundImage: 'ground.png',
+      backgroundImage: "ground.png",
       width: size * 5,
       height: 13 * size,
     },
   };
 
-  create () {
-    const bgm = this.props.map.bgm
+  create() {
+    const bgm = this.props.map.bgm;
     // this.mapBgm = this.$sound.play('bgm', bgm)
   }
 
-  destroy () {
-    const bgm = this.props.map.bgm
+  destroy() {
+    const bgm = this.props.map.bgm;
     // this.$sound.pause('bgm', bgm)
-    this.mapBgm.pause()
+    this.mapBgm.pause();
   }
 
-  renderMapTerrains (status) {
-    const { mapTerrains } = this.props.map
-    const tick = this.tick
-    const terrains = []
+  renderMapTerrains(status) {
+    const { mapTerrains } = this.props.map;
+    const tick = this.tick;
+    const terrains = [];
     if (!mapTerrains) {
-      return
+      return;
     }
-    let sx = 0
+    let sx = 0;
     mapTerrains.forEach((line, y) => {
       line.forEach((value, x) => {
         if (value) {
-          const info = this.$state.mapping[value]
-          const { type, name } = info
-          const detail = this.$state[type][name]
+          const info = this.$state.mapping[value];
+          const { type, name } = info;
+          const detail = this.$state[type][name];
 
-          if (type === 'animates') {
-            sx = (tick % 4) * size
+          if (type === "animates") {
+            sx = (tick % 4) * size;
             const style = {
               sy: detail.sy * size,
               sx,
@@ -56,9 +56,9 @@ export default class Map extends Component {
               y: y * size,
               height: size,
               width: size,
-            }
-            terrains.push(<img src={type} style={style} />)
-          } else if (type === 'terrains') {
+            };
+            terrains.push(<img src={type} style={style} />);
+          } else if (type === "terrains") {
             const style = {
               sy: detail.sy * size,
               sx: 0,
@@ -66,82 +66,93 @@ export default class Map extends Component {
               y: y * size,
               height: size,
               width: size,
-            }
-            terrains.push(<img src={type} style={style} />)
+            };
+            terrains.push(<img src={type} style={style} />);
           } else {
-            console.error('error type', type, info)
+            console.error("error type", type, info);
           }
         }
-      })
-    })
-    return terrains
+      });
+    });
+    return terrains;
   }
 
-  renderMapEvents () {
-    const { mapId, destroy = {} } = this.$state.save
-    const { mapEvents } = this.props.map
-    const tick = this.tick
-    const enemys = {}
-    this.enemys = enemys
+  renderMapEvents() {
+    const { mapId, destroy = {} } = this.$state.save;
+    const { mapEvents } = this.props.map;
+    const tick = this.tick;
+    const enemys = {};
+    this.enemys = enemys;
     if (mapEvents) {
       return mapEvents.map((event) => {
-        const [x, y, value, events] = event
+        const [x, y, value, events] = event;
         if (destroy[[mapId, x, y]]) {
-          return null
+          return null;
         }
         if (value) {
-          const info = this.$state.mapping[value]
+          const info = this.$state.mapping[value];
           if (info) {
-            const { type, name } = info
-            const detail = this.$state[type][name]
+            const { type, name } = info;
+            const detail = this.$state[type][name];
             // terrains items icons npcs enemys
-            let sx = 0
-            if (type === 'npcs' || type === 'enemys') {
-              sx = (tick % 2) * size
+            let sx = 0;
+            if (type === "npcs" || type === "enemys") {
+              sx = (tick % 2) * size;
             }
 
-            if (type === 'enemys') {
-              enemys[name] = name
+            if (type === "enemys") {
+              enemys[name] = name;
             }
             return (
-              <div style={{ x: x * size, y: y * size, height: size, width: size }}>
+              <div
+                style={{ x: x * size, y: y * size, height: size, width: size }}
+              >
                 <img
                   src={type}
-                  style={{ sy: detail.sy * size, sx, height: size, width: size }}
+                  style={{
+                    sy: detail.sy * size,
+                    sx,
+                    height: size,
+                    width: size,
+                  }}
                 />
               </div>
-            )
+            );
           }
         }
-        return null
-      })
+        return null;
+      });
     }
   }
 
   onRemoveMapEvent = (mapEvent) => {
-    const [x, y] = mapEvent
-    const mapId = this.$state.save.mapId
-    this.$state.save.destroy = this.$state.save.destroy || {}
-    this.$state.save.destroy[[mapId, x, y]] = 1
+    const [x, y] = mapEvent;
+    const mapId = this.$state.save.mapId;
+    this.$state.save.destroy = this.$state.save.destroy || {};
+    this.$state.save.destroy[[mapId, x, y]] = 1;
   };
 
   onTitle = () => {
-    this.props.onTitle()
+    this.props.onTitle();
   };
 
   onMouseDown = (e) => {
     // DFS BFS
-    console.warn(e)
+    const { canvasX, canvasY } = e;
+    const x = (canvasX / size) | 0;
+    const y = (canvasY / size) | 0;
+    this.$state.save.position.x = x * size;
+    this.$state.save.position.y = y * size;
   };
 
-  render () {
-    this.interval--
+  render() {
+    this.interval--;
     if (this.interval === 0) {
-      this.tick++
-      this.interval = 10
+      this.tick++;
+      this.interval = 10;
     }
-    const mapTerrains = this.renderMapTerrains()
-    const mapEvents = this.renderMapEvents()
+    const mapTerrains = this.renderMapTerrains();
+    const mapEvents = this.renderMapEvents();
     return (
       <div>
         <div style={this.styles.map} onMouseDown={this.onMouseDown}>
@@ -162,6 +173,6 @@ export default class Map extends Component {
           onTitle={this.onTitle}
         />
       </div>
-    )
+    );
   }
 }
