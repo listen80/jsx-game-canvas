@@ -48,7 +48,6 @@ export default class Title extends Component {
       <div style={styles.title}>
         <div style={styles.gameName}>{this.$state.config.title}</div>
         <Select
-          activeIndex={this.activeIndex}
           options={this.options}
           style={styles.select}
           onConfirm={this.onConfirm}

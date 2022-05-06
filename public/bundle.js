@@ -1247,7 +1247,6 @@ class Title extends Component {
     }, this.$c("div", {
       style: styles$1.gameName
     }, this.$state.config.title), this.$c(Select, {
-      activeIndex: this.activeIndex,
       options: this.options,
       style: styles$1.select,
       onConfirm: this.onConfirm
@@ -1812,12 +1811,7 @@ const size$5 = 32;
 class Hero extends Component {
   tick = 0;
 
-  create() {
-    const hero = Object.assign(this.$state.save.position, {});
-    this.styles = {
-      hero
-    };
-  }
+  create() {}
 
   isCoincidedTerrains(heroStyle) {
     return this.props.mapTerrains.findIndex(item => item && item && isCoincided(item.props.style, heroStyle));
@@ -1831,7 +1825,7 @@ class Hero extends Component {
     code,
     $key
   }) {
-    const styleHero = this.styles.hero;
+    const postion = this.$state.save.position;
     const step = 32;
     let moveVector = null;
 
@@ -1839,22 +1833,22 @@ class Hero extends Component {
       moveVector = {
         y: step
       };
-      styleHero.sy = 0; // this.$sound.play('se', 'step.mp3')
+      postion.sy = 0; // this.$sound.play('se', 'step.mp3')
     } else if ($key === "up") {
       moveVector = {
         y: -step
       };
-      styleHero.sy = 3; // this.$sound.play('se', 'step.mp3')
+      postion.sy = 3; // this.$sound.play('se', 'step.mp3')
     } else if ($key === "left") {
       moveVector = {
         x: -step
       };
-      styleHero.sy = 1; // this.$sound.play('se', 'step.mp3')
+      postion.sy = 1; // this.$sound.play('se', 'step.mp3')
     } else if ($key === "right") {
       moveVector = {
         x: step
       };
-      styleHero.sy = 2; // this.$sound.play('se', 'step.mp3')
+      postion.sy = 2; // this.$sound.play('se', 'step.mp3')
     } else if (code === "KeyS") {
       saveGame(this.$state.save);
       this.$sound.play("se", "load.mp3");
@@ -1886,7 +1880,7 @@ class Hero extends Component {
     }
 
     if (moveVector) {
-      const vector = updateVector(styleHero, moveVector);
+      const vector = updateVector(postion, moveVector);
       const terrain = this.isCoincidedTerrains(vector);
 
       if (terrain !== -1) {
@@ -1897,13 +1891,13 @@ class Hero extends Component {
 
       if (eventIndex !== -1) {
         if (this.handleEvents(this.props.map.mapEvents[eventIndex])) {
-          assignVector(styleHero, vector);
+          assignVector(postion, vector);
         }
 
         return;
       }
 
-      assignVector(styleHero, vector);
+      assignVector(postion, vector);
     }
   }
 
@@ -2136,7 +2130,7 @@ class Hero extends Component {
         height: size$5,
         maxTick: 4,
         maxInterval: 10,
-        sy: this.styles.hero.sy
+        sy: this.$state.save.position.sy
       }
     })), this.buying && this.$c(ShopList, {
       onClose: this.onShopListClose,
@@ -2256,15 +2250,14 @@ class Map extends Component {
       mapTerrains
     } = this.props.map;
     const tick = this.tick;
-    const terrains = [];
 
     if (!mapTerrains) {
       return;
     }
 
     let sx = 0;
-    mapTerrains.forEach((line, y) => {
-      line.forEach((value, x) => {
+    return mapTerrains.map((line, y) => {
+      return line.map((value, x) => {
         if (value) {
           const info = this.$state.mapping[value];
           const {
@@ -2283,10 +2276,10 @@ class Map extends Component {
               height: size$3,
               width: size$3
             };
-            terrains.push(this.$c("img", {
+            return this.$c("img", {
               src: type,
               style: style
-            }));
+            });
           } else if (type === "terrains") {
             const style = {
               sy: detail.sy * size$3,
@@ -2296,17 +2289,18 @@ class Map extends Component {
               height: size$3,
               width: size$3
             };
-            terrains.push(this.$c("img", {
+            return this.$c("img", {
               src: type,
               style: style
-            }));
+            });
           } else {
-            console.error("error type", type, info);
+            return null;
           }
+        } else {
+          return null;
         }
       });
     });
-    return terrains;
   }
 
   renderMapEvents() {
@@ -2316,10 +2310,9 @@ class Map extends Component {
     } = this.$state.save;
     const {
       mapEvents
-    } = this.props.map;
-    const tick = this.tick;
-    const enemys = {};
-    this.enemys = enemys;
+    } = this.$state.map;
+    const tick = this.tick; // const enemys = {};
+    // this.enemys = enemys;
 
     if (mapEvents) {
       return mapEvents.map(event => {
@@ -2343,11 +2336,10 @@ class Map extends Component {
 
             if (type === "npcs" || type === "enemys") {
               sx = tick % 2 * size$3;
-            }
+            } // if (type === "enemys") {
+            //   enemys[name] = name;
+            // }
 
-            if (type === "enemys") {
-              enemys[name] = name;
-            }
 
             return this.$c("div", {
               style: {

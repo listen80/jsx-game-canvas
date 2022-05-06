@@ -35,13 +35,12 @@ export default class Map extends Component {
   renderMapTerrains(status) {
     const { mapTerrains } = this.props.map;
     const tick = this.tick;
-    const terrains = [];
     if (!mapTerrains) {
       return;
     }
     let sx = 0;
-    mapTerrains.forEach((line, y) => {
-      line.forEach((value, x) => {
+    return mapTerrains.map((line, y) => {
+      return line.map((value, x) => {
         if (value) {
           const info = this.$state.mapping[value];
           const { type, name } = info;
@@ -57,7 +56,7 @@ export default class Map extends Component {
               height: size,
               width: size,
             };
-            terrains.push(<img src={type} style={style} />);
+            return (<img src={type} style={style} />);
           } else if (type === "terrains") {
             const style = {
               sy: detail.sy * size,
@@ -67,22 +66,23 @@ export default class Map extends Component {
               height: size,
               width: size,
             };
-            terrains.push(<img src={type} style={style} />);
+            return (<img src={type} style={style} />);
           } else {
-            console.error("error type", type, info);
+            return null
           }
+        } else {
+          return null
         }
       });
     });
-    return terrains;
   }
 
   renderMapEvents() {
     const { mapId, destroy = {} } = this.$state.save;
-    const { mapEvents } = this.props.map;
+    const { mapEvents } = this.$state.map;
     const tick = this.tick;
-    const enemys = {};
-    this.enemys = enemys;
+    // const enemys = {};
+    // this.enemys = enemys;
     if (mapEvents) {
       return mapEvents.map((event) => {
         const [x, y, value, events] = event;
@@ -100,9 +100,9 @@ export default class Map extends Component {
               sx = (tick % 2) * size;
             }
 
-            if (type === "enemys") {
-              enemys[name] = name;
-            }
+            // if (type === "enemys") {
+            //   enemys[name] = name;
+            // }
             return (
               <div
                 style={{ x: x * size, y: y * size, height: size, width: size }}

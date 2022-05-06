@@ -65,11 +65,7 @@ class FourFace extends Component {
 export default class Hero extends Component {
   tick = 0;
   create() {
-    const hero = Object.assign(this.$state.save.position, {
-      
-    });
 
-    this.styles = { hero };
   }
 
   isCoincidedTerrains(heroStyle) {
@@ -85,24 +81,24 @@ export default class Hero extends Component {
   }
 
   onKeyDown({ code, $key }) {
-    const styleHero = this.styles.hero;
+    const postion = this.$state.save.position;
     const step = 32;
     let moveVector = null;
     if ($key === "down") {
       moveVector = { y: step };
-      styleHero.sy = 0;
+      postion.sy = 0;
       // this.$sound.play('se', 'step.mp3')
     } else if ($key === "up") {
       moveVector = { y: -step };
-      styleHero.sy = 3;
+      postion.sy = 3;
       // this.$sound.play('se', 'step.mp3')
   } else if ($key === "left") {
       moveVector = { x: -step };
-      styleHero.sy = 1;
+      postion.sy = 1;
       // this.$sound.play('se', 'step.mp3')
     } else if ($key === "right") {
       moveVector = { x: step };
-      styleHero.sy = 2;
+      postion.sy = 2;
       // this.$sound.play('se', 'step.mp3')
     } else if (code === "KeyS") {
       saveGame(this.$state.save);
@@ -129,7 +125,7 @@ export default class Hero extends Component {
     }
 
     if (moveVector) {
-      const vector = updateVector(styleHero, moveVector);
+      const vector = updateVector(postion, moveVector);
 
       const terrain = this.isCoincidedTerrains(vector);
       if (terrain !== -1) {
@@ -139,12 +135,12 @@ export default class Hero extends Component {
       const eventIndex = this.isCoincidedEvents(vector);
       if (eventIndex !== -1) {
         if (this.handleEvents(this.props.map.mapEvents[eventIndex])) {
-          assignVector(styleHero, vector);
+          assignVector(postion, vector);
         }
         return;
       }
 
-      assignVector(styleHero, vector);
+      assignVector(postion, vector);
     }
   }
 
@@ -374,7 +370,7 @@ export default class Hero extends Component {
               height: size,
               maxTick: 4,
               maxInterval: 10,
-              sy: this.styles.hero.sy,
+              sy: this.$state.save.position.sy,
             }}
           ></Animate>
         </div>
