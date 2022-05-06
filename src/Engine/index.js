@@ -70,7 +70,7 @@ export default class Engine {
     // this.$sound = new Sound();
     // this.$images = new Images();
     // this.$font = new Font();
-    this.$render = new Render(this);
+    this.$render = new Render(this, this.$state);
     this.$node = null;
     this.gameStart();
   }

@@ -25,10 +25,9 @@ export default class Status extends Component {
   }
 
   render () {
-    const { map } = this.props
-    const { save } = this.$state
+    const { save, map } = this.$state
     const rowProperty = [
-      this.$state.game.title,
+      this.$state.title,
       map.name,
       save.hero.lv,
       save.hero.hp,

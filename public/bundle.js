@@ -41,25 +41,31 @@ const isUndefined = o => o === undefined || o === null;
 const isString = o => typeof o === 'string';
 const isBoolean = o => typeof o === 'boolean';
 
-const mouseEvents = ['ContextMenu', 'Click', 'Wheel', 'MouseDown', 'MouseUp', 'MouseMove'];
-const keyEvents = ['KeyDown', 'KeyUp'];
+const mouseEvents = ["ContextMenu", "Click", "Wheel", "MouseDown", "MouseUp", "MouseMove"];
+const keyEvents = ["KeyDown", "KeyUp"];
 const size$e = 32;
 class Render {
-  constructor(game) {
+  constructor(game, $state) {
     this.initCanvas();
     this.bindEvents();
-    this.$state = game.$data;
-    this.$images = game.$images;
+    this.$state = $state; // this.$images = game.$images
   }
 
-  getImage = src => {
-    return this.$images.images[src];
-  };
+  getImage(src) {
+    // console.log(this)
+    const image = this.$state.image[src];
+
+    if (!image) {
+      console.log(src);
+    }
+
+    return image;
+  }
 
   initCanvas(screen = {}) {
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     this.canvas = canvas;
-    this.context = canvas.getContext('2d');
+    this.context = canvas.getContext("2d");
     const {
       el,
       width = size$e * (13 + 5),
@@ -71,7 +77,7 @@ class Render {
     const dom = document.querySelector(el) || document.body;
     dom && dom.appendChild(this.canvas);
     this.mergeStyle(baseStyle);
-    window.addEventListener('onresize', this.getCanvasRenderRect);
+    window.addEventListener("onresize", this.getCanvasRenderRect);
     this.getCanvasRenderRect();
   }
 
@@ -259,7 +265,7 @@ class Render {
       context.save();
       context.beginPath();
       context.rect(offsetX, offsetY, width, height);
-      context.fillStyle = context.createPattern(this.getImage(backgroundImage), 'repeat');
+      context.fillStyle = context.createPattern(this.getImage(backgroundImage), "repeat");
       context.fill();
       context.closePath();
       context.restore();
@@ -402,13 +408,13 @@ class Render {
       }
     }
 
-    if (tag === 'img') {
+    if (tag === "img") {
       this.drawImage(node, offsetX, offsetY);
-    } else if (tag === 'circle') {
+    } else if (tag === "circle") {
       this.drawCircle(node, offsetX, offsetY);
-    } else if (tag === 'line') {
+    } else if (tag === "line") {
       this.drawLine(node, offsetX, offsetX);
-    } else if (tag !== 'div' && tag !== 'view') {
+    } else if (tag !== "div" && tag !== "view") {
       console.error(`drawNode not support, check jsx <${tag} ....`, node);
     }
 
@@ -623,7 +629,7 @@ class Resource {
     this.$state = $state;
     this.load(config.json.map(v => `Data/${v}`), "data");
     this.load(config.mapping.map(v => `Data/${v}`), "mapping");
-    this.load(config.sprites.map(v => `Sprite/${v}.png`), "spriteImage");
+    this.load(config.sprites.map(v => `Sprite/${v}.png`), "image");
     this.load(config.sprites.map(v => `Sprite/${v}.dat`), "sprite");
     this.load(config.images.map(v => `Image/${v}`), "image");
     this.load(config.sounds.map(v => `Sound/${v}`), "sound");
@@ -637,20 +643,20 @@ class Resource {
       $state[type] = {};
     }
 
-    data.forEach(item => {
+    data.forEach(itemO => {
       this.total++;
-      this.loadOne(item).then(data => {
+      this.loadOne(itemO).then(data => {
         this.loaded++;
-        item = item.replace(/\w+\//, '').replace(/\.\w+/, '');
+        const item = itemO.replace(/\w+\//, '').replace(/\.\w+/, '');
 
         if (type === "data") {
-          $state[type][item] = data;
+          $state[item] = data;
         } else if (type === "mapping") {
           $state[type] = data;
         } else if (type === "sprite") {
           $state.sprite[item] = data;
         } else if (type === "image") {
-          $state[type][item] = data;
+          $state[type][itemO.replace(/\w+\//, '')] = data;
         } else if (type === "sound") {
           $state[type][item] = data;
         } else if (type === "spriteImage") {
@@ -1125,7 +1131,7 @@ class Engine {
     // this.$font = new Font();
 
 
-    this.$render = new Render(this);
+    this.$render = new Render(this, this.$state);
     this.$node = null;
     this.gameStart();
   }
@@ -2199,12 +2205,10 @@ class Status extends Component {
 
   render() {
     const {
+      save,
       map
-    } = this.props;
-    const {
-      save
     } = this.$state;
-    const rowProperty = [this.$state.game.title, map.name, save.hero.lv, save.hero.hp, save.hero.atk, save.hero.def, save.hero.exp, save.money, save.items.yellowKey, save.items.blueKey, save.items.redKey];
+    const rowProperty = [this.$state.title, map.name, save.hero.lv, save.hero.hp, save.hero.atk, save.hero.def, save.hero.exp, save.money, save.items.yellowKey, save.items.blueKey, save.items.redKey];
     return this.$c("div", {
       style: {
         fontSize: 24

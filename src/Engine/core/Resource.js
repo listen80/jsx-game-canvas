@@ -21,7 +21,7 @@ export default class Resource {
 
     this.load(
       config.sprites.map((v) => `Sprite/${v}.png`),
-      "spriteImage"
+      "image"
     );
 
     this.load(
@@ -45,19 +45,19 @@ export default class Resource {
     if (!$state[type]) {
       $state[type] = {}
     }
-    data.forEach((item) => {
+    data.forEach((itemO) => {
       this.total++;
-      this.loadOne(item).then((data) => {
+      this.loadOne(itemO).then((data) => {
         this.loaded++;
-        item = item.replace(/\w+\//, '').replace(/\.\w+/, '')
+        const item = itemO.replace(/\w+\//, '').replace(/\.\w+/, '')
         if (type === "data") {
-          $state[type][item] = data;
+          $state[item] = data;
         } else if (type === "mapping") {
           $state[type] = data;
         } else if (type === "sprite") {
           $state.sprite[item] = data;
         } else if (type === "image") {
-          $state[type][item] = data;
+          $state[type][itemO.replace(/\w+\//, '')] = data;
         } else if (type === "sound") {
           $state[type][item] = data;
         } else if (type === "spriteImage") {

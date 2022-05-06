@@ -1,8 +1,9 @@
 {
   "title": "魔 塔",
+  "size": 32,
   "screen": {
-    "width": 416,
-    "height": 416
+    "width": 13,
+    "height": 13
   },
   "font": {
     "name": "华文行楷",
