@@ -24,7 +24,7 @@ export default class Render {
   constructor (game) {
     this.initCanvas()
     this.bindEvents()
-    this.$data = game.$data
+    this.$state = game.$data
     this.$images = game.$images
   }
 
@@ -84,7 +84,7 @@ export default class Render {
     // keyEvents.forEach((name) => {
     //   window.addEventListener(name.toLowerCase(), (e) => {
     //     e.name = `on${name}`
-    //     e.$key = this.$data.game.control[e.code]
+    //     e.$key = this.$state.game.control[e.code]
     //     this.keyEventsCollectionKeyframe.push(e)
     //   })
     // })

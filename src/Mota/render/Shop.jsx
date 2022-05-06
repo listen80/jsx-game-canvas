@@ -5,7 +5,7 @@ const size = 32
 
 export default class Shop extends Component {
   create () {
-    this.shop = JSON.parse(JSON.stringify(this.$data.shop[this.props.shopid]))
+    this.shop = JSON.parse(JSON.stringify(this.$state.shop[this.props.shopid]))
     this.shop.choices.push({
       text: '离开',
     })

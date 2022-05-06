@@ -1,50 +1,69 @@
 import { loadJSON, loadText, loadImage, loadSound } from "../utils/http";
 
 export default class Resource {
-  constructor(config) {
+  constructor(config, $state) {
     this.loaded = 0;
     this.total = 0;
     this.$config = config;
     this.loading = false;
 
-    this.$data = Object.create(null);
-    this.$images = Object.create(null);
-    this.$sounds = Object.create(null);
+    this.$state = $state;
 
     this.load(
       config.json.map((v) => `Data/${v}`),
       "data"
     );
+
+    this.load(
+      config.mapping.map((v) => `Data/${v}`),
+      "mapping"
+    );
+
     this.load(
       config.sprites.map((v) => `Sprite/${v}.png`),
+      "spriteImage"
+    );
+
+    this.load(
+      config.sprites.map((v) => `Sprite/${v}.dat`),
       "sprite"
     );
+
     this.load(
-      config.images.map((v) => `Graph/${v}`),
-      "graph"
+      config.images.map((v) => `Image/${v}`),
+      "image"
     );
     this.load(
       config.sounds.map((v) => `Sound/${v}`),
-      "audio"
+      "sound"
     );
   }
 
   load(data, type) {
     this.loading = true;
+    const $state = this.$state;
+    if (!$state[type]) {
+      $state[type] = {}
+    }
     data.forEach((item) => {
       this.total++;
       this.loadOne(item).then((data) => {
         this.loaded++;
         item = item.replace(/\w+\//, '').replace(/\.\w+/, '')
         if (type === "data") {
-          this.$config[item] = data;
+          $state[type][item] = data;
+        } else if (type === "mapping") {
+          $state[type] = data;
         } else if (type === "sprite") {
-          this.$data[item] = data;
-        } else if (type === "graph") {
-          this.$images[item] = data;
-        } else if (type === "audio") {
-          this.$images[item] = data;
+          $state.sprite[item] = data;
+        } else if (type === "image") {
+          $state[type][item] = data;
+        } else if (type === "sound") {
+          $state[type][item] = data;
+        } else if (type === "spriteImage") {
+          $state[type][item] = data;
         }
+        
         if (this.loaded === this.total) {
           const timer = setTimeout(() => {
             this.loading = false;

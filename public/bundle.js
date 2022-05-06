@@ -48,7 +48,7 @@ class Render {
   constructor(game) {
     this.initCanvas();
     this.bindEvents();
-    this.$data = game.$data;
+    this.$state = game.$data;
     this.$images = game.$images;
   }
 
@@ -110,7 +110,7 @@ class Render {
     }); // keyEvents.forEach((name) => {
     //   window.addEventListener(name.toLowerCase(), (e) => {
     //     e.name = `on${name}`
-    //     e.$key = this.$data.game.control[e.code]
+    //     e.$key = this.$state.game.control[e.code]
     //     this.keyEventsCollectionKeyframe.push(e)
     //   })
     // })
@@ -615,22 +615,28 @@ function loadText(url) {
 }
 
 class Resource {
-  constructor(config) {
+  constructor(config, $state) {
     this.loaded = 0;
     this.total = 0;
     this.$config = config;
     this.loading = false;
-    this.$data = Object.create(null);
-    this.$images = Object.create(null);
-    this.$sounds = Object.create(null);
+    this.$state = $state;
     this.load(config.json.map(v => `Data/${v}`), "data");
-    this.load(config.sprites.map(v => `Sprite/${v}.png`), "sprite");
-    this.load(config.images.map(v => `Graph/${v}`), "graph");
-    this.load(config.sounds.map(v => `Sound/${v}`), "audio");
+    this.load(config.mapping.map(v => `Data/${v}`), "mapping");
+    this.load(config.sprites.map(v => `Sprite/${v}.png`), "spriteImage");
+    this.load(config.sprites.map(v => `Sprite/${v}.dat`), "sprite");
+    this.load(config.images.map(v => `Image/${v}`), "image");
+    this.load(config.sounds.map(v => `Sound/${v}`), "sound");
   }
 
   load(data, type) {
     this.loading = true;
+    const $state = this.$state;
+
+    if (!$state[type]) {
+      $state[type] = {};
+    }
+
     data.forEach(item => {
       this.total++;
       this.loadOne(item).then(data => {
@@ -638,13 +644,17 @@ class Resource {
         item = item.replace(/\w+\//, '').replace(/\.\w+/, '');
 
         if (type === "data") {
-          this.$config[item] = data;
+          $state[type][item] = data;
+        } else if (type === "mapping") {
+          $state[type] = data;
         } else if (type === "sprite") {
-          this.$data[item] = data;
-        } else if (type === "graph") {
-          this.$images[item] = data;
-        } else if (type === "audio") {
-          this.$images[item] = data;
+          $state.sprite[item] = data;
+        } else if (type === "image") {
+          $state[type][item] = data;
+        } else if (type === "sound") {
+          $state[type][item] = data;
+        } else if (type === "spriteImage") {
+          $state[type][item] = data;
         }
 
         if (this.loaded === this.total) {
@@ -705,7 +715,6 @@ function createInstance(next) {
   const Class = next.tag;
   next.$context = new Class(next);
   next.$context.$res = next.$parent.$res;
-  next.$context.$config = next.$parent.$config;
   next.$context.$state = next.$parent.$state;
   next.$context.$event = next.$parent.$event;
   next.$context.$parent = next.$parent;
@@ -1068,17 +1077,15 @@ class Engine {
   }
 
   init(config) {
-    this.$config = config;
     document.title = config.title;
     this.$state = Object.create(null);
-    this.$save = Object.create(null);
-    this.$res = new Resource(config);
-    this.$root = this;
+    this.$state.config = config;
+    this.$res = new Resource(config, this.$state);
 
     this.$event = (key, data) => {
       if (key === "loadMap") {
-        this.$res.loadMap(data); // this.map = await loadMap(this.$data.save.mapId)
-        // this.randMapKey = `${this.$data.save.mapId} ${new Date()}`
+        this.$res.loadMap(data); // this.map = await loadMap(this.$state.save.mapId)
+        // this.randMapKey = `${this.$state.save.mapId} ${new Date()}`
       } else if (key === "loadGame") {
         this.$res.loadMap("MT0").then(data => {
           this.$state.map = data;
@@ -1247,7 +1254,7 @@ class Title extends Component {
       style: styles$1.title
     }, this.$c("div", {
       style: styles$1.gameName
-    }, this.$config.title), this.$c(Select, {
+    }, this.$state.config.title), this.$c(Select, {
       activeIndex: this.activeIndex,
       options: this.options,
       style: styles$1.select,
@@ -1292,7 +1299,7 @@ class Title extends Component {
 const size$9 = 32;
 class Shop extends Component {
   create() {
-    this.shop = JSON.parse(JSON.stringify(this.$data.shop[this.props.shopid]));
+    this.shop = JSON.parse(JSON.stringify(this.$state.shop[this.props.shopid]));
     this.shop.choices.push({
       text: '离开'
     });
@@ -1432,7 +1439,7 @@ class Battle extends Component {
               money
             } = enemy;
             hero.exp += exp;
-            this.$data.save.money += money;
+            this.$state.save.money += money;
             this.battleMsg = `战斗胜利，获得${money}金币，${exp}经验`;
           }
         }
@@ -1706,14 +1713,14 @@ class EnemyInfo extends Component {
   };
 
   render() {
-    const dataSource = Object.keys(this.props.enemys).map(enemyId => this.$data.enemys[enemyId]);
+    const dataSource = Object.keys(this.props.enemys).map(enemyId => this.$state.enemys[enemyId]);
     return this.$c("div", {
       style: styles.wrap,
       onMouseDown: this.onMouseDown
     }, this.$c(Table, {
       dataSource: dataSource,
       columns: columns,
-      data: this.$data.save.hero
+      data: this.$state.save.hero
     }));
   }
 
@@ -1722,7 +1729,7 @@ class EnemyInfo extends Component {
 const size$6 = 32;
 class ShopList extends Component {
   create() {
-    const shops = this.$data.save.shops || [];
+    const shops = this.$state.save.shops || [];
     this.options = Object.entries(shops).map(([shopid, text]) => {
       return {
         text,
@@ -1814,7 +1821,7 @@ class Hero extends Component {
   tick = 0;
 
   create() {
-    const hero = Object.assign(this.$data.save.position, {
+    const hero = Object.assign(this.$state.save.position, {
       width: size$5,
       height: size$5
     });
@@ -1860,7 +1867,7 @@ class Hero extends Component {
       };
       styleHero.sy = 2; // this.$sound.play('se', 'step.mp3')
     } else if (code === "KeyS") {
-      saveGame(this.$data.save);
+      saveGame(this.$state.save);
       this.$sound.play("se", "load.mp3");
       this.setMessage("存储成功");
     } else if (code === "KeyL") {
@@ -1868,7 +1875,6 @@ class Hero extends Component {
       this.props.onLoadMap(loadGame());
       this.setMessage("读取成功");
     } else if (code === "KeyX") {
-      console.log("1111");
       this.showEnemyInfo = !this.showEnemyInfo;
     } else if (code === "KeyB") {
       this.buying = true;
@@ -1927,14 +1933,14 @@ class Hero extends Component {
       this.eventIndex = 0;
       this.setEvent();
     } else {
-      const info = this.$data.mapping[mapEvent[2]];
+      const info = this.$state.mapping[mapEvent[2]];
       const {
         name,
         type
       } = info;
 
       if (type === "items") {
-        const item = this.$data.items[name];
+        const item = this.$state.items[name];
         const {
           type
         } = item;
@@ -1956,7 +1962,7 @@ class Hero extends Component {
             if (name === "hero") {
               propertyName = propertyNames[key];
             } else if (name === "items") {
-              propertyName = this.$data.items[key].name;
+              propertyName = this.$state.items[key].name;
             } else if (key === "money") {
               propertyName = "金币";
             }
@@ -1979,8 +1985,8 @@ class Hero extends Component {
         if (["yellowDoor", "redDoor", "blueDoor", "steelDoor", "specialDoor"].includes(name)) {
           const key = name.slice(0, -4) + "Key";
 
-          if (this.$data.save.items[key]) {
-            this.$data.save.items[key]--;
+          if (this.$state.save.items[key]) {
+            this.$state.save.items[key]--;
             this.remove(mapEvent);
             this.$sound.play("se", "door.mp3");
             return true;
@@ -2005,8 +2011,8 @@ class Hero extends Component {
         this.props.onLoadMap(data);
       } else if (type === "openShop") {
         this.shopid = event.id;
-        this.$data.save.shops = this.$data.save.shops || {};
-        this.$data.save.shops[this.shopid] = this.$data.shop[this.shopid].title;
+        this.$state.save.shops = this.$state.save.shops || {};
+        this.$state.save.shops[this.shopid] = this.$state.shop[this.shopid].title;
         return;
       } else if (type === "getItems") {
         this.updateSaveData("items", data);
@@ -2017,8 +2023,8 @@ class Hero extends Component {
         this.remove(this.mapEvent);
         return;
       } else if (type === "enemy") {
-        const enemy = this.$data.enemys[data];
-        const hero = this.$data.save.hero;
+        const enemy = this.$state.enemys[data];
+        const hero = this.$state.save.hero;
 
         if (hero.atk > enemy.def) {
           if (hero.def >= enemy.atk || enemy.hp / (hero.atk - enemy.def) <= hero.hp / (enemy.atk - hero.def)) {
@@ -2051,7 +2057,7 @@ class Hero extends Component {
           x,
           y
         } = position;
-        this.$data.save.destroy[[mapId, x, y]] = true;
+        this.$state.save.destroy[[mapId, x, y]] = true;
       } else if (type === "if") {
         const {
           condition,
@@ -2096,7 +2102,7 @@ class Hero extends Component {
     if (Array.isArray(gets)) {
       gets.forEach(([id, value]) => this.updateSaveData(context, id, value));
     } else if (typeof gets === "string") {
-      const saveData = context ? this.$data.save[context] : this.$data.save;
+      const saveData = context ? this.$state.save[context] : this.$state.save;
       saveData[gets] = saveData[gets] || 0;
       saveData[gets] += Number(n);
     } else if (typeof gets === "object") {
@@ -2108,7 +2114,7 @@ class Hero extends Component {
     if (Array.isArray(gets)) {
       return gets.some(([id, value]) => this.checkSaveData(context, id, value));
     } else if (typeof gets === "string") {
-      const saveData = context ? this.$data.save[context] : this.$data.save;
+      const saveData = context ? this.$state.save[context] : this.$state.save;
       saveData[gets] = saveData[gets] || 0;
       return saveData[gets] + Number(n) >= 0;
     } else if (typeof gets === "object") {
@@ -2155,7 +2161,7 @@ class Hero extends Component {
     }), this.enemy && this.$c(Battle, {
       enemy: this.enemy,
       enemyId: this.enemyId,
-      hero: this.$data.save.hero,
+      hero: this.$state.save.hero,
       onClose: this.onBattleClose
     }), this.talk && this.$c(Talk, {
       talk: this.talk,
@@ -2197,8 +2203,8 @@ class Status extends Component {
     } = this.props;
     const {
       save
-    } = this.$data;
-    const rowProperty = [this.$data.game.title, map.name, save.hero.lv, save.hero.hp, save.hero.atk, save.hero.def, save.hero.exp, save.money, save.items.yellowKey, save.items.blueKey, save.items.redKey];
+    } = this.$state;
+    const rowProperty = [this.$state.game.title, map.name, save.hero.lv, save.hero.hp, save.hero.atk, save.hero.def, save.hero.exp, save.money, save.items.yellowKey, save.items.blueKey, save.items.redKey];
     return this.$c("div", {
       style: {
         fontSize: 24
@@ -2275,12 +2281,12 @@ class Map extends Component {
     mapTerrains.forEach((line, y) => {
       line.forEach((value, x) => {
         if (value) {
-          const info = this.$data.mapping[value];
+          const info = this.$state.mapping[value];
           const {
             type,
             name
           } = info;
-          const detail = this.$data[type][name];
+          const detail = this.$state.sprite[type][name];
 
           if (type === 'animates') {
             sx = tick % 4 * size$3;
@@ -2322,7 +2328,7 @@ class Map extends Component {
     const {
       mapId,
       destroy = {}
-    } = this.$data.save;
+    } = this.$state.save;
     const {
       mapEvents
     } = this.props.map;
@@ -2339,14 +2345,14 @@ class Map extends Component {
         }
 
         if (value) {
-          const info = this.$data.mapping[value];
+          const info = this.$state.mapping[value];
 
           if (info) {
             const {
               type,
               name
             } = info;
-            const detail = this.$data[type][name]; // terrains items icons npcs enemys
+            const detail = this.$state.sprite[type][name]; // terrains items icons npcs enemys
 
             let sx = 0;
 
@@ -2384,9 +2390,9 @@ class Map extends Component {
 
   onRemoveMapEvent = mapEvent => {
     const [x, y] = mapEvent;
-    const mapId = this.$data.save.mapId;
-    this.$data.save.destroy = this.$data.save.destroy || {};
-    this.$data.save.destroy[[mapId, x, y]] = 1;
+    const mapId = this.$state.save.mapId;
+    this.$state.save.destroy = this.$state.save.destroy || {};
+    this.$state.save.destroy[[mapId, x, y]] = 1;
   };
   onTitle = () => {
     this.props.onTitle();
@@ -2575,10 +2581,10 @@ class Game extends Component {
   } // onLoadMap = async (data) => {
   //   this.loading = "加载地图";
   //   debugger;
-  //   Object.assign(this.$data.save, data);
-  //   this.map = await loadMap(this.$data.save.mapId);
+  //   Object.assign(this.$state.save, data);
+  //   this.map = await loadMap(this.$state.save.mapId);
   //   this.loading = false;
-  //   this.randMapKey = `${this.$data.save.mapId} ${new Date()}`;
+  //   this.randMapKey = `${this.$state.save.mapId} ${new Date()}`;
   // };
 
 

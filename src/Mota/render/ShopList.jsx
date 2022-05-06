@@ -5,7 +5,7 @@ const size = 32
 
 export default class ShopList extends Component {
   create () {
-    const shops = this.$data.save.shops || []
+    const shops = this.$state.save.shops || []
     this.options = Object.entries(shops).map(([shopid, text]) => {
       return { text, shopid }
     })

@@ -47,7 +47,7 @@ export default class Title extends Component {
   render() {
     return (
       <div style={styles.title}>
-        <div style={styles.gameName}>{this.$config.title}</div>
+        <div style={styles.gameName}>{this.$state.config.title}</div>
         <Select
           activeIndex={this.activeIndex}
           options={this.options}

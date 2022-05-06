@@ -22,23 +22,23 @@ export default class Engine {
   }
 
   init(config) {
-    this.$config = config;
     document.title = config.title;
+
     this.$state = Object.create(null);
-    this.$save = Object.create(null);
-    this.$res = new Resource(config);
-    this.$root = this;
+    this.$state.config = config;
+    this.$res = new Resource(config, this.$state);
+
     this.$event = (key, data) => {
       if (key === "loadMap") {
         this.$res.loadMap(data);
-        // this.map = await loadMap(this.$data.save.mapId)
-        // this.randMapKey = `${this.$data.save.mapId} ${new Date()}`
+        // this.map = await loadMap(this.$state.save.mapId)
+        // this.randMapKey = `${this.$state.save.mapId} ${new Date()}`
       } else if (key === "loadGame") {
         this.$res.loadMap("MT0").then((data) => {
           this.$state.map = data;
           this.$save;
         });
-      } 
+      }
 
       switch (key) {
         case "startGame":

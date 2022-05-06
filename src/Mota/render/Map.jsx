@@ -43,9 +43,9 @@ export default class Map extends Component {
     mapTerrains.forEach((line, y) => {
       line.forEach((value, x) => {
         if (value) {
-          const info = this.$data.mapping[value]
+          const info = this.$state.mapping[value]
           const { type, name } = info
-          const detail = this.$data[type][name]
+          const detail = this.$state.sprite[type][name]
 
           if (type === 'animates') {
             sx = (tick % 4) * size
@@ -78,7 +78,7 @@ export default class Map extends Component {
   }
 
   renderMapEvents () {
-    const { mapId, destroy = {} } = this.$data.save
+    const { mapId, destroy = {} } = this.$state.save
     const { mapEvents } = this.props.map
     const tick = this.tick
     const enemys = {}
@@ -90,10 +90,10 @@ export default class Map extends Component {
           return null
         }
         if (value) {
-          const info = this.$data.mapping[value]
+          const info = this.$state.mapping[value]
           if (info) {
             const { type, name } = info
-            const detail = this.$data[type][name]
+            const detail = this.$state.sprite[type][name]
             // terrains items icons npcs enemys
             let sx = 0
             if (type === 'npcs' || type === 'enemys') {
@@ -120,9 +120,9 @@ export default class Map extends Component {
 
   onRemoveMapEvent = (mapEvent) => {
     const [x, y] = mapEvent
-    const mapId = this.$data.save.mapId
-    this.$data.save.destroy = this.$data.save.destroy || {}
-    this.$data.save.destroy[[mapId, x, y]] = 1
+    const mapId = this.$state.save.mapId
+    this.$state.save.destroy = this.$state.save.destroy || {}
+    this.$state.save.destroy[[mapId, x, y]] = 1
   };
 
   onTitle = () => {

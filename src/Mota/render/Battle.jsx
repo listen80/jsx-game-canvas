@@ -69,7 +69,7 @@ export default class Battle extends Component {
             enemy.hp = 0
             const { exp, money } = enemy
             hero.exp += exp
-            this.$data.save.money += money
+            this.$state.save.money += money
             this.battleMsg = `战斗胜利，获得${money}金币，${exp}经验`
           }
         }

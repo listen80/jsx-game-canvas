@@ -64,7 +64,7 @@ class FourFace extends Component {
 export default class Hero extends Component {
   tick = 0;
   create() {
-    const hero = Object.assign(this.$data.save.position, {
+    const hero = Object.assign(this.$state.save.position, {
       width: size,
       height: size,
     });
@@ -105,7 +105,7 @@ export default class Hero extends Component {
       styleHero.sy = 2;
       // this.$sound.play('se', 'step.mp3')
     } else if (code === "KeyS") {
-      saveGame(this.$data.save);
+      saveGame(this.$state.save);
       this.$sound.play("se", "load.mp3");
       this.setMessage("存储成功");
     } else if (code === "KeyL") {
@@ -113,7 +113,6 @@ export default class Hero extends Component {
       this.props.onLoadMap(loadGame());
       this.setMessage("读取成功");
     } else if (code === "KeyX") {
-      console.log("1111");
       this.showEnemyInfo = !this.showEnemyInfo;
     } else if (code === "KeyB") {
       this.buying = true;
@@ -164,10 +163,10 @@ export default class Hero extends Component {
       this.eventIndex = 0;
       this.setEvent();
     } else {
-      const info = this.$data.mapping[mapEvent[2]];
+      const info = this.$state.mapping[mapEvent[2]];
       const { name, type } = info;
       if (type === "items") {
-        const item = this.$data.items[name];
+        const item = this.$state.items[name];
         const { type } = item;
         if (type === "1" || type === "3") {
           this.remove(mapEvent);
@@ -185,7 +184,7 @@ export default class Hero extends Component {
             if (name === "hero") {
               propertyName = propertyNames[key];
             } else if (name === "items") {
-              propertyName = this.$data.items[key].name;
+              propertyName = this.$state.items[key].name;
             } else if (key === "money") {
               propertyName = "金币";
             }
@@ -215,8 +214,8 @@ export default class Hero extends Component {
           ].includes(name)
         ) {
           const key = name.slice(0, -4) + "Key";
-          if (this.$data.save.items[key]) {
-            this.$data.save.items[key]--;
+          if (this.$state.save.items[key]) {
+            this.$state.save.items[key]--;
             this.remove(mapEvent);
             this.$sound.play("se", "door.mp3");
             return true;
@@ -237,8 +236,8 @@ export default class Hero extends Component {
         this.props.onLoadMap(data);
       } else if (type === "openShop") {
         this.shopid = event.id;
-        this.$data.save.shops = this.$data.save.shops || {};
-        this.$data.save.shops[this.shopid] = this.$data.shop[this.shopid].title;
+        this.$state.save.shops = this.$state.save.shops || {};
+        this.$state.save.shops[this.shopid] = this.$state.shop[this.shopid].title;
         return;
       } else if (type === "getItems") {
         this.updateSaveData("items", data);
@@ -249,8 +248,8 @@ export default class Hero extends Component {
         this.remove(this.mapEvent);
         return;
       } else if (type === "enemy") {
-        const enemy = this.$data.enemys[data];
-        const hero = this.$data.save.hero;
+        const enemy = this.$state.enemys[data];
+        const hero = this.$state.save.hero;
         if (hero.atk > enemy.def) {
           if (
             hero.def >= enemy.atk ||
@@ -280,7 +279,7 @@ export default class Hero extends Component {
       } else if (type === "removeMapBlock") {
         const { mapId, position } = data;
         const { x, y } = position;
-        this.$data.save.destroy[[mapId, x, y]] = true;
+        this.$state.save.destroy[[mapId, x, y]] = true;
       } else if (type === "if") {
         const { condition, true: trueEvent, false: falseEvent } = event;
         this.mapEvent = null;
@@ -323,7 +322,7 @@ export default class Hero extends Component {
     if (Array.isArray(gets)) {
       gets.forEach(([id, value]) => this.updateSaveData(context, id, value));
     } else if (typeof gets === "string") {
-      const saveData = context ? this.$data.save[context] : this.$data.save;
+      const saveData = context ? this.$state.save[context] : this.$state.save;
       saveData[gets] = saveData[gets] || 0;
       saveData[gets] += Number(n);
     } else if (typeof gets === "object") {
@@ -337,7 +336,7 @@ export default class Hero extends Component {
     if (Array.isArray(gets)) {
       return gets.some(([id, value]) => this.checkSaveData(context, id, value));
     } else if (typeof gets === "string") {
-      const saveData = context ? this.$data.save[context] : this.$data.save;
+      const saveData = context ? this.$state.save[context] : this.$state.save;
       saveData[gets] = saveData[gets] || 0;
       return saveData[gets] + Number(n) >= 0;
     } else if (typeof gets === "object") {
@@ -396,7 +395,7 @@ export default class Hero extends Component {
           <Battle
             enemy={this.enemy}
             enemyId={this.enemyId}
-            hero={this.$data.save.hero}
+            hero={this.$state.save.hero}
             onClose={this.onBattleClose}
           />
         )}

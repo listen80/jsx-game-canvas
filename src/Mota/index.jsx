@@ -22,10 +22,10 @@ export default class Game extends Component {
   // onLoadMap = async (data) => {
   //   this.loading = "加载地图";
   //   debugger;
-  //   Object.assign(this.$data.save, data);
-  //   this.map = await loadMap(this.$data.save.mapId);
+  //   Object.assign(this.$state.save, data);
+  //   this.map = await loadMap(this.$state.save.mapId);
   //   this.loading = false;
-  //   this.randMapKey = `${this.$data.save.mapId} ${new Date()}`;
+  //   this.randMapKey = `${this.$state.save.mapId} ${new Date()}`;
   // };
 
   onTitle = () => {

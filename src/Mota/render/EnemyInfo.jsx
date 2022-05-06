@@ -85,14 +85,14 @@ export default class EnemyInfo extends Component {
 
   render() {
     const dataSource = Object.keys(this.props.enemys).map(
-      (enemyId) => this.$data.enemys[enemyId]
+      (enemyId) => this.$state.enemys[enemyId]
     );
     return (
       <div style={styles.wrap} onMouseDown={this.onMouseDown}>
         <Table
           dataSource={dataSource}
           columns={columns}
-          data={this.$data.save.hero}
+          data={this.$state.save.hero}
         />
       </div>
     );
