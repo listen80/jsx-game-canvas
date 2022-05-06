@@ -9,11 +9,11 @@ export { default as Select } from "./components/Select";
 export { default as Table } from "./components/Table";
 import { loadJSON, loadText } from "./utils/http";
 import "./core/Control";
-import { loadGame } from "./utils/sl";
+import { loadGame, saveGame } from "./utils/sl";
 
 export default class Engine {
-  constructor($game) {
-    this.$game = $game;
+  constructor($gameJSX) {
+    this.$gameJSX = $gameJSX;
     if (this.checkChromeVersion()) {
       loadJSON("game.json").then((game) => {
         this.init(game);
@@ -24,36 +24,44 @@ export default class Engine {
   init(config) {
     document.title = config.title;
 
-    this.$state = Object.create(null);
-    this.$state.config = config;
-    this.$res = new Resource(config, this.$state);
+    this.$state = {
+      config,
+      save: {},
+      image: {},
+      sound: {}
+    };
 
-    this.$event = (key, data) => {
-      if (key === "loadMap") {
-        this.$res.loadMap(data);
-        // this.map = await loadMap(this.$state.save.mapId)
-        // this.randMapKey = `${this.$state.save.mapId} ${new Date()}`
-      } else if (key === "loadGame") {
-        this.$res.loadMap("MT0").then((data) => {
-          this.$state.map = data;
-          this.$save;
-        });
+    this.$res = new Resource(this.$state);
+
+    this.$event = async (key, data) => {
+      if (typeof key === typeof null) {
+        data = key.data
+        key = key.type
       }
-
       switch (key) {
         case "startGame":
-          this.$res.load([]).then((map) => {
-            this.$state.map = map;
-          });
+          Object.assign(this.$state.save, this.$state.config.save)
+          this.$res.loadMap(this.$state.save.mapId);
+          // this.map = loadMap(this.$state.save.mapId);
+          // this.$state.randMapKey = `${this.$state.save.mapId} ${new Date()}`;
           break;
+
+        case "loadGame":
+          Object.assign(this.$state.save, loadGame())
+          this.$res.loadMap(this.$state.save.mapId);
+          break;
+
+        case "saveGame":
+          saveGame(this.$state.save)
+          break;
+
         case "toTitle":
           this.$state.map = null;
           break;
 
         case "loadMap":
-          this.$res.load(data).then((map) => {
-            this.$state.map = map;
-          });
+          this.$state.save.mapId = data
+          this.$res.loadMap(this.$state.save.mapId);
           break;
 
         case "message":
@@ -99,7 +107,7 @@ export default class Engine {
   }
 
   keyFrame() {
-    this.$node = patchNode(this.$node, createNode.call(this, this.$game, null));
+    this.$node = patchNode(this.$node, createNode.call(this, this.$gameJSX, null));
     this.$render.render(this.$node);
   }
 }

@@ -45,7 +45,7 @@ export default class Map extends Component {
         if (value) {
           const info = this.$state.mapping[value]
           const { type, name } = info
-          const detail = this.$state.sprite[type][name]
+          const detail = this.$state[type][name]
 
           if (type === 'animates') {
             sx = (tick % 4) * size
@@ -57,7 +57,7 @@ export default class Map extends Component {
               height: size,
               width: size,
             }
-            terrains.push(<img src={type + '.png'} style={style} />)
+            terrains.push(<img src={type} style={style} />)
           } else if (type === 'terrains') {
             const style = {
               sy: detail.sy * size,
@@ -67,7 +67,7 @@ export default class Map extends Component {
               height: size,
               width: size,
             }
-            terrains.push(<img src={type + '.png'} style={style} />)
+            terrains.push(<img src={type} style={style} />)
           } else {
             console.error('error type', type, info)
           }
@@ -93,7 +93,7 @@ export default class Map extends Component {
           const info = this.$state.mapping[value]
           if (info) {
             const { type, name } = info
-            const detail = this.$state.sprite[type][name]
+            const detail = this.$state[type][name]
             // terrains items icons npcs enemys
             let sx = 0
             if (type === 'npcs' || type === 'enemys') {
@@ -106,7 +106,7 @@ export default class Map extends Component {
             return (
               <div style={{ x: x * size, y: y * size, height: size, width: size }}>
                 <img
-                  src={type + '.png'}
+                  src={type}
                   style={{ sy: detail.sy * size, sx, height: size, width: size }}
                 />
               </div>

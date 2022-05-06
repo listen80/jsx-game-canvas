@@ -20,7 +20,7 @@ export default class ScrollText extends Component {
   create () {
     const { text, bgm } = this.$state.map
     this.text = text.split('\n')
-    // this.mapBgm = this.$sound.play('bgm', bgm)
+    this.mapBgm = this.$sound.play('bgm', bgm)
   }
 
   destroy () {
@@ -36,7 +36,7 @@ export default class ScrollText extends Component {
   onMouseDown = () => {
     if (this.ready) {
       // const { type, data } = this.props.map.event
-      this.$event('loadMap')
+      this.$event('loadMap', this.$state.map.event.data.mapId)
       // if (type === 'mapLoad') {
       //   this.props.onClose(data)
       // } else if (type === 'title') {
@@ -48,7 +48,7 @@ export default class ScrollText extends Component {
   render () {
     const style = this.styles.scroll
     if (style.y > -size * (this.text.length - 2)) {
-      const y = 100
+      const y = 1
       style.y -= y
     } else {
       this.ready = true

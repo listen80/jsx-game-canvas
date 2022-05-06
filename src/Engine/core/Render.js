@@ -29,11 +29,7 @@ export default class Render {
   }
 
   getImage(src) {
-    // console.log(this)
     const image = this.$state.image[src];
-    if (!image) {
-      console.log(src)
-    }
     return image;
   }
 
@@ -86,13 +82,13 @@ export default class Render {
       );
     });
 
-    // keyEvents.forEach((name) => {
-    //   window.addEventListener(name.toLowerCase(), (e) => {
-    //     e.name = `on${name}`
-    //     e.$key = this.$state.game.control[e.code]
-    //     this.keyEventsCollectionKeyframe.push(e)
-    //   })
-    // })
+    keyEvents.forEach((name) => {
+      document.addEventListener(name.toLowerCase(), (e) => {
+        e.name = `on${name}`;
+        e.$key = this.$state.config.control[e.code];
+        this.keyEventsCollectionKeyframe.push(e);
+      });
+    });
   }
 
   runEvents() {
@@ -179,17 +175,21 @@ export default class Render {
           sheight,
         } = style;
         const { context } = this;
-        context.drawImage(
-          this.getImage(props.src),
-          sx,
-          sy,
-          swidth || width,
-          sheight || height,
-          offsetX,
-          offsetY,
-          width,
-          height
-        );
+        const image = this.getImage(props.src);
+        if (!image) {
+          console.log(image, this.$state.image, props);
+        } else
+          context.drawImage(
+            image,
+            sx,
+            sy,
+            swidth || width,
+            sheight || height,
+            offsetX,
+            offsetY,
+            width,
+            height
+          );
       }
     }
   }

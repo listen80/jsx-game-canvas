@@ -52,13 +52,7 @@ class Render {
   }
 
   getImage(src) {
-    // console.log(this)
     const image = this.$state.image[src];
-
-    if (!image) {
-      console.log(src);
-    }
-
     return image;
   }
 
@@ -113,13 +107,14 @@ class Render {
       }, {
         passive: false
       });
-    }); // keyEvents.forEach((name) => {
-    //   window.addEventListener(name.toLowerCase(), (e) => {
-    //     e.name = `on${name}`
-    //     e.$key = this.$state.game.control[e.code]
-    //     this.keyEventsCollectionKeyframe.push(e)
-    //   })
-    // })
+    });
+    keyEvents.forEach(name => {
+      document.addEventListener(name.toLowerCase(), e => {
+        e.name = `on${name}`;
+        e.$key = this.$state.config.control[e.code];
+        this.keyEventsCollectionKeyframe.push(e);
+      });
+    });
   }
 
   runEvents() {
@@ -235,7 +230,11 @@ class Render {
         const {
           context
         } = this;
-        context.drawImage(this.getImage(props.src), sx, sy, swidth || width, sheight || height, offsetX, offsetY, width, height);
+        const image = this.getImage(props.src);
+
+        if (!image) {
+          console.log(image, this.$state.image, props);
+        } else context.drawImage(image, sx, sy, swidth || width, sheight || height, offsetX, offsetY, width, height);
       }
     }
   }
@@ -602,17 +601,6 @@ const loadImage = (src, callback) => {
     img.src = src;
   });
 };
-const loadSound = (src, callback) => {
-  return new Promise(function (resolve, reject) {
-    const audio = new Audio();
-    audio.addEventListener("canplay", () => {
-      callback && callback(src, audio);
-      resolve(audio);
-    });
-    audio.addEventListener("error", () => reject(audio));
-    audio.src = src;
-  });
-};
 function loadJSON(url) {
   return fetch(url).then(data => data.json());
 }
@@ -621,88 +609,68 @@ function loadText(url) {
 }
 
 class Resource {
-  constructor(config, $state) {
+  constructor($state) {
     this.loaded = 0;
     this.total = 0;
-    this.$config = config;
     this.loading = false;
     this.$state = $state;
-    this.load(config.json.map(v => `Data/${v}`), "data");
-    this.load(config.mapping.map(v => `Data/${v}`), "mapping");
-    this.load(config.sprites.map(v => `Sprite/${v}.png`), "image");
-    this.load(config.sprites.map(v => `Sprite/${v}.dat`), "sprite");
-    this.load(config.images.map(v => `Image/${v}`), "image");
-    this.load(config.sounds.map(v => `Sound/${v}`), "sound");
+    this.loadMapping();
+    this.loadImage();
+    this.loadSprite();
   }
 
-  load(data, type) {
-    this.loading = true;
-    const $state = this.$state;
-
-    if (!$state[type]) {
-      $state[type] = {};
+  checkStatus() {
+    if (this.loaded === this.total) {
+      const timer = setTimeout(() => {
+        this.loading = false;
+        clearTimeout(timer);
+      }, 16);
     }
+  }
 
-    data.forEach(itemO => {
-      this.total++;
-      this.loadOne(itemO).then(data => {
-        this.loaded++;
-        const item = itemO.replace(/\w+\//, '').replace(/\.\w+/, '');
-
-        if (type === "data") {
-          $state[item] = data;
-        } else if (type === "mapping") {
-          $state[type] = data;
-        } else if (type === "sprite") {
-          $state.sprite[item] = data;
-        } else if (type === "image") {
-          $state[type][itemO.replace(/\w+\//, '')] = data;
-        } else if (type === "sound") {
-          $state[type][item] = data;
-        } else if (type === "spriteImage") {
-          $state[type][item] = data;
-        }
-
-        if (this.loaded === this.total) {
-          const timer = setTimeout(() => {
-            this.loading = false;
-            clearTimeout(timer);
-          }, 200);
-        }
+  loadMapping() {
+    this.$state.config.mapping.map(v => {
+      loadText(`Data/${v}`).then(data => {
+        this.$state.mapping = data;
       });
-    }); // return Promise.all(loaderMap.map((url) => {
-    //   return load(`Data/${url}`)
-    // })).then(([game, save, shop, mapping]) => {
-    //   Object.assign(this, { game, save, shop, mapping })
-    //   const sprites = game.sprites
-    //   Promise.all(sprites.map(url => load(`Sprite/${url}.dat`))).then(([enemys, items, animates, icons, npcs, terrains, boss]) => {
-    //     Object.assign(this, { enemys, items, animates, icons, npcs, terrains, boss })
-    //   })
-    // })
+    });
   }
 
-  loadOne(url) {
-    if (url.endsWith(".dat")) {
-      return loadText(`${url}`);
-    }
-
-    if (url.endsWith(".json")) {
-      return loadJSON(`${url}`);
-    }
-
-    if (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".webp")) {
-      return loadImage(`${url}`);
-    } else {
-      return loadSound(`${url}`);
-    }
+  loadImage() {
+    this.total++;
+    this.$state.config.images.map(v => {
+      loadImage(`Image/${v}`).then(data => {
+        this.$state.image[v] = data;
+        this.loaded++;
+        this.checkStatus();
+      });
+    });
   }
 
-  loadJSON() {}
-
-  loadSprite(sprites) {}
+  loadSprite() {
+    this.$state.config.sprites.map(v => {
+      this.total++;
+      loadImage(`Sprite/${v}.png`).then(data => {
+        this.$state.image[v] = data;
+        this.loaded++;
+        this.checkStatus();
+      });
+      this.total++;
+      loadText(`Sprite/${v}.dat`).then(data => {
+        this.$state[v] = data;
+        this.loaded++;
+        this.checkStatus();
+      });
+    });
+  }
 
   loadMap(id) {
-    return loadJSON(`Maps/${id}.json`);
+    this.total++;
+    loadJSON(`Maps/${id}.json`).then(data => {
+      this.$state.map = data;
+      this.loaded++;
+      this.checkStatus();
+    });
   }
 
 }
@@ -800,11 +768,17 @@ class Component {
     this.props = props;
     this.$node = null;
     this.$children = children;
+
+    this.$sound.play = () => {};
+
+    this.$sound.pause = () => {};
   }
 
   $c() {
     return createNode.apply(this, arguments);
   }
+
+  $sound() {}
 
 }
 
@@ -1038,8 +1012,7 @@ function createElement(array, root) {
 
       event.code = code; // Define that the event name is 'build'.
 
-      event.initEvent('keydown', true, true);
-      console.log('in'); // The form element listens for the custom "awesome" event and then consoles the output of the passed text() method
+      event.initEvent('keydown', true, true); // The form element listens for the custom "awesome" event and then consoles the output of the passed text() method
 
       document.dispatchEvent(event);
       e.preventDefault();
@@ -1072,8 +1045,8 @@ function loadGame() {
 }
 
 class Engine {
-  constructor($game) {
-    this.$game = $game;
+  constructor($gameJSX) {
+    this.$gameJSX = $gameJSX;
 
     if (this.checkChromeVersion()) {
       loadJSON("game.json").then(game => {
@@ -1084,26 +1057,35 @@ class Engine {
 
   init(config) {
     document.title = config.title;
-    this.$state = Object.create(null);
-    this.$state.config = config;
-    this.$res = new Resource(config, this.$state);
+    this.$state = {
+      config,
+      save: {},
+      image: {},
+      sound: {}
+    };
+    this.$res = new Resource(this.$state);
 
-    this.$event = (key, data) => {
-      if (key === "loadMap") {
-        this.$res.loadMap(data); // this.map = await loadMap(this.$state.save.mapId)
-        // this.randMapKey = `${this.$state.save.mapId} ${new Date()}`
-      } else if (key === "loadGame") {
-        this.$res.loadMap("MT0").then(data => {
-          this.$state.map = data;
-          this.$save;
-        });
+    this.$event = async (key, data) => {
+      if (typeof key === typeof null) {
+        data = key.data;
+        key = key.type;
       }
 
       switch (key) {
         case "startGame":
-          this.$res.load([]).then(map => {
-            this.$state.map = map;
-          });
+          Object.assign(this.$state.save, this.$state.config.save);
+          this.$res.loadMap(this.$state.save.mapId); // this.map = loadMap(this.$state.save.mapId);
+          // this.$state.randMapKey = `${this.$state.save.mapId} ${new Date()}`;
+
+          break;
+
+        case "loadGame":
+          Object.assign(this.$state.save, loadGame());
+          this.$res.loadMap(this.$state.save.mapId);
+          break;
+
+        case "saveGame":
+          saveGame(this.$state.save);
           break;
 
         case "toTitle":
@@ -1111,9 +1093,8 @@ class Engine {
           break;
 
         case "loadMap":
-          this.$res.load(data).then(map => {
-            this.$state.map = map;
-          });
+          this.$state.save.mapId = data;
+          this.$res.loadMap(this.$state.save.mapId);
           break;
 
         case "message":
@@ -1160,7 +1141,7 @@ class Engine {
   }
 
   keyFrame() {
-    this.$node = patchNode(this.$node, createNode.call(this, this.$game, null));
+    this.$node = patchNode(this.$node, createNode.call(this, this.$gameJSX, null));
     this.$render.render(this.$node);
   }
 
@@ -1239,7 +1220,7 @@ const styles$1 = {
 };
 class Title extends Component {
   create() {
-    this.activeIndex = loadGame() ? 1 : 0;
+    this.activeIndex = 0;
     this.options = [{
       text: "开始",
       event: "startGame"
@@ -1508,7 +1489,7 @@ class Battle extends Component {
     }, this.battleMsg), this.$c("div", {
       style: this.styles.enemy
     }, this.$c("img", {
-      src: "enemys.png",
+      src: "enemys",
       style: enemyImageStyle
     }), proprety.map((item, index) => {
       return this.$c("div", {
@@ -2013,9 +1994,7 @@ class Hero extends Component {
       if (type === "talk") {
         this.talk = data;
         return;
-      } else if (type === "mapLoad") {
-        this.props.onLoadMap(data);
-      } else if (type === "openShop") {
+      } else if (type === "mapLoad") ; else if (type === "openShop") {
         this.shopid = event.id;
         this.$state.save.shops = this.$state.save.shops || {};
         this.$state.save.shops[this.shopid] = this.$state.shop[this.shopid].title;
@@ -2190,7 +2169,7 @@ class Status extends Component {
       for (let y = 0; y < 13; y++) {
         if (x === 4 || y === 0 || y === 12) {
           this.walls.push(this.$c("img", {
-            src: "terrains.png",
+            src: "terrains",
             style: {
               sx: 0,
               sy: size$4 * 2,
@@ -2221,7 +2200,7 @@ class Status extends Component {
           height: size$4
         }
       }, this.$c("img", {
-        src: "icons.png",
+        src: "icons",
         style: {
           sy: index * size$4,
           width: size$4,
@@ -2290,7 +2269,7 @@ class Map extends Component {
             type,
             name
           } = info;
-          const detail = this.$state.sprite[type][name];
+          const detail = this.$state[type][name];
 
           if (type === 'animates') {
             sx = tick % 4 * size$3;
@@ -2303,7 +2282,7 @@ class Map extends Component {
               width: size$3
             };
             terrains.push(this.$c("img", {
-              src: type + '.png',
+              src: type,
               style: style
             }));
           } else if (type === 'terrains') {
@@ -2316,7 +2295,7 @@ class Map extends Component {
               width: size$3
             };
             terrains.push(this.$c("img", {
-              src: type + '.png',
+              src: type,
               style: style
             }));
           } else {
@@ -2356,7 +2335,7 @@ class Map extends Component {
               type,
               name
             } = info;
-            const detail = this.$state.sprite[type][name]; // terrains items icons npcs enemys
+            const detail = this.$state[type][name]; // terrains items icons npcs enemys
 
             let sx = 0;
 
@@ -2376,7 +2355,7 @@ class Map extends Component {
                 width: size$3
               }
             }, this.$c("img", {
-              src: type + '.png',
+              src: type,
               style: {
                 sy: detail.sy * size$3,
                 sx,
@@ -2458,7 +2437,8 @@ class ScrollText extends Component {
       text,
       bgm
     } = this.$state.map;
-    this.text = text.split('\n'); // this.mapBgm = this.$sound.play('bgm', bgm)
+    this.text = text.split('\n');
+    this.mapBgm = this.$sound.play('bgm', bgm);
   }
 
   destroy() {
@@ -2476,7 +2456,7 @@ class ScrollText extends Component {
   onMouseDown = () => {
     if (this.ready) {
       // const { type, data } = this.props.map.event
-      this.$event('loadMap'); // if (type === 'mapLoad') {
+      this.$event('loadMap', this.$state.map.event.data.mapId); // if (type === 'mapLoad') {
       //   this.props.onClose(data)
       // } else if (type === 'title') {
       //   this.props.onTitle(data)
@@ -2488,7 +2468,7 @@ class ScrollText extends Component {
     const style = this.styles.scroll;
 
     if (style.y > -size$2 * (this.text.length - 2)) {
-      const y = 100;
+      const y = 1;
       style.y -= y;
     } else {
       this.ready = true;

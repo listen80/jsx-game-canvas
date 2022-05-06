@@ -5,9 +5,15 @@ export default class Component {
     this.props = props
     this.$node = null
     this.$children = children
+    this.$sound.play = () => {}
+    this.$sound.pause = () => {}
   }
 
   $c () {
     return createNode.apply(this, arguments)
+  }
+
+  $sound () {
+
   }
 }

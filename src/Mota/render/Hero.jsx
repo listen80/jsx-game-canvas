@@ -13,6 +13,7 @@ import {
   updateVector,
   assignVector,
 } from "../../Engine/utils/physics";
+
 import { convertPropertyStr } from "../../Engine/utils/format";
 
 const propertyNames = {
@@ -233,7 +234,7 @@ export default class Hero extends Component {
         this.talk = data;
         return;
       } else if (type === "mapLoad") {
-        this.props.onLoadMap(data);
+        // this.props.onLoadMap(data);
       } else if (type === "openShop") {
         this.shopid = event.id;
         this.$state.save.shops = this.$state.save.shops || {};

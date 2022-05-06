@@ -10,7 +10,7 @@ export default class Status extends Component {
         if (x === 4 || y === 0 || y === 12) {
           this.walls.push(
             <img
-              src="terrains.png"
+              src="terrains"
               style={{
                 sx: 0,
                 sy: size * 2,
@@ -46,7 +46,7 @@ export default class Status extends Component {
           return (
             <div style={{ y: (index + 1) * size, width: size, height: size }}>
               <img
-                src="icons.png"
+                src="icons"
                 style={{
                   sy: index * size,
                   width: size,

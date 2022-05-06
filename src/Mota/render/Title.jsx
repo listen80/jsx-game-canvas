@@ -1,5 +1,4 @@
 import { Component, Select, Animate } from "Engine";
-import { loadGame } from "../../Engine/utils/sl";
 
 const size = 32;
 
@@ -24,7 +23,7 @@ const styles = {
 
 export default class Title extends Component {
   create() {
-    this.activeIndex = loadGame() ? 1 : 0;
+    this.activeIndex = 0;
     this.options = [
       {
         text: "开始",

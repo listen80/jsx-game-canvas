@@ -114,7 +114,7 @@ export default class Battle extends Component {
       <img src="Battlebacks/mota.jpg" style={this.styles.battle} onClick={this.onClick}>
         {this.battleMsg && <div style={msgStyle}>{this.battleMsg}</div>}
         <div style={this.styles.enemy}>
-          <img src="enemys.png" style={enemyImageStyle} />
+          <img src="enemys" style={enemyImageStyle} />
           {proprety.map((item, index) => {
             return (
               <div style={{ x: 0 * size, y: index * size }}>

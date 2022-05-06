@@ -1,106 +1,69 @@
 import { loadJSON, loadText, loadImage, loadSound } from "../utils/http";
 
 export default class Resource {
-  constructor(config, $state) {
+  constructor($state) {
     this.loaded = 0;
     this.total = 0;
-    this.$config = config;
     this.loading = false;
 
     this.$state = $state;
 
-    this.load(
-      config.json.map((v) => `Data/${v}`),
-      "data"
-    );
-
-    this.load(
-      config.mapping.map((v) => `Data/${v}`),
-      "mapping"
-    );
-
-    this.load(
-      config.sprites.map((v) => `Sprite/${v}.png`),
-      "image"
-    );
-
-    this.load(
-      config.sprites.map((v) => `Sprite/${v}.dat`),
-      "sprite"
-    );
-
-    this.load(
-      config.images.map((v) => `Image/${v}`),
-      "image"
-    );
-    this.load(
-      config.sounds.map((v) => `Sound/${v}`),
-      "sound"
-    );
+    this.loadMapping();
+    this.loadImage();
+    this.loadSprite();
   }
 
-  load(data, type) {
-    this.loading = true;
-    const $state = this.$state;
-    if (!$state[type]) {
-      $state[type] = {}
+  checkStatus() {
+    if (this.loaded === this.total) {
+      const timer = setTimeout(() => {
+        this.loading = false;
+        clearTimeout(timer);
+      }, 16);
     }
-    data.forEach((itemO) => {
-      this.total++;
-      this.loadOne(itemO).then((data) => {
-        this.loaded++;
-        const item = itemO.replace(/\w+\//, '').replace(/\.\w+/, '')
-        if (type === "data") {
-          $state[item] = data;
-        } else if (type === "mapping") {
-          $state[type] = data;
-        } else if (type === "sprite") {
-          $state.sprite[item] = data;
-        } else if (type === "image") {
-          $state[type][itemO.replace(/\w+\//, '')] = data;
-        } else if (type === "sound") {
-          $state[type][item] = data;
-        } else if (type === "spriteImage") {
-          $state[type][item] = data;
-        }
-        
-        if (this.loaded === this.total) {
-          const timer = setTimeout(() => {
-            this.loading = false;
-            clearTimeout(timer);
-          }, 200);
-        }
+  }
+
+  loadMapping() {
+    this.$state.config.mapping.map((v) => {
+      loadText(`Data/${v}`).then((data) => {
+        this.$state.mapping = data;
       });
     });
-    // return Promise.all(loaderMap.map((url) => {
-    //   return load(`Data/${url}`)
-    // })).then(([game, save, shop, mapping]) => {
-    //   Object.assign(this, { game, save, shop, mapping })
-    //   const sprites = game.sprites
-    //   Promise.all(sprites.map(url => load(`Sprite/${url}.dat`))).then(([enemys, items, animates, icons, npcs, terrains, boss]) => {
-    //     Object.assign(this, { enemys, items, animates, icons, npcs, terrains, boss })
-    //   })
-    // })
   }
 
-  loadOne(url) {
-    if (url.endsWith(".dat")) {
-      return loadText(`${url}`);
-    }
-    if (url.endsWith(".json")) {
-      return loadJSON(`${url}`);
-    }
-    if (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".webp")) {
-      return loadImage(`${url}`);
-    } else {
-      return loadSound(`${url}`)
-    }
+  loadImage() {
+    this.total++;
+    this.$state.config.images.map((v) => {
+      loadImage(`Image/${v}`).then((data) => {
+        this.$state.image[v] = data;
+        this.loaded++;
+        this.checkStatus();
+      });
+    });
   }
 
-  loadJSON() {}
-  loadSprite(sprites) {}
+  loadSprite() {
+    this.$state.config.sprites.map((v) => {
+      this.total++;
+      loadImage(`Sprite/${v}.png`).then((data) => {
+        this.$state.image[v] = data;
+        this.loaded++;
+        this.checkStatus();
+      });
+      this.total++;
+      loadText(`Sprite/${v}.dat`).then((data) => {
+        this.$state[v] = data;
+        this.loaded++;
+        this.checkStatus();
+      });
+    });
+  }
 
   loadMap(id) {
-    return loadJSON(`Maps/${id}.json`)
+    this.total++;
+    loadJSON(`Maps/${id}.json`).then((data) => {
+      this.$state.map = data;
+      this.loaded++;
+      this.checkStatus();
+    });
   }
 }

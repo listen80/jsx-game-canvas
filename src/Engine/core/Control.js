@@ -60,7 +60,6 @@ function createElement(array, root) {
       event.code = code
       // Define that the event name is 'build'.
       event.initEvent('keydown', true, true);
-      console.log('in')
       // The form element listens for the custom "awesome" event and then consoles the output of the passed text() method
       document.dispatchEvent(event);
       e.preventDefault()
