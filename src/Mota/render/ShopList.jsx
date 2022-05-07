@@ -1,8 +1,6 @@
 import { Component } from 'Engine'
 import Select from '../../Engine/components/Select'
 
-const size = 32
-
 export default class ShopList extends Component {
   create () {
     const shops = this.$state.save.shops || []
@@ -29,21 +27,21 @@ export default class ShopList extends Component {
       <img
         src="shop.webp"
         style={{
-          x: 3 * size,
-          y: 2 * size,
-          width: size * 7,
-          height: size * 8,
+          x: 3 * 1,
+          y: 2 * 1,
+          width: 1 * 7,
+          height: 1 * 8,
           borderWidth: 4,
           borderColor: '#deb887',
           swidth: 500,
           sheight: 701,
         }}
       >
-        <div style={{ y: (size / 4) * 3, width: size * 7, fontSize: 24 }}>
+        <div style={{ y: (1 / 4) * 3, width: 1 * 7, fontSize: 24 }}>
           商店选择
         </div>
         <Select
-          style={{ x: size, y: 48, width: size * 5, fontSize: 16 }}
+          style={{ x: 1, y: 48, width: 1 * 5, fontSize: 16 }}
           options={this.options}
           onConfirm={this.onConfirm}
           onClose={this.props.onClose}

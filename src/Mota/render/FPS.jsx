@@ -1,13 +1,12 @@
 import { Component } from 'Engine'
-const size = 32
 export default class FPS extends Component {
   styles = {
     fps: {
       fontSize: 14,
       textAlign: 'right',
       textBaseline: 'top',
-      height: size,
-      x: size * 18,
+      height: 1,
+      x: 1 * 18,
     },
   };
 

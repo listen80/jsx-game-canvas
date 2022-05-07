@@ -1,15 +1,14 @@
 import { Component, Animate, Table } from "Engine";
 
-const size = 32;
 const styles = {
   wrap: {
     textAlign: "left",
     fontSize: 18,
     backgroundImage: "ground.png",
-    width: size * (13 + 5 - 2),
-    x: size,
-    y: size,
-    height: size * (13 - 2),
+    width: 1 * (13 + 5 - 2),
+    x: 1,
+    y: 1,
+    height: 1 * (13 - 2),
   },
 };
 
@@ -23,8 +22,8 @@ const columns = [
           data={{
             src: "enemys.png",
             maxTick: 2,
-            width: size,
-            height: size,
+            width: 1,
+            height: 1,
             maxInterval: 10,
             sy: rowData.sy,
           }}
@@ -63,7 +62,7 @@ const columns = [
         } else {
           const atkCount = Math.floor(enemy.hp / (hero.atk - enemy.def));
           const needHp = (enemy.atk - hero.def) * atkCount;
-          return hero.hp > needHp ? needHp : <div style={{color: 'red', height: size}}>{needHp}</div>
+          return hero.hp > needHp ? needHp : <div style={{color: 'red', height: 1}}>{needHp}</div>
         }
       } else {
         return "-";

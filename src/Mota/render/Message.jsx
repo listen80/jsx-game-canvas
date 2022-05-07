@@ -1,7 +1,6 @@
 import { Component } from 'Engine'
 import { calcLength } from '../../Engine/utils/string'
 
-const size = 32
 export default class Message extends Component {
   create () {
     if (this.props) {
@@ -28,13 +27,13 @@ export default class Message extends Component {
         style={{
           backgroundColor: 'rgba(0,0,0,.7)',
           globalAlpha,
-          x: (size * 18 - width) / 2,
-          y: size * 2,
-          height: size,
+          x: (1 * 18 - width) / 2,
+          y: 1 * 2,
+          height: 1,
           width: width,
         }}
       >
-        <div style={{ textAlign: 'center', fontSize, x: width / 2, height: size }}>
+        <div style={{ textAlign: 'center', fontSize, x: width / 2, height: 1 }}>
           {this.msg}
         </div>
       </div>

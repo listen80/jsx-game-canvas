@@ -1,7 +1,5 @@
 import { Component, Select, Animate } from "Engine";
 
-const size = 32;
-
 const styles = {
   title: {
     width: '.5',

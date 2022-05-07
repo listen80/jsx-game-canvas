@@ -25,8 +25,6 @@ const propertyNames = {
   exp: "经验",
 };
 
-const size = 32;
-
 class FourFace extends Component {
   render() {
     return (

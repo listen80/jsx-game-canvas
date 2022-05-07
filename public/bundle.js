@@ -43,7 +43,7 @@ const isBoolean = o => typeof o === 'boolean';
 
 const mouseEvents = ["ContextMenu", "Click", "Wheel", "MouseDown", "MouseUp", "MouseMove"];
 const keyEvents = ["KeyDown", "KeyUp"];
-const size$7 = 32;
+const size = 32;
 class Render {
   constructor($state) {
     this.initCanvas();
@@ -62,8 +62,8 @@ class Render {
     this.context = canvas.getContext("2d");
     const {
       el,
-      width = size$7 * (13 + 5),
-      height = size$7 * 13
+      width = size * (13 + 5),
+      height = size * 13
     } = screen;
     this.screen = screen;
     this.canvas.width = width;
@@ -102,8 +102,8 @@ class Render {
         e.name = `on${name}`;
         e.canvasX = e.offsetX / $offsetWidth * width;
         e.canvasY = e.offsetY / $offsetHeight * height;
-        e.gameX = e.canvasX / size$7 | 0;
-        e.gameY = e.canvasY / size$7 | 0;
+        e.gameX = e.canvasX / size | 0;
+        e.gameY = e.canvasY / size | 0;
         this.mouseEventsCollectionKeyframe.push(e);
         e.preventDefault();
       }, {
@@ -236,7 +236,7 @@ class Render {
 
         if (!image) {
           console.log(image, this.$state.image, props);
-        } else context.drawImage(image, sx * size$7, sy * size$7, (swidth || width) * size$7, (sheight || height) * size$7, offsetX * size$7, offsetY * size$7, width * size$7, height * size$7);
+        } else context.drawImage(image, sx * size, sy * size, (swidth || width) * size, (sheight || height) * size, offsetX * size, offsetY * size, width * size, height * size);
       }
     }
   }
@@ -272,7 +272,7 @@ class Render {
     if (backgroundColor) {
       context.save();
       context.beginPath();
-      context.rect(offsetX * size$7, offsetY * size$7, width * size$7, height * size$7);
+      context.rect(offsetX * size, offsetY * size, width * size, height * size);
       context.fillStyle = backgroundColor;
       context.fill();
       context.closePath();
@@ -282,7 +282,7 @@ class Render {
     if (backgroundImage) {
       context.save();
       context.beginPath();
-      context.rect(offsetX * size$7, offsetY * size$7, width * size$7, height * size$7);
+      context.rect(offsetX * size, offsetY * size, width * size, height * size);
       context.fillStyle = context.createPattern(this.getImage(backgroundImage), "repeat");
       context.fill();
       context.closePath();
@@ -305,7 +305,7 @@ class Render {
       context.save();
       context.lineWidth = borderWidth;
       context.beginPath();
-      context.rect(offsetX * size$7, offsetY * size$7, width * size$7, height * size$7);
+      context.rect(offsetX * size, offsetY * size, width * size, height * size);
 
       if (borderColor) {
         context.strokeStyle = borderColor;
@@ -480,7 +480,7 @@ class Render {
     // ideographic 文本基线是表意基线。
     // bottom 文本基线是 em 方框的底端。
 
-    context.fillText(text, (offsetX + width * x[textAlign]) * size$7, (offsetY + height * y[textBaseline]) * size$7);
+    context.fillText(text, (offsetX + width * x[textAlign]) * size, (offsetY + height * y[textBaseline]) * size);
   }
 
   renderAnything(createdNode, offsetX, offsetY, offsetParent) {
@@ -539,7 +539,7 @@ class Render {
           canvasY
         } = event;
 
-        if (canvasX >= offsetX * size$7 && canvasX < (style.width + offsetX) * size$7 && canvasY >= offsetY * size$7 && canvasY < (style.height + offsetY) * size$7) {
+        if (canvasX >= offsetX * size && canvasX < (style.width + offsetX) * size && canvasY >= offsetY * size && canvasY < (style.height + offsetY) * size) {
           event.$node = node;
         }
       });
@@ -930,7 +930,6 @@ class Table extends Component {
     const {
       dataSource,
       columns,
-      size = 32,
       data
     } = this.props;
     let x = 0;
@@ -950,20 +949,20 @@ class Table extends Component {
       }, this.$c("div", {
         style: {
           x: x,
-          width: width * size,
-          height: size
+          width: width * 1,
+          height: 1
         }
       }, title), dataSource.map((rowData, rowIndex) => {
         return this.$c("div", {
           style: {
             x: x,
-            y: (rowIndex + 1) * size,
-            width: width * size,
-            height: size
+            y: (rowIndex + 1) * 1,
+            width: width * 1,
+            height: 1
           }
         }, render ? render.call(this, rowData, data, rowIndex, index) : rowData[dataIndex]);
       }));
-      x += width * size;
+      x += width * 1;
       return rowEle;
     });
   }
@@ -1171,15 +1170,14 @@ class Engine {
 
 }
 
-const size$6 = 32;
 class FPS extends Component {
   styles = {
     fps: {
       fontSize: 14,
       textAlign: 'right',
       textBaseline: 'top',
-      height: size$6,
-      x: size$6 * 18
+      height: 1,
+      x: 1 * 18
     }
   };
   static getTime = () => performance.now();
@@ -1196,15 +1194,14 @@ class FPS extends Component {
 
 }
 
-const size$5 = 32;
 class Loading extends Component {
   render() {
-    const width = size$5 * (18 - 2 * 2);
-    const height = size$5;
+    const width = 1 * (18 - 2 * 2);
+    const height = 1;
     return this.$c("div", {
       style: {
-        x: size$5 * 2,
-        y: size$5 * 2
+        x: 1 * 2,
+        y: 1 * 2
       }
     }, this.$c("div", {
       style: {
@@ -1306,7 +1303,6 @@ class Title extends Component {
 // }}
 // ></Animate>
 
-const size$4 = 32;
 class Shop extends Component {
   create() {
     this.shop = JSON.parse(JSON.stringify(this.$state.shop[this.props.shopid]));
@@ -1331,10 +1327,10 @@ class Shop extends Component {
     return this.$c("img", {
       src: "shop.webp",
       style: {
-        x: 3 * size$4,
-        y: 2 * size$4,
-        width: size$4 * 7,
-        height: size$4 * 8,
+        x: 3 * 1,
+        y: 2 * 1,
+        width: 1 * 7,
+        height: 1 * 8,
         borderWidth: 4,
         borderColor: '#deb887',
         swidth: 500,
@@ -1342,8 +1338,8 @@ class Shop extends Component {
       }
     }, this.$c("div", {
       style: {
-        y: size$4 / 4 * 3,
-        width: size$4 * 7,
+        y: 1 / 4 * 3,
+        width: 1 * 7,
         fontSize: 24
       }
     }, this.shop.title), this.$c("div", {
@@ -1354,16 +1350,16 @@ class Shop extends Component {
       }
     }, this.shop.text.split(/\n/).map((text, index) => this.$c("div", {
       style: {
-        x: size$4 / 2 * 7,
-        y: index * size$4 / 2
+        x: 1 / 2 * 7,
+        y: index * 1 / 2
       }
     }, text))), this.$c(Select, {
       options: this.shop.choices,
       onConfirm: this.onConfirm,
       style: {
-        x: size$4 * 1,
-        y: size$4 / 2 * 7,
-        width: size$4 * 5,
+        x: 1 * 1,
+        y: 1 / 2 * 7,
+        width: 1 * 5,
         fontSize: 16
       },
       onClose: this.props.onClose
@@ -1372,15 +1368,14 @@ class Shop extends Component {
 
 }
 
-const size$3 = 32;
 class Battle extends Component {
   tick = 0;
   styles = {
     battle: {
-      x: size$3,
-      y: size$3,
-      width: size$3 * 16,
-      height: size$3 * 11,
+      x: 1,
+      y: 1,
+      width: 1 * 16,
+      height: 1 * 11,
       fontSize: 20,
       borderWidth: 3,
       borderColor: '#deb887',
@@ -1388,12 +1383,12 @@ class Battle extends Component {
       sheight: 320
     },
     enemy: {
-      x: size$3 * 1,
-      y: size$3 * 1
+      x: 1 * 1,
+      y: 1 * 1
     },
     hero: {
-      x: size$3 * 10,
-      y: size$3 * 1
+      x: 1 * 10,
+      y: 1 * 1
     }
   };
 
@@ -1473,35 +1468,35 @@ class Battle extends Component {
       key: 'def'
     }];
     const heroImageStyle = {
-      x: size$3,
-      y: size$3 * 4.5,
-      swidth: size$3,
-      sheight: size$3,
+      x: 1,
+      y: 1 * 4.5,
+      swidth: 1,
+      sheight: 1,
       width: 64,
       height: 64,
       sy: 0
     };
     const enemyImageStyle = {
-      x: size$3,
-      y: size$3 * 4.5,
-      swidth: size$3,
-      sheight: size$3,
+      x: 1,
+      y: 1 * 4.5,
+      swidth: 1,
+      sheight: 1,
       width: 64,
       height: 64,
-      sy: enemy.sy * size$3
+      sy: enemy.sy * 1
     };
     const size64 = 64;
     const vsStyle = {
-      x: size$3 * (5 + 1.5),
-      y: size$3 * 2,
+      x: 1 * (5 + 1.5),
+      y: 1 * 2,
       height: size64,
       width: size64
     };
     const msgStyle = {
       fontSize: 24,
-      height: size$3,
-      y: size$3 * 8,
-      width: size$3 * 15
+      height: 1,
+      y: 1 * 8,
+      width: 1 * 15
     };
     return this.$c("img", {
       src: "Battlebacks/mota.jpg",
@@ -1517,20 +1512,20 @@ class Battle extends Component {
     }), proprety.map((item, index) => {
       return this.$c("div", {
         style: {
-          x: 0 * size$3,
-          y: index * size$3
+          x: 0 * 1,
+          y: index * 1
         }
       }, this.$c("div", {
         style: {
-          width: size$3 * 4,
+          width: 1 * 4,
           textAlign: 'left',
-          height: size$3
+          height: 1
         }
       }, item.text), this.$c("div", {
         style: {
-          width: size$3 * 4,
+          width: 1 * 4,
           textAlign: 'right',
-          height: size$3
+          height: 1
         }
       }, enemy[item.key]));
     })), this.$c("div", {
@@ -1543,20 +1538,20 @@ class Battle extends Component {
     }), proprety.map((item, index) => {
       return this.$c("div", {
         style: {
-          x: 0 * size$3,
-          y: index * size$3
+          x: 0 * 1,
+          y: index * 1
         }
       }, this.$c("div", {
         style: {
-          width: size$3 * 4,
+          width: 1 * 4,
           textAlign: 'left',
-          height: size$3
+          height: 1
         }
       }, hero[item.key]), this.$c("div", {
         style: {
-          width: size$3 * 4,
+          width: 1 * 4,
           textAlign: 'right',
-          height: size$3
+          height: 1
         }
       }, item.text));
     })));
@@ -1639,16 +1634,15 @@ class Talk extends Component {
 
 }
 
-const size$2 = 32;
 const styles = {
   wrap: {
     textAlign: "left",
     fontSize: 18,
     backgroundImage: "ground.png",
-    width: size$2 * (13 + 5 - 2),
-    x: size$2,
-    y: size$2,
-    height: size$2 * (13 - 2)
+    width: 1 * (13 + 5 - 2),
+    x: 1,
+    y: 1,
+    height: 1 * (13 - 2)
   }
 };
 const columns = [{
@@ -1660,8 +1654,8 @@ const columns = [{
       data: {
         src: "enemys.png",
         maxTick: 2,
-        width: size$2,
-        height: size$2,
+        width: 1,
+        height: 1,
         maxInterval: 10,
         sy: rowData.sy
       }
@@ -1699,7 +1693,7 @@ const columns = [{
         return hero.hp > needHp ? needHp : this.$c("div", {
           style: {
             color: 'red',
-            height: size$2
+            height: 1
           }
         }, needHp);
       }
@@ -1736,7 +1730,6 @@ class EnemyInfo extends Component {
 
 }
 
-const size$1 = 32;
 class ShopList extends Component {
   create() {
     const shops = this.$state.save.shops || [];
@@ -1769,10 +1762,10 @@ class ShopList extends Component {
     return this.$c("img", {
       src: "shop.webp",
       style: {
-        x: 3 * size$1,
-        y: 2 * size$1,
-        width: size$1 * 7,
-        height: size$1 * 8,
+        x: 3 * 1,
+        y: 2 * 1,
+        width: 1 * 7,
+        height: 1 * 8,
         borderWidth: 4,
         borderColor: '#deb887',
         swidth: 500,
@@ -1780,15 +1773,15 @@ class ShopList extends Component {
       }
     }, this.$c("div", {
       style: {
-        y: size$1 / 4 * 3,
-        width: size$1 * 7,
+        y: 1 / 4 * 3,
+        width: 1 * 7,
         fontSize: 24
       }
     }, "\u5546\u5E97\u9009\u62E9"), this.$c(Select, {
       style: {
-        x: size$1,
+        x: 1,
         y: 48,
-        width: size$1 * 5,
+        width: 1 * 5,
         fontSize: 16
       },
       options: this.options,
@@ -2392,6 +2385,8 @@ class Map extends Component {
   };
   onMouseDown = e => {
     // DFS BFS
+    this.$state.save.position;
+    this.$state.map(() => {});
     const {
       gameX,
       gameY
@@ -2515,7 +2510,6 @@ function calcLength(str) {
   return len;
 }
 
-const size = 32;
 class Message extends Component {
   create() {
     if (this.props) {
@@ -2546,9 +2540,9 @@ class Message extends Component {
       style: {
         backgroundColor: 'rgba(0,0,0,.7)',
         globalAlpha,
-        x: (size * 18 - width) / 2,
-        y: size * 2,
-        height: size,
+        x: (1 * 18 - width) / 2,
+        y: 1 * 2,
+        height: 1,
         width: width
       }
     }, this.$c("div", {
@@ -2556,7 +2550,7 @@ class Message extends Component {
         textAlign: 'center',
         fontSize,
         x: width / 2,
-        height: size
+        height: 1
       }
     }, this.msg));
   }

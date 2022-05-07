@@ -1,7 +1,5 @@
 import Component from "../core/Component";
 
-const size = 32;
-
 export default class Select extends Component {
   styles = {
     select: {

@@ -1,6 +1,5 @@
 import { Component } from 'Engine'
 
-const size = 32
 
 export default class ScrollText extends Component {
   styles = {

@@ -46,7 +46,7 @@ export default class Map extends Component {
           const detail = this.$state[type][name];
 
           if (type === "animates") {
-            sx = (tick % 4);
+            sx = tick % 4;
             const style = {
               sy: detail.sy,
               sx,
@@ -55,7 +55,7 @@ export default class Map extends Component {
               height: 1,
               width: 1,
             };
-            return (<img src={type} style={style} />);
+            return <img src={type} style={style} />;
           } else if (type === "terrains") {
             const style = {
               sy: detail.sy,
@@ -65,12 +65,12 @@ export default class Map extends Component {
               height: 1,
               width: 1,
             };
-            return (<img src={type} style={style} />);
+            return <img src={type} style={style} />;
           } else {
-            return null
+            return null;
           }
         } else {
-          return null
+          return null;
         }
       });
     });
@@ -96,16 +96,14 @@ export default class Map extends Component {
             // terrains items icons npcs enemys
             let sx = 0;
             if (type === "npcs" || type === "enemys") {
-              sx = (tick % 2);
+              sx = tick % 2;
             }
 
             // if (type === "enemys") {
             //   enemys[name] = name;
             // }
             return (
-              <div
-                style={{ x: x, y: y, height: 1, width: 1 }}
-              >
+              <div style={{ x: x, y: y, height: 1, width: 1 }}>
                 <img
                   src={type}
                   style={{
@@ -137,6 +135,9 @@ export default class Map extends Component {
 
   onMouseDown = (e) => {
     // DFS BFS
+    const position = this.$state.save.position;
+    const { x, y } = position;
+    this.$state.map(() => {});
     const { gameX, gameY } = e;
     this.$state.save.position.x = gameX;
     this.$state.save.position.y = gameY;
