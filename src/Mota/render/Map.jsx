@@ -2,22 +2,21 @@ import { Component, Animate } from "Engine";
 import Hero from "./Hero";
 import Status from "./Status";
 
-const size = 32;
 export default class Map extends Component {
   tick = 0;
   interval = 10;
   styles = {
     map: {
-      height: size * 13,
-      width: size * 13,
+      height: 13,
+      width: 13,
       backgroundImage: "ground.png",
     },
     statusBar: {
-      x: size * 13,
+      x: 13,
       y: 0,
       backgroundImage: "ground.png",
-      width: size * 5,
-      height: 13 * size,
+      width: 5,
+      height: 13,
     },
   };
 
@@ -47,24 +46,24 @@ export default class Map extends Component {
           const detail = this.$state[type][name];
 
           if (type === "animates") {
-            sx = (tick % 4) * size;
+            sx = (tick % 4);
             const style = {
-              sy: detail.sy * size,
+              sy: detail.sy,
               sx,
-              x: x * size,
-              y: y * size,
-              height: size,
-              width: size,
+              x: x,
+              y: y,
+              height: 1,
+              width: 1,
             };
             return (<img src={type} style={style} />);
           } else if (type === "terrains") {
             const style = {
-              sy: detail.sy * size,
+              sy: detail.sy,
               sx: 0,
-              x: x * size,
-              y: y * size,
-              height: size,
-              width: size,
+              x: x,
+              y: y,
+              height: 1,
+              width: 1,
             };
             return (<img src={type} style={style} />);
           } else {
@@ -97,7 +96,7 @@ export default class Map extends Component {
             // terrains items icons npcs enemys
             let sx = 0;
             if (type === "npcs" || type === "enemys") {
-              sx = (tick % 2) * size;
+              sx = (tick % 2);
             }
 
             // if (type === "enemys") {
@@ -105,15 +104,15 @@ export default class Map extends Component {
             // }
             return (
               <div
-                style={{ x: x * size, y: y * size, height: size, width: size }}
+                style={{ x: x, y: y, height: 1, width: 1 }}
               >
                 <img
                   src={type}
                   style={{
-                    sy: detail.sy * size,
+                    sy: detail.sy,
                     sx,
-                    height: size,
-                    width: size,
+                    height: 1,
+                    width: 1,
                   }}
                 />
               </div>
@@ -138,11 +137,9 @@ export default class Map extends Component {
 
   onMouseDown = (e) => {
     // DFS BFS
-    const { canvasX, canvasY } = e;
-    const x = (canvasX / size) | 0;
-    const y = (canvasY / size) | 0;
-    this.$state.save.position.x = x * size;
-    this.$state.save.position.y = y * size;
+    const { gameX, gameY } = e;
+    this.$state.save.position.x = gameX;
+    this.$state.save.position.y = gameY;
   };
 
   render() {

@@ -4,20 +4,21 @@ const size = 32;
 
 const styles = {
   title: {
-    width: size * (13 + 5),
-    height: size * 13,
+    width: '.5',
+    height: 13,
     textAlign: "center",
+    backgroundColor: 'red'
   },
   gameName: {
-    y: size * 2,
-    width: size * (13 + 5),
-    height: size * 4,
+    y: 2,
+    width: (13 + 5),
+    height: 4,
     fontSize: 128,
   },
   select: {
-    x: size * 8,
-    y: size * 8,
-    width: size * 2,
+    x: 8,
+    y: 8,
+    width: 3,
   },
 };
 

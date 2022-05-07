@@ -21,7 +21,7 @@ const keyEvents = ["KeyDown", "KeyUp"];
 const size = 32;
 
 export default class Render {
-  constructor(game, $state) {
+  constructor($state) {
     this.initCanvas();
     this.bindEvents();
     this.$state = $state;
@@ -74,6 +74,8 @@ export default class Render {
           e.name = `on${name}`;
           e.canvasX = (e.offsetX / $offsetWidth) * width;
           e.canvasY = (e.offsetY / $offsetHeight) * height;
+          e.gameX = e.canvasX / size | 0;
+          e.gameY = e.canvasY / size | 0;
           this.mouseEventsCollectionKeyframe.push(e);
 
           e.preventDefault();
@@ -154,14 +156,14 @@ export default class Render {
     context.clearRect(0, 0, canvas.width, canvas.height);
   }
 
-  drawText(node, offsetX, offsetY) {
+  drawText(node, offsetX, offsetY, offsetParent) {
     const { style, text } = node;
     const { context } = this;
     const { x = 0, y = 0 } = style;
     context.fillText(text, offsetX + x, offsetY + y);
   }
 
-  drawImage(node, offsetX, offsetY) {
+  drawImage(node, offsetX, offsetY, offsetParent) {
     const { props } = node;
     if (props) {
       const { style = {} } = props;
@@ -169,8 +171,8 @@ export default class Render {
         const {
           sx = 0,
           sy = 0,
-          width = size,
-          height = size,
+          width = 1,
+          height = 1,
           swidth,
           sheight,
         } = style;
@@ -181,27 +183,45 @@ export default class Render {
         } else
           context.drawImage(
             image,
-            sx,
-            sy,
-            swidth || width,
-            sheight || height,
-            offsetX,
-            offsetY,
-            width,
-            height
+            sx * size,
+            sy * size,
+            (swidth || width) * size,
+            (sheight || height) * size,
+            offsetX * size,
+            offsetY * size,
+            width * size,
+            height * size
           );
       }
     }
   }
 
-  drawBack(node, offsetX, offsetY) {
+  getStyle(key, value, offsetParent) {
+    if (typeof value === "number") {
+      return value;
+    }
+    if (typeof value === "string") {
+      return value * offsetParent.props.style[key];
+    }
+  }
+
+  drawBack(node, offsetX, offsetY, offsetParent) {
     const { context } = this;
     const { backgroundImage, backgroundColor, height, width } =
       node.props.style;
+
+    // let width = 0
+    // if (typeof _ !== "number") {
+    //   width = _ * offsetParent.props.style.width
+    //   console.log(this.getStyle('width', width, offsetParent) === width)
+    //   debugger
+    // } else {
+    //   width = _
+    // }
     if (backgroundColor) {
       context.save();
       context.beginPath();
-      context.rect(offsetX, offsetY, width, height);
+      context.rect(offsetX * size, offsetY * size, width * size, height * size);
       context.fillStyle = backgroundColor;
       context.fill();
       context.closePath();
@@ -210,7 +230,7 @@ export default class Render {
     if (backgroundImage) {
       context.save();
       context.beginPath();
-      context.rect(offsetX, offsetY, width, height);
+      context.rect(offsetX * size, offsetY * size, width * size, height * size);
       context.fillStyle = context.createPattern(
         this.getImage(backgroundImage),
         "repeat"
@@ -228,7 +248,7 @@ export default class Render {
       context.save();
       context.lineWidth = borderWidth;
       context.beginPath();
-      context.rect(offsetX, offsetY, width, height);
+      context.rect(offsetX * size, offsetY * size, width * size, height * size);
       if (borderColor) {
         context.strokeStyle = borderColor;
       }
@@ -300,7 +320,7 @@ export default class Render {
     context.stroke();
   }
 
-  drawNode(node, offsetX, offsetY, parent) {
+  drawNode(node, offsetX, offsetY, offsetParent) {
     const { context } = this;
     context.save();
     const { props, tag } = node;
@@ -308,8 +328,8 @@ export default class Render {
       const { style } = props;
       this.mergeStyle(style);
       if (style) {
-        this.drawBack(node, offsetX, offsetY);
-        this.drawBorder(node, offsetX, offsetY);
+        this.drawBack(node, offsetX, offsetY, offsetParent);
+        this.drawBorder(node, offsetX, offsetY, offsetParent);
       }
     }
     if (tag === "img") {
@@ -352,23 +372,24 @@ export default class Render {
     // bottom 文本基线是 em 方框的底端。
     context.fillText(
       text,
-      offsetX + width * x[textAlign],
-      offsetY + height * y[textBaseline]
+      (offsetX + width * x[textAlign]) * size,
+      (offsetY + height * y[textBaseline]) * size
     );
   }
 
-  renderAnything(createdNode, offsetX, offsetY, parent) {
+  renderAnything(createdNode, offsetX, offsetY, offsetParent) {
     // undefined null
     // string number
     // array
     // class component
     // div node
+
     if (!isUndefined(createdNode) && !isBoolean(createdNode)) {
       if (isPrimitive(createdNode)) {
-        this.drawPrimitive(createdNode, offsetX, offsetY, parent);
+        this.drawPrimitive(createdNode, offsetX, offsetY, offsetParent);
       } else if (isArray(createdNode)) {
         createdNode.forEach((child) =>
-          this.renderAnything(child, offsetX, offsetY, parent)
+          this.renderAnything(child, offsetX, offsetY, offsetParent)
         );
       } else if (isFunc(createdNode.tag)) {
         // events of keyboard
@@ -383,23 +404,23 @@ export default class Render {
           createdNode.$context.$node,
           offsetX,
           offsetY,
-          createdNode.$context
+          offsetParent
         );
       } else if (isString(createdNode.tag)) {
         // div node
-        this.calcNode(createdNode, offsetX, offsetY, parent);
+        this.calcNode(createdNode, offsetX, offsetY, offsetParent);
       } else {
         this.drawPrimitive(
           JSON.stringify(createdNode),
           offsetX,
           offsetY,
-          parent
+          offsetParent
         );
       }
     }
   }
 
-  calcNode(node, offsetX, offsetY, parent) {
+  calcNode(node, offsetX, offsetY, offsetParent) {
     // 非class component
     // div node
     const { context } = this;
@@ -414,10 +435,10 @@ export default class Render {
       this.mouseEventsCollectionKeyframe.forEach((event) => {
         const { canvasX, canvasY } = event;
         if (
-          canvasX >= offsetX &&
-          canvasX < style.width + offsetX &&
-          canvasY >= offsetY &&
-          canvasY < style.height + offsetY
+          canvasX >= offsetX * size &&
+          canvasX < (style.width + offsetX) * size &&
+          canvasY >= offsetY * size &&
+          canvasY < (style.height + offsetY) * size
         ) {
           event.$node = node;
         }
@@ -428,8 +449,7 @@ export default class Render {
         context.clip();
       }
     }
-
-    this.drawNode(node, offsetX, offsetY);
+    this.drawNode(node, offsetX, offsetY, offsetParent);
 
     context.restore();
   }

@@ -27,7 +27,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT21", "position": { "x": 192, "y": 96 } }
+          "data": {
+            "mapId": "MT21",
+            "position": {
+              "x": 6,
+              "y": 3
+            }
+          }
         }
       ]
     ],
@@ -118,10 +124,16 @@
               "loc": [[7, 4]],
               "mapId": "MT_1"
             },
-            { "type": "hide", "time": 0 }
+            {
+              "type": "hide",
+              "time": 0
+            }
           ]
         },
-        { "type": "playSound", "name": "unlockCtrl.mp3" }
+        {
+          "type": "playSound",
+          "name": "unlockCtrl.mp3"
+        }
       ]
     ],
     [
@@ -133,7 +145,11 @@
           "type": "mapLoad",
           "data": {
             "mapId": "MT23w",
-            "position": { "x": 320, "y": 192, "sy": 32 }
+            "position": {
+              "x": 10,
+              "y": 6,
+              "sy": 32
+            }
           }
         }
       ]
@@ -145,7 +161,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT23e", "position": { "x": 64, "y": 192 } }
+          "data": {
+            "mapId": "MT23e",
+            "position": {
+              "x": 2,
+              "y": 6
+            }
+          }
         }
       ]
     ],
@@ -156,7 +178,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT23s", "position": { "x": 192, "y": 64 } }
+          "data": {
+            "mapId": "MT23s",
+            "position": {
+              "x": 6,
+              "y": 2
+            }
+          }
         }
       ]
     ],

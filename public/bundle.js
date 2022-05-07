@@ -43,9 +43,9 @@ const isBoolean = o => typeof o === 'boolean';
 
 const mouseEvents = ["ContextMenu", "Click", "Wheel", "MouseDown", "MouseUp", "MouseMove"];
 const keyEvents = ["KeyDown", "KeyUp"];
-const size$e = 32;
+const size$7 = 32;
 class Render {
-  constructor(game, $state) {
+  constructor($state) {
     this.initCanvas();
     this.bindEvents();
     this.$state = $state; // this.$images = game.$images
@@ -62,8 +62,8 @@ class Render {
     this.context = canvas.getContext("2d");
     const {
       el,
-      width = size$e * (13 + 5),
-      height = size$e * 13
+      width = size$7 * (13 + 5),
+      height = size$7 * 13
     } = screen;
     this.screen = screen;
     this.canvas.width = width;
@@ -102,6 +102,8 @@ class Render {
         e.name = `on${name}`;
         e.canvasX = e.offsetX / $offsetWidth * width;
         e.canvasY = e.offsetY / $offsetHeight * height;
+        e.gameX = e.canvasX / size$7 | 0;
+        e.gameY = e.canvasY / size$7 | 0;
         this.mouseEventsCollectionKeyframe.push(e);
         e.preventDefault();
       }, {
@@ -193,7 +195,7 @@ class Render {
     context.clearRect(0, 0, canvas.width, canvas.height);
   }
 
-  drawText(node, offsetX, offsetY) {
+  drawText(node, offsetX, offsetY, offsetParent) {
     const {
       style,
       text
@@ -208,7 +210,7 @@ class Render {
     context.fillText(text, offsetX + x, offsetY + y);
   }
 
-  drawImage(node, offsetX, offsetY) {
+  drawImage(node, offsetX, offsetY, offsetParent) {
     const {
       props
     } = node;
@@ -222,8 +224,8 @@ class Render {
         const {
           sx = 0,
           sy = 0,
-          width = size$e,
-          height = size$e,
+          width = 1,
+          height = 1,
           swidth,
           sheight
         } = style;
@@ -234,12 +236,22 @@ class Render {
 
         if (!image) {
           console.log(image, this.$state.image, props);
-        } else context.drawImage(image, sx, sy, swidth || width, sheight || height, offsetX, offsetY, width, height);
+        } else context.drawImage(image, sx * size$7, sy * size$7, (swidth || width) * size$7, (sheight || height) * size$7, offsetX * size$7, offsetY * size$7, width * size$7, height * size$7);
       }
     }
   }
 
-  drawBack(node, offsetX, offsetY) {
+  getStyle(key, value, offsetParent) {
+    if (typeof value === "number") {
+      return value;
+    }
+
+    if (typeof value === "string") {
+      return value * offsetParent.props.style[key];
+    }
+  }
+
+  drawBack(node, offsetX, offsetY, offsetParent) {
     const {
       context
     } = this;
@@ -248,12 +260,19 @@ class Render {
       backgroundColor,
       height,
       width
-    } = node.props.style;
+    } = node.props.style; // let width = 0
+    // if (typeof _ !== "number") {
+    //   width = _ * offsetParent.props.style.width
+    //   console.log(this.getStyle('width', width, offsetParent) === width)
+    //   debugger
+    // } else {
+    //   width = _
+    // }
 
     if (backgroundColor) {
       context.save();
       context.beginPath();
-      context.rect(offsetX, offsetY, width, height);
+      context.rect(offsetX * size$7, offsetY * size$7, width * size$7, height * size$7);
       context.fillStyle = backgroundColor;
       context.fill();
       context.closePath();
@@ -263,7 +282,7 @@ class Render {
     if (backgroundImage) {
       context.save();
       context.beginPath();
-      context.rect(offsetX, offsetY, width, height);
+      context.rect(offsetX * size$7, offsetY * size$7, width * size$7, height * size$7);
       context.fillStyle = context.createPattern(this.getImage(backgroundImage), "repeat");
       context.fill();
       context.closePath();
@@ -286,7 +305,7 @@ class Render {
       context.save();
       context.lineWidth = borderWidth;
       context.beginPath();
-      context.rect(offsetX, offsetY, width, height);
+      context.rect(offsetX * size$7, offsetY * size$7, width * size$7, height * size$7);
 
       if (borderColor) {
         context.strokeStyle = borderColor;
@@ -385,7 +404,7 @@ class Render {
     context.stroke();
   }
 
-  drawNode(node, offsetX, offsetY, parent) {
+  drawNode(node, offsetX, offsetY, offsetParent) {
     const {
       context
     } = this;
@@ -402,8 +421,8 @@ class Render {
       this.mergeStyle(style);
 
       if (style) {
-        this.drawBack(node, offsetX, offsetY);
-        this.drawBorder(node, offsetX, offsetY);
+        this.drawBack(node, offsetX, offsetY, offsetParent);
+        this.drawBorder(node, offsetX, offsetY, offsetParent);
       }
     }
 
@@ -461,10 +480,10 @@ class Render {
     // ideographic 文本基线是表意基线。
     // bottom 文本基线是 em 方框的底端。
 
-    context.fillText(text, offsetX + width * x[textAlign], offsetY + height * y[textBaseline]);
+    context.fillText(text, (offsetX + width * x[textAlign]) * size$7, (offsetY + height * y[textBaseline]) * size$7);
   }
 
-  renderAnything(createdNode, offsetX, offsetY, parent) {
+  renderAnything(createdNode, offsetX, offsetY, offsetParent) {
     // undefined null
     // string number
     // array
@@ -472,9 +491,9 @@ class Render {
     // div node
     if (!isUndefined(createdNode) && !isBoolean(createdNode)) {
       if (isPrimitive(createdNode)) {
-        this.drawPrimitive(createdNode, offsetX, offsetY, parent);
+        this.drawPrimitive(createdNode, offsetX, offsetY, offsetParent);
       } else if (isArray(createdNode)) {
-        createdNode.forEach(child => this.renderAnything(child, offsetX, offsetY, parent));
+        createdNode.forEach(child => this.renderAnything(child, offsetX, offsetY, offsetParent));
       } else if (isFunc(createdNode.tag)) {
         // events of keyboard
         this.keyEventsCollectionKeyframe.forEach(event => {
@@ -485,17 +504,17 @@ class Render {
           }
         }); // tag 是 function
 
-        this.renderAnything(createdNode.$context.$node, offsetX, offsetY, createdNode.$context);
+        this.renderAnything(createdNode.$context.$node, offsetX, offsetY, offsetParent);
       } else if (isString(createdNode.tag)) {
         // div node
-        this.calcNode(createdNode, offsetX, offsetY, parent);
+        this.calcNode(createdNode, offsetX, offsetY, offsetParent);
       } else {
-        this.drawPrimitive(JSON.stringify(createdNode), offsetX, offsetY, parent);
+        this.drawPrimitive(JSON.stringify(createdNode), offsetX, offsetY, offsetParent);
       }
     }
   }
 
-  calcNode(node, offsetX, offsetY, parent) {
+  calcNode(node, offsetX, offsetY, offsetParent) {
     var _node$props;
 
     // 非class component
@@ -520,7 +539,7 @@ class Render {
           canvasY
         } = event;
 
-        if (canvasX >= offsetX && canvasX < style.width + offsetX && canvasY >= offsetY && canvasY < style.height + offsetY) {
+        if (canvasX >= offsetX * size$7 && canvasX < (style.width + offsetX) * size$7 && canvasY >= offsetY * size$7 && canvasY < (style.height + offsetY) * size$7) {
           event.$node = node;
         }
       });
@@ -531,7 +550,7 @@ class Render {
       }
     }
 
-    this.drawNode(node, offsetX, offsetY);
+    this.drawNode(node, offsetX, offsetY, offsetParent);
     context.restore();
   }
 
@@ -829,13 +848,14 @@ class Animate extends Component {
 
 }
 
-const size$d = 32;
 class Select extends Component {
   styles = {
     select: {
       fontSize: 24,
       textAlign: "center",
-      width: 320
+      width: 10,
+      height: 3,
+      backgroundColor: 'red'
     }
   };
 
@@ -871,8 +891,7 @@ class Select extends Component {
       this.props.onChange && this.props.onChange(this.activeIndex, this.props.options[this.activeIndex]);
     } else if (code === "Space") {
       this.props.onConfirm && this.props.onConfirm(this.activeIndex, this.props.options[this.activeIndex]);
-    } // return true
-
+    }
   }
 
   onMouseDown = index => {
@@ -892,8 +911,8 @@ class Select extends Component {
     }, index) => {
       return this.$c("div", {
         style: {
-          y: index * size$d,
-          height: size$d,
+          y: index,
+          height: 1,
           width: this.styles.select.width,
           borderWidth: this.activeIndex === index ? 2 : 0,
           borderColor: "#ddd"
@@ -1117,7 +1136,7 @@ class Engine {
     // this.$font = new Font();
 
 
-    this.$render = new Render(this, this.$state);
+    this.$render = new Render(this.$state);
     this.$node = null;
     this.gameStart();
   }
@@ -1152,15 +1171,15 @@ class Engine {
 
 }
 
-const size$c = 32;
+const size$6 = 32;
 class FPS extends Component {
   styles = {
     fps: {
       fontSize: 14,
       textAlign: 'right',
       textBaseline: 'top',
-      height: size$c,
-      x: size$c * 18
+      height: size$6,
+      x: size$6 * 18
     }
   };
   static getTime = () => performance.now();
@@ -1177,15 +1196,15 @@ class FPS extends Component {
 
 }
 
-const size$b = 32;
+const size$5 = 32;
 class Loading extends Component {
   render() {
-    const width = size$b * (18 - 2 * 2);
-    const height = size$b;
+    const width = size$5 * (18 - 2 * 2);
+    const height = size$5;
     return this.$c("div", {
       style: {
-        x: size$b * 2,
-        y: size$b * 2
+        x: size$5 * 2,
+        y: size$5 * 2
       }
     }, this.$c("div", {
       style: {
@@ -1204,23 +1223,23 @@ class Loading extends Component {
 
 }
 
-const size$a = 32;
 const styles$1 = {
   title: {
-    width: size$a * (13 + 5),
-    height: size$a * 13,
-    textAlign: "center"
+    width: '.5',
+    height: 13,
+    textAlign: "center",
+    backgroundColor: 'red'
   },
   gameName: {
-    y: size$a * 2,
-    width: size$a * (13 + 5),
-    height: size$a * 4,
+    y: 2,
+    width: 13 + 5,
+    height: 4,
     fontSize: 128
   },
   select: {
-    x: size$a * 8,
-    y: size$a * 8,
-    width: size$a * 2
+    x: 8,
+    y: 8,
+    width: 3
   }
 };
 class Title extends Component {
@@ -1287,7 +1306,7 @@ class Title extends Component {
 // }}
 // ></Animate>
 
-const size$9 = 32;
+const size$4 = 32;
 class Shop extends Component {
   create() {
     this.shop = JSON.parse(JSON.stringify(this.$state.shop[this.props.shopid]));
@@ -1312,10 +1331,10 @@ class Shop extends Component {
     return this.$c("img", {
       src: "shop.webp",
       style: {
-        x: 3 * size$9,
-        y: 2 * size$9,
-        width: size$9 * 7,
-        height: size$9 * 8,
+        x: 3 * size$4,
+        y: 2 * size$4,
+        width: size$4 * 7,
+        height: size$4 * 8,
         borderWidth: 4,
         borderColor: '#deb887',
         swidth: 500,
@@ -1323,8 +1342,8 @@ class Shop extends Component {
       }
     }, this.$c("div", {
       style: {
-        y: size$9 / 4 * 3,
-        width: size$9 * 7,
+        y: size$4 / 4 * 3,
+        width: size$4 * 7,
         fontSize: 24
       }
     }, this.shop.title), this.$c("div", {
@@ -1335,16 +1354,16 @@ class Shop extends Component {
       }
     }, this.shop.text.split(/\n/).map((text, index) => this.$c("div", {
       style: {
-        x: size$9 / 2 * 7,
-        y: index * size$9 / 2
+        x: size$4 / 2 * 7,
+        y: index * size$4 / 2
       }
     }, text))), this.$c(Select, {
       options: this.shop.choices,
       onConfirm: this.onConfirm,
       style: {
-        x: size$9 * 1,
-        y: size$9 / 2 * 7,
-        width: size$9 * 5,
+        x: size$4 * 1,
+        y: size$4 / 2 * 7,
+        width: size$4 * 5,
         fontSize: 16
       },
       onClose: this.props.onClose
@@ -1353,15 +1372,15 @@ class Shop extends Component {
 
 }
 
-const size$8 = 32;
+const size$3 = 32;
 class Battle extends Component {
   tick = 0;
   styles = {
     battle: {
-      x: size$8,
-      y: size$8,
-      width: size$8 * 16,
-      height: size$8 * 11,
+      x: size$3,
+      y: size$3,
+      width: size$3 * 16,
+      height: size$3 * 11,
       fontSize: 20,
       borderWidth: 3,
       borderColor: '#deb887',
@@ -1369,12 +1388,12 @@ class Battle extends Component {
       sheight: 320
     },
     enemy: {
-      x: size$8 * 1,
-      y: size$8 * 1
+      x: size$3 * 1,
+      y: size$3 * 1
     },
     hero: {
-      x: size$8 * 10,
-      y: size$8 * 1
+      x: size$3 * 10,
+      y: size$3 * 1
     }
   };
 
@@ -1454,35 +1473,35 @@ class Battle extends Component {
       key: 'def'
     }];
     const heroImageStyle = {
-      x: size$8,
-      y: size$8 * 4.5,
-      swidth: size$8,
-      sheight: size$8,
+      x: size$3,
+      y: size$3 * 4.5,
+      swidth: size$3,
+      sheight: size$3,
       width: 64,
       height: 64,
       sy: 0
     };
     const enemyImageStyle = {
-      x: size$8,
-      y: size$8 * 4.5,
-      swidth: size$8,
-      sheight: size$8,
+      x: size$3,
+      y: size$3 * 4.5,
+      swidth: size$3,
+      sheight: size$3,
       width: 64,
       height: 64,
-      sy: enemy.sy * size$8
+      sy: enemy.sy * size$3
     };
     const size64 = 64;
     const vsStyle = {
-      x: size$8 * (5 + 1.5),
-      y: size$8 * 2,
+      x: size$3 * (5 + 1.5),
+      y: size$3 * 2,
       height: size64,
       width: size64
     };
     const msgStyle = {
       fontSize: 24,
-      height: size$8,
-      y: size$8 * 8,
-      width: size$8 * 15
+      height: size$3,
+      y: size$3 * 8,
+      width: size$3 * 15
     };
     return this.$c("img", {
       src: "Battlebacks/mota.jpg",
@@ -1498,20 +1517,20 @@ class Battle extends Component {
     }), proprety.map((item, index) => {
       return this.$c("div", {
         style: {
-          x: 0 * size$8,
-          y: index * size$8
+          x: 0 * size$3,
+          y: index * size$3
         }
       }, this.$c("div", {
         style: {
-          width: size$8 * 4,
+          width: size$3 * 4,
           textAlign: 'left',
-          height: size$8
+          height: size$3
         }
       }, item.text), this.$c("div", {
         style: {
-          width: size$8 * 4,
+          width: size$3 * 4,
           textAlign: 'right',
-          height: size$8
+          height: size$3
         }
       }, enemy[item.key]));
     })), this.$c("div", {
@@ -1524,20 +1543,20 @@ class Battle extends Component {
     }), proprety.map((item, index) => {
       return this.$c("div", {
         style: {
-          x: 0 * size$8,
-          y: index * size$8
+          x: 0 * size$3,
+          y: index * size$3
         }
       }, this.$c("div", {
         style: {
-          width: size$8 * 4,
+          width: size$3 * 4,
           textAlign: 'left',
-          height: size$8
+          height: size$3
         }
       }, hero[item.key]), this.$c("div", {
         style: {
-          width: size$8 * 4,
+          width: size$3 * 4,
           textAlign: 'right',
-          height: size$8
+          height: size$3
         }
       }, item.text));
     })));
@@ -1620,16 +1639,16 @@ class Talk extends Component {
 
 }
 
-const size$7 = 32;
+const size$2 = 32;
 const styles = {
   wrap: {
     textAlign: "left",
     fontSize: 18,
     backgroundImage: "ground.png",
-    width: size$7 * (13 + 5 - 2),
-    x: size$7,
-    y: size$7,
-    height: size$7 * (13 - 2)
+    width: size$2 * (13 + 5 - 2),
+    x: size$2,
+    y: size$2,
+    height: size$2 * (13 - 2)
   }
 };
 const columns = [{
@@ -1641,8 +1660,8 @@ const columns = [{
       data: {
         src: "enemys.png",
         maxTick: 2,
-        width: size$7,
-        height: size$7,
+        width: size$2,
+        height: size$2,
         maxInterval: 10,
         sy: rowData.sy
       }
@@ -1680,7 +1699,7 @@ const columns = [{
         return hero.hp > needHp ? needHp : this.$c("div", {
           style: {
             color: 'red',
-            height: size$7
+            height: size$2
           }
         }, needHp);
       }
@@ -1717,7 +1736,7 @@ class EnemyInfo extends Component {
 
 }
 
-const size$6 = 32;
+const size$1 = 32;
 class ShopList extends Component {
   create() {
     const shops = this.$state.save.shops || [];
@@ -1750,10 +1769,10 @@ class ShopList extends Component {
     return this.$c("img", {
       src: "shop.webp",
       style: {
-        x: 3 * size$6,
-        y: 2 * size$6,
-        width: size$6 * 7,
-        height: size$6 * 8,
+        x: 3 * size$1,
+        y: 2 * size$1,
+        width: size$1 * 7,
+        height: size$1 * 8,
         borderWidth: 4,
         borderColor: '#deb887',
         swidth: 500,
@@ -1761,15 +1780,15 @@ class ShopList extends Component {
       }
     }, this.$c("div", {
       style: {
-        y: size$6 / 4 * 3,
-        width: size$6 * 7,
+        y: size$1 / 4 * 3,
+        width: size$1 * 7,
         fontSize: 24
       }
     }, "\u5546\u5E97\u9009\u62E9"), this.$c(Select, {
       style: {
-        x: size$6,
+        x: size$1,
         y: 48,
-        width: size$6 * 5,
+        width: size$1 * 5,
         fontSize: 16
       },
       options: this.options,
@@ -1806,7 +1825,6 @@ const propertyNames = {
   def: "防御",
   exp: "经验"
 };
-const size$5 = 32;
 
 class Hero extends Component {
   tick = 0;
@@ -2126,8 +2144,8 @@ class Hero extends Component {
     }, this.$c(Animate, {
       data: {
         src: "Characters/hero.png",
-        width: size$5,
-        height: size$5,
+        width: 1,
+        height: 1,
         maxTick: 4,
         maxInterval: 10,
         sy: this.$state.save.position.sy
@@ -2156,7 +2174,6 @@ class Hero extends Component {
 
 }
 
-const size$4 = 32;
 class Status extends Component {
   create() {
     this.walls = [];
@@ -2168,9 +2185,9 @@ class Status extends Component {
             src: "terrains",
             style: {
               sx: 0,
-              sy: size$4 * 2,
-              x: x * size$4,
-              y: y * size$4
+              sy: 1 * 2,
+              x: x * 1,
+              y: y * 1
             }
           }));
         }
@@ -2191,24 +2208,24 @@ class Status extends Component {
     }, this.walls, rowProperty.map((value, index) => {
       return this.$c("div", {
         style: {
-          y: (index + 1) * size$4,
-          width: size$4,
-          height: size$4
+          y: (index + 1) * 1,
+          width: 1,
+          height: 1
         }
       }, this.$c("img", {
         src: "icons",
         style: {
-          sy: index * size$4,
-          width: size$4,
-          height: size$4,
-          swidth: size$4,
-          sheight: size$4
+          sy: index * 1,
+          width: 1,
+          height: 1,
+          swidth: 1,
+          sheight: 1
         }
       }), this.$c("div", {
         style: {
-          x: size$4,
-          height: size$4,
-          width: size$4 * 3
+          x: 1,
+          height: 1,
+          width: 1 * 3
         }
       }, value));
     }));
@@ -2216,22 +2233,21 @@ class Status extends Component {
 
 }
 
-const size$3 = 32;
 class Map extends Component {
   tick = 0;
   interval = 10;
   styles = {
     map: {
-      height: size$3 * 13,
-      width: size$3 * 13,
+      height: 13,
+      width: 13,
       backgroundImage: "ground.png"
     },
     statusBar: {
-      x: size$3 * 13,
+      x: 13,
       y: 0,
       backgroundImage: "ground.png",
-      width: size$3 * 5,
-      height: 13 * size$3
+      width: 5,
+      height: 13
     }
   };
 
@@ -2267,14 +2283,14 @@ class Map extends Component {
           const detail = this.$state[type][name];
 
           if (type === "animates") {
-            sx = tick % 4 * size$3;
+            sx = tick % 4;
             const style = {
-              sy: detail.sy * size$3,
+              sy: detail.sy,
               sx,
-              x: x * size$3,
-              y: y * size$3,
-              height: size$3,
-              width: size$3
+              x: x,
+              y: y,
+              height: 1,
+              width: 1
             };
             return this.$c("img", {
               src: type,
@@ -2282,12 +2298,12 @@ class Map extends Component {
             });
           } else if (type === "terrains") {
             const style = {
-              sy: detail.sy * size$3,
+              sy: detail.sy,
               sx: 0,
-              x: x * size$3,
-              y: y * size$3,
-              height: size$3,
-              width: size$3
+              x: x,
+              y: y,
+              height: 1,
+              width: 1
             };
             return this.$c("img", {
               src: type,
@@ -2335,7 +2351,7 @@ class Map extends Component {
             let sx = 0;
 
             if (type === "npcs" || type === "enemys") {
-              sx = tick % 2 * size$3;
+              sx = tick % 2;
             } // if (type === "enemys") {
             //   enemys[name] = name;
             // }
@@ -2343,18 +2359,18 @@ class Map extends Component {
 
             return this.$c("div", {
               style: {
-                x: x * size$3,
-                y: y * size$3,
-                height: size$3,
-                width: size$3
+                x: x,
+                y: y,
+                height: 1,
+                width: 1
               }
             }, this.$c("img", {
               src: type,
               style: {
-                sy: detail.sy * size$3,
+                sy: detail.sy,
                 sx,
-                height: size$3,
-                width: size$3
+                height: 1,
+                width: 1
               }
             }));
           }
@@ -2377,13 +2393,11 @@ class Map extends Component {
   onMouseDown = e => {
     // DFS BFS
     const {
-      canvasX,
-      canvasY
+      gameX,
+      gameY
     } = e;
-    const x = canvasX / size$3 | 0;
-    const y = canvasY / size$3 | 0;
-    this.$state.save.position.x = x * size$3;
-    this.$state.save.position.y = y * size$3;
+    this.$state.save.position.x = gameX;
+    this.$state.save.position.y = gameY;
   };
 
   render() {
@@ -2417,19 +2431,18 @@ class Map extends Component {
 
 }
 
-const size$2 = 32;
 class ScrollText extends Component {
   styles = {
     text: {
       fontSize: 20,
       textAlign: 'left',
       textBaseline: 'top',
-      width: size$2 * 18,
-      height: size$2 * 13
+      width: 18,
+      height: 13
     },
     scroll: {
-      x: size$2,
-      y: size$2 * 5
+      x: 1,
+      y: 5
     }
   };
 
@@ -2468,9 +2481,8 @@ class ScrollText extends Component {
   render() {
     const style = this.styles.scroll;
 
-    if (style.y > -size$2 * (this.text.length - 2)) {
-      const y = 1;
-      style.y -= y;
+    if (style.y > -1 * (this.text.length - 2)) {
+      style.y -= 0.1;
     } else {
       this.ready = true;
     }
@@ -2482,7 +2494,7 @@ class ScrollText extends Component {
       style: this.styles.scroll
     }, this.text.map((text, index) => this.$c("div", {
       style: {
-        y: index * size$2
+        y: index
       }
     }, text))));
   }
@@ -2503,7 +2515,7 @@ function calcLength(str) {
   return len;
 }
 
-const size$1 = 32;
+const size = 32;
 class Message extends Component {
   create() {
     if (this.props) {
@@ -2534,9 +2546,9 @@ class Message extends Component {
       style: {
         backgroundColor: 'rgba(0,0,0,.7)',
         globalAlpha,
-        x: (size$1 * 18 - width) / 2,
-        y: size$1 * 2,
-        height: size$1,
+        x: (size * 18 - width) / 2,
+        y: size * 2,
+        height: size,
         width: width
       }
     }, this.$c("div", {
@@ -2544,7 +2556,7 @@ class Message extends Component {
         textAlign: 'center',
         fontSize,
         x: width / 2,
-        height: size$1
+        height: size
       }
     }, this.msg));
   }
@@ -2552,26 +2564,17 @@ class Message extends Component {
 }
 
 /* eslint-disable multiline-ternary */
-const size = 32;
-class Game extends Component {
+class Index extends Component {
   styles = {
     app: {
-      height: size * 13,
-      width: size * 18
+      height: 13,
+      width: 18
     }
   };
 
   async create() {
     this.loading = "加载数据";
-  } // onLoadMap = async (data) => {
-  //   this.loading = "加载地图";
-  //   debugger;
-  //   Object.assign(this.$state.save, data);
-  //   this.map = await loadMap(this.$state.save.mapId);
-  //   this.loading = false;
-  //   this.randMapKey = `${this.$state.save.mapId} ${new Date()}`;
-  // };
-
+  }
 
   onTitle = () => {
     this.map = null;
@@ -2620,6 +2623,6 @@ class Game extends Component {
 }
 
 if (typeof window !== 'undefined') {
-  window.mota = new Engine(Game);
+  window.mota = new Engine(Index);
 }
 //# sourceMappingURL=bundle.js.map

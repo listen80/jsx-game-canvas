@@ -27,20 +27,33 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT20", "position": { "x": 192, "y": 224 } }
+          "data": {
+            "mapId": "MT20",
+            "position": {
+              "x": 6,
+              "y": 7
+            }
+          }
         }
       ]
     ],
-    [6, 2, 208, [
-      {
-        "type": "enemy",
-        "data": "vampire"
-      },
-      {
-        "type": "mapLoad",
-        "data": { "mapId": "MT_END" }
-      }
-    ]],
+    [
+      6,
+      2,
+      208,
+      [
+        {
+          "type": "enemy",
+          "data": "vampire"
+        },
+        {
+          "type": "mapLoad",
+          "data": {
+            "mapId": "MT_END"
+          }
+        }
+      ]
+    ],
     [6, 3, 247],
     [6, 4, 247],
     [5, 8, 86],
@@ -52,7 +65,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT22", "position": { "x": 192, "y": 64 } }
+          "data": {
+            "mapId": "MT22",
+            "position": {
+              "x": 6,
+              "y": 2
+            }
+          }
         }
       ]
     ]

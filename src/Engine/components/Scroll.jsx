@@ -4,7 +4,7 @@ export default class Scroll extends Component {
   create () {
     this.scrollTop = 0
     this.height = this.props.heigth || 0
-    this.width = this.props.width || 100
+    this.width = this.props.width || 10
     this.contentHeight = this.props.contentHeight || 0
   }
 

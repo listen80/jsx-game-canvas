@@ -20,7 +20,17 @@
     [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
   ],
   "mapEvents": [
-    [1, 1, 122, [{ "type": "openShop", "id": "keyShop2" }]],
+    [
+      1,
+      1,
+      122,
+      [
+        {
+          "type": "openShop",
+          "id": "keyShop2"
+        }
+      ]
+    ],
     [
       1,
       11,
@@ -28,7 +38,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT13", "position": { "x": 64, "y": 352 } }
+          "data": {
+            "mapId": "MT13",
+            "position": {
+              "x": 2,
+              "y": 11
+            }
+          }
         }
       ]
     ],
@@ -39,7 +55,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT11", "position": { "x": 320, "y": 352 } }
+          "data": {
+            "mapId": "MT11",
+            "position": {
+              "x": 10,
+              "y": 11
+            }
+          }
         }
       ]
     ],

@@ -27,7 +27,14 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT1", "position": { "x": 192, "y": 320, "z": 0 } }
+          "data": {
+            "mapId": "MT1",
+            "position": {
+              "x": 6,
+              "y": 10,
+              "z": 0
+            }
+          }
         }
       ]
     ],
@@ -71,9 +78,15 @@
         },
         {
           "type": "getItems",
-          "data": { "yellowKey": 1, "blueKey": 1, "redKey": 1 }
+          "data": {
+            "yellowKey": 1,
+            "blueKey": 1,
+            "redKey": 1
+          }
         },
-        { "type": "moveBlock" },
+        {
+          "type": "moveBlock"
+        },
         {
           "type": "if",
           "condition": "items.cross.-1",

@@ -8,12 +8,12 @@ export default class ScrollText extends Component {
       fontSize: 20,
       textAlign: 'left',
       textBaseline: 'top',
-      width: size * 18,
-      height: size * 13,
+      width: 18,
+      height: 13,
     },
     scroll: {
-      x: size,
-      y: size * 5,
+      x: 1,
+      y: 5,
     },
   };
 
@@ -47,9 +47,8 @@ export default class ScrollText extends Component {
 
   render () {
     const style = this.styles.scroll
-    if (style.y > -size * (this.text.length - 2)) {
-      const y = 1
-      style.y -= y
+    if (style.y > -1 * (this.text.length - 2)) {
+      style.y -= 0.1
     } else {
       this.ready = true
     }
@@ -57,7 +56,7 @@ export default class ScrollText extends Component {
       <div style={this.styles.text} onMouseDown={this.onMouseDown}>
         <div style={this.styles.scroll}>
           {this.text.map((text, index) => (
-            <div style={{ y: index * size }}>{text}</div>
+            <div style={{ y: index }}>{text}</div>
           ))}
         </div>
       </div>

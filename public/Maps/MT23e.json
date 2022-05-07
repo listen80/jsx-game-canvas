@@ -29,7 +29,11 @@
           "type": "mapLoad",
           "data": {
             "mapId": "MT22",
-            "position": { "x": 320, "y": 192, "sy": 32 }
+            "position": {
+              "x": 10,
+              "y": 6,
+              "sy": 32
+            }
           }
         }
       ]

@@ -27,7 +27,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT9", "position": { "x": 224, "y": 256 } }
+          "data": {
+            "mapId": "MT9",
+            "position": {
+              "x": 7,
+              "y": 8
+            }
+          }
         }
       ]
     ],
@@ -38,7 +44,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT11", "position": { "x": 64, "y": 352 } }
+          "data": {
+            "mapId": "MT11",
+            "position": {
+              "x": 2,
+              "y": 11
+            }
+          }
         }
       ]
     ],
@@ -60,7 +72,16 @@
     [8, 6, 81],
     [11, 6, 21],
     [1, 7, 206],
-    [4, 7, 86, [{ "type": "removeSelf" }]],
+    [
+      4,
+      7,
+      86,
+      [
+        {
+          "type": "removeSelf"
+        }
+      ]
+    ],
     [9, 7, 81],
     [10, 7, 207],
     [8, 8, 81],

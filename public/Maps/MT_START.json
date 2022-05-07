@@ -3,6 +3,8 @@
   "bgm": "terror.mp3",
   "event": {
     "type": "loadMap",
-    "data": { "mapId": "MT0" }
+    "data": {
+      "mapId": "MT0"
+    }
   }
 }

@@ -27,7 +27,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT15", "position": { "x": 256, "y": 32 } }
+          "data": {
+            "mapId": "MT15",
+            "position": {
+              "x": 8,
+              "y": 1
+            }
+          }
         }
       ]
     ],
@@ -46,8 +52,13 @@
             "快去吧，再迟就来不及了！"
           ]
         },
-        { "type": "updateSaveData", "data": "items.ff:1" },
-        { "type": "removeSelf" }
+        {
+          "type": "updateSaveData",
+          "data": "items.ff:1"
+        },
+        {
+          "type": "removeSelf"
+        }
       ]
     ],
     [
@@ -57,7 +68,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT17", "position": { "x": 192, "y": 288 } }
+          "data": {
+            "mapId": "MT17",
+            "position": {
+              "x": 6,
+              "y": 9
+            }
+          }
         }
       ]
     ],

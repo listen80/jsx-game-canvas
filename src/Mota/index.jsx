@@ -6,27 +6,17 @@ import Title from "./render/Title";
 import Map from "./render/Map";
 import ScrollText from "./render/ScrollText";
 import Message from "./render/Message";
-const size = 32;
-export default class Game extends Component {
+export default class Index extends Component {
   styles = {
     app: {
-      height: size * 13,
-      width: size * 18,
+      height: 13,
+      width: 18,
     },
   };
 
   async create() {
     this.loading = "加载数据";
   }
-
-  // onLoadMap = async (data) => {
-  //   this.loading = "加载地图";
-  //   debugger;
-  //   Object.assign(this.$state.save, data);
-  //   this.map = await loadMap(this.$state.save.mapId);
-  //   this.loading = false;
-  //   this.randMapKey = `${this.$state.save.mapId} ${new Date()}`;
-  // };
 
   onTitle = () => {
     this.map = null;

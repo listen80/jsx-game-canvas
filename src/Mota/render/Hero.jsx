@@ -33,8 +33,8 @@ class FourFace extends Component {
       <Animate
         data={{
           src: "Characters/hero.png",
-          width: size,
-          height: size,
+          width: 1,
+          height: 1,
           maxTick: 4,
           maxInterval: 10,
           sy: this.save.sy,
@@ -366,8 +366,8 @@ export default class Hero extends Component {
           <Animate
             data={{
               src: "Characters/hero.png",
-              width: size,
-              height: size,
+              width: 1,
+              height: 1,
               maxTick: 4,
               maxInterval: 10,
               sy: this.$state.save.position.sy,

@@ -27,7 +27,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT15", "position": { "x": 128, "y": 32 } }
+          "data": {
+            "mapId": "MT15",
+            "position": {
+              "x": 4,
+              "y": 1
+            }
+          }
         }
       ]
     ],
@@ -38,7 +44,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT13", "position": { "x": 160, "y": 352 } }
+          "data": {
+            "mapId": "MT13",
+            "position": {
+              "x": 5,
+              "y": 11
+            }
+          }
         }
       ]
     ],

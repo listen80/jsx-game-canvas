@@ -27,7 +27,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT14", "position": { "x": 192, "y": 32 } }
+          "data": {
+            "mapId": "MT14",
+            "position": {
+              "x": 6,
+              "y": 1
+            }
+          }
         }
       ]
     ],
@@ -38,7 +44,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT16", "position": { "x": 192, "y": 32 } }
+          "data": {
+            "mapId": "MT16",
+            "position": {
+              "x": 6,
+              "y": 1
+            }
+          }
         }
       ]
     ],
@@ -70,8 +82,14 @@
                     "老人：那好吧，这把剑就给你了！"
                   ]
                 },
-                { "type": "updateSaveData", "data": "flags.15loldman:-1" },
-                { "type": "updateSaveData", "data": "hero.atk:120;exp:-500" }
+                {
+                  "type": "updateSaveData",
+                  "data": "flags.15loldman:-1"
+                },
+                {
+                  "type": "updateSaveData",
+                  "data": "hero.atk:120;exp:-500"
+                }
               ],
               "false": [
                 {
@@ -87,9 +105,7 @@
           "false": [
             {
               "type": "talk",
-              "data": [
-                "你拿到剑了， 去击败大魔王吧"
-              ]
+              "data": ["你拿到剑了， 去击败大魔王吧"]
             }
           ]
         }
@@ -122,9 +138,18 @@
                   "type": "talk",
                   "data": ["勇士：我有500个金币。", "好，成交！"]
                 },
-                { "type": "updateSaveData", "data": "flags.15lbussinessman:-1" },
-                { "type": "updateSaveData", "data": "hero.def:120" },
-                { "type": "updateSaveData", "data": "money:-500" }
+                {
+                  "type": "updateSaveData",
+                  "data": "flags.15lbussinessman:-1"
+                },
+                {
+                  "type": "updateSaveData",
+                  "data": "hero.def:120"
+                },
+                {
+                  "type": "updateSaveData",
+                  "data": "money:-500"
+                }
               ],
               "false": [
                 {
@@ -140,9 +165,7 @@
           "false": [
             {
               "type": "talk",
-              "data": [
-                "勇敢的去吧"
-              ]
+              "data": ["勇敢的去吧"]
             }
           ]
         }

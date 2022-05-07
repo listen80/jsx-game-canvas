@@ -7,7 +7,9 @@ export default class Select extends Component {
     select: {
       fontSize: 24,
       textAlign: "center",
-      width: 320,
+      width: 10,
+      height: 3,
+      backgroundColor: 'red'
     },
   };
 
@@ -47,7 +49,6 @@ export default class Select extends Component {
           this.props.options[this.activeIndex]
         );
     }
-    // return true
   }
 
   onMouseDown = (index) => {
@@ -70,8 +71,8 @@ export default class Select extends Component {
           return (
             <div
               style={{
-                y: index * size,
-                height: size,
+                y: index,
+                height: 1,
                 width: this.styles.select.width,
                 borderWidth: this.activeIndex === index ? 2 : 0,
                 borderColor: "#ddd",

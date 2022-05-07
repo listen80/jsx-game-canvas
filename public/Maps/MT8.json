@@ -27,7 +27,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT7", "position": { "x": 64, "y": 32 } }
+          "data": {
+            "mapId": "MT7",
+            "position": {
+              "x": 2,
+              "y": 1
+            }
+          }
         }
       ]
     ],
@@ -38,7 +44,13 @@
       [
         {
           "type": "mapLoad",
-          "data": { "mapId": "MT9", "position": { "x": 224, "y": 128 } }
+          "data": {
+            "mapId": "MT9",
+            "position": {
+              "x": 7,
+              "y": 4
+            }
+          }
         }
       ]
     ],
