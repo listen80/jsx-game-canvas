@@ -139,6 +139,7 @@ export default class Map extends Component {
     const { x, y } = position;
     // this.$state.map(() => {});
     const { gameX, gameY } = e;
+    console.log({ gameX, gameY })
     this.$state.save.position.x = gameX;
     this.$state.save.position.y = gameY;
   };

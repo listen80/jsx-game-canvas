@@ -80,7 +80,7 @@ export default class Hero extends Component {
 
   onKeyDown({ code, $key }) {
     const postion = this.$state.save.position;
-    const step = 32;
+    const step = 1;
     let moveVector = null;
     if ($key === "down") {
       moveVector = { y: step };
@@ -125,18 +125,18 @@ export default class Hero extends Component {
     if (moveVector) {
       const vector = updateVector(postion, moveVector);
 
-      const terrain = this.isCoincidedTerrains(vector);
-      if (terrain !== -1) {
-        return;
-      }
+      // const terrain = this.isCoincidedTerrains(vector);
+      // if (terrain !== -1) {
+      //   return;
+      // }
 
-      const eventIndex = this.isCoincidedEvents(vector);
-      if (eventIndex !== -1) {
-        if (this.handleEvents(this.props.map.mapEvents[eventIndex])) {
-          assignVector(postion, vector);
-        }
-        return;
-      }
+      // const eventIndex = this.isCoincidedEvents(vector);
+      // if (eventIndex !== -1) {
+      //   if (this.handleEvents(this.props.map.mapEvents[eventIndex])) {
+      //     assignVector(postion, vector);
+      //   }
+      //   return;
+      // }
 
       assignVector(postion, vector);
     }

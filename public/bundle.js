@@ -125,6 +125,7 @@ class Render {
         $node,
         name
       } = event;
+      console.log($node);
 
       if ($node && $node.props[name]) {
         $node.props[name](event, $node);
@@ -1554,21 +1555,21 @@ class Talk extends Component {
   width = 7;
   styles = {
     talk: {
-      width: 32 * this.width,
-      height: 32 * 1,
-      backgroundColor: 'black',
+      width: this.width,
+      height: 1,
+      backgroundColor: "black",
       borderWidth: 2,
-      borderColor: 'white',
+      borderColor: "white",
       fontSize: 16,
-      textAlign: 'left',
-      textBaseline: 'middle'
+      textAlign: "left",
+      textBaseline: "middle"
     }
   };
 
   onKeyDown({
     code
   }) {
-    if (code === 'Space') {
+    if (code === "Space") {
       this.index++;
 
       if (this.index === this.props.talk.length) {
@@ -1577,7 +1578,7 @@ class Talk extends Component {
         this.next();
       }
 
-      this.$sound.play('se', 'dialogue.mp3');
+      this.$sound.play("se", "dialogue.mp3");
     }
   }
 
@@ -1590,14 +1591,14 @@ class Talk extends Component {
       }
     });
     const leftStyle = {
-      x: 32 * 2,
-      y: 32 * 2,
-      height: 32 * this.current.length
+      x: 2,
+      y: 2,
+      height: this.current.length
     };
     const rightStyle = {
-      x: 32 * 4,
-      y: 32 * 6,
-      height: 32 * this.current.length
+      x: 4,
+      y: 6,
+      height: this.current.length
     };
     this.turn = !this.turn;
     Object.assign(this.styles.talk, this.turn ? leftStyle : rightStyle);
@@ -1614,9 +1615,9 @@ class Talk extends Component {
       return this.$c("div", {
         style: {
           x: 0,
-          y: 32 * index,
-          width: 32 * this.width,
-          height: 32
+          y: index,
+          width: this.width,
+          height: 1
         }
       }, talk);
     }));
@@ -1827,7 +1828,7 @@ class Hero extends Component {
     $key
   }) {
     const postion = this.$state.save.position;
-    const step = 32;
+    const step = 1;
     let moveVector = null;
 
     if ($key === "down") {
@@ -1881,22 +1882,17 @@ class Hero extends Component {
     }
 
     if (moveVector) {
-      const vector = updateVector(postion, moveVector);
-      const terrain = this.isCoincidedTerrains(vector);
-
-      if (terrain !== -1) {
-        return;
-      }
-
-      const eventIndex = this.isCoincidedEvents(vector);
-
-      if (eventIndex !== -1) {
-        if (this.handleEvents(this.props.map.mapEvents[eventIndex])) {
-          assignVector(postion, vector);
-        }
-
-        return;
-      }
+      const vector = updateVector(postion, moveVector); // const terrain = this.isCoincidedTerrains(vector);
+      // if (terrain !== -1) {
+      //   return;
+      // }
+      // const eventIndex = this.isCoincidedEvents(vector);
+      // if (eventIndex !== -1) {
+      //   if (this.handleEvents(this.props.map.mapEvents[eventIndex])) {
+      //     assignVector(postion, vector);
+      //   }
+      //   return;
+      // }
 
       assignVector(postion, vector);
     }
@@ -2370,6 +2366,10 @@ class Map extends Component {
       gameX,
       gameY
     } = e;
+    console.log({
+      gameX,
+      gameY
+    });
     this.$state.save.position.x = gameX;
     this.$state.save.position.y = gameY;
   };
