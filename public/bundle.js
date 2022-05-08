@@ -812,14 +812,14 @@ class Animate extends Component {
 
   render() {
     const {
+      src,
       x = 0,
       y = 0,
-      width,
-      height,
-      src,
-      maxTick,
+      width = 1,
+      height = 1,
+      maxTick = 1,
       maxInterval = 10,
-      center,
+      center = false,
       sy = 0
     } = this.props.data;
     this.interval++;
@@ -853,21 +853,19 @@ class Select extends Component {
     select: {
       fontSize: 24,
       textAlign: "center",
-      width: 10,
-      height: 3,
-      backgroundColor: 'red'
+      width: 3,
+      backgroundColor: "red"
     }
   };
 
   create() {
-    this.activeIndex = this.props.activeIndex || 0;
     const {
-      style
+      style,
+      activeIndex = 0
     } = this.props;
-
-    if (style) {
-      Object.assign(this.styles.select, style);
-    }
+    this.activeIndex = activeIndex || 0;
+    Object.assign(this.styles.select, style);
+    this.styles.select.height = this.props.options.length;
   }
 
   onKeyDown({
@@ -1220,26 +1218,22 @@ class Loading extends Component {
 
 }
 
-const styles$1 = {
-  title: {
-    width: '.5',
-    height: 13,
-    textAlign: "center",
-    backgroundColor: 'red'
-  },
-  gameName: {
-    y: 2,
-    width: 13 + 5,
-    height: 4,
-    fontSize: 128
-  },
-  select: {
-    x: 8,
-    y: 8,
-    width: 3
-  }
-};
 class Title extends Component {
+  styles = {
+    gameName: {
+      y: 2,
+      textAlign: "center",
+      width: 18,
+      height: 4,
+      fontSize: 128
+    },
+    select: {
+      x: 8,
+      y: 8,
+      width: 3
+    }
+  };
+
   create() {
     this.activeIndex = 0;
     this.options = [{
@@ -1252,19 +1246,15 @@ class Title extends Component {
   }
 
   onConfirm = index => {
-    const event = this.options[index].event;
-    this.$event(event); // console.log(index)
-    // this.props.onLoadMap(isLoad ? loadGame() : null);
+    this.$event(this.options[index].event);
   };
 
   render() {
-    return this.$c("div", {
-      style: styles$1.title
-    }, this.$c("div", {
-      style: styles$1.gameName
+    return this.$c("div", null, this.$c("div", {
+      style: this.styles.gameName
     }, this.$state.config.title), this.$c(Select, {
       options: this.options,
-      style: styles$1.select,
+      style: this.styles.select,
       onConfirm: this.onConfirm
     }));
   }
@@ -2231,33 +2221,31 @@ class Map extends Component {
   interval = 10;
   styles = {
     map: {
-      height: 13,
       width: 13,
+      height: 13,
       backgroundImage: "ground.png"
     },
     statusBar: {
       x: 13,
-      y: 0,
-      backgroundImage: "ground.png",
       width: 5,
-      height: 13
+      height: 13,
+      backgroundImage: "ground.png"
     }
   };
 
-  create() {
-    this.props.map.bgm; // this.mapBgm = this.$sound.play('bgm', bgm)
+  create() {// const bgm = this.props.map.bgm;
+    // this.mapBgm = this.$sound.play('bgm', bgm)
   }
 
-  destroy() {
-    this.props.map.bgm; // this.$sound.pause('bgm', bgm)
-
-    this.mapBgm.pause();
+  destroy() {// const bgm = this.props.map.bgm;
+    // this.$sound.pause('bgm', bgm)
+    // this.mapBgm.pause();
   }
 
-  renderMapTerrains(status) {
+  renderMapTerrains() {
     const {
       mapTerrains
-    } = this.props.map;
+    } = this.$state.map;
     const tick = this.tick;
 
     if (!mapTerrains) {
@@ -2320,58 +2308,49 @@ class Map extends Component {
     const {
       mapEvents
     } = this.$state.map;
-    const tick = this.tick; // const enemys = {};
-    // this.enemys = enemys;
+    return mapEvents && mapEvents.map(event => {
+      const [x, y, value, events] = event;
 
-    if (mapEvents) {
-      return mapEvents.map(event => {
-        const [x, y, value, events] = event;
+      if (destroy[[mapId, x, y]]) {
+        return null;
+      }
 
-        if (destroy[[mapId, x, y]]) {
-          return null;
-        }
+      if (value) {
+        const info = this.$state.mapping[value];
 
-        if (value) {
-          const info = this.$state.mapping[value];
+        if (info) {
+          const {
+            type,
+            name
+          } = info;
+          const detail = this.$state[type][name]; // terrains items icons npcs enemys
 
-          if (info) {
-            const {
-              type,
-              name
-            } = info;
-            const detail = this.$state[type][name]; // terrains items icons npcs enemys
-
-            let sx = 0;
-
-            if (type === "npcs" || type === "enemys") {
-              sx = tick % 2;
-            } // if (type === "enemys") {
-            //   enemys[name] = name;
-            // }
-
-
-            return this.$c("div", {
-              style: {
+          if (type === "npcs" || type === "enemys") {
+            return this.$c(Animate, {
+              data: {
+                src: type,
                 x: x,
                 y: y,
-                height: 1,
-                width: 1
-              }
-            }, this.$c("img", {
-              src: type,
-              style: {
                 sy: detail.sy,
-                sx,
-                height: 1,
-                width: 1
+                maxTick: 2
               }
-            }));
+            });
           }
-        }
 
-        return null;
-      });
-    }
+          return this.$c(Animate, {
+            data: {
+              src: type,
+              x: x,
+              y: y,
+              sy: detail.sy,
+              maxTick: 1
+            }
+          });
+        }
+      }
+
+      return null;
+    });
   }
 
   onRemoveMapEvent = mapEvent => {
@@ -2386,7 +2365,7 @@ class Map extends Component {
   onMouseDown = e => {
     // DFS BFS
     this.$state.save.position;
-    this.$state.map(() => {});
+
     const {
       gameX,
       gameY
@@ -2410,12 +2389,9 @@ class Map extends Component {
       onMouseDown: this.onMouseDown
     }, mapTerrains, mapEvents), this.$c("div", {
       style: this.styles.statusBar
-    }, this.$c(Status, {
-      map: this.props.map
-    })), this.$c(Hero, {
+    }, this.$c(Status, null)), this.$c(Hero, {
       mapTerrains: mapTerrains,
       mapEvents: mapEvents,
-      enemys: this.enemys,
       map: this.props.map,
       onLoadMap: this.props.onLoadMap,
       onMessage: this.props.onMessage,
@@ -2561,15 +2537,10 @@ class Message extends Component {
 class Index extends Component {
   styles = {
     app: {
-      height: 13,
-      width: 18
+      width: 18,
+      height: 13
     }
   };
-
-  async create() {
-    this.loading = "加载数据";
-  }
-
   onTitle = () => {
     this.map = null;
   };
@@ -2580,34 +2551,34 @@ class Index extends Component {
     this.msg = msg;
   };
 
-  renderLoading() {
-    return this.$c(Loading, {
-      msg: this.loading,
-      rate: this.$res.loaded / this.$res.total
-    });
+  renderDetail() {
+    if (this.$res.loading) {
+      return this.$c(Loading, {
+        rate: this.$res.loaded / this.$res.total
+      });
+    }
+
+    if (this.$state.map) {
+      if (this.$state.map.text) {
+        return this.$c(ScrollText, null);
+      }
+
+      return this.$c(Map, {
+        map: this.$state.map,
+        key: this.randMapKey,
+        onLoadMap: this.onLoadMap,
+        onMessage: this.onMessage,
+        onEvent: this.onEvent
+      });
+    }
+
+    return this.$c(Title, null);
   }
 
   render() {
-    if (this.$res.loading) {
-      return this.renderLoading();
-    } // console.log(this.$state.map)
-
-
     return this.$c("div", {
       style: this.styles.app
-    }, this.$state.map ? this.$state.map.text ? this.$c(ScrollText, {
-      map: this.map,
-      onClose: this.onLoadMap,
-      onTitle: this.onTitle
-    }) : this.$c(Map, {
-      map: this.$state.map,
-      key: this.randMapKey,
-      onLoadMap: this.onLoadMap,
-      onMessage: this.onMessage,
-      onEvent: this.onEvent
-    }) : this.$c(Title, {
-      onLoadMap: this.onLoadMap
-    }), this.msg && this.$c(Message, {
+    }, this.renderDetail(), this.msg && this.$c(Message, {
       msg: this.msg,
       key: this.msg,
       onMessageClose: this.onMessageClose

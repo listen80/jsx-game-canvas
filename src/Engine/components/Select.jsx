@@ -5,18 +5,16 @@ export default class Select extends Component {
     select: {
       fontSize: 24,
       textAlign: "center",
-      width: 10,
-      height: 3,
-      backgroundColor: 'red'
+      width: 3,
+      backgroundColor: "red",
     },
   };
 
   create() {
-    this.activeIndex = this.props.activeIndex || 0;
-    const { style } = this.props;
-    if (style) {
-      Object.assign(this.styles.select, style);
-    }
+    const { style, activeIndex = 0 } = this.props;
+    this.activeIndex = activeIndex || 0;
+    Object.assign(this.styles.select, style);
+    this.styles.select.height = this.props.options.length
   }
 
   onKeyDown({ code }) {

@@ -5,14 +5,14 @@ export default class Animate extends Component {
   tick = 0;
   render () {
     const {
+      src,
       x = 0,
       y = 0,
-      width,
-      height,
-      src,
-      maxTick,
+      width = 1,
+      height = 1,
+      maxTick = 1,
       maxInterval = 10,
-      center,
+      center = false,
       sy = 0,
     } = this.props.data
     this.interval++

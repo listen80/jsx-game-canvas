@@ -9,14 +9,10 @@ import Message from "./render/Message";
 export default class Index extends Component {
   styles = {
     app: {
-      height: 13,
       width: 18,
+      height: 13,
     },
   };
-
-  async create() {
-    this.loading = "加载数据";
-  }
 
   onTitle = () => {
     this.map = null;
@@ -29,37 +25,31 @@ export default class Index extends Component {
   onMessage = (msg) => {
     this.msg = msg;
   };
-  renderLoading() {
-    return (
-      <Loading msg={this.loading} rate={this.$res.loaded / this.$res.total} />
-    );
+  renderDetail() {
+    if (this.$res.loading) {
+      return <Loading rate={this.$res.loaded / this.$res.total} />;
+    }
+    if (this.$state.map) {
+      if (this.$state.map.text) {
+        return <ScrollText></ScrollText>;
+      }
+      return (
+        <Map
+          map={this.$state.map}
+          key={this.randMapKey}
+          onLoadMap={this.onLoadMap}
+          onMessage={this.onMessage}
+          onEvent={this.onEvent}
+        />
+      );
+    }
+
+    return <Title></Title>;
   }
   render() {
-    if (this.$res.loading) {
-      return this.renderLoading();
-    }
-    // console.log(this.$state.map)
     return (
       <div style={this.styles.app}>
-        {this.$state.map ? (
-          this.$state.map.text ? (
-            <ScrollText
-              map={this.map}
-              onClose={this.onLoadMap}
-              onTitle={this.onTitle}
-            ></ScrollText>
-          ) : (
-            <Map
-              map={this.$state.map}
-              key={this.randMapKey}
-              onLoadMap={this.onLoadMap}
-              onMessage={this.onMessage}
-              onEvent={this.onEvent}
-            />
-          )
-        ) : (
-          <Title onLoadMap={this.onLoadMap}></Title>
-        )}
+        {this.renderDetail()}
         {this.msg && (
           <Message
             msg={this.msg}

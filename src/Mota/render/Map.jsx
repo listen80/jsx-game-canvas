@@ -7,32 +7,31 @@ export default class Map extends Component {
   interval = 10;
   styles = {
     map: {
-      height: 13,
       width: 13,
+      height: 13,
       backgroundImage: "ground.png",
     },
     statusBar: {
       x: 13,
-      y: 0,
-      backgroundImage: "ground.png",
       width: 5,
       height: 13,
+      backgroundImage: "ground.png",
     },
   };
 
   create() {
-    const bgm = this.props.map.bgm;
+    // const bgm = this.props.map.bgm;
     // this.mapBgm = this.$sound.play('bgm', bgm)
   }
 
   destroy() {
-    const bgm = this.props.map.bgm;
+    // const bgm = this.props.map.bgm;
     // this.$sound.pause('bgm', bgm)
-    this.mapBgm.pause();
+    // this.mapBgm.pause();
   }
 
-  renderMapTerrains(status) {
-    const { mapTerrains } = this.props.map;
+  renderMapTerrains() {
+    const { mapTerrains } = this.$state.map;
     const tick = this.tick;
     if (!mapTerrains) {
       return;
@@ -79,11 +78,9 @@ export default class Map extends Component {
   renderMapEvents() {
     const { mapId, destroy = {} } = this.$state.save;
     const { mapEvents } = this.$state.map;
-    const tick = this.tick;
-    // const enemys = {};
-    // this.enemys = enemys;
-    if (mapEvents) {
-      return mapEvents.map((event) => {
+    return (
+      mapEvents &&
+      mapEvents.map((event) => {
         const [x, y, value, events] = event;
         if (destroy[[mapId, x, y]]) {
           return null;
@@ -94,32 +91,35 @@ export default class Map extends Component {
             const { type, name } = info;
             const detail = this.$state[type][name];
             // terrains items icons npcs enemys
-            let sx = 0;
             if (type === "npcs" || type === "enemys") {
-              sx = tick % 2;
-            }
-
-            // if (type === "enemys") {
-            //   enemys[name] = name;
-            // }
-            return (
-              <div style={{ x: x, y: y, height: 1, width: 1 }}>
-                <img
-                  src={type}
-                  style={{
+              return (
+                <Animate
+                  data={{
+                    src: type,
+                    x: x,
+                    y: y,
                     sy: detail.sy,
-                    sx,
-                    height: 1,
-                    width: 1,
+                    maxTick: 2,
                   }}
-                />
-              </div>
+                ></Animate>
+              );
+            }
+            return (
+              <Animate
+                data={{
+                  src: type,
+                  x: x,
+                  y: y,
+                  sy: detail.sy,
+                  maxTick: 1,
+                }}
+              ></Animate>
             );
           }
         }
         return null;
-      });
-    }
+      })
+    );
   }
 
   onRemoveMapEvent = (mapEvent) => {
@@ -137,7 +137,7 @@ export default class Map extends Component {
     // DFS BFS
     const position = this.$state.save.position;
     const { x, y } = position;
-    this.$state.map(() => {});
+    // this.$state.map(() => {});
     const { gameX, gameY } = e;
     this.$state.save.position.x = gameX;
     this.$state.save.position.y = gameY;
@@ -158,12 +158,11 @@ export default class Map extends Component {
           {mapEvents}
         </div>
         <div style={this.styles.statusBar}>
-          <Status map={this.props.map} />
+          <Status />
         </div>
         <Hero
           mapTerrains={mapTerrains}
           mapEvents={mapEvents}
-          enemys={this.enemys}
           map={this.props.map}
           onLoadMap={this.props.onLoadMap}
           onMessage={this.props.onMessage}

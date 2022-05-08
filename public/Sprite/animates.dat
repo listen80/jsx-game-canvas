@@ -4,10 +4,10 @@ lava,熔岩
 blueWater,
 water,
 yellowDoor,黄门
-blueDoor,
-redDoor,
-greenDoor,
-specialDoor,
+blueDoor,蓝门
+redDoor,红门
+greenDoor,绿门
+specialDoor,特殊门
 steelDoor,钢门
 yellowWall,
 whiteWall,

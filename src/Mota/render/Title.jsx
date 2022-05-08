@@ -1,26 +1,20 @@
 import { Component, Select, Animate } from "Engine";
-
-const styles = {
-  title: {
-    width: '.5',
-    height: 13,
-    textAlign: "center",
-    backgroundColor: 'red'
-  },
-  gameName: {
-    y: 2,
-    width: (13 + 5),
-    height: 4,
-    fontSize: 128,
-  },
-  select: {
-    x: 8,
-    y: 8,
-    width: 3,
-  },
-};
-
 export default class Title extends Component {
+  styles = {
+    gameName: {
+      y: 2,
+      textAlign: "center",
+      width: 18,
+      height: 4,
+      fontSize: 128,
+    },
+    select: {
+      x: 8,
+      y: 8,
+      width: 3,
+    },
+  };
+  
   create() {
     this.activeIndex = 0;
     this.options = [
@@ -36,19 +30,16 @@ export default class Title extends Component {
   }
 
   onConfirm = (index) => {
-    const event = this.options[index].event
-    this.$event(event)
-    // console.log(index)
-    // this.props.onLoadMap(isLoad ? loadGame() : null);
+    this.$event(this.options[index].event)
   };
 
   render() {
     return (
-      <div style={styles.title}>
-        <div style={styles.gameName}>{this.$state.config.title}</div>
+      <div>
+        <div style={this.styles.gameName}>{this.$state.config.title}</div>
         <Select
           options={this.options}
-          style={styles.select}
+          style={this.styles.select}
           onConfirm={this.onConfirm}
         ></Select>
       </div>
