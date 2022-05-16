@@ -647,15 +647,17 @@ class Resource {
 
   loadMapping() {
     this.$state.config.mapping.map(v => {
+      this.total++;
       loadText(`Data/${v}`).then(data => {
+        this.loaded++;
         this.$state.mapping = data;
       });
     });
   }
 
   loadImage() {
-    this.total++;
     this.$state.config.images.map(v => {
+      this.total++;
       loadImage(`Image/${v}`).then(data => {
         this.$state.image[v] = data;
         this.loaded++;
@@ -807,6 +809,10 @@ class Component {
 class Animate extends Component {
   interval = -1;
   tick = 0;
+
+  create() {
+    debugger;
+  }
 
   render() {
     const {
@@ -1124,12 +1130,7 @@ class Engine {
           this.$state.message = null;
           break;
       }
-
-      console.log(key, data);
-    }; // this.$sound = new Sound();
-    // this.$images = new Images();
-    // this.$font = new Font();
-
+    };
 
     this.$render = new Render(this.$state);
     this.$node = null;
@@ -1192,23 +1193,22 @@ class FPS extends Component {
 
 class Loading extends Component {
   render() {
-    const width = 1 * (18 - 2 * 2);
-    const height = 1;
-    return this.$c("div", {
+    const x = 6;
+    const width = 1 * (18 - 2 * x);
+    return this.$c("div", null, this.$c("div", {
       style: {
-        x: 1 * 2,
-        y: 1 * 2
+        y: 2,
+        width: 18,
+        color: 'rebeccapurple',
+        textAlign: 'center',
+        fontSize: 64
       }
-    }, this.$c("div", {
+    }, "\u6E38\u620F\u5F15\u64CE"), this.$c("div", {
       style: {
-        width,
-        height,
-        backgroundColor: 'white'
-      }
-    }, "Engine"), this.$c("div", {
-      style: {
+        x: x,
+        y: 5,
         width: width * this.props.rate || 0,
-        height,
+        height: 0.2,
         backgroundColor: '#666'
       }
     }));
@@ -2239,13 +2239,11 @@ class Map extends Component {
     const {
       mapTerrains
     } = this.$state.map;
-    const tick = this.tick;
 
     if (!mapTerrains) {
       return;
     }
 
-    let sx = 0;
     return mapTerrains.map((line, y) => {
       return line.map((value, x) => {
         if (value) {
@@ -2257,31 +2255,24 @@ class Map extends Component {
           const detail = this.$state[type][name];
 
           if (type === "animates") {
-            sx = tick % 4;
-            const style = {
-              sy: detail.sy,
-              sx,
-              x: x,
-              y: y,
-              height: 1,
-              width: 1
-            };
-            return this.$c("img", {
-              src: type,
-              style: style
+            return this.$c(Animate, {
+              data: {
+                src: type,
+                sy: detail.sy,
+                x: x,
+                y: y,
+                maxTick: 4
+              }
             });
           } else if (type === "terrains") {
-            const style = {
-              sy: detail.sy,
-              sx: 0,
-              x: x,
-              y: y,
-              height: 1,
-              width: 1
-            };
-            return this.$c("img", {
-              src: type,
-              style: style
+            return this.$c(Animate, {
+              data: {
+                src: type,
+                sy: detail.sy,
+                x: x,
+                y: y,
+                maxTick: 1
+              }
             });
           } else {
             return null;
@@ -2322,9 +2313,9 @@ class Map extends Component {
             return this.$c(Animate, {
               data: {
                 src: type,
+                sy: detail.sy,
                 x: x,
                 y: y,
-                sy: detail.sy,
                 maxTick: 2
               }
             });
@@ -2333,9 +2324,9 @@ class Map extends Component {
           return this.$c(Animate, {
             data: {
               src: type,
+              sy: detail.sy,
               x: x,
               y: y,
-              sy: detail.sy,
               maxTick: 1
             }
           });
@@ -2603,7 +2594,7 @@ class Index extends Component {
   };
 
   renderDetail() {
-    if (this.$res.loading) {
+    if (this.$res.loaded !== this.$res.total) {
       return this.$c(Loading, {
         rate: this.$res.loaded / this.$res.total
       });

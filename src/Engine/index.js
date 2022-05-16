@@ -73,11 +73,8 @@ export default class Engine {
           break;
       }
 
-      console.log(key, data);
     };
-    // this.$sound = new Sound();
-    // this.$images = new Images();
-    // this.$font = new Font();
+
     this.$render = new Render(this.$state);
     this.$node = null;
     this.gameStart();

@@ -3,6 +3,9 @@ import Component from '../core/Component'
 export default class Animate extends Component {
   interval = -1;
   tick = 0;
+  create() {
+    debugger
+  }
   render () {
     const {
       src,

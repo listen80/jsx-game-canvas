@@ -24,15 +24,17 @@ export default class Resource {
 
   loadMapping() {
     this.$state.config.mapping.map((v) => {
+      this.total++;
       loadText(`Data/${v}`).then((data) => {
+        this.loaded++;
         this.$state.mapping = data;
       });
     });
   }
 
   loadImage() {
-    this.total++;
     this.$state.config.images.map((v) => {
+      this.total++;
       loadImage(`Image/${v}`).then((data) => {
         this.$state.image[v] = data;
         this.loaded++;

@@ -32,39 +32,33 @@ export default class Map extends Component {
 
   renderMapTerrains() {
     const { mapTerrains } = this.$state.map;
-    const tick = this.tick;
     if (!mapTerrains) {
       return;
     }
-    let sx = 0;
     return mapTerrains.map((line, y) => {
       return line.map((value, x) => {
         if (value) {
           const info = this.$state.mapping[value];
           const { type, name } = info;
           const detail = this.$state[type][name];
-
           if (type === "animates") {
-            sx = tick % 4;
-            const style = {
-              sy: detail.sy,
-              sx,
-              x: x,
-              y: y,
-              height: 1,
-              width: 1,
-            };
-            return <img src={type} style={style} />;
+            return <Animate
+              data={{
+                src: type,
+                sy: detail.sy,
+                x: x,
+                y: y,
+                maxTick: 4,
+              }}></Animate>
           } else if (type === "terrains") {
-            const style = {
-              sy: detail.sy,
-              sx: 0,
-              x: x,
-              y: y,
-              height: 1,
-              width: 1,
-            };
-            return <img src={type} style={style} />;
+            return <Animate
+              data={{
+                src: type,
+                sy: detail.sy,
+                x: x,
+                y: y,
+                maxTick: 1,
+              }}></Animate>
           } else {
             return null;
           }
@@ -96,9 +90,9 @@ export default class Map extends Component {
                 <Animate
                   data={{
                     src: type,
+                    sy: detail.sy,
                     x: x,
                     y: y,
-                    sy: detail.sy,
                     maxTick: 2,
                   }}
                 ></Animate>
@@ -108,9 +102,9 @@ export default class Map extends Component {
               <Animate
                 data={{
                   src: type,
+                  sy: detail.sy,
                   x: x,
                   y: y,
-                  sy: detail.sy,
                   maxTick: 1,
                 }}
               ></Animate>

@@ -26,7 +26,7 @@ export default class Index extends Component {
     this.msg = msg;
   };
   renderDetail() {
-    if (this.$res.loading) {
+    if (this.$res.loaded !== this.$res.total) {
       return <Loading rate={this.$res.loaded / this.$res.total} />;
     }
     if (this.$state.map) {
