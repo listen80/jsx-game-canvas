@@ -124,8 +124,7 @@ class Render {
       const {
         $node,
         name
-      } = event;
-      console.log($node);
+      } = event; // console.log($node)
 
       if ($node && $node.props[name]) {
         $node.props[name](event, $node);
@@ -235,9 +234,7 @@ class Render {
         } = this;
         const image = this.getImage(props.src);
 
-        if (!image) {
-          console.log(image, this.$state.image, props);
-        } else context.drawImage(image, sx * size, sy * size, (swidth || width) * size, (sheight || height) * size, offsetX * size, offsetY * size, width * size, height * size);
+        if (!image) ; else context.drawImage(image, sx * size, sy * size, (swidth || width) * size, (sheight || height) * size, offsetX * size, offsetY * size, width * size, height * size);
       }
     }
   }
@@ -1208,7 +1205,7 @@ class Loading extends Component {
         height,
         backgroundColor: 'white'
       }
-    }), this.$c("div", {
+    }, "Engine"), this.$c("div", {
       style: {
         width: width * this.props.rate || 0,
         height,
@@ -2361,17 +2358,71 @@ class Map extends Component {
   onMouseDown = e => {
     // DFS BFS
     this.$state.save.position;
-
     const {
       gameX,
       gameY
     } = e;
+    console.log(this.$state.map);
     console.log({
       gameX,
       gameY
     });
-    this.$state.save.position.x = gameX;
-    this.$state.save.position.y = gameY;
+    const mapXY = {};
+    const {
+      mapTerrains,
+      mapEvents
+    } = this.$state.map;
+    const height = this.$state.map.height;
+    const width = this.$state.map.width;
+
+    function next(x, y, path) {
+      if (x < 0 || y < 0 || x === width || x === height) {
+        return false;
+      }
+
+      if (mapTerrains[y][x]) {
+        return false;
+      }
+
+      if (mapXY[[x, y]]) {
+        return false;
+      }
+
+      mapXY[[x, y]] = 1;
+      path.push([x, y]);
+
+      if (x === gameX && y === gameY) {
+        console.log(path.slice());
+        return true;
+      }
+
+      const result = next(x - 1, y, path) || next(x + 1, y, path) || next(x, y - 1, path) || next(x, y + 1, path);
+
+      if (!result) {
+        path.pop();
+      }
+
+      return result;
+    }
+
+    const path = [];
+    const {
+      x,
+      y
+    } = this.$state.save.position;
+    next(x, y, path);
+    let i = 0;
+    const timer = setInterval(() => {
+      this.$state.save.position.x = path[i][0];
+      this.$state.save.position.y = path[i][1];
+      i++;
+
+      if (i === path.length) {
+        clearInterval(timer);
+      }
+    }, 33);
+    console.log(path); // this.$state.save.position.x = gameX;
+    // this.$state.save.position.y = gameY;
   };
 
   render() {
@@ -2573,6 +2624,10 @@ class Index extends Component {
     }
 
     return this.$c(Title, null);
+  }
+
+  create() {
+    this.$event('loadGame');
   }
 
   render() {

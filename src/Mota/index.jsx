@@ -46,6 +46,9 @@ export default class Index extends Component {
 
     return <Title></Title>;
   }
+  create() {
+    this.$event('loadGame')
+  }
   render() {
     return (
       <div style={this.styles.app}>

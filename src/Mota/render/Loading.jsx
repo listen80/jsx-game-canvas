@@ -6,7 +6,7 @@ export default class Loading extends Component {
     const height = 1
     return (
       <div style={{ x: 1 * 2, y: 1 * 2 }}>
-        <div style={{ width, height, backgroundColor: 'white' }}></div>
+        <div style={{ width, height, backgroundColor: 'white' }}>Engine</div>
         <div
           style={{
             width: width * this.props.rate || 0,

@@ -96,7 +96,7 @@ export default class Render {
   runEvents() {
     this.mouseEventsCollectionKeyframe.forEach((event) => {
       const { $node, name } = event;
-      console.log($node)
+      // console.log($node)
       if ($node && $node.props[name]) {
         $node.props[name](event, $node);
       }
@@ -180,7 +180,7 @@ export default class Render {
         const { context } = this;
         const image = this.getImage(props.src);
         if (!image) {
-          console.log(image, this.$state.image, props);
+          // console.log(image, this.$state.image, props);
         } else
           context.drawImage(
             image,

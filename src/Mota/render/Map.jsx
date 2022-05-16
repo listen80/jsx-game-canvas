@@ -136,12 +136,56 @@ export default class Map extends Component {
   onMouseDown = (e) => {
     // DFS BFS
     const position = this.$state.save.position;
-    const { x, y } = position;
-    // this.$state.map(() => {});
     const { gameX, gameY } = e;
+    console.log(this.$state.map)
     console.log({ gameX, gameY })
-    this.$state.save.position.x = gameX;
-    this.$state.save.position.y = gameY;
+
+    const mapXY = {}
+    const { mapTerrains, mapEvents } = this.$state.map
+    const height = this.$state.map.height
+    const width = this.$state.map.width
+    function next(x, y, path) {
+      if (x < 0 || y < 0 || x === width || x === height) {
+        return false
+      }
+      if (mapTerrains[y][x]) {
+        return false
+      }
+      if (mapXY[[x, y]]) {
+        return false
+      }
+      mapXY[[x, y]] = 1;
+      path.push([x, y])
+      if (x === gameX && y === gameY) {
+        console.log(path.slice())
+        return true
+      }
+      const result =
+        next(x - 1, y, path) ||
+        next(x + 1, y, path) ||
+        next(x, y - 1, path) ||
+        next(x, y + 1, path)
+      if (!result) {
+        path.pop()
+      }
+      return result
+    }
+    const path = []
+    const { x, y } = this.$state.save.position
+    next(x, y, path)
+
+    let i = 0;
+    const timer = setInterval(() => {
+      this.$state.save.position.x = path[i][0];
+      this.$state.save.position.y = path[i][1];
+      i++
+      if (i === path.length) {
+        clearInterval(timer)
+      }
+    }, 33)
+    console.log(path)
+    // this.$state.save.position.x = gameX;
+    // this.$state.save.position.y = gameY;
   };
 
   render() {
