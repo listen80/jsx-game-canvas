@@ -26,7 +26,7 @@ export default class Engine {
 
     this.$state = {
       config,
-      save: {},
+      save: { ...config.save },
       image: {},
       sound: {}
     };

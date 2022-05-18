@@ -1080,7 +1080,8 @@ class Engine {
     document.title = config.title;
     this.$state = {
       config,
-      save: {},
+      save: { ...config.save
+      },
       image: {},
       sound: {}
     };
