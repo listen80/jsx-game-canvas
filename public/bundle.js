@@ -810,10 +810,6 @@ class Animate extends Component {
   interval = -1;
   tick = 0;
 
-  create() {
-    debugger;
-  }
-
   render() {
     const {
       src,
@@ -1167,21 +1163,20 @@ class Engine {
 
 }
 
+const getTime = () => performance.now();
+
 class FPS extends Component {
   styles = {
     fps: {
-      fontSize: 14,
-      textAlign: 'right',
-      textBaseline: 'top',
-      height: 1,
-      x: 1 * 18
+      fontSize: 32,
+      textAlign: 'left',
+      textBaseline: 'top'
     }
   };
-  static getTime = () => performance.now();
-  timeStamp = FPS.getTime();
+  timeStamp = getTime();
 
   render() {
-    const timeStamp = FPS.getTime();
+    const timeStamp = getTime();
     const fps = 1000 / (timeStamp - this.timeStamp);
     this.timeStamp = timeStamp;
     return this.$c("div", {
@@ -1241,6 +1236,7 @@ class Title extends Component {
       text: "继续",
       event: "loadGame"
     }];
+    this.$event('loadGame');
   }
 
   onConfirm = index => {
@@ -2583,9 +2579,6 @@ class Index extends Component {
       height: 13
     }
   };
-  onTitle = () => {
-    this.map = null;
-  };
   onMessageClose = () => {
     this.msg = null;
   };
@@ -2617,18 +2610,20 @@ class Index extends Component {
     return this.$c(Title, null);
   }
 
-  create() {
-    this.$event('loadGame');
+  renderMessage() {
+    return this.msg && this.$c(Message, {
+      msg: this.msg,
+      key: this.msg,
+      onMessageClose: this.onMessageClose
+    });
   }
+
+  create() {}
 
   render() {
     return this.$c("div", {
       style: this.styles.app
-    }, this.renderDetail(), this.msg && this.$c(Message, {
-      msg: this.msg,
-      key: this.msg,
-      onMessageClose: this.onMessageClose
-    }), this.$c(FPS, null));
+    }, this.renderDetail(), this.renderMessage(), this.$c(FPS, null));
   }
 
 }

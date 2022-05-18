@@ -1,20 +1,19 @@
 import { Component } from 'Engine'
+
+const getTime = () => performance.now()
+
 export default class FPS extends Component {
   styles = {
     fps: {
-      fontSize: 14,
-      textAlign: 'right',
+      fontSize: 32,
+      textAlign: 'left',
       textBaseline: 'top',
-      height: 1,
-      x: 1 * 18,
     },
   };
 
-  static getTime = () => performance.now()
-
-  timeStamp = FPS.getTime();
-  render () {
-    const timeStamp = FPS.getTime()
+  timeStamp = getTime();
+  render() {
+    const timeStamp = getTime()
     const fps = 1000 / (timeStamp - this.timeStamp)
     this.timeStamp = timeStamp
     return (

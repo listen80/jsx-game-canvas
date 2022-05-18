@@ -14,7 +14,7 @@ export default class Title extends Component {
       width: 3,
     },
   };
-  
+
   create() {
     this.activeIndex = 0;
     this.options = [
@@ -27,6 +27,8 @@ export default class Title extends Component {
         event: "loadGame",
       },
     ];
+
+    this.$event('loadGame')
   }
 
   onConfirm = (index) => {

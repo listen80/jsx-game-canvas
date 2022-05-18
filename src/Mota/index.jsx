@@ -14,10 +14,6 @@ export default class Index extends Component {
     },
   };
 
-  onTitle = () => {
-    this.map = null;
-  };
-
   onMessageClose = () => {
     this.msg = null;
   };
@@ -43,23 +39,24 @@ export default class Index extends Component {
         />
       );
     }
-
     return <Title></Title>;
   }
+  renderMessage() {
+    return this.msg && (
+      <Message
+        msg={this.msg}
+        key={this.msg}
+        onMessageClose={this.onMessageClose}
+      />
+    )
+  }
   create() {
-    this.$event('loadGame')
   }
   render() {
     return (
       <div style={this.styles.app}>
         {this.renderDetail()}
-        {this.msg && (
-          <Message
-            msg={this.msg}
-            key={this.msg}
-            onMessageClose={this.onMessageClose}
-          />
-        )}
+        {this.renderMessage()}
         <FPS />
       </div>
     );
