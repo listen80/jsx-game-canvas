@@ -14,13 +14,6 @@ export default class Index extends Component {
     },
   };
 
-  onMessageClose = () => {
-    this.msg = null;
-  };
-
-  onMessage = (msg) => {
-    this.msg = msg;
-  };
   renderDetail() {
     if (this.$res.loaded !== this.$res.total) {
       return <Loading rate={this.$res.loaded / this.$res.total} />;
@@ -29,15 +22,7 @@ export default class Index extends Component {
       if (this.$state.map.text) {
         return <ScrollText></ScrollText>;
       }
-      return (
-        <Map
-          map={this.$state.map}
-          key={this.randMapKey}
-          onLoadMap={this.onLoadMap}
-          onMessage={this.onMessage}
-          onEvent={this.onEvent}
-        />
-      );
+      return <Map key={this.randMapKey} />
     }
     return <Title></Title>;
   }
@@ -49,8 +34,6 @@ export default class Index extends Component {
         onMessageClose={this.onMessageClose}
       />
     )
-  }
-  create() {
   }
   render() {
     return (

@@ -2207,8 +2207,6 @@ class Status extends Component {
 }
 
 class Map extends Component {
-  tick = 0;
-  interval = 10;
   styles = {
     map: {
       width: 13,
@@ -2350,11 +2348,6 @@ class Map extends Component {
       gameX,
       gameY
     } = e;
-    console.log(this.$state.map);
-    console.log({
-      gameX,
-      gameY
-    });
     const mapXY = {};
     const {
       mapTerrains,
@@ -2399,26 +2392,26 @@ class Map extends Component {
       y
     } = this.$state.save.position;
     next(x, y, path);
-    let i = 0;
-    const timer = setInterval(() => {
-      this.$state.save.position.x = path[i][0];
-      this.$state.save.position.y = path[i][1];
-      i++;
-
-      if (i === path.length) {
-        clearInterval(timer);
-      }
-    }, 33);
-    console.log(path); // this.$state.save.position.x = gameX;
+    this.path = path; // let i = 0;
+    // const timer = setInterval(() => {
+    //   this.$state.save.position.x = path[i][0];
+    //   this.$state.save.position.y = path[i][1];
+    //   i++
+    //   if (i === path.length) {
+    //     clearInterval(timer)
+    //   }
+    // }, 11)
+    // console.log(path)
+    // this.$state.save.position.x = gameX;
     // this.$state.save.position.y = gameY;
   };
 
   render() {
-    this.interval--;
-
-    if (this.interval === 0) {
-      this.tick++;
-      this.interval = 10;
+    if (this.path && this.path.length) {
+      const path = this.path.shift();
+      const [x, y] = path;
+      this.$state.save.position.x = x;
+      this.$state.save.position.y = y;
     }
 
     const mapTerrains = this.renderMapTerrains();
@@ -2431,7 +2424,7 @@ class Map extends Component {
     }, this.$c(Status, null)), this.$c(Hero, {
       mapTerrains: mapTerrains,
       mapEvents: mapEvents,
-      map: this.props.map,
+      map: this.$state.map,
       onLoadMap: this.props.onLoadMap,
       onMessage: this.props.onMessage,
       removeMapEvent: this.onRemoveMapEvent,
@@ -2580,12 +2573,6 @@ class Index extends Component {
       height: 13
     }
   };
-  onMessageClose = () => {
-    this.msg = null;
-  };
-  onMessage = msg => {
-    this.msg = msg;
-  };
 
   renderDetail() {
     if (this.$res.loaded !== this.$res.total) {
@@ -2600,11 +2587,7 @@ class Index extends Component {
       }
 
       return this.$c(Map, {
-        map: this.$state.map,
-        key: this.randMapKey,
-        onLoadMap: this.onLoadMap,
-        onMessage: this.onMessage,
-        onEvent: this.onEvent
+        key: this.randMapKey
       });
     }
 
@@ -2618,8 +2601,6 @@ class Index extends Component {
       onMessageClose: this.onMessageClose
     });
   }
-
-  create() {}
 
   render() {
     return this.$c("div", {

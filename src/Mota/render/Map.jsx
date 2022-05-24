@@ -3,8 +3,6 @@ import Hero from "./Hero";
 import Status from "./Status";
 
 export default class Map extends Component {
-  tick = 0;
-  interval = 10;
   styles = {
     map: {
       width: 13,
@@ -131,9 +129,6 @@ export default class Map extends Component {
     // DFS BFS
     const position = this.$state.save.position;
     const { gameX, gameY } = e;
-    console.log(this.$state.map)
-    console.log({ gameX, gameY })
-
     const mapXY = {}
     const { mapTerrains, mapEvents } = this.$state.map
     const height = this.$state.map.height
@@ -167,26 +162,27 @@ export default class Map extends Component {
     const path = []
     const { x, y } = this.$state.save.position
     next(x, y, path)
-
-    let i = 0;
-    const timer = setInterval(() => {
-      this.$state.save.position.x = path[i][0];
-      this.$state.save.position.y = path[i][1];
-      i++
-      if (i === path.length) {
-        clearInterval(timer)
-      }
-    }, 33)
-    console.log(path)
+    this.path = path;
+    // let i = 0;
+    // const timer = setInterval(() => {
+    //   this.$state.save.position.x = path[i][0];
+    //   this.$state.save.position.y = path[i][1];
+    //   i++
+    //   if (i === path.length) {
+    //     clearInterval(timer)
+    //   }
+    // }, 11)
+    // console.log(path)
     // this.$state.save.position.x = gameX;
     // this.$state.save.position.y = gameY;
   };
 
   render() {
-    this.interval--;
-    if (this.interval === 0) {
-      this.tick++;
-      this.interval = 10;
+    if (this.path && this.path.length) {
+      const path = this.path.shift()
+      const [x, y] = path;
+      this.$state.save.position.x = x;
+      this.$state.save.position.y = y;
     }
     const mapTerrains = this.renderMapTerrains();
     const mapEvents = this.renderMapEvents();
@@ -202,7 +198,7 @@ export default class Map extends Component {
         <Hero
           mapTerrains={mapTerrains}
           mapEvents={mapEvents}
-          map={this.props.map}
+          map={this.$state.map}
           onLoadMap={this.props.onLoadMap}
           onMessage={this.props.onMessage}
           removeMapEvent={this.onRemoveMapEvent}
