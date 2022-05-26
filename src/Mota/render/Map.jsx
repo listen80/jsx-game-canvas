@@ -163,18 +163,6 @@ export default class Map extends Component {
     const { x, y } = this.$state.save.position
     next(x, y, path)
     this.path = path;
-    // let i = 0;
-    // const timer = setInterval(() => {
-    //   this.$state.save.position.x = path[i][0];
-    //   this.$state.save.position.y = path[i][1];
-    //   i++
-    //   if (i === path.length) {
-    //     clearInterval(timer)
-    //   }
-    // }, 11)
-    // console.log(path)
-    // this.$state.save.position.x = gameX;
-    // this.$state.save.position.y = gameY;
   };
 
   render() {
