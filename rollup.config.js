@@ -56,18 +56,18 @@ const plugins = [
   // }),
   // postcss(),
   // vue(),
-  html2({
-    template: "src/index.html",
-    inject: false,
-    externals: { after: [p] },
-  }),
+  // html2({
+  //   template: "src/index.html",
+  //   inject: false,
+  //   externals: { after: [p] },
+  // }),
 ];
 
 if (process.env.NODE_ENV === "development") {
   plugins.push(
     serve({
       // open: true,
-      port: 9999,
+      port: 8003,
       contentBase: "public",
     })
   );
