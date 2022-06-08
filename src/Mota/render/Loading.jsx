@@ -6,7 +6,7 @@ export default class Loading extends Component {
     const width = 1 * (18 - 2 * x)
     return (
       <div>
-        <div style={{ y: 2, width: 18, color: 'rebeccapurple', textAlign: 'center', fontSize: 64 }}>游戏引擎</div>
+        <div style={{ y: 2, width: 18, textAlign: 'center', fontSize: 128 }}>Loading</div>
         <div
           style={{
             x: x,
