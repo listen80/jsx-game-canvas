@@ -35,6 +35,44 @@ export default class Title extends Component {
     this.$event(this.options[index].event)
   };
 
+  renderAnimate() {
+    return <div>
+      <Animate
+        data={{
+          src: "stand.png",
+          maxTick: 4,
+          sy: 4,
+          x: 208,
+          y: 100,
+          width: 632 / 4,
+          height: 768 / 8,
+        }}
+      ></Animate>
+      <Animate
+        data={{
+          src: "skill.png",
+          maxTick: 6,
+          sy: 4,
+          width: 912 / 6,
+          height: 800 / 8,
+          x: 308,
+          y: 200,
+        }}
+      ></Animate>
+      <Animate
+        data={{
+          src: "run.png",
+          maxTick: 6,
+          width: 996 / 6,
+          height: 824 / 8,
+          sy: 4,
+          x: 108,
+          y: 200,
+        }}
+      ></Animate>
+    </div>
+  }
+
   render() {
     return (
       <div>
@@ -44,41 +82,9 @@ export default class Title extends Component {
           style={this.styles.select}
           onConfirm={this.onConfirm}
         ></Select>
+        {this.renderAnimate()}
       </div>
     );
   }
 }
 
-// <Animate
-// data={{
-//   src: "stand.png",
-//   maxTick: 4,
-//   sy: 4,
-//   x: 208,
-//   y: 100,
-//   width: 632 / 4,
-//   height: 768 / 8,
-// }}
-// ></Animate>
-// <Animate
-// data={{
-//   src: "skill.png",
-//   maxTick: 6,
-//   sy: 4,
-//   width: 912 / 6,
-//   height: 800 / 8,
-//   x: 308,
-//   y: 200,
-// }}
-// ></Animate>
-// <Animate
-// data={{
-//   src: "run.png",
-//   maxTick: 6,
-//   width: 996 / 6,
-//   height: 824 / 8,
-//   sy: 4,
-//   x: 108,
-//   y: 200,
-// }}
-// ></Animate>
