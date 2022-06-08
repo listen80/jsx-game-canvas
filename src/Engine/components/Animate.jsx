@@ -3,6 +3,16 @@ import Component from '../core/Component'
 export default class Animate extends Component {
   interval = -1;
   tick = 0;
+  create() {
+    // debugger
+  }
+  onClick = () => {
+    const { events } = this.props
+    if (events) {
+      console.log(this)
+      this.$event('mapLoad', events[0].data)
+    }
+  }
   render() {
     const {
       src,
@@ -25,6 +35,7 @@ export default class Animate extends Component {
     }
     return (
       <img
+        onClick={this.onClick}
         src={src}
         style={{
           x: x + (center ? -width / 2 : 0),

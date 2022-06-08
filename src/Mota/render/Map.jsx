@@ -28,6 +28,10 @@ export default class Map extends Component {
     // this.mapBgm.pause();
   }
 
+  onClick() {
+    console.log(this)
+  }
+
   renderMapTerrains() {
     const { mapTerrains } = this.$state.map;
     if (!mapTerrains) {
@@ -98,6 +102,7 @@ export default class Map extends Component {
             }
             return (
               <Animate
+                events={events}
                 data={{
                   src: type,
                   sy: detail.sy,

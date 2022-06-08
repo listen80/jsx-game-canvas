@@ -71,6 +71,13 @@ export default class Engine {
         case "messageClose":
           this.$state.message = null;
           break;
+
+        case "mapLoad":
+          Object.assign(this.$state.save, data)
+          this.$res.loadMap(this.$state.save.mapId)
+          // this.$state.message = null;
+          break;
+
       }
 
     };
