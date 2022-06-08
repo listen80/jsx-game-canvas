@@ -68,5 +68,5 @@ function createElement(array, root) {
     root.appendChild(el)
   });
 }
-createElement(directions, '.direction')
-createElement(controls, '.control')
+// createElement(directions, '.direction')
+// createElement(controls, '.control')
