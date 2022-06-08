@@ -28,5 +28,8 @@
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-terser": "^7.0.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "express": "^4.18.1",
+    "express-middleware-rollup": "^3.0.0"
+  }
 }

@@ -13,6 +13,7 @@ import html2 from "rollup-plugin-html2";
 // import vue from 'rollup-plugin-vue' // 处理vue的插件ƒ
 // import livereload from 'rollup-plugin-livereload' // 实时刷新
 
+
 const p = new Proxy(
   {
     tag: "script",
