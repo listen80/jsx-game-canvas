@@ -10,9 +10,9 @@ export default class Loading extends Component {
         <div
           style={{
             x: x,
-            y: 5,
+            y: 7,
             width: width * this.props.rate || 0,
-            height: 0.2,
+            height: 0.5,
             backgroundColor: '#666',
           }}
         ></div>
