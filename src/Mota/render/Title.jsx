@@ -28,7 +28,7 @@ export default class Title extends Component {
       },
     ];
 
-    this.$event('loadGame')
+    // this.$event('loadGame')
   }
 
   onConfirm = (index) => {
