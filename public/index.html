@@ -42,10 +42,18 @@
       background: black;
     }
 
-    canvas {
-      max-width: 100vh;
-      max-height: 100vw;
-      display: block;
+    @media screen and (max-width:500px) {
+      div#game {
+        /* position: absolute; */
+        transform: rotateZ(90deg);
+        transform-origin: center;
+      }
+
+      canvas {
+        max-width: 100vh;
+        max-height: 100vw;
+        display: block;
+      }
     }
   </style>
   <style>
@@ -77,12 +85,6 @@
       top: 50%;
       user-select: none;
       opacity: 0.7;
-    }
-
-    div#game {
-      /* position: absolute; */
-      transform: rotateZ(90deg);
-      transform-origin: center;
     }
   </style>
 </head>
