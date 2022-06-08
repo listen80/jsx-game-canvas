@@ -47,7 +47,7 @@ export default class ScrollText extends Component {
   render () {
     const style = this.styles.scroll
     if (style.y > -1 * (this.text.length - 2)) {
-      style.y -= 0.1
+      style.y -= 1 / 16
     } else {
       this.ready = true
     }
