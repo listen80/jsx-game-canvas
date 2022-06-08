@@ -96,11 +96,9 @@ export default class Engine {
   }
 
   gameStart() {
-    const frame = () => {
+    this.ident = setInterval(() => {
       this.keyFrame();
-      this.ident = requestAnimationFrame(frame);
-    };
-    frame();
+    }, 16)
   }
 
   keyFrame() {
