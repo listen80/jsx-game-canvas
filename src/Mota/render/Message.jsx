@@ -6,14 +6,13 @@ export default class Message extends Component {
     if (this.props) {
       this.tick = this.props.tick || 90
     }
-    this.length = calcLength(this.props.msg)
-    this.msg = this.props.msg
+    this.length = calcLength(this.$state.msg)
+    this.msg = this.$state.msg
   }
 
   render () {
     this.tick--
     if (this.tick === 0) {
-      this.props.onMessageClose()
       return null
     }
     let globalAlpha = 1

@@ -41,7 +41,7 @@ export default class Render {
     this.screen = screen;
     this.canvas.width = width;
     this.canvas.height = height;
-    const dom = document.querySelector(el) || document.body;
+    const dom = document.querySelector(el || '#game') || document.body;
     dom && dom.appendChild(this.canvas);
     this.mergeStyle(baseStyle);
     window.addEventListener("onresize", this.getCanvasRenderRect);

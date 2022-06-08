@@ -27,11 +27,9 @@ export default class Index extends Component {
     return <Title></Title>;
   }
   renderMessage() {
-    return this.msg && (
+    return this.$state.msg && (
       <Message
-        msg={this.msg}
-        key={this.msg}
-        onMessageClose={this.onMessageClose}
+        key={this.$state.msg}
       />
     )
   }

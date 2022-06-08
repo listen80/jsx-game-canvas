@@ -27,3 +27,4 @@ pnpm-debug.log*
 *.exe
 bundle.js.map
 todo
+bundle.js
