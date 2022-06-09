@@ -10,7 +10,18 @@ fs.readdirSync(dir).forEach((file) => {
 
   const s = JSON.parse(fs.readFileSync(path.join(dir, file)).toString())
   const { name, ground, mapTerrains, width, height, bgm, mapEvents } = s
-
+  if (mapEvents) {
+    console.log(mapEvents.length, mapEvents[0])
+    let i = mapEvents.length - 1
+    for (;i >= 0; i--) {
+      const [ x, y,value, event] = mapEvents[i]
+      if (mapTerrains[y][x] === 0 && !event) {
+        mapTerrains[y][x] = value
+        mapEvents.splice(i, 1)
+      }
+    }
+  }
+  // console.log()
   // mapEvents && mapEvents.forEach((mapEvent, i) => {
   //   const [x, y, value, events] = mapEvent
   //   events && events.forEach(e => {

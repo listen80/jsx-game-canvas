@@ -7,10 +7,11 @@ export default class Map extends Component {
     map: {
       width: 13,
       height: 13,
-      x: 5,
+      x: 0,
       backgroundImage: "ground.png",
     },
     statusBar: {
+      x: 13,
       width: 5,
       height: 13,
       backgroundImage: "ground.png",
@@ -52,7 +53,7 @@ export default class Map extends Component {
                 y: y,
                 maxTick: 4,
               }}></Animate>
-          } else if (type === "terrains") {
+          } else if (type === "terrains" || type === "items") {
             return <Animate
               data={{
                 src: type,
@@ -60,6 +61,15 @@ export default class Map extends Component {
                 x: x,
                 y: y,
                 maxTick: 1,
+              }}></Animate>
+          } else if (type === "npcs" || type === "enemys") {
+            return <Animate
+              data={{
+                src: type,
+                sy: detail.sy,
+                x: x,
+                y: y,
+                maxTick: 2,
               }}></Animate>
           } else {
             return null;
