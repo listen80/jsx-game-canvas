@@ -184,19 +184,19 @@ export default class Map extends Component {
         <div style={this.styles.map} onMouseDown={this.onMouseDown}>
           {mapTerrains}
           {mapEvents}
+          <Hero
+            mapTerrains={mapTerrains}
+            mapEvents={mapEvents}
+            map={this.$state.map}
+            onLoadMap={this.props.onLoadMap}
+            onMessage={this.props.onMessage}
+            removeMapEvent={this.onRemoveMapEvent}
+            onTitle={this.onTitle}
+          />
         </div>
         <div style={this.styles.statusBar}>
           <Status />
         </div>
-        <Hero
-          mapTerrains={mapTerrains}
-          mapEvents={mapEvents}
-          map={this.$state.map}
-          onLoadMap={this.props.onLoadMap}
-          onMessage={this.props.onMessage}
-          removeMapEvent={this.onRemoveMapEvent}
-          onTitle={this.onTitle}
-        />
       </div>
     );
   }
