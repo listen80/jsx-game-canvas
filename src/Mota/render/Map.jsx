@@ -198,8 +198,6 @@ export default class Map extends Component {
             mapTerrains={mapTerrains}
             mapEvents={mapEvents}
             map={this.$state.map}
-            onLoadMap={this.props.onLoadMap}
-            onMessage={this.props.onMessage}
             removeMapEvent={this.onRemoveMapEvent}
             onTitle={this.onTitle}
           />
