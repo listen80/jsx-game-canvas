@@ -7,10 +7,10 @@ export default class Map extends Component {
     map: {
       width: 13,
       height: 13,
+      x: 5,
       backgroundImage: "ground.png",
     },
     statusBar: {
-      x: 13,
       width: 5,
       height: 13,
       backgroundImage: "ground.png",
