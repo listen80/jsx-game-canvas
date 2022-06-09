@@ -25,7 +25,7 @@ export default class Status extends Component {
   render() {
     const { save, map } = this.$state
     const rowProperty = [
-      this.$state.title,
+      this.$state.config.title,
       map.name,
       save.hero.lv,
       save.hero.hp,
@@ -38,7 +38,7 @@ export default class Status extends Component {
       save.items.redKey,
     ]
     return (
-      <div style={{ fontSize: 24, textBaseLine: 'middle', textAlign: 'center' }}>
+      <div style={{ fontSize: 24, textAlign: 'center' }}>
         {this.walls}
         {rowProperty.map((value, index) => {
           return (
@@ -53,7 +53,7 @@ export default class Status extends Component {
                   sheight: 1,
                 }}
               />
-              <div style={{ x: 1, height: 1, width: 1 * 3 }}>{value}</div>
+              <div style={{ x: 1.5, height: 1, width: 1 * 2.5, textBaseLine: 'middle' }}>{value}</div>
             </div>
           )
         })}
