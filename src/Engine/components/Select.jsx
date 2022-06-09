@@ -6,6 +6,7 @@ export default class Select extends Component {
       fontSize: 24,
       textAlign: "center",
       width: 3,
+      textBaseline: "middle"
       // backgroundColor: "red",
     },
   };
