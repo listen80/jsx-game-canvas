@@ -38,7 +38,7 @@ export default class Status extends Component {
       save.items.redKey,
     ]
     return (
-      <div style={{ fontSize: 32, textAlign: 'center', textBaseLine: 'middle' }}>
+      <div style={{ fontSize: 24, textAlign: 'center', textBaseLine: 'middle' }}>
         {this.walls}
         {rowProperty.map((value, index) => {
           return (

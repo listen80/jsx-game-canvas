@@ -50,5 +50,5 @@ export const baseStyle = {
   strokeStyle: 'white',
   textAlign: 'start',
   // textBaseline: "alphabetic",
-  textBaseline: 'top',
+  textBaseline: 'middle',
 }
