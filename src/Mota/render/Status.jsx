@@ -38,11 +38,11 @@ export default class Status extends Component {
       save.items.redKey,
     ]
     return (
-      <div style={{ fontSize: 24, textAlign: 'center' }}>
+      <div style={{ fontSize: 32, textAlign: 'center', textBaseLine: 'middle' }}>
         {this.walls}
         {rowProperty.map((value, index) => {
           return (
-            <div style={{ x: 1, y: (index + 1) * 1, width: 1, height: 1 }}>
+            <div style={{ x: 1, y: (index + 1) * 1, width: 1 }}>
               <img
                 src="icons"
                 style={{
@@ -53,7 +53,7 @@ export default class Status extends Component {
                   sheight: 1,
                 }}
               />
-              <div style={{ x: 1.5, height: 1, width: 1 * 2.5, textBaseLine: 'middle' }}>{value}</div>
+              <div style={{ x: 1.5, y: 0, height: 1, width: 1 * 2.5, }}>{value}</div>
             </div>
           )
         })}

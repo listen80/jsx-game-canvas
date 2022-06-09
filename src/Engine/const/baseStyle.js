@@ -1,4 +1,4 @@
-export function checkFont (name, size = 16) {
+export function checkFont(name, size = 16) {
   return document.fonts.check(`${size}px ${name}`)
 }
 
@@ -15,7 +15,13 @@ export const fontsIos = [
   '宋体-简',
 ]
 
-export const fontsMS = ['楷体', '仿宋', '微软雅黑', '黑体',  '宋体', ]
+export const fontsMS = [
+  '黑体',
+  '宋体',
+  '微软雅黑',
+  '仿宋',
+  '楷体'
+]
 
 export const fontsAndroid = ['Roboto', 'Noto Sans', 'Droid']
 
