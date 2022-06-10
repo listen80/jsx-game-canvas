@@ -1,19 +1,5 @@
 import Component from "../core/Component";
 
-function createLoop(start, end, interval = 1) {
-  let n = start
-  return () => {
-    n += interval
-    if (n >= end) {
-      n = end - interval
-      interval = - interval
-    } else if (n < start) {
-      n = start
-      interval = - interval
-    }
-    return n
-  }
-}
 export default class Select extends Component {
   styles = {
     select: {
@@ -24,8 +10,6 @@ export default class Select extends Component {
       // backgroundColor: "red",
     },
   };
-  tick = 0
-  delta = -4
 
   create() {
     const { style, activeIndex = 0 } = this.props;
@@ -82,7 +66,7 @@ export default class Select extends Component {
     return `rgb(${rgb},${rgb},${rgb})`
   }
 
-  loop = createLoop(100, 255, 3)
+  loop = this.createLoop(100, 255, 3)
 
   render() {
     return (
