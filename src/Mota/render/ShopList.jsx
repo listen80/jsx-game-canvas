@@ -3,7 +3,7 @@ import Select from '../../Engine/components/Select'
 
 export default class ShopList extends Component {
   create () {
-    const shops = this.$state.save.shops || []
+    const shops = this.$state.save.shops || [{}, {}]
     this.options = Object.entries(shops).map(([shopid, text]) => {
       return { text, shopid }
     })

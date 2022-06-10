@@ -2,6 +2,28 @@ import { Component, Animate } from "Engine";
 import Hero from "./Hero";
 import Status from "./Status";
 
+function transform($state, value, x, y) {
+  const info = $state.mapping[value];
+  const { type, name } = info;
+  const detail = $state[type][name];
+  let maxTick = 1
+  const data = {
+    src: type,
+    sy: detail.sy,
+    x: x,
+    y: y,
+    maxInterval: 30,
+  }
+  if (type === "animates") {
+    maxTick = 4
+  } else if (type === "terrains" || type === "items") {
+    maxTick = 1
+  } else if (type === "npcs" || type === "enemys") {
+    maxTick = 2
+  }
+  data.maxTick = maxTick
+  return data
+}
 export default class Map extends Component {
   styles = {
     map: {
@@ -41,39 +63,7 @@ export default class Map extends Component {
     return mapTerrains.map((line, y) => {
       return line.map((value, x) => {
         if (value) {
-          const info = this.$state.mapping[value];
-          const { type, name } = info;
-          const detail = this.$state[type][name];
-          if (type === "animates") {
-            return <Animate
-              data={{
-                src: type,
-                sy: detail.sy,
-                x: x,
-                y: y,
-                maxTick: 4,
-              }}></Animate>
-          } else if (type === "terrains" || type === "items") {
-            return <Animate
-              data={{
-                src: type,
-                sy: detail.sy,
-                x: x,
-                y: y,
-                maxTick: 1,
-              }}></Animate>
-          } else if (type === "npcs" || type === "enemys") {
-            return <Animate
-              data={{
-                src: type,
-                sy: detail.sy,
-                x: x,
-                y: y,
-                maxTick: 2,
-              }}></Animate>
-          } else {
-            return null;
-          }
+          return <Animate data={transform(this.$state, value, x, y)}></Animate>
         } else {
           return null;
         }
@@ -97,19 +87,19 @@ export default class Map extends Component {
             const { type, name } = info;
             const detail = this.$state[type][name];
             // terrains items icons npcs enemys
-            if (type === "npcs" || type === "enemys") {
-              return (
-                <Animate
-                  data={{
-                    src: type,
-                    sy: detail.sy,
-                    x: x,
-                    y: y,
-                    maxTick: 2,
-                  }}
-                ></Animate>
-              );
-            }
+            // if (type === "npcs" || type === "enemys") {
+            //   return (
+            //     <Animate
+            //       data={{
+            //         src: type,
+            //         sy: detail.sy,
+            //         x: x,
+            //         y: y,
+            //         maxTick: 2,
+            //       }}
+            //     ></Animate>
+            //   );
+            // }
             return (
               <Animate
                 events={events}
