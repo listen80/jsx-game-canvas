@@ -183,7 +183,8 @@
     "Characters/hero.png",
     "ground.png",
     "Battlebacks/mota.jpg",
-    "shop.webp"
+    "shop.webp",
+    "skill.png"
   ],
   "sounds": [
     "bgm/area1.mp3",

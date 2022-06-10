@@ -37,7 +37,7 @@ export default class Title extends Component {
 
   renderAnimate() {
     return <div>
-      <Animate
+      {/* <Animate
         data={{
           src: "stand.png",
           maxTick: 4,
@@ -47,19 +47,20 @@ export default class Title extends Component {
           width: 632 / 4,
           height: 768 / 8,
         }}
-      ></Animate>
+      ></Animate> */}
       <Animate
         data={{
           src: "skill.png",
           maxTick: 6,
+          maxInterval: 5,
           sy: 4,
-          width: 912 / 6,
-          height: 800 / 8,
-          x: 308,
-          y: 200,
+          width: 912 / 6 / 32,
+          height: 800 / 8 / 32,
+          x: 0,
+          y: 0,
         }}
       ></Animate>
-      <Animate
+      {/* <Animate
         data={{
           src: "run.png",
           maxTick: 6,
@@ -69,7 +70,7 @@ export default class Title extends Component {
           x: 108,
           y: 200,
         }}
-      ></Animate>
+      ></Animate> */}
     </div>
   }
 

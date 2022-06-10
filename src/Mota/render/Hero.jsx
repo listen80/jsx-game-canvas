@@ -61,10 +61,6 @@ class FourFace extends Component {
 }
 
 export default class Hero extends Component {
-  tick = 0;
-  create() {
-
-  }
 
   isCoincidedTerrains(heroStyle) {
     return this.props.mapTerrains.findIndex(

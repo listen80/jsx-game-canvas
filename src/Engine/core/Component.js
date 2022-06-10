@@ -17,17 +17,25 @@ export default class Component {
     return createNode.apply(this, arguments);
   }
 
-  createLoop(start = 0, end = 10, interval = 1) {
+  createLoop(start = 0, end = 10, interval = 1, delta = 1) {
     let n = start;
+    let tick = 0;
     return () => {
-      n += interval;
-      if (n >= end) {
-        n = end - interval;
-        interval = -interval;
-      } else if (n < start) {
-        n = start;
-        interval = -interval;
+      tick++;
+      if (tick === interval) {
+        tick = 0;
+        if (interval) {
+          n += delta;
+          if (n >= end) {
+            n = end - delta;
+            delta = -delta;
+          } else if (n < start) {
+            n = start;
+            delta = -delta;
+          }
+        }
       }
+
       return n;
     };
   }

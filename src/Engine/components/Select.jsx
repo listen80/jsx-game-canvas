@@ -66,7 +66,7 @@ export default class Select extends Component {
     return `rgb(${rgb},${rgb},${rgb})`
   }
 
-  loop = this.createLoop(100, 255, 3)
+  loop = this.createLoop(100, 255, 1, 3)
 
   render() {
     return (
