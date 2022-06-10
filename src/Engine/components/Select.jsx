@@ -1,5 +1,19 @@
 import Component from "../core/Component";
 
+function createLoop(start, end, interval = 1) {
+  let n = start
+  return () => {
+    n += interval
+    if (n >= end) {
+      n = end - interval
+      interval = - interval
+    } else if (n < start) {
+      n = start
+      interval = - interval
+    }
+    return n
+  }
+}
 export default class Select extends Component {
   styles = {
     select: {
@@ -64,16 +78,13 @@ export default class Select extends Component {
   }
 
   activeBorderColor() {
-    const rgb = this.tick;
+    const rgb = this.loop()
     return `rgb(${rgb},${rgb},${rgb})`
   }
 
+  loop = createLoop(100, 255, 3)
+
   render() {
-    if (this.tick > 255 || this.tick < 0) {
-      this.delta = -this.delta
-    }
-    this.tick += this.delta
-    
     return (
       <div style={this.styles.select}>
         {this.props.options.map(({ text }, index) => {
