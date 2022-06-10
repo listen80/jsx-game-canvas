@@ -26,7 +26,7 @@ export default class Engine {
 
     this.$state = {
       config,
-      save: {},
+      save: { ...config.save },
       image: {},
       sound: {}
     };
@@ -71,13 +71,17 @@ export default class Engine {
         case "messageClose":
           this.$state.message = null;
           break;
+
+        case "mapLoad":
+          Object.assign(this.$state.save, data)
+          this.$res.loadMap(this.$state.save.mapId)
+          // this.$state.message = null;
+          break;
+
       }
 
-      console.log(key, data);
     };
-    // this.$sound = new Sound();
-    // this.$images = new Images();
-    // this.$font = new Font();
+
     this.$render = new Render(this.$state);
     this.$node = null;
     this.gameStart();
@@ -99,11 +103,9 @@ export default class Engine {
   }
 
   gameStart() {
-    const frame = () => {
+    this.ident = setInterval(() => {
       this.keyFrame();
-      this.ident = requestAnimationFrame(frame);
-    };
-    frame();
+    }, 16)
   }
 
   keyFrame() {

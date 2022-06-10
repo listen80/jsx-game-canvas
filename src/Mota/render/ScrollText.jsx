@@ -14,19 +14,25 @@ export default class ScrollText extends Component {
       x: 1,
       y: 5,
     },
+    continue: {
+      x: 9,
+      y: 5,
+      textAlign: 'center',
+      fontSize: 50,
+    }
   };
 
-  create () {
+  create() {
     const { text, bgm } = this.$state.map
     this.text = text.split('\n')
     this.mapBgm = this.$sound.play('bgm', bgm)
   }
 
-  destroy () {
+  destroy() {
     this.mapBgm.pause()
   }
 
-  onKeyDown ({ code }) {
+  onKeyDown({ code }) {
     if (code === 'Space') {
       this.onMouseDown()
     }
@@ -44,20 +50,22 @@ export default class ScrollText extends Component {
     }
   };
 
-  render () {
+  render() {
     const style = this.styles.scroll
-    if (style.y > -1 * (this.text.length - 2)) {
-      style.y -= 0.1
+    if (style.y > -1 * this.text.length) {
+      style.y -= 1 / 16
     } else {
       this.ready = true
     }
     return (
       <div style={this.styles.text} onMouseDown={this.onMouseDown}>
-        <div style={this.styles.scroll}>
-          {this.text.map((text, index) => (
-            <div style={{ y: index }}>{text}</div>
-          ))}
-        </div>
+        {
+          this.ready ? <div style={this.styles.continue}>点击继续</div> : <div style={this.styles.scroll}>
+            {this.text.map((text, index) => (
+              <div style={{ y: index }}>{text}</div>
+            ))}
+          </div>
+        }
       </div>
     )
   }

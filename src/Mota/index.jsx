@@ -14,49 +14,30 @@ export default class Index extends Component {
     },
   };
 
-  onTitle = () => {
-    this.map = null;
-  };
-
-  onMessageClose = () => {
-    this.msg = null;
-  };
-
-  onMessage = (msg) => {
-    this.msg = msg;
-  };
   renderDetail() {
-    if (this.$res.loading) {
+    if (this.$res.loaded !== this.$res.total) {
       return <Loading rate={this.$res.loaded / this.$res.total} />;
     }
     if (this.$state.map) {
       if (this.$state.map.text) {
         return <ScrollText></ScrollText>;
       }
-      return (
-        <Map
-          map={this.$state.map}
-          key={this.randMapKey}
-          onLoadMap={this.onLoadMap}
-          onMessage={this.onMessage}
-          onEvent={this.onEvent}
-        />
-      );
+      return <Map key={this.randMapKey} />
     }
-
     return <Title></Title>;
+  }
+  renderMessage() {
+    return this.$state.msg && (
+      <Message
+        key={this.$state.msg}
+      />
+    )
   }
   render() {
     return (
       <div style={this.styles.app}>
         {this.renderDetail()}
-        {this.msg && (
-          <Message
-            msg={this.msg}
-            key={this.msg}
-            onMessageClose={this.onMessageClose}
-          />
-        )}
+        {this.renderMessage()}
         <FPS />
       </div>
     );

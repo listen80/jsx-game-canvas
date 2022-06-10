@@ -101,11 +101,11 @@ export default class Hero extends Component {
     } else if (code === "KeyS") {
       saveGame(this.$state.save);
       this.$sound.play("se", "load.mp3");
-      this.setMessage("存储成功");
+      // this.setMessage("存储成功");
     } else if (code === "KeyL") {
       this.$sound.play("se", "load.mp3");
-      this.props.onLoadMap(loadGame());
-      this.setMessage("读取成功");
+      // this.props.onLoadMap(loadGame());
+      // this.setMessage("读取成功");
     } else if (code === "KeyX") {
       this.showEnemyInfo = !this.showEnemyInfo;
     } else if (code === "KeyB") {

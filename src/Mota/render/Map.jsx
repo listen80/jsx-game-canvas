@@ -3,12 +3,11 @@ import Hero from "./Hero";
 import Status from "./Status";
 
 export default class Map extends Component {
-  tick = 0;
-  interval = 10;
   styles = {
     map: {
       width: 13,
       height: 13,
+      x: 0,
       backgroundImage: "ground.png",
     },
     statusBar: {
@@ -30,41 +29,48 @@ export default class Map extends Component {
     // this.mapBgm.pause();
   }
 
+  onClick() {
+    console.log(this)
+  }
+
   renderMapTerrains() {
     const { mapTerrains } = this.$state.map;
-    const tick = this.tick;
     if (!mapTerrains) {
       return;
     }
-    let sx = 0;
     return mapTerrains.map((line, y) => {
       return line.map((value, x) => {
         if (value) {
           const info = this.$state.mapping[value];
           const { type, name } = info;
           const detail = this.$state[type][name];
-
           if (type === "animates") {
-            sx = tick % 4;
-            const style = {
-              sy: detail.sy,
-              sx,
-              x: x,
-              y: y,
-              height: 1,
-              width: 1,
-            };
-            return <img src={type} style={style} />;
-          } else if (type === "terrains") {
-            const style = {
-              sy: detail.sy,
-              sx: 0,
-              x: x,
-              y: y,
-              height: 1,
-              width: 1,
-            };
-            return <img src={type} style={style} />;
+            return <Animate
+              data={{
+                src: type,
+                sy: detail.sy,
+                x: x,
+                y: y,
+                maxTick: 4,
+              }}></Animate>
+          } else if (type === "terrains" || type === "items") {
+            return <Animate
+              data={{
+                src: type,
+                sy: detail.sy,
+                x: x,
+                y: y,
+                maxTick: 1,
+              }}></Animate>
+          } else if (type === "npcs" || type === "enemys") {
+            return <Animate
+              data={{
+                src: type,
+                sy: detail.sy,
+                x: x,
+                y: y,
+                maxTick: 2,
+              }}></Animate>
           } else {
             return null;
           }
@@ -96,9 +102,9 @@ export default class Map extends Component {
                 <Animate
                   data={{
                     src: type,
+                    sy: detail.sy,
                     x: x,
                     y: y,
-                    sy: detail.sy,
                     maxTick: 2,
                   }}
                 ></Animate>
@@ -106,11 +112,12 @@ export default class Map extends Component {
             }
             return (
               <Animate
+                events={events}
                 data={{
                   src: type,
+                  sy: detail.sy,
                   x: x,
                   y: y,
-                  sy: detail.sy,
                   maxTick: 1,
                 }}
               ></Animate>
@@ -136,19 +143,49 @@ export default class Map extends Component {
   onMouseDown = (e) => {
     // DFS BFS
     const position = this.$state.save.position;
-    const { x, y } = position;
-    // this.$state.map(() => {});
     const { gameX, gameY } = e;
-    console.log({ gameX, gameY })
-    this.$state.save.position.x = gameX;
-    this.$state.save.position.y = gameY;
+    const mapXY = {}
+    const { mapTerrains, mapEvents } = this.$state.map
+    const height = this.$state.map.height
+    const width = this.$state.map.width
+    function next(x, y, path) {
+      if (x < 0 || y < 0 || x === width || x === height) {
+        return false
+      }
+      if (mapTerrains[y][x]) {
+        return false
+      }
+      if (mapXY[[x, y]]) {
+        return false
+      }
+      mapXY[[x, y]] = 1;
+      path.push([x, y])
+      if (x === gameX && y === gameY) {
+        console.log(path.slice())
+        return true
+      }
+      const result =
+        next(x - 1, y, path) ||
+        next(x + 1, y, path) ||
+        next(x, y - 1, path) ||
+        next(x, y + 1, path)
+      if (!result) {
+        path.pop()
+      }
+      return result
+    }
+    const path = []
+    const { x, y } = this.$state.save.position
+    next(x, y, path)
+    this.path = path;
   };
 
   render() {
-    this.interval--;
-    if (this.interval === 0) {
-      this.tick++;
-      this.interval = 10;
+    if (this.path && this.path.length) {
+      const path = this.path.shift()
+      const [x, y] = path;
+      this.$state.save.position.x = x;
+      this.$state.save.position.y = y;
     }
     const mapTerrains = this.renderMapTerrains();
     const mapEvents = this.renderMapEvents();
@@ -157,19 +194,17 @@ export default class Map extends Component {
         <div style={this.styles.map} onMouseDown={this.onMouseDown}>
           {mapTerrains}
           {mapEvents}
+          <Hero
+            mapTerrains={mapTerrains}
+            mapEvents={mapEvents}
+            map={this.$state.map}
+            removeMapEvent={this.onRemoveMapEvent}
+            onTitle={this.onTitle}
+          />
         </div>
         <div style={this.styles.statusBar}>
           <Status />
         </div>
-        <Hero
-          mapTerrains={mapTerrains}
-          mapEvents={mapEvents}
-          map={this.props.map}
-          onLoadMap={this.props.onLoadMap}
-          onMessage={this.props.onMessage}
-          removeMapEvent={this.onRemoveMapEvent}
-          onTitle={this.onTitle}
-        />
       </div>
     );
   }
