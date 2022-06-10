@@ -10,6 +10,8 @@ export default class Select extends Component {
       // backgroundColor: "red",
     },
   };
+  tick = 0
+  delta = -4
 
   create() {
     const { style, activeIndex = 0 } = this.props;
@@ -61,7 +63,17 @@ export default class Select extends Component {
     this.activeIndex = index;
   }
 
+  activeBorderColor() {
+    const rgb = this.tick;
+    return `rgb(${rgb},${rgb},${rgb})`
+  }
+
   render() {
+    if (this.tick > 255 || this.tick < 0) {
+      this.delta = -this.delta
+    }
+    this.tick += this.delta
+    
     return (
       <div style={this.styles.select}>
         {this.props.options.map(({ text }, index) => {
@@ -72,7 +84,7 @@ export default class Select extends Component {
                 height: 1,
                 width: this.styles.select.width,
                 borderWidth: this.activeIndex === index ? 2 : 0,
-                borderColor: "#ddd",
+                borderColor: this.activeBorderColor(),
               }}
               onMouseDown={this.onMouseDown.bind(this, index)}
               onMouseMove={this.setActiveIndex.bind(this, index)}

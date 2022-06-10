@@ -9,7 +9,7 @@ export default class Title extends Component {
       fontSize: 128,
     },
     select: {
-      x: 8,
+      x: 7.5,
       y: 8,
       width: 3,
     },
