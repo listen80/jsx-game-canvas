@@ -6,9 +6,22 @@ import {
   isString,
   isBoolean,
 } from "../utils/common";
+import Animate from "../components/Animate";
+import Select from "../components/Select";
+import table from "../components/Table";
+import scroll from "../components/Scroll";
+
+const componentsMap = {
+  animate: Animate,
+  select: Select,
+  table,
+  scroll,
+}
+
 
 export function createNode(tag, props = {}, ...children) {
   const $parent = this;
+  tag = componentsMap[tag] || tag
   return {
     tag,
     props,

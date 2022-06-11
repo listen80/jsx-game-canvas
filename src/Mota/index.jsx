@@ -16,24 +16,22 @@ export default class Index extends Component {
   };
 
   renderDetail() {
-    
+
     if (this.$res.loaded !== this.$res.total) {
       return <Loading rate={this.$res.loaded / this.$res.total} />;
     }
     if (this.$state.map) {
       if (this.$state.map.text) {
-        return <ScrollText></ScrollText>;
+        return <ScrollText />;
       }
       return <Map key={this.randMapKey} />
     }
     // return <Test></Test>
-    return <Title></Title>;
+    return <Title />;
   }
   renderMessage() {
     return this.$state.msg && (
-      <Message
-        key={this.$state.msg}
-      />
+      <Message key={this.$state.msg} />
     )
   }
   render() {

@@ -56,14 +56,10 @@ export default class Map extends Component {
   }
 
   renderMapTerrains() {
-    const { mapTerrains } = this.$state.map;
-    if (!mapTerrains) {
-      return;
-    }
-    return mapTerrains.map((line, y) => {
+    return this.$state.map.mapTerrains.map((line, y) => {
       return line.map((value, x) => {
         if (value) {
-          return <Animate data={transform(this.$state, value, x, y)}></Animate>
+          return <animate {...transform(this.$state, value, x, y)}></animate>
         } else {
           return null;
         }
@@ -86,20 +82,6 @@ export default class Map extends Component {
           if (info) {
             const { type, name } = info;
             const detail = this.$state[type][name];
-            // terrains items icons npcs enemys
-            // if (type === "npcs" || type === "enemys") {
-            //   return (
-            //     <Animate
-            //       data={{
-            //         src: type,
-            //         sy: detail.sy,
-            //         x: x,
-            //         y: y,
-            //         maxTick: 2,
-            //       }}
-            //     ></Animate>
-            //   );
-            // }
             return (
               <Animate
                 events={events}

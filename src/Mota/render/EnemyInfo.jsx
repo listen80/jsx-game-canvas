@@ -1,4 +1,4 @@
-import { Component, Animate, Table } from "Engine";
+import { Component, Table } from "Engine";
 
 const styles = {
   wrap: {
@@ -18,7 +18,7 @@ const columns = [
     width: 1,
     render(rowData) {
       return (
-        <Animate
+        <animate
           data={{
             src: "enemys.png",
             maxTick: 2,

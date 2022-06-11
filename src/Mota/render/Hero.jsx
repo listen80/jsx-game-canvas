@@ -12,7 +12,12 @@ import { findPath } from "../utils"
 
 export default class Hero extends Component {
   onClick = (e) => {
-    const path = findPath(this.$state.save.position, { x: e.gameX, y: e.gameY, }, this.$state.map)
+    const { gameX: x, gameY: y } = e
+    if (this.$state.map.mapTerrains[y][x]) {
+      console.log(this.$state.map.mapTerrains[y][x])
+      return
+    }
+    const path = findPath(this.$state.save.position, { x, y }, this.$state.map)
     this.path = path
     console.log(path)
 
@@ -39,7 +44,7 @@ export default class Hero extends Component {
       <div style={wrapStyl} onClick={this.onClick}>
         <div style={this.$state.save.position}>
           <Animate
-            data={{
+            {...{
               src: "Characters/hero.png",
               width: 1,
               height: 1,

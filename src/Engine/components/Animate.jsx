@@ -1,27 +1,9 @@
 import Component from '../core/Component'
 
 export default class Animate extends Component {
-  create() {
-    // debugger
-  }
-  onClick = () => {
-    const { events } = this.props
-    if (events) {
-      console.log(this)
-      this.$event('mapLoad', events[0].data)
-    }
-  }
-  loop = this.createLoop(0, this.props.data.maxTick, this.props.data.maxInterval)
+  loop = this.createLoop(0, this.props.maxTick, this.props.maxInterval)
   render() {
-    const {
-      src,
-      x = 0,
-      y = 0,
-      width = 1,
-      height = 1,
-      center = false,
-      sy = 0,
-    } = this.props.data
+    const { src, x = 0,y = 0, width = 1,  height = 1,  center = false,  sy = 0,  } = this.props
     const sx = this.loop()
     return (
       <img

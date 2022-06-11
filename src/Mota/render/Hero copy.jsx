@@ -316,20 +316,6 @@ export default class Hero extends Component {
     this.props.onMessage(msg);
   };
 
-  updateSaveData(context, gets, n = 1) {
-    if (Array.isArray(gets)) {
-      gets.forEach(([id, value]) => this.updateSaveData(context, id, value));
-    } else if (typeof gets === "string") {
-      const saveData = context ? this.$state.save[context] : this.$state.save;
-      saveData[gets] = saveData[gets] || 0;
-      saveData[gets] += Number(n);
-    } else if (typeof gets === "object") {
-      this.updateSaveData(context, Object.entries(gets));
-    } else {
-      // console.error(gets, n)
-    }
-  }
-
   checkSaveData(context, gets, n = 1) {
     if (Array.isArray(gets)) {
       return gets.some(([id, value]) => this.checkSaveData(context, id, value));
