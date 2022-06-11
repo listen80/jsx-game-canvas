@@ -16,7 +16,7 @@ export default class Index extends Component {
   };
 
   renderDetail() {
-    return <Test></Test>
+    
     if (this.$res.loaded !== this.$res.total) {
       return <Loading rate={this.$res.loaded / this.$res.total} />;
     }
@@ -26,6 +26,7 @@ export default class Index extends Component {
       }
       return <Map key={this.randMapKey} />
     }
+    // return <Test></Test>
     return <Title></Title>;
   }
   renderMessage() {

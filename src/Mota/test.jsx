@@ -1,5 +1,6 @@
 import { Component, Animate, Scroll } from "Engine";
-
+import Hero from "./render/Hero"
+import { findPath } from "./utils"
 export const run = {
   src: "run.png",
   maxTick: 6,
@@ -37,8 +38,63 @@ export const fireFlys = {
   height: 98,
   loop: false,
 };
+const mockMap = {
+  width: 13,
+  height: 13,
+  map: [
+    [],
+    [],
+    [],
+    [],
+    [, , , , 1, 32, 22, 23, 3],
+    [],
+    [],
+    [, , , , , , 4, 4, 4, 4],
+    [],
+    [],
+    [, , , , 1, 32, 22, 23, 3],
+    [],
+    [1],
+
+  ]
+}
+
+function transform($state, value, x, y) {
+  const info = $state.mapping[value];
+  const { type, name } = info;
+  const detail = $state[type][name];
+  const maxTick = {
+    animates: 4,
+    terrains: 1,
+    items: 1,
+    npcs: 2,
+    enemys: 2,
+  }[type]
+  const data = {
+    src: type,
+    sy: detail.sy,
+    x: x,
+    y: y,
+    maxInterval: 30,
+    maxTick,
+  }
+
+  return data
+}
+
 
 export default class Test extends Component {
+
+  styles = {
+    wrap: {
+      height: 13,
+      width: 13,
+      borderColor: 'red',
+      borderwidth: 2,
+      backgroundColor: '#ccc',
+      // backgroundImage: 'ground.png',
+    }
+  }
   onKeyDown = ({ code }) => {
     this.data.x = 200;
   };
@@ -48,22 +104,29 @@ export default class Test extends Component {
     this.data.x = 0;
     this.data.sy = 2;
   }
+  // onClick = (e) => {
+  //   const path = findPath(this.$state.save.position, { x: e.gameX, y: e.gameY, }, mockMap)
+  //   this.path = path
 
+  //   // console.log(,)
+  //   // console.log(e)
+  // }
+  renderMap() {
+    return mockMap.map.map((line, y) => line.map((value, x) => value ? <Animate data={transform(this.$state, value, x, y)}></Animate> : null));
+  }
   render() {
-    this.data.x += 3;
-    if (this.data.x > 2) {
-      this.data.x = 0;
+    if (this.path && this.path.length) {
+      const path = this.path.pop()
+      const { x, y, sy } = path;
+      this.$state.save.position.x = x;
+      this.$state.save.position.y = y;
+      this.$state.save.position.sy = sy;
     }
     return (
-      <div>
-        <Animate
-          data={this.data}
-        ></Animate>
+      <div style={this.styles.wrap} onClick={this.onClick}>
+        {this.renderMap()}
+        <Hero />
       </div>
     );
-  }
-
-  destroy() {
-    super.destroy();
   }
 }
