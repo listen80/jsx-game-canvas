@@ -20,7 +20,7 @@ export default class Hero extends Component {
     // console.log(e)
   }
 
-  render() {
+  runSteps() {
     if (this.path && this.path.length) {
       const path = this.path.pop()
       const { x, y, sy } = path;
@@ -28,6 +28,9 @@ export default class Hero extends Component {
       this.$state.save.position.y = y;
       this.$state.save.position.sy = sy;
     }
+  }
+  render() {
+    this.runSteps()
     const wrapStyl = {
       width: 13,
       height: 13,
@@ -40,6 +43,20 @@ export default class Hero extends Component {
               src: "Characters/hero.png",
               width: 1,
               height: 1,
+              maxTick: 4,
+              maxInterval: 10,
+              sy: this.$state.save.position.sy,
+            }}
+          ></Animate>
+          <Animate
+            data={{
+              x: 2,
+              y: -2,
+              src: "Characters/hero.png",
+              width: 1,
+              height: 2,
+              swidth: 1,
+              sheight: 1,
               maxTick: 4,
               maxInterval: 10,
               sy: this.$state.save.position.sy,
