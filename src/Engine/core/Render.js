@@ -180,7 +180,7 @@ export default class Render {
         const { context } = this;
         const image = this.getImage(props.src);
         if (!image) {
-          // console.log(image, this.$state.image, props);
+          // console.warn(image, this.$state.image, props);
         } else
           context.drawImage(
             image,

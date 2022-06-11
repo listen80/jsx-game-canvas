@@ -104,7 +104,12 @@ export default class Engine {
 
   gameStart() {
     this.ident = setInterval(() => {
-      this.keyFrame();
+      try {
+        this.keyFrame();
+      } catch (e) {
+        console.log(e)
+        clearInterval(this.ident)
+      }
     }, 16)
   }
 

@@ -67,8 +67,8 @@ export default class Title extends Component {
           width: 996 / 6,
           height: 824 / 8,
           sy: 4,
-          x: 108,
-          y: 200,
+          x: 3,
+          y: 4,
         }}
       ></Animate> */}
     </div>

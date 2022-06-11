@@ -135,38 +135,61 @@ export default class Map extends Component {
     const position = this.$state.save.position;
     const { gameX, gameY } = e;
     const mapXY = {}
-    const { mapTerrains, mapEvents } = this.$state.map
-    const height = this.$state.map.height
-    const width = this.$state.map.width
-    function next(x, y, path) {
+    const { mapTerrains, mapEvents, height, width } = this.$state.map
+
+    function check(x, y) {
+      if (x < 0 || y < 0 || x === width || x === height || mapTerrains[y][x]) {
+        return false
+      }
+      return true
+    }
+
+    function getArray(position) {
+      const [x, y] = position
+    }
+
+    function next(position) {
+      const { x, y } = position
+      const arr = [
+        { x: x - 1, y },
+        { x: x + 1, y },
+        { x, y: y + 1 },
+        { x, y: y - 1 }
+      ].filter(check)
+      console.log(arr)
+      for (let n of arr) {
+        next()
+      }
       if (x < 0 || y < 0 || x === width || x === height) {
         return false
       }
-      if (mapTerrains[y][x]) {
-        return false
-      }
-      if (mapXY[[x, y]]) {
-        return false
-      }
-      mapXY[[x, y]] = 1;
-      path.push([x, y])
-      if (x === gameX && y === gameY) {
-        console.log(path.slice())
-        return true
-      }
-      const result =
-        next(x - 1, y, path) ||
-        next(x + 1, y, path) ||
-        next(x, y - 1, path) ||
-        next(x, y + 1, path)
-      if (!result) {
-        path.pop()
-      }
+      // if (x === gameX && y === gameY) {
+      //   console.log(path.slice())
+      //   return true
+      // }
+      // if (mapTerrains[y][x]) {
+      //   return false
+      // }
+      // if (mapXY[[x, y]]) {
+      //   return false
+      // }
+      // mapXY[[x, y]] = 1;
+      // path.push([x, y])
+
+      // const result =
+      //   next(x - 1, y, path) ||
+      //   next(x + 1, y, path) ||
+      //   next(x, y - 1, path) ||
+      //   next(x, y + 1, path)
+      // if (!result) {
+      //   path.pop()
+      // }
       return result
     }
     const path = []
     const { x, y } = this.$state.save.position
-    next(x, y, path)
+    next({ x, y }, path)
+
     this.path = path;
   };
 
@@ -183,7 +206,7 @@ export default class Map extends Component {
       <div>
         <div style={this.styles.map} onMouseDown={this.onMouseDown}>
           {mapTerrains}
-          {mapEvents}
+          {/* {mapEvents} */}
           <Hero
             mapTerrains={mapTerrains}
             mapEvents={mapEvents}

@@ -29,6 +29,7 @@ export const fire = {
   height: 360 / 1,
   loop: false,
 };
+
 export const fireFlys = {
   src: "fireFlys.png",
   maxTick: 9,
