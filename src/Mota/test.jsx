@@ -3,8 +3,8 @@ import { Component, Animate, Scroll } from "Engine";
 export const run = {
   src: "run.png",
   maxTick: 6,
-  width: 996 / 6,
-  height: 824 / 8,
+  width: 996 / 6 / 32,
+  height: 824 / 8 / 32,
 };
 
 export const stand = {
@@ -51,18 +51,13 @@ export default class Test extends Component {
 
   render() {
     this.data.x += 3;
-    if (this.data.x > 400) {
+    if (this.data.x > 2) {
       this.data.x = 0;
     }
     return (
       <div>
         <Animate
-          data={{
-            src: "run.png",
-            maxTick: 6,
-            width: 996 / 6,
-            height: 824 / 8,
-          }}
+          data={this.data}
         ></Animate>
       </div>
     );

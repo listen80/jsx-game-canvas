@@ -6,6 +6,7 @@ import Title from "./render/Title";
 import Map from "./render/Map";
 import ScrollText from "./render/ScrollText";
 import Message from "./render/Message";
+import Test from "./Test";
 export default class Index extends Component {
   styles = {
     app: {
@@ -15,6 +16,7 @@ export default class Index extends Component {
   };
 
   renderDetail() {
+    return <Test></Test>
     if (this.$res.loaded !== this.$res.total) {
       return <Loading rate={this.$res.loaded / this.$res.total} />;
     }
