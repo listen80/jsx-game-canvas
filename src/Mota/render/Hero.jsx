@@ -48,7 +48,7 @@ export default class Hero extends Component {
               sy: this.$state.save.position.sy,
             }}
           ></Animate>
-          <Animate
+          {/* <Animate
             data={{
               x: 2,
               y: -2,
@@ -61,7 +61,7 @@ export default class Hero extends Component {
               maxInterval: 10,
               sy: this.$state.save.position.sy,
             }}
-          ></Animate>
+          ></Animate> */}
         </div>
       </div>
     );
