@@ -40,18 +40,19 @@ export default class Hero extends Component {
       width: 13,
       height: 13,
     }
+    const data = {
+      src: "Characters/hero.png",
+      width: 1,
+      height: 1,
+      maxTick: 4,
+      maxInterval: 10,
+      sy: this.$state.save.position.sy,
+    }
     return (
       <div style={wrapStyl} onClick={this.onClick}>
         <div style={this.$state.save.position}>
           <Animate
-            {...{
-              src: "Characters/hero.png",
-              width: 1,
-              height: 1,
-              maxTick: 4,
-              maxInterval: 10,
-              sy: this.$state.save.position.sy,
-            }}
+            {...data}
           ></Animate>
           {/* <Animate
             data={{
