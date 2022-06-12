@@ -26,7 +26,7 @@ export default class Index extends Component {
       }
       return <Map key={this.randMapKey} />
     }
-    // return <Test></Test>
+    return <Test></Test>
     return <Title />;
   }
   renderMessage() {
@@ -38,8 +38,8 @@ export default class Index extends Component {
     return (
       <div style={this.styles.app}>
         {this.renderDetail()}
-        {this.renderMessage()}
-        <FPS />
+        {/* {this.renderMessage()} */}
+        {/* <FPS /> */}
       </div>
     );
   }

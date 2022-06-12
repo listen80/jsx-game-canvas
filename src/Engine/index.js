@@ -103,14 +103,22 @@ export default class Engine {
   }
 
   gameStart() {
-    this.ident = setInterval(() => {
-      // try {
-        this.keyFrame();
-      // } catch (e) {
-      //   console.log(e)
-      //   clearInterval(this.ident)
-      // }
-    }, 16)
+
+    const next = () => {
+      requestAnimationFrame(() => {
+        this.keyFrame()
+        next()
+      })
+    }
+    next()
+    // this.ident = setInterval(() => {
+    //   // try {
+    //     this.keyFrame();
+    //   // } catch (e) {
+    //   //   console.log(e)
+    //   //   clearInterval(this.ident)
+    //   // }
+    // }, 16)
   }
 
   keyFrame() {

@@ -5,7 +5,7 @@ import { findPath } from "./utils"
 const mockMap = {
   width: 13,
   height: 13,
-  map: [
+  mapTerrains: [
     [],
     [],
     [],
@@ -47,6 +47,25 @@ function transform($state, value, x, y) {
   return data
 }
 
+const left = [
+  "f",
+  "f",
+  "f",
+  "f",
+  "f",
+]
+
+class List extends Component {
+  onKeyDown() {
+
+  }
+  create() {
+
+  }
+  render() {
+
+  }
+}
 
 export default class Test extends Component {
 
@@ -58,14 +77,79 @@ export default class Test extends Component {
       borderwidth: 2,
       backgroundColor: '#ccc',
       backgroundImage: 'ground.png',
+      rotate: 90,
     }
   }
   onKeyDown = ({ code }) => {
   };
 
   create() {
+    // this.$state.map = mockMap
+    this.options = [
+      {
+        text: "开始",
+        event: "startGame",
+        option: [
+          {
+            text: "开始",
+            event: "startGame",
+          },
+          {
+            text: "继续",
+            event: "loadGame",
+          },
+          {
+            text: "继续",
+            event: "loadGame",
+          },
+        ],
+      },
+      {
+        text: "继续",
+        event: "loadGame",
+        option: [
+          {
+            text: "开始2",
+            event: "startGame",
+          },
+          {
+            text: "继续2",
+            event: "loadGame",
+          },
+          {
+            text: "继续2",
+            event: "loadGame",
+          }
+        ]
+      },
+      {
+        text: "继续",
+        event: "loadGame",
+      },
+      {
+        text: "继续",
+        event: "loadGame",
+      },
+      {
+        text: "继续",
+        event: "loadGame",
+      },
+    ];
+    this.index
   }
-  
+
+  onConfirm = (option, index) => {
+    this.index = index
+  }
+
+  onChange = (option, index) => {
+    this.index = index
+  }
+
+  onConfirmRight = (option, index) => {
+    this.rightIndex = index
+  }
+
   renderMap() {
     // return mockMap.map.map((line, y) => line.map((value, x) => value ? <Animate data={transform(this.$state, value, x, y)}></Animate> : null));
   }
@@ -77,10 +161,33 @@ export default class Test extends Component {
       this.$state.save.position.y = y;
       this.$state.save.position.sy = sy;
     }
+    const rightOptions = this.options[this.index]?.option
+    // const bottomOption = rightOptions?.[this.rightIndex];
+    // console.log(this.rightOptions, bottomOption)
+
     return (
       <div style={this.styles.wrap} onClick={this.onClick}>
-        {this.renderMap()}
-        <Hero />
+        {/* {this.renderMap()}
+        <Hero /> */}
+        <select
+          optionSize={{ width: 3, height: 1 }}
+          options={this.options}
+          onConfirm={this.onConfirm}
+          onChange={this.onChange}
+        >
+
+        </select>
+        <div style={{
+          x: 3,
+          y: 0,
+        }}>
+          <select
+            hidden={!rightOptions}
+            optionSize={{ width: 3, height: 1 }}
+            options={rightOptions}
+            onConfirm={this.onConfirmRight}
+          ></select>
+        </div>
       </div>
     );
   }

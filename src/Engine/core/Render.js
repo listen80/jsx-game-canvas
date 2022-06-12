@@ -102,6 +102,7 @@ export default class Render {
       }
     });
     this.keyEventsCollectionKeyframe.forEach((event) => {
+      console.log(event)
       const { $context, name } = event;
       $context && $context[name] && $context[name](event);
     });
