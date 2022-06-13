@@ -1,4 +1,4 @@
-import { Component, Select, Animate } from "Engine";
+import { Component, Animate } from "Engine";
 export default class Title extends Component {
   styles = {
     gameName: {
@@ -12,6 +12,13 @@ export default class Title extends Component {
       x: 7.5,
       y: 8,
       width: 3,
+      ...{
+        fontSize: 24,
+        textAlign: "center",
+        width: 3,
+        backgroundColor: "red",
+        textBaseline: "middle"
+      }
     },
   };
 
@@ -31,8 +38,8 @@ export default class Title extends Component {
     // this.$event('loadGame')
   }
 
-  onConfirm = (index) => {
-    this.$event(this.options[index].event)
+  onConfirm = (option) => {
+    this.$event(option)
   };
 
   renderAnimate() {
@@ -78,11 +85,13 @@ export default class Title extends Component {
     return (
       <div>
         <div style={this.styles.gameName}>{this.$state.config.title}</div>
-        <Select
-          options={this.options}
-          style={this.styles.select}
-          onConfirm={this.onConfirm}
-        ></Select>
+        <div style={this.styles.select}>
+          <select
+            optionSize={{ width: 3, height: 1 }}
+            options={this.options}
+            onConfirm={this.onConfirm}
+          ></select>
+        </div>
         {this.renderAnimate()}
       </div>
     );

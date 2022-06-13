@@ -1,94 +1,80 @@
 import Component from "../core/Component";
 
 export default class Select extends Component {
-  styles = {
-    select: {
-      fontSize: 24,
-      textAlign: "center",
-      width: 3,
-      textBaseline: "middle"
-      // backgroundColor: "red",
-    },
-  };
+  loop = this.createLoop(155, 222, 1, 4)
 
   create() {
-    const { style, activeIndex = 0 } = this.props;
-    this.activeIndex = activeIndex || 0;
-    Object.assign(this.styles.select, style);
-    this.styles.select.height = this.props.options.length
+    const { activeIndex = 0 } = this.props;
+    this.activeIndex = activeIndex;
   }
 
-  onKeyDown({ code }) {
-    if (code === "ArrowDown") {
+  onChange() {
+    if (this.props.onChange) {
+      this.props.onChange(
+        this.props.options[this.activeIndex],
+        this.activeIndex,
+      );
+    }
+  }
+
+  onConfirm() {
+    if (this.props.onConfirm) {
+      this.props.onConfirm(
+        this.props.options[this.activeIndex],
+        this.activeIndex,
+      );
+    }
+  }
+
+  onKeyDown({ $key }) {
+    if ($key === "down") {
       this.activeIndex++;
-      if (this.activeIndex === this.props.options.length) {
+      if (this.activeIndex >= this.props.options.length) {
         this.activeIndex = 0;
       }
-      this.props.onChange &&
-        this.props.onChange(
-          this.activeIndex,
-          this.props.options[this.activeIndex]
-        );
-    } else if (code === "ArrowUp") {
+      this.onChange();
+    } else if ($key === "up") {
       this.activeIndex--;
-      if (this.activeIndex === -1) {
+      if (this.activeIndex < 0) {
         this.activeIndex += this.props.options.length;
       }
-      this.props.onChange &&
-        this.props.onChange(
-          this.activeIndex,
-          this.props.options[this.activeIndex]
-        );
-    } else if (code === "Space") {
-      this.props.onConfirm &&
-        this.props.onConfirm(
-          this.activeIndex,
-          this.props.options[this.activeIndex]
-        );
+      this.onChange();
+    } else if ($key === "confirm") {
+      this.onConfirm()
     }
   }
 
   onMouseDown = (index) => {
     this.activeIndex = index;
-    this.props.onConfirm &&
-      this.props.onConfirm(
-        this.activeIndex,
-        this.props.options[this.activeIndex]
-      );
+    this.onConfirm()
   };
 
-  setActiveIndex(index) {
+  onMouseMove(index) {
     this.activeIndex = index;
+    this.onChange();
   }
-
-  activeBorderColor() {
-    const rgb = this.loop()
-    return `rgb(${rgb},${rgb},${rgb})`
-  }
-
-  loop = this.createLoop(100, 255, 1, 3)
 
   render() {
-    return (
-      <div style={this.styles.select}>
-        {this.props.options.map(({ text }, index) => {
-          return (
-            <div
-              style={{
-                y: index,
-                height: 1,
-                width: this.styles.select.width,
-                borderWidth: this.activeIndex === index ? 2 : 0,
-                borderColor: this.activeBorderColor(),
-              }}
-              onMouseDown={this.onMouseDown.bind(this, index)}
-              onMouseMove={this.setActiveIndex.bind(this, index)}
-            >
-              {text}
-            </div>
-          );
-        })}
-      </div>
-    );
+    const optionSize = this.props.optionSize
+    const rgb = this.loop()
+    const arr = this.props.options.map(({ text }, index) => {
+      return (
+        <div
+          style={{
+            y: index,
+            height: optionSize.height,
+            width: optionSize.width,
+            borderWidth: this.activeIndex === index ? 2 : 0,
+            backgroundColor: this.activeIndex === index ? `rgb(${rgb},${rgb},${rgb})` : null,
+            textAlign: this.activeIndex === index ? `right` : null,
+          }}
+          onMouseDown={this.onMouseDown.bind(this, index)}
+          onMouseMove={this.onMouseMove.bind(this, index)}
+        >
+          {text}
+        </div>
+      );
+    })
+    return arr;
   }
 }

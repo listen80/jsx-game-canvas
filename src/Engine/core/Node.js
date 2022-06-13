@@ -22,6 +22,9 @@ const componentsMap = {
 export function createNode(tag, props = {}, ...children) {
   const $parent = this;
   tag = componentsMap[tag] || tag
+  if (props?.hidden) {
+    return null
+  }
   return {
     tag,
     props,
