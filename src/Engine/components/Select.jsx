@@ -1,7 +1,7 @@
 import Component from "../core/Component";
 
 export default class Select extends Component {
-  loop = this.createLoop(100, 255, 1, 3)
+  loop = this.createLoop(155, 222, 1, 4)
 
   create() {
     const { activeIndex = 0 } = this.props;
@@ -65,7 +65,8 @@ export default class Select extends Component {
             height: optionSize.height,
             width: optionSize.width,
             borderWidth: this.activeIndex === index ? 2 : 0,
-            borderColor: `rgb(${rgb},${rgb},${rgb})`,
+            backgroundColor: this.activeIndex === index ? `rgb(${rgb},${rgb},${rgb})` : null,
+            textAlign: this.activeIndex === index ? `right` : null,
           }}
           onMouseDown={this.onMouseDown.bind(this, index)}
           onMouseMove={this.onMouseMove.bind(this, index)}

@@ -246,14 +246,12 @@ export default class Render {
   drawBorder(node, offsetX, offsetY) {
     const { context } = this;
     const { borderWidth, borderColor, height, width } = node.props.style;
-    if (borderWidth) {
+    if (borderWidth && borderColor) {
       context.save();
       context.lineWidth = borderWidth;
       context.beginPath();
-      context.rect(offsetX * size, offsetY * size, width * size, height * size);
-      if (borderColor) {
-        context.strokeStyle = borderColor;
-      }
+      context.rect(offsetX * size + borderWidth / 2, offsetY * size + borderWidth / 2, width * size - borderWidth, height * size - borderWidth);
+      context.strokeStyle = borderColor;
       context.stroke();
       context.closePath();
       context.restore();
