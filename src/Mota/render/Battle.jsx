@@ -28,8 +28,8 @@ export default class Battle extends Component {
     this.hero = this.props.hero
   }
 
-  onKeyDown ({ code }) {
-    if (code === 'Space') {
+  onKeyDown ({ $key }) {
+    if ($key === 'confirm') {
       if (this.battleMsg) {
         this.props.onClose && this.props.onClose()
       }
