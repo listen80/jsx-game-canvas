@@ -8,8 +8,8 @@ function transform($state, value, x, y) {
   const data = {
     src: type,
     sy: detail.sy,
-    x: x,
-    y: y,
+    // x: x,
+    // y: y,
     maxInterval: 10,
   }
   if (type === "animates") {
@@ -19,21 +19,30 @@ function transform($state, value, x, y) {
   } else if (type === "npcs" || type === "enemys") {
     maxTick = 2
   }
+  if (type === "enemys") {
+    const enemy = mota.$node.$context.$state.enemys[name]
+    data.enemy = enemy
+    maxTick = 2
+  }
   data.maxTick = maxTick
   return data
 }
 
-export default class Map extends Component {
+export default class Event extends Component {
 
+  onCreate() {
+    this.data = transform(this.$state, this.props.value)
+  }
   onMouseDown() {
     console.log(this)
   }
 
   render() {
-    const data = transform(this.$state, this.props.value, this.props.x, this.props.y)
+
     return (
-      <div>
-        <animate {...data}></animate>
+      <div style={{ width: 1, height: 1, x: this.props.x, y: this.props.y }}>
+        <animate {...this.data}></animate>
+        {this.enemy}
       </div>
     );
   }
