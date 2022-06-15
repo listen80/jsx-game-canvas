@@ -1,4 +1,4 @@
-import { Component, Table } from 'Engine'
+import { Component } from 'Engine'
 
 export default class Status extends Component {
   create() {

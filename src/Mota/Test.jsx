@@ -1,4 +1,4 @@
-import { Component, Animate, Scroll } from "Engine";
+import { Component } from "Engine";
 import Hero from "./render/Hero"
 import { findPath } from "./utils"
 
@@ -175,19 +175,14 @@ export default class Test extends Component {
           onConfirm={this.onConfirm}
           onChange={this.onChange}
         >
-
         </select>
-        <div style={{
-          x: 3,
-          y: 0,
-        }}>
-          <select
-            hidden={!rightOptions}
-            optionSize={{ width: 3, height: 1 }}
-            options={rightOptions}
-            onConfirm={this.onConfirmRight}
-          ></select>
-        </div>
+        <select
+          style={{ x: 3, y: 0, }}
+          hidden={!rightOptions}
+          optionSize={{ width: 3, height: 1 }}
+          options={rightOptions}
+          onConfirm={this.onConfirmRight}
+        ></select>
       </div>
     );
   }

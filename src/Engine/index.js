@@ -3,13 +3,9 @@ import Resource from "./core/Resource";
 
 import { createNode, patchNode } from "./core/Node";
 export { default as Component } from "./core/Component";
-export { default as Animate } from "./components/Animate";
-export { default as Scroll } from "./components/Scroll";
-export { default as Select } from "./components/Select";
-export { default as Table } from "./components/Table";
 import { loadJSON, loadText } from "./utils/http";
 import "./core/Control";
-import { loadGame, saveGame } from "./utils/sl";
+import Event from "./event"
 
 export default class Engine {
   constructor($gameJSX) {
@@ -28,59 +24,14 @@ export default class Engine {
       config,
       save: { ...config.save },
       image: {},
-      sound: {}
+      sound: {},
     };
+    const $res = new Resource(this.$state);
+    this.$state.$res = $res
 
-    this.$res = new Resource(this.$state);
-
-    this.$event = async (key, data) => {
-      if (typeof key === typeof null) {
-        data = key.data
-        key = key.type
-      }
-      switch (key) {
-        case "startGame":
-          Object.assign(this.$state.save, this.$state.config.save)
-          this.$res.loadMap(this.$state.save.mapId);
-          // this.map = loadMap(this.$state.save.mapId);
-          // this.$state.randMapKey = `${this.$state.save.mapId} ${new Date()}`;
-          break;
-
-        case "loadGame":
-          Object.assign(this.$state.save, loadGame())
-          this.$res.loadMap(this.$state.save.mapId);
-          break;
-
-        case "saveGame":
-          saveGame(this.$state.save)
-          break;
-
-        case "toTitle":
-          this.$state.map = null;
-          break;
-
-        case "loadMap":
-          this.$state.save.mapId = data
-          this.$res.loadMap(this.$state.save.mapId);
-          break;
-
-        case "message":
-          this.$state.message = data;
-          break;
-
-        case "messageClose":
-          this.$state.message = null;
-          break;
-
-        case "mapLoad":
-          Object.assign(this.$state.save, data)
-          this.$res.loadMap(this.$state.save.mapId)
-          // this.$state.message = null;
-          break;
-
-      }
-
-    };
+    this.$event = (...others) => {
+      Event(this.$state, ...others)
+    }
 
     this.$render = new Render(this.$state);
     this.$node = null;
@@ -122,7 +73,7 @@ export default class Engine {
   }
 
   keyFrame() {
-    this.$node = patchNode(this.$node, createNode.call(this, this.$gameJSX, null));
+    this.$node = patchNode(this.$node, createNode.call(this, this.$gameJSX));
     this.$render.render(this.$node);
   }
 }

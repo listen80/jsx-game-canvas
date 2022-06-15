@@ -3,17 +3,19 @@ import Component from '../core/Component'
 export default class Table extends Component {
   render() {
     const { dataSource, columns, data } = this.props
-    let x = 0
+    let x = 0;
     return columns.map((column, index) => {
-      const { title, dataIndex, width = 1, render } = column
+      const { title, dataIndex, width = 1, height = 1, render } = column
+      let y = height
       const rowEle = <div style={{ x: 0, y: 0, textAlign: 'start' }}>
-        <div style={{ x: x, width: width, height: 1 }}>{title}</div>
+        <div style={{ x, width, height }}>{title}</div>
         {dataSource.map((rowData, rowIndex) => {
+          y += height
           const style = {
-            x: x,
-            y: (rowIndex + 1),
+            x,
+            y,
             width: width,
-            height: 1,
+            height: height,
           }
           return (
             <div style={style} >
@@ -22,7 +24,7 @@ export default class Table extends Component {
           )
         })}
       </div>
-      x += width * 1
+      x += width
       return rowEle
     })
   }

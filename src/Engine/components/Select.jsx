@@ -1,7 +1,7 @@
 import Component from "../core/Component";
 
 export default class Select extends Component {
-  loop = this.createLoop(155, 222, 1, 4)
+  loop = this.createLoop(155, 222, 1, 2)
 
   create() {
     const { activeIndex = 0 } = this.props;
@@ -18,11 +18,18 @@ export default class Select extends Component {
   }
 
   onConfirm() {
-    if (this.props.onConfirm) {
-      this.props.onConfirm(
-        this.props.options[this.activeIndex],
-        this.activeIndex,
-      );
+    const option = this.props.options[this.activeIndex]
+    if (option) {
+      const { event } = option
+      if (event) {
+        this.$event(event)
+      }
+      if (this.props.onConfirm) {
+        this.props.onConfirm(
+          this.props.options[this.activeIndex],
+          this.activeIndex,
+        );
+      }
     }
   }
 
@@ -44,7 +51,7 @@ export default class Select extends Component {
     }
   }
 
-  onMouseDown = (index) => {
+  onMouseDown(index) {
     this.activeIndex = index;
     this.onConfirm()
   };
@@ -55,26 +62,27 @@ export default class Select extends Component {
   }
 
   render() {
-    const optionSize = this.props.optionSize
+    const { width = 1, height = 1 } = this.props.optionSize || {}
     const rgb = this.loop()
-    const arr = this.props.options.map(({ text }, index) => {
-      return (
-        <div
-          style={{
-            y: index,
-            height: optionSize.height,
-            width: optionSize.width,
-            borderWidth: this.activeIndex === index ? 2 : 0,
-            backgroundColor: this.activeIndex === index ? `rgb(${rgb},${rgb},${rgb})` : null,
-            textAlign: this.activeIndex === index ? `right` : null,
-          }}
-          onMouseDown={this.onMouseDown.bind(this, index)}
-          onMouseMove={this.onMouseMove.bind(this, index)}
-        >
-          {text}
-        </div>
-      );
+    let y = 0
+    const selects = this.props.options.map(({ text }, index) => {
+      const select = <div
+        style={{
+          y,
+          height,
+          width,
+          borderWidth: this.activeIndex === index ? 2 : 0,
+          backgroundColor: this.activeIndex === index ? `rgb(${rgb},${rgb},${rgb}, 0.5)` : null,
+        }}
+        onMouseDown={this.onMouseDown.bind(this, index)}
+        onMouseMove={this.onMouseMove.bind(this, index)}
+      >
+        {text}
+      </div>;
+
+      y += height
+      return select;
     })
-    return arr;
+    return <div style={this.props.style}>{selects}</div>;
   }
 }

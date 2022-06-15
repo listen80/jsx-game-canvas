@@ -1,4 +1,4 @@
-import { Component, Animate } from "Engine";
+import { Component } from "Engine";
 import Hero from "./Hero";
 import Status from "./Status";
 
@@ -83,7 +83,7 @@ export default class Map extends Component {
             const { type, name } = info;
             const detail = this.$state[type][name];
             return (
-              <Animate
+              <animate
                 events={events}
                 data={{
                   src: type,
@@ -92,7 +92,7 @@ export default class Map extends Component {
                   y: y,
                   maxTick: 1,
                 }}
-              ></Animate>
+              ></animate>
             );
           }
         }

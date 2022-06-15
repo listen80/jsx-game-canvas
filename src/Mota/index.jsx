@@ -16,9 +16,9 @@ export default class Index extends Component {
   };
 
   renderDetail() {
-
-    if (this.$res.loaded !== this.$res.total) {
-      return <Loading rate={this.$res.loaded / this.$res.total} />;
+    const $res = this.$state.$res
+    if ($res.loaded !== $res.total) {
+      return <Loading rate={$res.loaded / $res.total} />;
     }
     if (this.$state.map) {
       if (this.$state.map.text) {
@@ -26,7 +26,7 @@ export default class Index extends Component {
       }
       return <Map key={this.randMapKey} />
     }
-    return <Test></Test>
+    // return <Test></Test>
     return <Title />;
   }
   renderMessage() {

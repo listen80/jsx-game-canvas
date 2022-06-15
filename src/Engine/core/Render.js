@@ -96,9 +96,8 @@ export default class Render {
   runEvents() {
     this.mouseEventsCollectionKeyframe.forEach((event) => {
       const { $node, name } = event;
-      // console.log($node)
       if ($node && $node.props[name]) {
-        $node.props[name](event, $node);
+        $node.props[name].call($node.$parent, event, $node);
       }
     });
     this.keyEventsCollectionKeyframe.forEach((event) => {

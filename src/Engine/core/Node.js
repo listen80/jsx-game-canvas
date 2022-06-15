@@ -6,17 +6,12 @@ import {
   isString,
   isBoolean,
 } from "../utils/common";
-import Animate from "../components/Animate";
-import Select from "../components/Select";
+import animate from "../components/Animate";
+import select from "../components/Select";
 import table from "../components/Table";
 import scroll from "../components/Scroll";
 
-const componentsMap = {
-  animate: Animate,
-  select: Select,
-  table,
-  scroll,
-}
+const componentsMap = { animate, select, table, scroll, }
 
 
 export function createNode(tag, props = {}, ...children) {
@@ -25,6 +20,7 @@ export function createNode(tag, props = {}, ...children) {
   if (props?.hidden) {
     return null
   }
+
   return {
     tag,
     props,
@@ -37,11 +33,10 @@ function createInstance(next) {
   const Class = next.tag;
   next.$context = new Class(next);
 
-  next.$context.$res = next.$parent.$res;
   next.$context.$state = next.$parent.$state;
   next.$context.$event = next.$parent.$event;
 
-  next.$context.$parent = next.$parent;
+  // next.$context.$parent = next.$parent;
   next.$context.create && next.$context.create();
   renderNode(next);
 }
