@@ -7,6 +7,7 @@ import Map from "./render/Map";
 import ScrollText from "./render/ScrollText";
 import Message from "./render/Message";
 import Test from "./Test";
+
 export default class Index extends Component {
   styles = {
     app: {

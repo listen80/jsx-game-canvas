@@ -6,13 +6,13 @@ import {
   isString,
   isBoolean,
 } from "../utils/common";
+
 import animate from "../components/Animate";
 import select from "../components/Select";
 import table from "../components/Table";
 import scroll from "../components/Scroll";
 
 const componentsMap = { animate, select, table, scroll, }
-
 
 export function createNode(tag, props = {}, ...children) {
   const $parent = this;
@@ -37,7 +37,7 @@ function createInstance(next) {
   next.$context.$event = next.$parent.$event;
 
   // next.$context.$parent = next.$parent;
-  next.$context.create && next.$context.create();
+  next.$context.onCreate && next.$context.onCreate();
   renderNode(next);
 }
 
@@ -46,7 +46,7 @@ function destoryInstance(pre) {
   if (!isPrimitive(pre) && !isUndefined(pre)) {
     if (isFunc(pre.tag)) {
       destoryInstance(pre.$context.$node);
-      pre.$context.destroy && pre.$context.destroy();
+      pre.$context.destroy && pre.$context.onDestroy();
     } else if (isArray(pre)) {
       while (pre.length) {
         destoryInstance(pre.pop());

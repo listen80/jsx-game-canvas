@@ -40,12 +40,12 @@ export default class Map extends Component {
     },
   };
 
-  create() {
+  onCreate() {
     // const bgm = this.props.map.bgm;
     // this.mapBgm = this.$sound.play('bgm', bgm)
   }
 
-  destroy() {
+  onDestroy() {
     // const bgm = this.props.map.bgm;
     // this.$sound.pause('bgm', bgm)
     // this.mapBgm.pause();

@@ -2,7 +2,7 @@ import { loadImage } from '../utils/http'
 
 export default class ImageCollection {
   constructor () {
-    this.images = Object.create(null)
+    this.images = Object.onCreate(null)
     this.total = Infinity
     this.loaded = 0
   }

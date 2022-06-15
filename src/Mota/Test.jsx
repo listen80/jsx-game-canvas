@@ -59,7 +59,7 @@ class List extends Component {
   onKeyDown() {
 
   }
-  create() {
+  onCreate() {
 
   }
   render() {
@@ -83,7 +83,7 @@ export default class Test extends Component {
   onKeyDown = ({ code }) => {
   };
 
-  create() {
+  onCreate() {
     // this.$state.map = mockMap
     this.options = [
       {

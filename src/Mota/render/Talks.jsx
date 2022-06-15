@@ -51,7 +51,7 @@ export default class Talk extends Component {
     Object.assign(this.styles.talk, this.turn ? leftStyle : rightStyle);
   }
 
-  create() {
+  onCreate() {
     this.next();
   }
 

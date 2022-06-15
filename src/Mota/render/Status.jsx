@@ -1,7 +1,7 @@
 import { Component } from 'Engine'
 
 export default class Status extends Component {
-  create() {
+  onCreate() {
     this.walls = []
     for (let x = 0; x < 5; x++) {
       for (let y = 0; y < 13; y++) {

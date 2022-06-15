@@ -5,7 +5,7 @@ export const findPath = (start, dist, mapJSON) => {
 
   function checkStep(step) {
     const { x, y } = step
-    if ((x < 0 || y < 0 || x === width || y === height) || map[y][x] || arrivedMap.has([x, y] + '') || (x === start.x && y === start.y)) {
+    if ((x < 0 || y < 0 || x >= width || y >= height) || map[y][x] || arrivedMap.has([x, y] + '') || (x === start.x && y === start.y)) {
       return false
     }
     if (x === dist.x && y === dist.y) {
@@ -13,7 +13,6 @@ export const findPath = (start, dist, mapJSON) => {
         path.push(step)
         step = step.start
       }
-      console.log(path)
     }
     arrivedMap.set([x, y] + '', 1)
     return true
@@ -41,5 +40,8 @@ export const findPath = (start, dist, mapJSON) => {
   }
 
   find([start], Infinity)
-  return path
+  return path.map((v) => {
+    delete v.start
+    return v
+  })
 }

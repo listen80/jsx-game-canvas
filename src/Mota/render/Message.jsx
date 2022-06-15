@@ -2,7 +2,7 @@ import { Component } from 'Engine'
 import { calcLength } from '../../Engine/utils/string'
 
 export default class Message extends Component {
-  create () {
+  onCreate() {
     if (this.props) {
       this.tick = this.props.tick || 90
     }
@@ -10,7 +10,7 @@ export default class Message extends Component {
     this.msg = this.$state.msg
   }
 
-  render () {
+  render() {
     this.tick--
     if (this.tick === 0) {
       return null

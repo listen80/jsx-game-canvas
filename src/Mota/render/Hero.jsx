@@ -1,25 +1,19 @@
 import { Component } from "Engine";
 
-import Shop from "./Shop";
-import Battle from "./Battle";
-import Talks from "./Talks";
-import EnemyInfo from "./EnemyInfo";
-import ShopList from "./ShopList";
-import Animate from "../../Engine/components/Animate";
-
 import { findPath } from "../utils"
 
 
 export default class Hero extends Component {
   onClick = (e) => {
     const { gameX: x, gameY: y } = e
-    if (this.$state.map.mapTerrains[y][x]) {
-      console.log(this.$state.map.mapTerrains[y][x])
-      return
-    }
+    // if (this.$state.map.mapTerrains[y][x]) {
+    //   console.log(this.$state.map.mapTerrains[y][x])
+    //   return
+    // }
     const path = findPath(this.$state.save.position, { x, y }, this.$state.map)
     this.path = path
-    console.log(path)
+    console.log(JSON.stringify(path))
+
   }
 
   runSteps() {
@@ -46,12 +40,12 @@ export default class Hero extends Component {
       sy: this.$state.save.position.sy,
     }
     return (
-      <div style={wrapStyl} onClick={this.onClick}>
+      <div onClick={this.onClick}>
         <div style={this.$state.save.position}>
-          <Animate
+          <animate
             {...data}
-          ></Animate>
-          {/* <Animate
+          ></animate>
+          {/* <animate
             data={{
               x: 2,
               y: -2,
@@ -64,7 +58,7 @@ export default class Hero extends Component {
               maxInterval: 10,
               sy: this.$state.save.position.sy,
             }}
-          ></Animate> */}
+          ></animate> */}
         </div>
       </div>
     );

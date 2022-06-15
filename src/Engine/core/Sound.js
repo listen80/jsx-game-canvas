@@ -2,7 +2,7 @@ import { loadSound } from "../utils/http";
 
 export default class Sound {
   constructor(sounds) {
-    this.sounds = sounds || Object.create(null);
+    this.sounds = sounds || Object.onCreate(null);
     this.loaded = 0;
     this.total = Infinity;
   }

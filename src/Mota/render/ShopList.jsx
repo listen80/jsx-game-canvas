@@ -1,8 +1,7 @@
 import { Component } from 'Engine'
-import Select from '../../Engine/components/Select'
 
 export default class ShopList extends Component {
-  create () {
+  onCreate() {
     const shops = this.$state.save.shops || [{}, {}]
     this.options = Object.entries(shops).map(([shopid, text]) => {
       return { text, shopid }
@@ -16,13 +15,13 @@ export default class ShopList extends Component {
     }
   };
 
-  onKeyDown ({ code }) {
+  onKeyDown({ code }) {
     if (code === 'KeyB') {
       this.props.onClose()
     }
   }
 
-  render () {
+  render() {
     return (
       <img
         src="shop.webp"
@@ -40,7 +39,7 @@ export default class ShopList extends Component {
         <div style={{ y: (1 / 4) * 3, width: 1 * 7, fontSize: 24 }}>
           商店选择
         </div>
-        <Select
+        <select
           style={{ x: 1, y: 48, width: 1 * 5, fontSize: 16 }}
           options={this.options}
           onConfirm={this.onConfirm}

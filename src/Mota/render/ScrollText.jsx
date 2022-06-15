@@ -22,13 +22,13 @@ export default class ScrollText extends Component {
     }
   };
 
-  create() {
+  onCreate() {
     const { text, bgm } = this.$state.map
     this.text = text.split('\n')
     this.mapBgm = this.$sound.play('bgm', bgm)
   }
 
-  destroy() {
+  onDestroy() {
     this.mapBgm.pause()
   }
 

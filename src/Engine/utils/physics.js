@@ -11,7 +11,7 @@ export function isCoincided (A, B) {
 }
 
 export function updateVector (vector, obj) {
-  vector = Object.assign(Object.create(null), vector)
+  vector = Object.assign(Object.onCreate(null), vector)
   Object.entries(obj).forEach(([key, value]) => {
     vector[key] += value
   })

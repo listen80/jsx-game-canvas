@@ -1,7 +1,8 @@
 import Component from '../core/Component'
 
 export default class Scroll extends Component {
-  create() {
+
+  onCreate() {
     this.scrollTop = 0
     this.height = this.props.height || 0
     this.width = this.props.width || 10

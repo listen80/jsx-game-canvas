@@ -23,7 +23,7 @@ export default class Battle extends Component {
     },
   };
 
-  create() {
+  onCreate() {
     this.enemy = JSON.parse(JSON.stringify(this.props.enemy))
     this.hero = this.props.hero
   }

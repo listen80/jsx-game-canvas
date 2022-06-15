@@ -1,8 +1,7 @@
 import { Component } from 'Engine'
-import Select from '../../Engine/components/Select'
 
 export default class Shop extends Component {
-  create() {
+  onCreate() {
     this.shop = JSON.parse(JSON.stringify(this.$state.shop[this.props.shopid]))
     this.shop.choices.push({
       text: '离开',
@@ -33,7 +32,7 @@ export default class Shop extends Component {
           sheight: 701 / 32,
         }}
       >
-        <div style={{ y: 1 / 4 * 3, width: 1 * 7, fontSize: 24 }}>{this.shop.title || "ddd"}</div>
+        <div style={{ y: 1 / 4 * 3, width: 1 * 7, fontSize: 24 }}>{this.shop.title}</div>
         <div style={{ x: 0, y: 48, fontSize: 14 }}>
           {this.shop.text.split(/\n/).map((text, index) => (
             <div style={{ x: (1 / 2) * 7, y: (index * 1) / 2 }}>
@@ -41,7 +40,7 @@ export default class Shop extends Component {
             </div>
           ))}
         </div>
-        <Select
+        <select
           style={{
             x: 1 * 1,
             y: (1 / 2) * 7,
@@ -51,7 +50,7 @@ export default class Shop extends Component {
           options={this.shop.choices}
           onConfirm={this.onConfirm}
           onClose={this.props.onClose}
-        ></Select>
+        ></select>
       </img>
     )
   }

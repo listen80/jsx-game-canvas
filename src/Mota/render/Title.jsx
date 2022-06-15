@@ -1,52 +1,5 @@
 import { Component } from "Engine";
 
-class Title extends Component {
-  styles = {
-    gameName: {
-
-    },
-    select: {
-      x: 8,
-      y: 8,
-      fontSize: 24,
-      textAlign: "center",
-      textBaseline: "middle"
-    },
-  };
-
-  create() {
-    this.options = [
-      {
-        text: "开始",
-        event: "startGame",
-      },
-      {
-        text: "继续",
-        event: "loadGame",
-      }
-    ];
-  }
-
-  onConfirm = (option) => {
-    this.$event(option.event)
-  };
-
-  render() {
-    return (
-      <div>
-        <div style={this.styles.gameName}>{this.$state.config.title}</div>
-        <div style={this.styles.select}>
-          <select
-            optionSize={{ width: 2, height: 1 }}
-            options={this.options}
-            onConfirm={this.onConfirm}
-          ></select>
-        </div>
-      </div>
-    );
-  }
-}
-
 const config = {
   children: [
     {
@@ -89,7 +42,7 @@ const config = {
   ]
 }
 
-export default class XX extends Component {
+export default class Title extends Component {
   createNode(config) {
     if (typeof config === 'string') {
       return config
