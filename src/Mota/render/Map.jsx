@@ -30,7 +30,7 @@ export default class Map extends Component {
     // this.mapBgm.pause();
   }
 
-  onClick() {
+  onMouseDown() {
     console.log(this)
   }
 
@@ -93,74 +93,9 @@ export default class Map extends Component {
 
   onMouseDown = (e) => {
     // DFS BFS
-    const position = this.$state.save.position;
-    const { gameX, gameY } = e;
-    const mapXY = {}
-    const { mapTerrains, mapEvents, height, width } = this.$state.map
-
-    function check(x, y) {
-      if (x < 0 || y < 0 || x === width || x === height || mapTerrains[y][x]) {
-        return false
-      }
-      return true
-    }
-
-    function getArray(position) {
-      const [x, y] = position
-    }
-
-    function next(position) {
-      const { x, y } = position
-      const arr = [
-        { x: x - 1, y },
-        { x: x + 1, y },
-        { x, y: y + 1 },
-        { x, y: y - 1 }
-      ].filter(check)
-      console.log(arr)
-      for (let n of arr) {
-        next()
-      }
-      if (x < 0 || y < 0 || x === width || x === height) {
-        return false
-      }
-      // if (x === gameX && y === gameY) {
-      //   console.log(path.slice())
-      //   return true
-      // }
-      // if (mapTerrains[y][x]) {
-      //   return false
-      // }
-      // if (mapXY[[x, y]]) {
-      //   return false
-      // }
-      // mapXY[[x, y]] = 1;
-      // path.push([x, y])
-
-      // const result =
-      //   next(x - 1, y, path) ||
-      //   next(x + 1, y, path) ||
-      //   next(x, y - 1, path) ||
-      //   next(x, y + 1, path)
-      // if (!result) {
-      //   path.pop()
-      // }
-      return result
-    }
-    const path = []
-    const { x, y } = this.$state.save.position
-    next({ x, y }, path)
-
-    this.path = path;
   };
 
   render() {
-    if (this.path && this.path.length) {
-      const path = this.path.shift()
-      const [x, y] = path;
-      this.$state.save.position.x = x;
-      this.$state.save.position.y = y;
-    }
     const mapTerrains = this.renderMapTerrains();
     const mapEvents = this.renderMapEvents();
     return (

@@ -7,7 +7,7 @@ export default class Animate extends Component {
     const sx = this.loop()
     return (
       <img
-        onClick={this.onClick}
+        onMouseDown={this.onMouseDown}
         src={src}
         style={{
           x: x + (center ? -width / 2 : 0),

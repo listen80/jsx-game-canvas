@@ -74,7 +74,7 @@ export default class Hero extends Component {
       (item) => item && item && isCoincided(item.props.style, heroStyle)
     );
   }
-  onClick = (e) => {
+  onMouseDown = (e) => {
     const path = findPath(this.$state.save.position, { x: e.gameX, y: e.gameY, }, mockMap)
     this.path = path
     console.log(path)

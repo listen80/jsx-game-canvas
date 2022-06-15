@@ -62,7 +62,7 @@ const columns = [
         } else {
           const atkCount = Math.floor(enemy.hp / (hero.atk - enemy.def));
           const needHp = (enemy.atk - hero.def) * atkCount;
-          return hero.hp > needHp ? needHp : <div style={{color: 'red', height: 1}}>{needHp}</div>
+          return hero.hp > needHp ? needHp : <div style={{ color: 'red', height: 1 }}>{needHp}</div>
         }
       } else {
         return "-";

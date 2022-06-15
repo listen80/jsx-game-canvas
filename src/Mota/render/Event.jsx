@@ -25,7 +25,7 @@ function transform($state, value, x, y) {
 
 export default class Map extends Component {
 
-  onClick() {
+  onMouseDown() {
     console.log(this)
   }
 

@@ -166,7 +166,7 @@ export default class Test extends Component {
     // console.log(this.rightOptions, bottomOption)
 
     return (
-      <div style={this.styles.wrap} onClick={this.onClick}>
+      <div style={this.styles.wrap} onMouseDown={this.onMouseDown}>
         {/* {this.renderMap()}
         <Hero /> */}
         <select

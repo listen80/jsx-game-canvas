@@ -4,7 +4,7 @@ import { findPath } from "../utils"
 
 
 export default class Hero extends Component {
-  onClick = (e) => {
+  onMouseDown = (e) => {
     const { gameX: x, gameY: y } = e
     // if (this.$state.map.mapTerrains[y][x]) {
     //   console.log(this.$state.map.mapTerrains[y][x])
@@ -40,7 +40,7 @@ export default class Hero extends Component {
       sy: this.$state.save.position.sy,
     }
     return (
-      <div onClick={this.onClick}>
+      <div onMouseDown={this.onMouseDown}>
         <div style={this.$state.save.position}>
           <animate
             {...data}

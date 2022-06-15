@@ -36,7 +36,7 @@ export default class Battle extends Component {
     }
   }
 
-  onClick () {
+  onMouseDown () {
     if (this.battleMsg) {
       this.props.onClose && this.props.onClose()
     }
@@ -108,7 +108,7 @@ export default class Battle extends Component {
     }
     const msgStyle = { fontSize: 24, height: 1, y: 1 * 8, width: 1 * 15 }
     return (
-      <img src="Battlebacks/mota.jpg" style={this.styles.battle} onClick={this.onClick}>
+      <img src="Battlebacks/mota.jpg" style={this.styles.battle} onMouseDown={this.onMouseDown}>
         {this.battleMsg && <div style={msgStyle}>{this.battleMsg}</div>}
         <div style={this.styles.enemy}>
           <img src="enemys" style={enemyImageStyle} />
