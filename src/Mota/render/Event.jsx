@@ -1,48 +1,39 @@
+import { Component } from "Engine";
+
+function transform($state, value, x, y) {
+  const info = $state.mapping[value];
+  const { type, name } = info;
+  const detail = $state[type][name];
+  let maxTick = 1
+  const data = {
+    src: type,
+    sy: detail.sy,
+    x: x,
+    y: y,
+    maxInterval: 10,
+  }
+  if (type === "animates") {
+    maxTick = 4
+  } else if (type === "terrains" || type === "items") {
+    maxTick = 1
+  } else if (type === "npcs" || type === "enemys") {
+    maxTick = 2
+  }
+  data.maxTick = maxTick
+  return data
+}
+
 export default class Map extends Component {
-  styles = {
-    map: {
-      width: 13,
-      height: 13,
-      x: 0,
-      backgroundImage: "ground.png",
-    },
-    statusBar: {
-      x: 13,
-      width: 5,
-      height: 13,
-      backgroundImage: "ground.png",
-    },
-  };
 
   onClick() {
     console.log(this)
   }
 
   render() {
-    if (this.path && this.path.length) {
-      const path = this.path.shift()
-      const [x, y] = path;
-      this.$state.save.position.x = x;
-      this.$state.save.position.y = y;
-    }
-    const mapTerrains = this.renderMapTerrains();
-    const mapEvents = this.renderMapEvents();
+    const data = transform(this.$state, this.props.value, this.props.x, this.props.y)
     return (
       <div>
-        <div style={this.styles.map} onMouseDown={this.onMouseDown}>
-          {mapTerrains}
-          {/* {mapEvents} */}
-          <Hero
-            mapTerrains={mapTerrains}
-            mapEvents={mapEvents}
-            map={this.$state.map}
-            removeMapEvent={this.onRemoveMapEvent}
-            onTitle={this.onTitle}
-          />
-        </div>
-        <div style={this.styles.statusBar}>
-          <Status />
-        </div>
+        <animate {...data}></animate>
       </div>
     );
   }

@@ -1,29 +1,8 @@
 import { Component } from "Engine";
 import Hero from "./Hero";
 import Status from "./Status";
+import Event from "./Event"
 
-function transform($state, value, x, y) {
-  const info = $state.mapping[value];
-  const { type, name } = info;
-  const detail = $state[type][name];
-  let maxTick = 1
-  const data = {
-    src: type,
-    sy: detail.sy,
-    x: x,
-    y: y,
-    maxInterval: 30,
-  }
-  if (type === "animates") {
-    maxTick = 4
-  } else if (type === "terrains" || type === "items") {
-    maxTick = 1
-  } else if (type === "npcs" || type === "enemys") {
-    maxTick = 2
-  }
-  data.maxTick = maxTick
-  return data
-}
 export default class Map extends Component {
   styles = {
     map: {
@@ -59,7 +38,7 @@ export default class Map extends Component {
     return this.$state.map.mapTerrains.map((line, y) => {
       return line.map((value, x) => {
         if (value) {
-          return <animate {...transform(this.$state, value, x, y)}></animate>
+          return <Event value={value} x={x} y={y} />
         } else {
           return null;
         }
