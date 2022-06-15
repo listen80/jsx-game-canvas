@@ -11,7 +11,7 @@ export default class Engine {
   constructor($gameJSX) {
     this.$gameJSX = $gameJSX;
     if (this.checkChromeVersion()) {
-      loadJSON("game.json").then((game) => {
+      loadJSON("config.json").then((game) => {
         this.init(game);
       });
     }

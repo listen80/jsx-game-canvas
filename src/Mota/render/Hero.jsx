@@ -20,9 +20,6 @@ export default class Hero extends Component {
     const path = findPath(this.$state.save.position, { x, y }, this.$state.map)
     this.path = path
     console.log(path)
-
-    // console.log(,)
-    // console.log(e)
   }
 
   runSteps() {
