@@ -25,7 +25,7 @@ export default class Battle extends Component {
 
   onCreate() {
     this.enemy = JSON.parse(JSON.stringify(this.$state.enemy))
-    this.hero = this.$state.hero
+    this.hero = this.$state.save.hero
   }
 
   onMouseDown () {
