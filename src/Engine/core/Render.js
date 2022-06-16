@@ -101,7 +101,6 @@ export default class Render {
       }
     });
     this.keyEventsCollectionKeyframe.forEach((event) => {
-      console.log(event)
       const { $context, name } = event;
       $context && $context[name] && $context[name](event);
     });
@@ -419,6 +418,21 @@ export default class Render {
     }
   }
 
+  calcEvent(offsetX, offsetY, style, node) {
+    // events of mouse
+    this.mouseEventsCollectionKeyframe.forEach((event) => {
+      const { canvasX, canvasY } = event;
+      if (
+        canvasX >= offsetX * size &&
+        canvasX < (style.width + offsetX) * size &&
+        canvasY >= offsetY * size &&
+        canvasY < (style.height + offsetY) * size
+      ) {
+        event.$node = node;
+      }
+    });
+  }
+
   calcNode(node, offsetX, offsetY, offsetParent) {
     // 非class component
     // div node
@@ -430,19 +444,8 @@ export default class Render {
       const { x = 0, y = 0 } = style;
       offsetX += x;
       offsetY += y;
-      // events of mouse
-      this.mouseEventsCollectionKeyframe.forEach((event) => {
-        const { canvasX, canvasY } = event;
-        if (
-          canvasX >= offsetX * size &&
-          canvasX < (style.width + offsetX) * size &&
-          canvasY >= offsetY * size &&
-          canvasY < (style.height + offsetY) * size
-        ) {
-          event.$node = node;
-        }
-      });
 
+      this.calcEvent(offsetX, offsetY, style, node)
       if (style && style.overflow) {
         // context.rect(0, 0, 33, 30)
         context.clip();
