@@ -91,7 +91,8 @@ export default class Map extends Component {
     this.props.onTitle();
   };
 
-  onMouseDown = (e) => {
+  onMouseDown(e) {
+    console.log('ok')
     // DFS BFS
   };
 

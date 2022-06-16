@@ -7,6 +7,7 @@ import Map from "./render/Map";
 import ScrollText from "./render/ScrollText";
 import Message from "./render/Message";
 import Test from "./Test";
+import Battle from "./render/Battle";
 
 export default class Index extends Component {
   styles = {
@@ -39,6 +40,12 @@ export default class Index extends Component {
     return (
       <div style={this.styles.app}>
         {this.renderDetail()}
+        {this.$state.enemy && (
+          <Battle
+            enemy={this.$state.enemy}
+            hero={this.$state.save.hero}
+          />
+        )}
         {/* {this.renderMessage()} */}
         {/* <FPS /> */}
       </div>

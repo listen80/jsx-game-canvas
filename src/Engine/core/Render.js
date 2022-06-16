@@ -9,12 +9,12 @@ import {
 } from "../utils/common";
 
 const mouseEvents = [
-  "ContextMenu",
-  "Click",
+  // "ContextMenu",
+  // "Click",
   "Wheel",
   "MouseDown",
-  "MouseUp",
-  "MouseMove",
+  // "MouseUp",
+  // "MouseMove",
 ];
 const keyEvents = ["KeyDown", "KeyUp"];
 
@@ -76,6 +76,7 @@ export default class Render {
           e.canvasY = (e.offsetY / $offsetHeight) * height;
           e.gameX = e.canvasX / size | 0;
           e.gameY = e.canvasY / size | 0;
+          e.$nodes = []
           this.mouseEventsCollectionKeyframe.push(e);
 
           e.preventDefault();
@@ -95,10 +96,16 @@ export default class Render {
 
   runEvents() {
     this.mouseEventsCollectionKeyframe.forEach((event) => {
-      const { $node, name } = event;
-      if ($node && $node.props[name]) {
-        $node.props[name].call($node.$parent, event, $node);
+      const { $nodes, name } = event;
+      if ($nodes.length) {
+        console.log($nodes)
+
       }
+      $nodes.forEach(($node) => {
+        if ($node && $node.props[name]) {
+          $node.props[name].call($node.$parent, event, $node);
+        }
+      })
     });
     this.keyEventsCollectionKeyframe.forEach((event) => {
       const { $context, name } = event;
@@ -428,7 +435,7 @@ export default class Render {
         canvasY >= offsetY * size &&
         canvasY < (style.height + offsetY) * size
       ) {
-        event.$node = node;
+        event.$nodes.push(node);
       }
     });
   }

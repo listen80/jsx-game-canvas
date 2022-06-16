@@ -8,6 +8,9 @@ function transform($state, value, x, y) {
   const data = {
     src: type,
     sy: detail.sy,
+    type,
+    name,
+    // ...info,
     // x: x,
     // y: y,
     maxInterval: 10,
@@ -34,13 +37,16 @@ export default class Event extends Component {
     this.data = transform(this.$state, this.props.value)
   }
   onMouseDown() {
-    console.log(this)
+    const { type, enemy } = this.data
+    if (type === 'enemys') {
+      this.$state.enemy = enemy
+    }
   }
 
   render() {
 
     return (
-      <div style={{ width: 1, height: 1, x: this.props.x, y: this.props.y }}>
+      <div style={{ width: 1, height: 1, x: this.props.x, y: this.props.y }} onMouseDown={this.onMouseDown}>
         <animate {...this.data}></animate>
         {this.enemy}
       </div>
