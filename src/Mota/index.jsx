@@ -31,20 +31,16 @@ export default class Index extends Component {
     // return <Test></Test>
     return <Title />;
   }
-  renderMessage() {
-    return this.$state.msg && (
-      <Message key={this.$state.msg} />
-    )
-  }
+
   render() {
     return (
       <div style={this.styles.app}>
         {this.renderDetail()}
         {this.$state.enemy && (
-          <Battle
-            enemy={this.$state.enemy}
-            hero={this.$state.save.hero}
-          />
+          <Battle />
+        )}
+        {this.$state.msg && (
+          <Message key={this.$state.msg} />
         )}
         {/* {this.renderMessage()} */}
         {/* <FPS /> */}

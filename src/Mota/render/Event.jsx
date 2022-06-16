@@ -37,9 +37,12 @@ export default class Event extends Component {
     this.data = transform(this.$state, this.props.value)
   }
   onMouseDown() {
-    const { type, enemy } = this.data
+    const { type, enemy, name } = this.data
     if (type === 'enemys') {
       this.$state.enemy = enemy
+    } else if (type === "items") {
+      console.log(this.$state.items[name])
+      this.update
     }
   }
 

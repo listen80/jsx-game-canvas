@@ -18,7 +18,7 @@ const config = {
       tag: 'select',
       props: {
         style: {
-          x: 8,
+          x: 7.5,
           y: 8,
           fontSize: 24,
           textAlign: "center",

@@ -24,16 +24,8 @@ export default class Battle extends Component {
   };
 
   onCreate() {
-    this.enemy = JSON.parse(JSON.stringify(this.props.enemy))
-    this.hero = this.props.hero
-  }
-
-  onKeyDown ({ $key }) {
-    if ($key === 'confirm') {
-      if (this.battleMsg) {
-        this.props.onClose && this.props.onClose()
-      }
-    }
+    this.enemy = JSON.parse(JSON.stringify(this.$state.enemy))
+    this.hero = this.$state.hero
   }
 
   onMouseDown () {
