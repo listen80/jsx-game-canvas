@@ -5,7 +5,7 @@ export default class Battle extends Component {
     battle: {
       x: 1,
       y: 1,
-      width: 1 * 16,
+      width:  16,
       height: 1 * 11,
       fontSize: 20,
       borderWidth: 3,
@@ -38,7 +38,7 @@ export default class Battle extends Component {
 
   onMouseDown () {
     if (this.battleMsg) {
-      this.props.onClose && this.props.onClose()
+      this.$state.enemy = null
     }
   }
 
