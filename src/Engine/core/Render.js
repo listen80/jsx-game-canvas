@@ -14,7 +14,7 @@ const mouseEvents = [
   "Wheel",
   "MouseDown",
   // "MouseUp",
-  // "MouseMove",
+  "MouseMove",
 ];
 const keyEvents = ["KeyDown", "KeyUp"];
 
