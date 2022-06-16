@@ -10,8 +10,8 @@ export default class Battle extends Component {
       fontSize: 20,
       borderWidth: 3,
       borderColor: '#deb887',
-      swidth: 640,
-      sheight: 320,
+      swidth: 640 / 32,
+      sheight: 320 / 32,
     },
     enemy: {
       x: 1 * 1,
