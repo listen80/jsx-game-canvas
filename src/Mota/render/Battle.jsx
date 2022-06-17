@@ -5,7 +5,7 @@ export default class Battle extends Component {
     battle: {
       x: 1,
       y: 1,
-      width:  16,
+      width: 16,
       height: 1 * 11,
       fontSize: 20,
       borderWidth: 3,
@@ -28,16 +28,17 @@ export default class Battle extends Component {
     this.hero = this.$state.save.hero
   }
 
-  onMouseDown () {
+  onMouseDown() {
     if (this.battleMsg) {
       this.$state.enemy = null
     }
   }
 
-  render() {
+  calc() {
     const enemy = this.enemy
     const hero = this.hero
     const isDev = location.hostname === 'localhost'
+
     const tick = isDev ? 3 : 3
     if (enemy.hp > 0) {
       this.tick++
@@ -66,6 +67,13 @@ export default class Battle extends Component {
         this.tick = 0
       }
     }
+  }
+
+  loop = this.createLoop(1, 2, 2, 1 / 32)
+  render() {
+    const enemy = this.enemy
+    const hero = this.hero
+    this.calc()
 
     const proprety = [
       { text: '名称', key: 'name' },
@@ -98,10 +106,15 @@ export default class Battle extends Component {
       height: size64,
       width: size64,
     }
-    const msgStyle = { fontSize: 24, height: 1, y: 1 * 8, width: 1 * 15 }
+    const y = this.loop()
+    const msgStyle = { fontSize: 24, height: 1, y: 1 * 8, width: 1 * 15, textAlign: 'center' }
     return (
       <img src="Battlebacks/mota.jpg" style={this.styles.battle} onMouseDown={this.onMouseDown}>
-        {this.battleMsg && <div style={msgStyle}>{this.battleMsg}</div>}
+        {this.battleMsg && <div style={msgStyle}>
+          {this.battleMsg}
+          <div style={{ x: 8, y, height: 1 }}>↓</div>
+        </div>}
+
         <div style={this.styles.enemy}>
           <img src="enemys" style={enemyImageStyle} />
           {proprety.map((item, index) => {
