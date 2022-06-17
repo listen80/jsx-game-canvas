@@ -41,7 +41,7 @@ export default class Render {
     this.screen = screen;
     this.canvas.width = width;
     this.canvas.height = height;
-    const dom = document.querySelector(el || '#game') || document.body;
+    const dom = document.querySelector(el || "#game") || document.body;
     dom && dom.appendChild(this.canvas);
     this.mergeStyle(baseStyle);
     window.addEventListener("onresize", this.getCanvasRenderRect);
@@ -74,9 +74,9 @@ export default class Render {
           e.name = `on${name}`;
           e.canvasX = (e.offsetX / $offsetWidth) * width;
           e.canvasY = (e.offsetY / $offsetHeight) * height;
-          e.gameX = e.canvasX / size | 0;
-          e.gameY = e.canvasY / size | 0;
-          e.$nodes = []
+          e.gameX = (e.canvasX / size) | 0;
+          e.gameY = (e.canvasY / size) | 0;
+          e.$nodes = [];
           this.mouseEventsCollectionKeyframe.push(e);
 
           e.preventDefault();
@@ -101,7 +101,7 @@ export default class Render {
         if ($node && $node.props[name]) {
           $node.props[name].call($node.$parent, event, $node);
         }
-      })
+      });
     });
     this.keyEventsCollectionKeyframe.forEach((event) => {
       const { $context, name } = event;
@@ -251,7 +251,12 @@ export default class Render {
       context.save();
       context.lineWidth = borderWidth;
       context.beginPath();
-      context.rect(offsetX * size + borderWidth / 2, offsetY * size + borderWidth / 2, width * size - borderWidth, height * size - borderWidth);
+      context.rect(
+        offsetX * size + borderWidth / 2,
+        offsetY * size + borderWidth / 2,
+        width * size - borderWidth,
+        height * size - borderWidth
+      );
       context.strokeStyle = borderColor;
       context.stroke();
       context.closePath();
@@ -444,11 +449,18 @@ export default class Render {
 
     const style = node?.props?.style;
     if (style) {
-      const { x = 0, y = 0 } = style;
+      let { x = 0, y = 0, align, width } = style;
+      if (align === "center") {
+        x = (offsetParent.style.width - width) / 2;
+      } else if (align === "right") {
+        x = offsetParent.style.width - width;
+      } else if (typeof x === 'string') {
+        x = x * offsetParent.style.width
+      }
       offsetX += x;
       offsetY += y;
 
-      this.calcEvent(offsetX, offsetY, style, node)
+      this.calcEvent(offsetX, offsetY, style, node);
       if (style && style.overflow) {
         // context.rect(0, 0, 33, 30)
         context.clip();
