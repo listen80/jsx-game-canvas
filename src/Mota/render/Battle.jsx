@@ -69,7 +69,7 @@ export default class Battle extends Component {
     }
   }
 
-  loop = this.createLoop(1, 2, 2, 1 / 32)
+  loop = this.createLoop(1.5, 1.75, 2, 1 / 32)
   render() {
     const enemy = this.enemy
     const hero = this.hero
@@ -110,10 +110,13 @@ export default class Battle extends Component {
     const msgStyle = { fontSize: 24, height: 1, y: 1 * 8, width: 1 * 15, textAlign: 'center' }
     return (
       <img src="Battlebacks/mota.jpg" style={this.styles.battle} onMouseDown={this.onMouseDown}>
-        {this.battleMsg && <div style={msgStyle}>
-          {this.battleMsg}
-          <div style={{ x: 8, y, height: 1 }}>↓</div>
-        </div>}
+        {
+          this.battleMsg &&
+          <div style={msgStyle}>
+            {this.battleMsg}
+            <div style={{ x: 8, y, height: 1 }}>↓</div>
+          </div>
+        }
 
         <div style={this.styles.enemy}>
           <img src="enemys" style={enemyImageStyle} />
