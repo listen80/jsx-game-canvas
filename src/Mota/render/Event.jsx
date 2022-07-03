@@ -32,7 +32,6 @@ function transform($state, value, x, y) {
 }
 
 export default class Event extends Component {
-
   onCreate() {
     this.data = transform(this.$state, this.props.value)
   }
@@ -41,8 +40,34 @@ export default class Event extends Component {
     if (type === 'enemys') {
       this.$state.enemy = enemy
     } else if (type === "items") {
-      console.log(this.$state.items[name])
-      this.update
+      const item = this.$state.items[name];
+      const { type } = item;
+      if (type === "1" || type === "3") {
+        this.remove(mapEvent);
+        this.updateSaveData("items", name);
+        this.setMessage(`获得${item.name}`);
+        this.$sound.play("se", type === "1" ? "item.mp3" : "constants.mp3");
+      } else if (type === "2") {
+        this.remove(mapEvent);
+        this.updateSaveData(...item.property);
+        const [name, property] = item.property;
+        let msg = `获得${item.name}`;
+        property.forEach((property) => {
+          const [key, value] = property;
+          let propertyName = key;
+          if (name === "hero") {
+            propertyName = propertyNames[key];
+          } else if (name === "items") {
+            propertyName = this.$state.items[key].name;
+          } else if (key === "money") {
+            propertyName = "金币";
+          }
+          msg += ` ${propertyName}${value > 0 ? "+" : "-"}${value}`;
+          this.setMessage(msg);
+        });
+        this.$sound.play("se", "item.mp3");
+      }
+      return true;
     }
   }
 
