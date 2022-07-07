@@ -1,4 +1,3 @@
-import { Component } from "Engine";
 
 import { findPath } from "../utils"
 

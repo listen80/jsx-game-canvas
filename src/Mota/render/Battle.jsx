@@ -1,4 +1,3 @@
-import { Component } from 'Engine'
 export default class Battle extends Component {
   tick = 0;
   styles = {
@@ -71,9 +70,9 @@ export default class Battle extends Component {
 
   loop = this.createLoop(1.5, 1.75, 2, 1 / 32)
   render() {
+    this.calc()
     const enemy = this.enemy
     const hero = this.hero
-    this.calc()
 
     const proprety = [
       { text: '名称', key: 'name' },

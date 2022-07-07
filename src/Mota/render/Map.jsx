@@ -1,4 +1,3 @@
-import { Component } from "Engine";
 import Hero from "./Hero";
 import Status from "./Status";
 import Event from "./Event"

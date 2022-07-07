@@ -1,4 +1,5 @@
-import { loadGame, saveGame } from "./utils/sl";
+import { loadGame, saveGame } from "../utils/sl";
+
 const events = function ($state, key, data) {
   if (typeof key === typeof null) {
     data = key.data
@@ -45,10 +46,7 @@ const events = function ($state, key, data) {
       $res.loadMap($state.save.mapId)
       // $state.message = null;
       break;
-
-      
   }
-
 };
 
 export default events

@@ -1,4 +1,3 @@
-import { Component } from "Engine";
 
 const styles = {
   wrap: {

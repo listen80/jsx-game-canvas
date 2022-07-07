@@ -1,13 +1,10 @@
-import { Component } from "Engine";
 
 import Shop from "./Shop";
 import Battle from "./Battle";
 import Talks from "./Talks";
 import EnemyInfo from "./EnemyInfo";
 import ShopList from "./ShopList";
-import Animate from "../../Engine/components/Animate";
 
-import { saveGame, loadGame } from "../../Engine/utils/sl";
 import {
   isCoincided,
   updateVector,

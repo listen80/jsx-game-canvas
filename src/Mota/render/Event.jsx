@@ -1,4 +1,3 @@
-import { Component } from "Engine";
 
 function transform($state, value, x, y) {
   const info = $state.mapping[value];
@@ -72,9 +71,9 @@ export default class Event extends Component {
   }
 
   render() {
-
+    const { x, y } = this.props;
     return (
-      <div style={{ width: 1, height: 1, x: this.props.x, y: this.props.y }} onMouseDown={this.onMouseDown}>
+      <div style={{ width: 1, height: 1, x, y }} onMouseDown={this.onMouseDown}>
         <animate {...this.data}></animate>
         {this.enemy}
       </div>

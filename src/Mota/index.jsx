@@ -1,5 +1,4 @@
 /* eslint-disable multiline-ternary */
-import { Component } from "Engine";
 import FPS from "./render/FPS";
 import Loading from "./render/Loading";
 import Title from "./render/Title";
@@ -9,7 +8,7 @@ import Message from "./render/Message";
 import Test from "./Test";
 import Battle from "./render/Battle";
 
-export default class Index extends Component {
+export default class Mota extends Component {
   styles = {
     app: {
       width: 18,

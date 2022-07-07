@@ -7,14 +7,22 @@ export default class Component {
     this.$children = children;
     this.$sound.play = () => {
       return {
-        pause() {},
+        pause() { },
       };
     };
-    this.$sound.pause = () => {};
+    this.$sound.pause = () => { };
   }
 
   $c() {
     return createNode.apply(this, arguments);
+  }
+
+  createNodeByConfig(config) {
+    if (typeof config === 'string') {
+      return config
+    }
+    const { tag = 'div', props, children = [] } = config
+    return this.$c(tag, props, ...children.map((c) => this.createNodeByConfig(c)))
   }
 
   updateSaveData(context, gets, n = 1) {
@@ -54,5 +62,7 @@ export default class Component {
     };
   }
 
-  $sound() {}
+  $sound() { }
 }
+
+window.Component = Component

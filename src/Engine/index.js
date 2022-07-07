@@ -1,19 +1,29 @@
 import Render from "./core/Render";
 import Resource from "./core/Resource";
 
-import { createNode, patchNode } from "./core/Node";
+import { createNode, patchNode, registryComponents } from "./core/Node";
 export { default as Component } from "./core/Component";
-import { loadJSON, loadText } from "./utils/http";
-import "./core/Control";
-import Event from "./event"
+
+import { loadJSON } from "./utils/http";
+import { checkChromeVersion } from "./utils/ua";
+
+import EventHook from "./core/Hook"
+import animate from "./components/Animate.jsx";
+import select from "./components/Select.jsx";
+import table from "./components/Table.jsx";
+import scroll from "./components/Scroll.jsx";
+
+registryComponents({ animate, select, table, scroll, })
 
 export default class Engine {
   constructor($gameJSX) {
     this.$gameJSX = $gameJSX;
-    if (this.checkChromeVersion()) {
+    if (checkChromeVersion()) {
       loadJSON("config.json").then((game) => {
         this.init(game);
       });
+    } else {
+      alert("不能直接运行index.html");
     }
   }
 
@@ -29,23 +39,10 @@ export default class Engine {
     const $res = new Resource(this.$state);
     this.$state.$res = $res
 
-    this.$event = (...others) => {
-      Event(this.$state, ...others)
-    }
-
+    this.$event = (...others) => EventHook(this.$state, ...others)
     this.$render = new Render(this.$state);
     this.$node = null;
     this.gameStart();
-  }
-
-  checkChromeVersion() {
-    if (location.protocol === "file:") {
-      alert("不能直接运行index.html");
-      // } else if (!navigator.userAgent.match(/Chrome\/(\d+)/) || RegExp.$1 < 86) {
-      // alert('需要chrome最新浏览器')
-    } else {
-      return true;
-    }
   }
 
   gameStop() {

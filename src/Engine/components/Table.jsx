@@ -11,12 +11,7 @@ export default class Table extends Component {
         <div style={{ x, width, height }}>{title}</div>
         {dataSource.map((rowData, rowIndex) => {
           y += height
-          const style = {
-            x,
-            y,
-            width: width,
-            height: height,
-          }
+          const style = { x, y, width, height, }
           return (
             <div style={style} >
               {render ? render.call(this, rowData, data, rowIndex, index) : rowData[dataIndex]}

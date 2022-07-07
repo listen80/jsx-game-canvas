@@ -71,18 +71,27 @@ export default class Select extends Component {
         borderWidth: this.activeIndex === index ? 2 : 0,
         backgroundColor: this.activeIndex === index ? `rgb(${rgb},${rgb},${rgb}, 0.5)` : null,
       }
-      const select = <div
-        index={index}
-        style={{ y, height, width, ...activeStyle }}
-        onMouseDown={this.onMouseDown}
-        onMouseMove={this.onMouseMove}
-      >
-        {text}
-      </div>;
+      const select =
+        <div
+          index={index}
+          style={{ y, height, width, ...activeStyle }}
+          onMouseDown={this.onMouseDown}
+          onMouseMove={this.onMouseMove}
+        >
+          {text}
+        </div>;
 
       y += height
       return select;
     })
     return <div style={this.props.style}>{selects}</div>;
+  }
+}
+
+class Column {
+  render() {
+    let y = 0
+    let height
+    
   }
 }

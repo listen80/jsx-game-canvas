@@ -43,14 +43,7 @@ const config = {
 }
 
 export default class Title extends Component {
-  createNode(config) {
-    if (typeof config === 'string') {
-      return config
-    }
-    const { tag = 'div', props, children = [] } = config
-    return this.$c(tag, props, ...children.map((c) => this.createNode(c)))
-  }
   render() {
-    return this.createNode(config)
+    return this.createNodeByConfig(config)
   }
 }

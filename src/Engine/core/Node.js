@@ -7,12 +7,14 @@ import {
   isBoolean,
 } from "../utils/common";
 
-import animate from "../components/Animate";
-import select from "../components/Select";
-import table from "../components/Table";
-import scroll from "../components/Scroll";
+const componentsMap = Object.create(null)
 
-const componentsMap = { animate, select, table, scroll, }
+export const registryComponents = (map) => {
+  Object.entries(map).forEach(([key, value]) => {
+    componentsMap[key] = value
+  })
+}
+
 
 export function createNode(tag, props = {}, ...children) {
   const $parent = this;

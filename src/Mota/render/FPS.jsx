@@ -1,4 +1,3 @@
-import { Component } from 'Engine'
 
 const getTime = () => performance.now()
 

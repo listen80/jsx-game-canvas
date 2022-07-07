@@ -1,4 +1,3 @@
-import { Component } from "Engine";
 import Hero from "./render/Hero"
 import { findPath } from "./utils"
 
