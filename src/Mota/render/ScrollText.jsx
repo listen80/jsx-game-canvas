@@ -40,8 +40,12 @@ export default class ScrollText extends Component {
 
   onMouseDown = () => {
     if (this.ready) {
-      // const { type, data } = this.props.map.event
-      this.$hook('loadMap', this.$state.map.event.data.mapId)
+      if (this.$state.map.event) {
+        this.$state.map.event.forEach((v) => {
+          this.$hook(v)
+        })
+        return
+      }
       // if (type === 'loadMap') {
       //   this.props.onClose(data)
       // } else if (type === 'title') {

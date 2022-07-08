@@ -14,7 +14,7 @@ const mouseEvents = [
   "Wheel",
   "MouseDown",
   // "MouseUp",
-  "MouseMove",
+  // "MouseMove",
 ];
 const keyEvents = ["KeyDown", "KeyUp"];
 
@@ -97,9 +97,11 @@ export default class Render {
   runEvents() {
     this.mouseEventsCollectionKeyframe.forEach((event) => {
       const { $nodes, name } = event;
-      $nodes.forEach(($node) => {
+      // const real = []
+      // console.log($nodes)
+      $nodes.reverse().some(($node) => {
         if ($node && $node.props[name]) {
-          $node.props[name].call($node.$parent, event, $node);
+          return $node.props[name].call($node.$parent, event, $node);
         }
       });
     });

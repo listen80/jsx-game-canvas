@@ -22,6 +22,7 @@ const hooks = function ($state, key, data, cb) {
 
   $res = $state.$res
   switch (key) {
+
     case "startGame":
       Object.assign($state.save, $state.config.save)
       $res.loadMap($state.save.mapId);
@@ -48,15 +49,6 @@ const hooks = function ($state, key, data, cb) {
       $state.mapKey = Math.random()
       $res.loadMap($state.save.mapId);
       break;
-
-    case "message":
-      $state.message = data;
-      break;
-
-    case "messageClose":
-      $state.message = null;
-      break;
-
     default:
       return map[key] && map[key]($state, data, cb)
 

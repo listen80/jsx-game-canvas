@@ -45,6 +45,13 @@ export default class Event extends Component {
   }
   onZhuangji() {
     const { type, enemy, name } = this.data
+    if (this.props.event) {
+      this.props.event.forEach((v) => {
+        this.$hook(v)
+      })
+      return
+    }
+
 
     if (type === 'enemys') {
       this.$hook('battle', enemy, () => {
@@ -101,9 +108,7 @@ export default class Event extends Component {
         }
       } else {
         // debugger
-        this.props.event && this.props.event.forEach((v) => {
-          this.$hook(v)
-        })
+
       }
     } else {
       debugger

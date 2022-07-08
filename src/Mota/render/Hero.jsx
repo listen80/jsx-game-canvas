@@ -37,7 +37,7 @@ export default class Hero extends Component {
       moveVector = { y: -step };
       postion.sy = 3;
       // this.$sound.play('se', 'step.mp3')
-  } else if ($key === "left") {
+    } else if ($key === "left") {
       moveVector = { x: -step };
       postion.sy = 1;
       // this.$sound.play('se', 'step.mp3')
@@ -102,7 +102,7 @@ export default class Hero extends Component {
       const path = this.path.pop()
       const { x, y, sy } = path;
       if (map[y][x]) {
-        console.log(this.props.terrains[y][x].$context.onZhuangji(this))
+        this.props.terrains[y][x].$context.onZhuangji(this)
         this.$state.save.position.sy = sy;
       } else {
         this.$state.save.position.x = x;
