@@ -3,10 +3,9 @@ import Resource from "./core/Resource";
 
 import { createNode, patchNode, registryComponents } from "./core/Node";
 
-import * as utils from "./utils/http";
 import { loadJSON } from "./utils/http";
-import { findPath } from "./utils/physics";
 import { checkChromeVersion } from "./utils/ua";
+
 import EventHook from "./core/Hook"
 import Component from "./core/Component"
 
