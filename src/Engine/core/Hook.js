@@ -1,8 +1,22 @@
 import { loadGame, saveGame } from "../utils/sl";
 
-const events = function ($state, key, data) {
+const map = {
+  findPathInMap: () => {
+
+  }
+}
+
+const registry = (key, cb) => {
+  map[key] = cb
+  // console.log(map)
+}
+
+window.registry = registry
+
+const hooks = function ($state, key, data, cb) {
   if (typeof key === typeof null) {
     data = key.data
+    cb = key.cb
     key = key.type
   }
 
@@ -17,6 +31,7 @@ const events = function ($state, key, data) {
 
     case "loadGame":
       Object.assign($state.save, loadGame())
+      $state.mapKey = Math.random()
       $res.loadMap($state.save.mapId);
       break;
 
@@ -29,7 +44,8 @@ const events = function ($state, key, data) {
       break;
 
     case "loadMap":
-      $state.save.mapId = data
+      Object.assign($state.save, data)
+      $state.mapKey = Math.random()
       $res.loadMap($state.save.mapId);
       break;
 
@@ -41,12 +57,12 @@ const events = function ($state, key, data) {
       $state.message = null;
       break;
 
-    case "mapLoad":
-      Object.assign($state.save, data)
-      $res.loadMap($state.save.mapId)
-      // $state.message = null;
-      break;
+    default:
+      return map[key] && map[key]($state, data, cb)
+
   }
 };
 
-export default events
+hooks.registry = registry
+
+export default hooks

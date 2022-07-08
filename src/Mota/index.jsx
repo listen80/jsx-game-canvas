@@ -1,4 +1,3 @@
-/* eslint-disable multiline-ternary */
 import FPS from "./render/FPS";
 import Loading from "./render/Loading";
 import Title from "./render/Title";
@@ -16,7 +15,7 @@ export default class Mota extends Component {
     },
   };
 
-  renderDetail() {
+  renderMap() {
     const $res = this.$state.$res
     if ($res.loaded !== $res.total) {
       return <Loading rate={$res.loaded / $res.total} />;
@@ -25,7 +24,7 @@ export default class Mota extends Component {
       if (this.$state.map.text) {
         return <ScrollText />;
       }
-      return <Map key={this.randMapKey} />
+      return <Map key={this.$state.mapKey} />
     }
     // return <Test></Test>
     return <Title />;
@@ -34,15 +33,10 @@ export default class Mota extends Component {
   render() {
     return (
       <div style={this.styles.app}>
-        {this.renderDetail()}
-        {this.$state.enemy && (
-          <Battle />
-        )}
-        {this.$state.msg && (
-          <Message key={this.$state.msg} />
-        )}
-        {/* {this.renderMessage()} */}
-        {/* <FPS /> */}
+        {this.renderMap()}
+        <Battle />
+        <Message />
+        <FPS />
       </div>
     );
   }

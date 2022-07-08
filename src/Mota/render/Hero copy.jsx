@@ -227,7 +227,7 @@ export default class Hero extends Component {
       if (type === "talk") {
         this.talk = data;
         return;
-      } else if (type === "mapLoad") {
+      } else if (type === "loadMap") {
         // this.props.onLoadMap(data);
       } else if (type === "openShop") {
         this.shopid = event.id;

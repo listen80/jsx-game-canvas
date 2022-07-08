@@ -127,7 +127,7 @@ export default class Render {
         globalAlpha,
         fillStyle,
       } = style;
-      if (globalAlpha) {
+      if (globalAlpha !== undefined) {
         this.context.globalAlpha = globalAlpha;
       }
       if (textAlign) {
@@ -183,7 +183,21 @@ export default class Render {
         const image = this.getImage(props.src);
         if (!image) {
           // console.warn(image, this.$state.image, props);
-        } else
+        } else {
+          if (height === 2) {
+            console.log(
+              image,
+              sx * size,
+              sy * size,
+              (swidth || width) * size,
+              (sheight || height) * size,
+              offsetX * size,
+              offsetY * size,
+              width * size,
+              height * size
+            )
+          }
+          
           context.drawImage(
             image,
             sx * size,
@@ -195,6 +209,7 @@ export default class Render {
             width * size,
             height * size
           );
+        }
       }
     }
   }

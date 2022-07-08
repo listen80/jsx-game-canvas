@@ -22,7 +22,7 @@ export default class Select extends Component {
     if (option) {
       const { event } = option
       if (event) {
-        this.$event(event)
+        this.$hook(event)
       }
       if (this.props.onConfirm) {
         this.props.onConfirm(

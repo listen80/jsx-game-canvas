@@ -219,7 +219,7 @@
             87,
             [
                 {
-                    "type": "mapLoad",
+                    "type": "loadMap",
                     "data": {
                         "mapId": "MT13",
                         "position": {
@@ -236,7 +236,7 @@
             88,
             [
                 {
-                    "type": "mapLoad",
+                    "type": "loadMap",
                     "data": {
                         "mapId": "MT11",
                         "position": {

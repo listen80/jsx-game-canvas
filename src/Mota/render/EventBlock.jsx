@@ -29,25 +29,39 @@ function transform($state, value, x, y) {
   data.maxTick = maxTick
   return data
 }
+const propertyNames = {
+  lv: "等级",
+  money: "金币",
+  hp: "生命",
+  atk: "攻击",
+  def: "防御",
+  exp: "经验",
+};
 
 export default class Event extends Component {
   onCreate() {
     this.data = transform(this.$state, this.props.value)
+    this.event = this.props.event
   }
-  onMouseDown() {
+  onZhuangji() {
     const { type, enemy, name } = this.data
+
     if (type === 'enemys') {
-      this.$state.enemy = enemy
+      this.$hook('battle', enemy, () => {
+        this.$hook('removeMapEvent', this)
+      })
     } else if (type === "items") {
       const item = this.$state.items[name];
       const { type } = item;
+      debugger
       if (type === "1" || type === "3") {
-        this.remove(mapEvent);
+        // this.remove(mapEvent);
         this.updateSaveData("items", name);
-        this.setMessage(`获得${item.name}`);
+        this.$hook('setMessage', `获得${item.name}`);
         this.$sound.play("se", type === "1" ? "item.mp3" : "constants.mp3");
+        this.$hook('removeMapEvent', this)
       } else if (type === "2") {
-        this.remove(mapEvent);
+        // this.remove(mapEvent);
         this.updateSaveData(...item.property);
         const [name, property] = item.property;
         let msg = `获得${item.name}`;
@@ -62,12 +76,46 @@ export default class Event extends Component {
             propertyName = "金币";
           }
           msg += ` ${propertyName}${value > 0 ? "+" : "-"}${value}`;
-          this.setMessage(msg);
+          this.$hook('setMessage', msg);
         });
+        this.$hook('removeMapEvent', this)
         this.$sound.play("se", "item.mp3");
       }
       return true;
+    } else if (type === "terrains") {
+      if (
+        [
+          "yellowDoor",
+          "redDoor",
+          "blueDoor",
+          "steelDoor",
+          "specialDoor",
+        ].includes(name)
+      ) {
+        const key = name.slice(0, -4) + "Key";
+        if (this.$state.save.items[key]) {
+          this.$state.save.items[key]--;
+          this.$hook('removeMapEvent', this)
+          this.$sound.play("se", "door.mp3");
+          return true;
+        }
+      } else {
+        // debugger
+        this.props.event && this.props.event.forEach((v) => {
+          this.$hook(v)
+        })
+      }
+    } else {
+      debugger
     }
+  }
+  onMouseDown() {
+
+  }
+  onMouseDown() {
+    const { type, enemy, name } = this.data
+
+    this.props.onClick(this)
   }
 
   render() {

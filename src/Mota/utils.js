@@ -1,25 +1,35 @@
 export const findPath = (start, dist, mapJSON) => {
-  const { mapTerrains: map, height, width } = mapJSON
+  const { map, height, width } = mapJSON
   const arrivedMap = new Map()
   const path = []
-
+  if (start.x === dist.x && start.y === dist.y) {
+    return []
+  }
   function checkStep(step) {
     const { x, y } = step
-    if ((x < 0 || y < 0 || x >= width || y >= height) || map[y][x] || arrivedMap.has([x, y] + '') || (x === start.x && y === start.y)) {
-      return false
-    }
+
     if (x === dist.x && y === dist.y) {
       while (step.start) {
         path.push(step)
         step = step.start
       }
+      return false
     }
+    if ((x < 0 || y < 0 || x >= width || y >= height) || map[y][x] || arrivedMap.has([x, y] + '') || (x === start.x && y === start.y)) {
+      return false
+    }
+
     arrivedMap.set([x, y] + '', 1)
     return true
   }
   function getNextSteps(start) {
     const { x, y } = start
-    const arr = [{ x: x - 1, y, sy: 1 }, { x: x + 1, y, sy: 2 }, { x, y: y + 1, sy: 0 }, { x, y: y - 1, sy: 3 }].map((v) => { v.start = start; return v }).filter(checkStep)
+    const arr = [
+      { x: x - 1, y, sy: 1, dir: 'left' },
+      { x: x + 1, y, sy: 2, dir: 'right' },
+      { x, y: y + 1, sy: 0, dir: 'bottom' },
+      { x, y: y - 1, sy: 3, dir: 'top' }
+    ].map((v) => { v.start = start; return v }).filter(checkStep)
     return arr
   }
   const find = (starts, depth) => {
@@ -32,8 +42,13 @@ export const findPath = (start, dist, mapJSON) => {
     const next = []
     for (let start of starts) {
       const t = getNextSteps(start)
+      if (path.length) {
+        return
+      }
+
       next.push(...t)
     }
+
 
     find(next, depth - 1)
     return next

@@ -208,7 +208,7 @@
             87,
             [
                 {
-                    "type": "mapLoad",
+                    "type": "loadMap",
                     "data": {
                         "mapId": "MT1",
                         "position": {

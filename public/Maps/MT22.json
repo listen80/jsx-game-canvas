@@ -208,7 +208,7 @@
             88,
             [
                 {
-                    "type": "mapLoad",
+                    "type": "loadMap",
                     "data": {
                         "mapId": "MT21",
                         "position": {
@@ -369,7 +369,7 @@
             87,
             [
                 {
-                    "type": "mapLoad",
+                    "type": "loadMap",
                     "data": {
                         "mapId": "MT23w",
                         "position": {
@@ -386,7 +386,7 @@
             87,
             [
                 {
-                    "type": "mapLoad",
+                    "type": "loadMap",
                     "data": {
                         "mapId": "MT23e",
                         "position": {
@@ -403,7 +403,7 @@
             87,
             [
                 {
-                    "type": "mapLoad",
+                    "type": "loadMap",
                     "data": {
                         "mapId": "MT23s",
                         "position": {

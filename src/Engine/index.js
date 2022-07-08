@@ -2,7 +2,6 @@ import Render from "./core/Render";
 import Resource from "./core/Resource";
 
 import { createNode, patchNode, registryComponents } from "./core/Node";
-export { default as Component } from "./core/Component";
 
 import { loadJSON } from "./utils/http";
 import { checkChromeVersion } from "./utils/ua";
@@ -21,9 +20,9 @@ export default class Engine {
     if (checkChromeVersion()) {
       loadJSON("config.json").then((game) => {
         this.init(game);
-      });
+      }).catch(() => alert('config.json不存在'))
     } else {
-      alert("不能直接运行index.html");
+      alert("不能直接运行index.html")
     }
   }
 
@@ -39,10 +38,12 @@ export default class Engine {
     const $res = new Resource(this.$state);
     this.$state.$res = $res
 
-    this.$event = (...others) => EventHook(this.$state, ...others)
+    this.$hook = (...others) => EventHook(this.$state, ...others)
     this.$render = new Render(this.$state);
     this.$node = null;
     this.gameStart();
+
+    window.$hook = this.$hook
   }
 
   gameStop() {
@@ -74,3 +75,5 @@ export default class Engine {
     this.$render.render(this.$node);
   }
 }
+
+export { default as Component } from "./core/Component";

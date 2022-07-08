@@ -23,19 +23,23 @@ export default class Battle extends Component {
   };
 
   onCreate() {
-    this.enemy = JSON.parse(JSON.stringify(this.$state.enemy))
-    this.hero = this.$state.save.hero
+    window.registry('battle', ($state, enemy, callback) => {
+      this.enemy = JSON.parse(JSON.stringify(enemy))
+      this.callback = callback
+    })
   }
 
   onMouseDown() {
     if (this.battleMsg) {
-      this.$state.enemy = null
+      this.enemy = null
+      this.callback && this.callback()
     }
   }
 
   calc() {
     const enemy = this.enemy
-    const hero = this.hero
+    const save = this.$state.save
+    const hero = save.hero
     const isDev = location.hostname === 'localhost'
 
     const tick = isDev ? 3 : 3
@@ -58,7 +62,7 @@ export default class Battle extends Component {
             enemy.hp = 0
             const { exp, money } = enemy
             hero.exp += exp
-            this.$state.save.money += money
+            save.money += money
             this.battleMsg = `战斗胜利，获得${money}金币，${exp}经验`
           }
         }
@@ -70,9 +74,12 @@ export default class Battle extends Component {
 
   loop = this.createLoop(1.5, 1.75, 2, 1 / 32)
   render() {
+    if (!this.enemy) {
+      return
+    }
     this.calc()
     const enemy = this.enemy
-    const hero = this.hero
+    const hero = this.$state.save.hero
 
     const proprety = [
       { text: '名称', key: 'name' },

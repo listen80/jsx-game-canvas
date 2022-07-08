@@ -208,7 +208,7 @@
             88,
             [
                 {
-                    "type": "mapLoad",
+                    "type": "loadMap",
                     "data": {
                         "mapId": "MT20",
                         "position": {
@@ -229,7 +229,7 @@
                     "data": "vampire"
                 },
                 {
-                    "type": "mapLoad",
+                    "type": "loadMap",
                     "data": {
                         "mapId": "MT_END"
                     }
@@ -242,7 +242,7 @@
             87,
             [
                 {
-                    "type": "mapLoad",
+                    "type": "loadMap",
                     "data": {
                         "mapId": "MT22",
                         "position": {

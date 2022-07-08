@@ -2,40 +2,45 @@ import { Component } from 'Engine'
 import { calcLength } from '../../Engine/utils/string'
 
 export default class Message extends Component {
+  messages = []
+  tempMessages = []
   onCreate() {
-    if (this.props) {
-      this.tick = this.props.tick || 90
-    }
-    this.length = calcLength(this.$state.msg)
-    this.msg = this.$state.msg
+    window.registry('setMessage', ($state, data) => {
+      if (!data) {
+        return
+      }
+      const length = calcLength(data)
+      const fontSize = 20
+      const width = (fontSize / 2 * length + fontSize) / 32
+      this.messages.unshift({
+        message: data,
+        tick: 180,
+        width,
+      })
+    })
   }
 
   render() {
-    this.tick--
-    if (this.tick === 0) {
-      return null
-    }
-    let globalAlpha = 1
-    if (this.tick < 15) {
-      globalAlpha = this.tick / 15
-    }
-    const fontSize = 20
-    const width = fontSize / 2 * this.length + fontSize
-    return (
-      <div
+    this.messages = this.messages.filter((config) => {
+      return config.tick--
+    })
+    return this.messages.map((config, index) => {
+      const { message, width } = config
+      return (<div
         style={{
           backgroundColor: 'rgba(0,0,0,.7)',
-          globalAlpha,
+          globalAlpha: config.tick / 180,
           x: (1 * 18 - width) / 2,
-          y: 1 * 2,
+          y: 1 * 2 + index * 1.2,
           height: 1,
           width: width,
         }}
       >
-        <div style={{ textAlign: 'center', fontSize, x: width / 2, height: 1 }}>
-          {this.msg}
+        <div style={{ textAlign: 'center', fontSize: 20, x: width / 2, height: 1 }}>
+          {message}
         </div>
-      </div>
-    )
+      </div>)
+    })
+
   }
 }
