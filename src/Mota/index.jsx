@@ -4,7 +4,7 @@ import Title from "./render/Title";
 import Map from "./render/Map";
 import ScrollText from "./render/ScrollText";
 import Message from "./render/Message";
-import Test from "./Test";
+import Test from "./render/Test";
 import Battle from "./render/Battle";
 
 import animate from "./components/Animate.jsx";
@@ -34,7 +34,10 @@ export default class Mota extends Component {
       }
       return <Map key={this.$state.mapKey} />
     }
-    // return <Test></Test>
+    if (location.hash === 'test') {
+      return <Test />
+    }
+
     return <Title />;
   }
 
