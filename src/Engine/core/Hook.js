@@ -44,8 +44,12 @@ const hooks = function ($state, key, data, cb) {
       $res.loadMap($state.save.mapId);
       break;
     default:
-      return map[key] && map[key]($state, data, cb)
-
+      if (map[key]) {
+        return map[key]($state, data, cb)
+      } else {
+        console.error(key, data)
+      }
+     
   }
 };
 
