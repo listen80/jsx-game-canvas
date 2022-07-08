@@ -8,11 +8,13 @@ import { loadJSON } from "./utils/http";
 import { findPath } from "./utils/physics";
 import { checkChromeVersion } from "./utils/ua";
 import EventHook from "./core/Hook"
-import "./core/Component"
+import Component from "./core/Component"
 
+registryComponents({ Component })
 export default class Engine {
   constructor($gameJSX) {
     this.$gameJSX = $gameJSX;
+    this.Component = Component
     if (checkChromeVersion()) {
       loadJSON("config.json").then((game) => {
         this.init(game);
@@ -72,5 +74,5 @@ export default class Engine {
 }
 
 export { default as Component } from "./core/Component";
-export { createNode, patchNode, registryComponents } from "./core/Node";
-export { findPath }
+export { registryComponents } from "./core/Node";
+export { findPath } from "./utils/physics"
