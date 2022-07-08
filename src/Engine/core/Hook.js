@@ -20,13 +20,10 @@ const hooks = function ($state, key, data, cb) {
     case "startGame":
       Object.assign($state.save, $state.config.save)
       $res.loadMap($state.save.mapId);
-      // map = loadMap($state.save.mapId);
-      // $state.randMapKey = `${$state.save.mapId} ${new Date()}`;
       break;
 
     case "loadGame":
       Object.assign($state.save, loadGame())
-      $state.mapKey = Math.random()
       $res.loadMap($state.save.mapId);
       break;
 
@@ -34,22 +31,21 @@ const hooks = function ($state, key, data, cb) {
       saveGame($state.save)
       break;
 
+    case "loadMap":
+      Object.assign($state.save, data)
+      $res.loadMap($state.save.mapId);
+      break;
+
     case "toTitle":
       $state.map = null;
       break;
 
-    case "loadMap":
-      Object.assign($state.save, data)
-      $state.mapKey = Math.random()
-      $res.loadMap($state.save.mapId);
-      break;
     default:
       if (map[key]) {
         return map[key]($state, data, cb)
       } else {
         console.error(key, data)
       }
-     
   }
 };
 

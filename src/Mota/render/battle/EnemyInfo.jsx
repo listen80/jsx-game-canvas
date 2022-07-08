@@ -1,16 +1,3 @@
-
-const styles = {
-  wrap: {
-    textAlign: "left",
-    fontSize: 18,
-    backgroundImage: "ground.png",
-    width: 1 * (13 + 5 - 2),
-    x: 1,
-    y: 1,
-    height: 1 * (13 - 2),
-  },
-};
-
 const columns = [
   {
     title: null,
@@ -82,9 +69,19 @@ export default class EnemyInfo extends Component {
   };
 
   render() {
-    const dataSource = Object.keys(this.props.enemys).map(
-      (enemyId) => this.$state.enemys[enemyId]
-    );
+    const styles = {
+      wrap: {
+        textAlign: "left",
+        fontSize: 18,
+        backgroundImage: "ground.png",
+        width: 1 * (13 + 5 - 2),
+        x: 1,
+        y: 1,
+        height: 1 * (13 - 2),
+      },
+    };
+
+    const dataSource = Object.keys(this.props.enemys).map((enemyId) => this.$state.enemys[enemyId]);
     return (
       <div style={styles.wrap} onMouseDown={this.onMouseDown}>
         <Table

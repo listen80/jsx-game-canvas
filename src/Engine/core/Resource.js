@@ -64,6 +64,7 @@ export default class Resource {
     this.total++;
     loadJSON(`Maps/${id}.json`).then((data) => {
       this.$state.map = data;
+      this.$state.mapKey = Math.random()
       this.loaded++;
       this.checkStatus();
     });

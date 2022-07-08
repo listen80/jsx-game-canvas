@@ -1,11 +1,11 @@
-import FPS from "./render/FPS";
-import Loading from "./render/Loading";
-import Title from "./render/Title";
+import FPS from "./render/helper/FPS";
+import Loading from "./render/helper/Loading";
+import Title from "./render/base/Title";
 import Map from "./render/Map";
-import ScrollText from "./render/ScrollText";
-import Message from "./render/Message";
+import ScrollText from "./render/base/ScrollText";
+import Message from "./render/helper/Message";
 import Test from "./render/Test";
-import Battle from "./render/Battle";
+import Battle from "./render/battle/Battle";
 
 import animate from "./components/Animate.jsx";
 import select from "./components/Select.jsx";

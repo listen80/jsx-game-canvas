@@ -1,5 +1,5 @@
 import Hero from "./Hero";
-import Status from "./Status";
+import Status from "./base/Status";
 import EventBlock from "./EventBlock"
 import { registryComponents, Component } from "Engine"
 
