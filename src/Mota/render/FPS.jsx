@@ -14,13 +14,23 @@ export default class FPS extends Component {
   };
 
   timeStamp = getTime();
+  interval = 30;
+  tick = 0;
   render() {
-    const timeStamp = getTime()
-    const fps = 1000 / (timeStamp - this.timeStamp)
-    this.timeStamp = timeStamp
+    if (this.tick === 0) {
+      const timeStamp = getTime()
+      this.fps = (1000 / (timeStamp - this.timeStamp)).toFixed()
+      this.timeStamp = timeStamp
+    } else {
+      this.tick++
+      if (this.tick === this.interval) {
+        this.tick = 0
+      }
+    }
+
     return (
       <div style={this.styles.fps}>
-        {`${fps.toFixed()}fps`}
+        {`${this.fps}fps`}
       </div>
     )
   }
