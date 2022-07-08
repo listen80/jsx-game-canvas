@@ -7,6 +7,14 @@ import Message from "./render/Message";
 import Test from "./Test";
 import Battle from "./render/Battle";
 
+import animate from "./components/Animate.jsx";
+import select from "./components/Select.jsx";
+import table from "./components/Table.jsx";
+import scroll from "./components/Scroll.jsx";
+import { registryComponents, Component } from "Engine"
+
+registryComponents({ animate, select, table, scroll, })
+
 export default class Mota extends Component {
   styles = {
     app: {

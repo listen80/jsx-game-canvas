@@ -3,16 +3,12 @@ import Resource from "./core/Resource";
 
 import { createNode, patchNode, registryComponents } from "./core/Node";
 
+import * as utils from "./utils/http";
 import { loadJSON } from "./utils/http";
+import { findPath } from "./utils/physics";
 import { checkChromeVersion } from "./utils/ua";
-
 import EventHook from "./core/Hook"
-import animate from "./components/Animate.jsx";
-import select from "./components/Select.jsx";
-import table from "./components/Table.jsx";
-import scroll from "./components/Scroll.jsx";
-
-registryComponents({ animate, select, table, scroll, })
+import "./core/Component"
 
 export default class Engine {
   constructor($gameJSX) {
@@ -31,19 +27,18 @@ export default class Engine {
 
     this.$state = {
       config,
-      save: { ...config.save },
-      image: {},
-      sound: {},
+      save: Object.create(null),
+      image: Object.create(null),
+      sound: Object.create(null),
     };
     const $res = new Resource(this.$state);
     this.$state.$res = $res
 
     this.$hook = (...others) => EventHook(this.$state, ...others)
+    this.$hook.registry = EventHook.registry
     this.$render = new Render(this.$state);
     this.$node = null;
     this.gameStart();
-
-    window.$hook = this.$hook
   }
 
   gameStop() {
@@ -77,3 +72,5 @@ export default class Engine {
 }
 
 export { default as Component } from "./core/Component";
+export { createNode, patchNode, registryComponents } from "./core/Node";
+export { findPath }

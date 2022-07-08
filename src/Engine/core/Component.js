@@ -1,5 +1,4 @@
 import { createNode } from "./Node";
-
 export default class Component {
   constructor({ props, children }) {
     this.props = props;
@@ -65,4 +64,3 @@ export default class Component {
   $sound() { }
 }
 
-window.Component = Component

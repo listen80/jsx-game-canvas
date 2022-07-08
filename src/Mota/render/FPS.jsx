@@ -1,4 +1,7 @@
 
+
+import { registryComponents, Component } from "Engine"
+
 const getTime = () => performance.now()
 
 export default class FPS extends Component {

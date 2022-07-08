@@ -1,5 +1,6 @@
 import Hero from "./render/Hero"
-import { findPath } from "./utils"
+import { findPath } from "Engine"
+import { registryComponents, Component } from "Engine"
 
 const mockMap = {
   width: 13,

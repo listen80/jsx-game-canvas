@@ -1,17 +1,11 @@
 import { loadGame, saveGame } from "../utils/sl";
 
-const map = {
-  findPathInMap: () => {
-
-  }
-}
+const map = {}
 
 const registry = (key, cb) => {
   map[key] = cb
   // console.log(map)
 }
-
-window.registry = registry
 
 const hooks = function ($state, key, data, cb) {
   if (typeof key === typeof null) {
@@ -56,5 +50,4 @@ const hooks = function ($state, key, data, cb) {
 };
 
 hooks.registry = registry
-
 export default hooks

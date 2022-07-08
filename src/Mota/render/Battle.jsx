@@ -1,3 +1,5 @@
+import { registryComponents, Component } from "Engine"
+
 export default class Battle extends Component {
   tick = 0;
   styles = {
@@ -23,7 +25,7 @@ export default class Battle extends Component {
   };
 
   onCreate() {
-    window.registry('battle', ($state, enemy, callback) => {
+    this.$hook.registry('battle', ($state, enemy, callback) => {
       this.enemy = JSON.parse(JSON.stringify(enemy))
       this.callback = callback
     })

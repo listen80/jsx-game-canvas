@@ -1,4 +1,4 @@
-import Component from "../core/Component";
+import { Component } from "Engine";
 
 export default class Select extends Component {
   loop = this.createLoop(155, 222, 1, 2)
@@ -92,6 +92,6 @@ class Column {
   render() {
     let y = 0
     let height
-    
+
   }
 }

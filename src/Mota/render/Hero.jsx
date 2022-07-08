@@ -1,9 +1,10 @@
 
-import { findPath } from "../utils"
+import { findPath } from "Engine"
+import { registryComponents, Component } from "Engine"
 
 export default class Hero extends Component {
   onCreate() {
-    window.registry('setPath', ($state, data) => {
+    this.$hook.registry('setPath', ($state, data) => {
       this.setPath(data)
     })
   }

@@ -1,3 +1,5 @@
+import { registryComponents, Component } from "Engine"
+
 
 function transform($state, value, x, y) {
   const info = $state.mapping[value];

@@ -1,6 +1,7 @@
 import Hero from "./Hero";
 import Status from "./Status";
 import EventBlock from "./EventBlock"
+import { registryComponents, Component } from "Engine"
 
 export default class GameMap extends Component {
   styles = {
@@ -19,7 +20,7 @@ export default class GameMap extends Component {
   };
 
   onCreate() {
-    window.registry('removeMapEvent', ($state, data) => {
+    this.$hook.registry('removeMapEvent', ($state, data) => {
       const { x, y } = data.props;
       $state.save.destroy[this.getKey(x, y)] = 1;
       this.map = this.createMap()

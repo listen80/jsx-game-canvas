@@ -1,3 +1,6 @@
+
+import { registryComponents, Component } from "Engine"
+
 export default class Loading extends Component {
   render() {
     const loadFontStyle = {

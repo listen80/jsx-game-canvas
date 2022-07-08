@@ -44,7 +44,7 @@ export default class Render {
     const dom = document.querySelector(el || "#game") || document.body;
     dom && dom.appendChild(this.canvas);
     this.mergeStyle(baseStyle);
-    window.addEventListener("onresize", this.getCanvasRenderRect);
+    self.addEventListener("onresize", this.getCanvasRenderRect);
     this.getCanvasRenderRect();
   }
 
