@@ -4,8 +4,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta id="viewport" name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <!-- 禁止点击telephone，email -->
   <meta name="format-detection" content="telephone=no, email=no">
   <!-- 启用360浏览器的极速模式(webkit) -->
@@ -99,8 +98,12 @@
 </head>
 
 <body>
-  <div id="game"></div>
-  <script src="bundle.js?2022/6/8"></script>
+  <script type="module">
+    import Engine from "./Bundle/Engine.js"
+    import Mota from "./Bundle/Mota.js"
+    const mota = new Engine(Mota)
+    console.log(mota)
+  </script>
 </body>
 
 </html>

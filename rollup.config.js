@@ -11,7 +11,7 @@ import replace from "rollup-plugin-replace"; // 注入环境变量
 
 // import postcss from 'rollup-plugin-postcss';
 // import vue from 'rollup-plugin-vue' // 处理vue的插件ƒ
-import livereload from 'rollup-plugin-livereload' // 实时刷新
+// import livereload from 'rollup-plugin-livereload' // 实时刷新
 
 
 const p = new Proxy(
@@ -80,15 +80,15 @@ if (process.env.NODE_ENV === "development") {
 export default {
   plugins,
   input: {
-    bundle: "src/index",
-    // Engine: "src/Engine/index.js",
+    Engine: "src/Engine",
+    Mota: "src/Mota",
   },
   // input:  "src/Mota/index.jsx",
-    // Engine: "src/Engine/index.js",
+  // Engine: "src/Engine/index.js",
   output: {
     // file: 'public/bundle.js',
     // format: "umd",
-    dir: "public/",
+    dir: "public/Bundle",
   },
   // output: {
   //   Mota: "dasd.js",

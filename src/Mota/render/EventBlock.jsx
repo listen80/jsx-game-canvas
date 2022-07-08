@@ -22,7 +22,7 @@ function transform($state, value, x, y) {
     maxTick = 2
   }
   if (type === "enemys") {
-    const enemy = mota.$node.$context.$state.enemys[name]
+    const enemy = $state.enemys[name]
     data.enemy = enemy
     maxTick = 2
   }
@@ -60,7 +60,6 @@ export default class Event extends Component {
     } else if (type === "items") {
       const item = this.$state.items[name];
       const { type } = item;
-      debugger
       if (type === "1" || type === "3") {
         // this.remove(mapEvent);
         this.updateSaveData("items", name);

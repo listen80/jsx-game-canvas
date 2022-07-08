@@ -20,7 +20,7 @@ const hooks = function ($state, key, data, cb) {
     key = key.type
   }
 
-  $res = $state.$res
+  const $res = $state.$res
   switch (key) {
 
     case "startGame":
