@@ -28,6 +28,8 @@ export default class Battle extends Component {
     this.$registry('battle', ($state, enemy, callback) => {
       this.enemy = JSON.parse(JSON.stringify(enemy))
       this.callback = callback
+      this.turn = false
+      this.tick = 0
     })
   }
 
@@ -36,6 +38,7 @@ export default class Battle extends Component {
       this.enemy = null
       this.callback && this.callback()
     }
+    return true
   }
 
   calc() {
