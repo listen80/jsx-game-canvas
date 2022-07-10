@@ -17,16 +17,6 @@ export default class Hero extends Component {
   }
 
   onKeyDown({ code, $key }) {
-
-    // case "loadGame":
-    //   Object.assign($state.save, loadGame())
-    //   $res.loadMap($state.save.mapId);
-    //   break;
-
-    // case "saveGame":
-    //   saveGame($state.save)
-    //   break;
-    // debugger
     const postion = this.$state.save.position;
     const step = 1;
     let moveVector = null;
@@ -60,9 +50,9 @@ export default class Hero extends Component {
     } else if (code === "KeyB") {
       this.buying = true;
     } else if (code === "Backspace") {
-      this.updateSaveData("hero", { lv: 1, hp: 100, atk: 100, def: 100, exp: 100, });
-      this.updateSaveData("items", { yellowKey: 3, blueKey: 2, redKey: 1 });
-      this.updateSaveData("", { money: 100 });
+      this.$hook("updateSaveDataX", "hero", { lv: 1, hp: 100, atk: 100, def: 100, exp: 100, });
+      this.$hook("updateSaveDataX", "items", { yellowKey: 3, blueKey: 2, redKey: 1 });
+      this.$hook("updateSaveDataX", "", { money: 100 });
     }
 
     if (moveVector) {

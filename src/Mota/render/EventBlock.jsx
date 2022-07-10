@@ -64,7 +64,7 @@ export default class Event extends Component {
       const { type } = item;
       if (type === "1" || type === "3") {
         // this.remove(mapEvent);
-        this.updateSaveData("items", name);
+        this.$hook("getItems", name);
         this.$hook('setMessage', `获得${item.name}`);
         this.$sound.play("se", type === "1" ? "item.mp3" : "constants.mp3");
         this.$hook('removeMapEvent', this)

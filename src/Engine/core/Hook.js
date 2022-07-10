@@ -61,6 +61,10 @@ const hooks = function ($state, key, data, cb) {
       updateSaveDataX($state, 'items', data)
       break;
 
+    case "updateSaveDataX":
+      updateSaveDataX($state, data, cb)
+      break;
+
     default:
       if (map[key]) {
         return map[key]($state, data, cb)
