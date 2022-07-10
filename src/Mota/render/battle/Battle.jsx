@@ -25,7 +25,7 @@ export default class Battle extends Component {
   };
 
   onCreate() {
-    this.$hook.registry('battle', ($state, enemy, callback) => {
+    this.$registry('battle', ($state, enemy, callback) => {
       this.enemy = JSON.parse(JSON.stringify(enemy))
       this.callback = callback
     })

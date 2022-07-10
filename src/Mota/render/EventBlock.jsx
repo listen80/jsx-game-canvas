@@ -1,5 +1,4 @@
-import { registryComponents, Component } from "Engine"
-
+import { Component } from "Engine"
 
 function transform($state, value, x, y) {
   const info = $state.mapping[value];
@@ -31,14 +30,6 @@ function transform($state, value, x, y) {
   data.maxTick = maxTick
   return data
 }
-const propertyNames = {
-  lv: "等级",
-  money: "金币",
-  hp: "生命",
-  atk: "攻击",
-  def: "防御",
-  exp: "经验",
-};
 
 export default class Event extends Component {
   onCreate() {
@@ -54,6 +45,7 @@ export default class Event extends Component {
       return
     }
 
+    const propertyNames = this.$state.config.propertyNames
 
     if (type === 'enemys') {
       this.$hook('battle', enemy, () => {
@@ -114,9 +106,6 @@ export default class Event extends Component {
     } else {
       debugger
     }
-  }
-  onMouseDown() {
-
   }
   onMouseDown() {
     const { type, enemy, name } = this.data

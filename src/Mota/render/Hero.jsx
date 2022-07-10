@@ -4,7 +4,7 @@ import { registryComponents, Component } from "Engine"
 
 export default class Hero extends Component {
   onCreate() {
-    this.$hook.registry('setPath', ($state, data) => {
+    this.$registry('setPath', ($state, data) => {
       this.setPath(data)
     })
   }

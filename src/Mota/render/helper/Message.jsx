@@ -39,7 +39,7 @@ export default class Message extends Component {
   messages = []
   tempMessages = []
   onCreate() {
-    this.$hook.registry('setMessage', ($state, data) => {
+    this.$registry('setMessage', ($state, data) => {
       if (!data) {
         return
       }

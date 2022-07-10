@@ -221,5 +221,15 @@
     "blue": "#acaadc",
     "red": "#dc6664"
   },
-  "mapping": ["mapping.dat"]
+  "mapping": [
+    "mapping.dat"
+  ],
+  "propertyNames": {
+    "lv": "等级",
+    "money": "金币",
+    "hp": "生命",
+    "atk": "攻击",
+    "def": "防御",
+    "exp": "经验"
+  }
 }

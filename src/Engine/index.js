@@ -6,18 +6,17 @@ import { createNode, patchNode, registryComponents } from "./core/Node";
 import { loadJSON } from "./utils/http";
 import { checkChromeVersion } from "./utils/ua";
 
-import EventHook from "./core/Hook"
+import { hooks, registry } from "./core/Hook"
 import Component from "./core/Component"
 
 registryComponents({ Component })
+
 export default class Engine {
   constructor($gameJSX) {
     this.$gameJSX = $gameJSX;
     this.Component = Component
     if (checkChromeVersion()) {
-      loadJSON("config.json").then((game) => {
-        this.init(game);
-      }).catch(() => alert('config.json不存在'))
+      loadJSON("config.json").catch(() => alert('config.json不存在')).then((game) => this.init(game))
     } else {
       alert("不能直接运行index.html")
     }
@@ -35,8 +34,8 @@ export default class Engine {
     const $res = new Resource(this.$state);
     this.$state.$res = $res
 
-    this.$hook = (...others) => EventHook(this.$state, ...others)
-    this.$hook.registry = EventHook.registry
+    this.$hook = (...others) => hooks(this.$state, ...others)
+    this.$registry = registry
     this.$render = new Render(this.$state);
     this.$node = null;
     this.gameStart();
