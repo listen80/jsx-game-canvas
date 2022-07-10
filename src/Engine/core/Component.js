@@ -1,4 +1,5 @@
 import { createNode } from "./Node";
+
 export default class Component {
   constructor({ props, children }) {
     this.props = props;
