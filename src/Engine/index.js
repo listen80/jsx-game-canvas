@@ -15,11 +15,9 @@ export default class Engine {
   constructor($gameJSX) {
     this.$gameJSX = $gameJSX;
     this.Component = Component
-    if (checkChromeVersion()) {
-      loadJSON("config.json").catch(() => alert('config.json不存在')).then((game) => this.init(game))
-    } else {
-      alert("不能直接运行index.html")
-    }
+    checkChromeVersion()
+      ? loadJSON("config.json").catch(() => alert('config.json不存在')).then((game) => this.init(game))
+      : alert("不能直接运行index.html")
   }
 
   init(config) {
