@@ -1,5 +1,5 @@
-import { Component } from "Engine"
-
+import { Component, utils } from "Engine"
+console.log(utils.convertPropertyStr)
 function transform($state, value, x, y) {
   const info = $state.mapping[value];
   const { type, name } = info;
@@ -37,18 +37,28 @@ export default class Event extends Component {
     this.event = this.props.event
   }
   runEvent(i = 0) {
-    const { data, key, next, condition } = this.props.event[i]
-    if (key === 'if') {
-      console.log(condition)
+    const { data, type, next, condition, yes, no } = this.event[i]
+
+    if (type === 'if') {
+      const data = utils.convertPropertyStr(condition)
+      if (this.checkSaveData(...data)) {
+        this.event = yes
+        this.runEvent()
+        // const y = utils.convertPropertyStr(yes)
+        // this.setSave(...y)
+      } else {
+        console.log('no')
+      }
+      return
     }
     this.$hook({
-      ...this.props.event[i],
+      ...this.event[i],
       next: () => this.runEvent(i + 1)
     })
   }
   onZhuangji() {
     const { type, enemy, name } = this.data
-    if (this.props.event) {
+    if (this.event) {
       this.runEvent()
       return
     }
@@ -70,7 +80,7 @@ export default class Event extends Component {
         this.$hook('removeMapEvent', this)
       } else if (type === "2") {
         // this.remove(mapEvent);
-        this.updateSaveData(...item.property);
+        this.setSave(...item.property);
         const [name, property] = item.property;
         let msg = `获得${item.name}`;
         property.forEach((property) => {
@@ -107,14 +117,12 @@ export default class Event extends Component {
           this.$sound.play("se", "door.mp3");
           return true;
         }
-      } else {
         this.$hook('setMessage', `你没有${name}`);
-
-        // debugger
+      } else {
 
       }
     } else {
-      debugger
+      // debugger
     }
   }
   onMouseDown() {

@@ -67,7 +67,6 @@ export default class Test extends Component {
         event: "loadGame",
       },
     ];
-    this.index
   }
 
   onConfirm = (option, index) => {

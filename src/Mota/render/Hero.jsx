@@ -3,6 +3,7 @@ import { findPath } from "Engine"
 import { registryComponents, Component } from "Engine"
 
 export default class Hero extends Component {
+  moving = false
   onCreate() {
     this.$registry('setPath', ($state, data) => {
       this.setPath(data)
@@ -50,37 +51,27 @@ export default class Hero extends Component {
     } else if (code === "KeyB") {
       this.buying = true;
     } else if (code === "Backspace") {
-      this.$hook("updateSaveDataX", "hero", { lv: 1, hp: 100, atk: 100, def: 100, exp: 100, });
-      this.$hook("updateSaveDataX", "items", { yellowKey: 3, blueKey: 2, redKey: 1 });
-      this.$hook("updateSaveDataX", "", { money: 100 });
+      this.$hook("setSave", "hero", { lv: 1, hp: 100, atk: 100, def: 100, exp: 100, });
+      this.$hook("setSave", "items", { yellowKey: 3, blueKey: 2, redKey: 1 });
+      this.$hook("setSave", "", { money: 100 });
     }
 
     if (moveVector) {
       const vector = updateVector(postion, moveVector);
-
-      // const terrain = this.isCoincidedTerrains(vector);
-      // if (terrain !== -1) {
-      //   return;
-      // }
-
-      // const eventIndex = this.isCoincidedEvents(vector);
-      // if (eventIndex !== -1) {
-      //   if (this.handleEvents(this.props.map.mapEvents[eventIndex])) {
-      //     assignVector(postion, vector);
-      //   }
-      //   return;
-      // }
-
       assignVector(postion, vector);
     }
   }
 
   runSteps() {
-    if (this.tick !== 3) {
-      this.tick++
+    // if (this.moving) {
+    //   return
+    // }
+    // this.moving = true
+    if (this.current) {
+      this.runOneStep()
       return
     }
-    this.tick = 0
+
     const map = this.props.map
     if (this.path && this.path.length) {
       const path = this.path.pop()
@@ -89,20 +80,30 @@ export default class Hero extends Component {
         this.props.terrains[y][x].$context.onZhuangji(this)
         this.$state.save.position.sy = sy;
       } else {
-        this.$state.save.position.x = x;
-        this.$state.save.position.y = y;
+        this.current = path
+        this.loop = this.createLoop(1 / 4, 1 + 1 / 4, 1, 1 / 4)
+        this.runOneStep()
+        // this.$state.save.position.x = x;
+        // this.$state.save.position.y = y;
         this.$state.save.position.sy = sy;
       }
     }
   }
 
+  runOneStep() {
+    const a = this.loop()
+    this.$state.save.position.x += 1 / 4 * Math.cos(this.current.rad);
+    this.$state.save.position.y += 1 / 4 * Math.sin(this.current.rad);
+    if (a === 1) {
+      this.current = null
+    }
+  }
   render() {
     this.runSteps()
     const data = {
       src: "Characters/hero.png",
       width: 1,
       height: 1,
-      // sheight: 1.5,
       maxTick: 4,
       maxInterval: 10,
       sy: this.$state.save.position.sy,

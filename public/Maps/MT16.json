@@ -235,7 +235,7 @@
                     ]
                 },
                 {
-                    "type": "updateSaveData",
+                    "type": "setSave",
                     "data": "items.ff:1"
                 },
                 {

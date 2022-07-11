@@ -244,9 +244,9 @@
                 {
                     "type": "if",
                     "condition": "flags.3loldman:0",
-                    "true": [
+                    "yes": [
                         {
-                            "type": "updateSaveData",
+                            "type": "setSave",
                             "data": "flags.3loldman:-1"
                         },
                         {
@@ -262,7 +262,7 @@
                             ]
                         },
                         {
-                            "type": "updateSaveData",
+                            "type": "setSave",
                             "data": "hero.atk:30"
                         }
                     ],
@@ -285,9 +285,9 @@
                 {
                     "type": "if",
                     "condition": "flags.3lbussinessman:0",
-                    "true": [
+                    "yes": [
                         {
-                            "type": "updateSaveData",
+                            "type": "setSave",
                             "data": "flags.3lbussinessman:-1"
                         },
                         {
@@ -303,7 +303,7 @@
                             ]
                         },
                         {
-                            "type": "updateSaveData",
+                            "type": "setSave",
                             "data": "hero.def:30"
                         }
                     ],

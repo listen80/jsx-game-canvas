@@ -1,7 +1,7 @@
 import FPS from "./render/helper/FPS";
 import Loading from "./render/base/Loading";
 import Title from "./render/base/Title";
-import Map from "./render/Map";
+import GameMap from "./render/GameMap";
 import ScrollText from "./render/base/ScrollText";
 import Message from "./render/helper/Message";
 import Talks from "./render/helper/Talks";
@@ -33,11 +33,11 @@ export default class Mota extends Component {
     }
     if (this.$state.map) {
       if (this.$state.map.text) {
-        return <ScrollText />;
+        return <ScrollText key={this.$state.mapKey} />;
       }
-      return <Map key={this.$state.mapKey} />
+      return <GameMap key={this.$state.mapKey} />
     }
-    if (location.hash === 'test') {
+    if (location.hash === '#test') {
       return <Test />
     }
 
@@ -50,8 +50,8 @@ export default class Mota extends Component {
         {this.renderMap()}
         <Battle />
         <Message />
-        <FPS />
         <Talks />
+        <FPS />
       </div>
     );
   }

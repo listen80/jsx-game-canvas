@@ -244,7 +244,7 @@
                 {
                     "type": "if",
                     "condition": "flags.15loldman:0",
-                    "true": [
+                    "yes": [
                         {
                             "type": "talk",
                             "data": [
@@ -256,7 +256,7 @@
                         {
                             "type": "if",
                             "condition": "hero.exp:-500",
-                            "true": [
+                            "yes": [
                                 {
                                     "type": "talk",
                                     "data": [
@@ -265,11 +265,11 @@
                                     ]
                                 },
                                 {
-                                    "type": "updateSaveData",
+                                    "type": "setSave",
                                     "data": "flags.15loldman:-1"
                                 },
                                 {
-                                    "type": "updateSaveData",
+                                    "type": "setSave",
                                     "data": "hero.atk:120;exp:-500"
                                 }
                             ],
@@ -303,7 +303,7 @@
                 {
                     "type": "if",
                     "condition": "flags.15lbussinessman:0",
-                    "true": [
+                    "yes": [
                         {
                             "type": "talk",
                             "data": [
@@ -317,7 +317,7 @@
                         {
                             "type": "if",
                             "condition": "money:-500",
-                            "true": [
+                            "yes": [
                                 {
                                     "type": "talk",
                                     "data": [
@@ -326,15 +326,15 @@
                                     ]
                                 },
                                 {
-                                    "type": "updateSaveData",
+                                    "type": "setSave",
                                     "data": "flags.15lbussinessman:-1"
                                 },
                                 {
-                                    "type": "updateSaveData",
+                                    "type": "setSave",
                                     "data": "hero.def:120"
                                 },
                                 {
-                                    "type": "updateSaveData",
+                                    "type": "setSave",
                                     "data": "money:-500"
                                 }
                             ],

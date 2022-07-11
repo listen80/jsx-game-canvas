@@ -1,4 +1,4 @@
-import { loadGame, saveGame, updateSaveDataX } from "../utils/sl";
+import { loadGame, saveGame, setSave } from "../utils/sl";
 
 const map = {}
 
@@ -12,7 +12,6 @@ const hooks = function ($state, key, data, next) {
     next = key.next
     key = key.type
   }
-  console.info(data, next)
 
   const $res = $state.$res
   switch (key) {
@@ -41,11 +40,11 @@ const hooks = function ($state, key, data, next) {
       break;
 
     case "getItems":
-      updateSaveDataX($state, 'items', data)
+      setSave($state, 'items', data)
       break;
 
-    case "updateSaveDataX":
-      updateSaveDataX($state, data, next)
+    case "setSave":
+      setSave($state, data, next)
       break;
 
     default:

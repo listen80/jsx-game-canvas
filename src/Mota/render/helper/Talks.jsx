@@ -41,7 +41,6 @@ class Talk extends Component {
   }
 
   next() {
-    // Object.assign(this.styles.talk, this.turn ? leftStyle : rightStyle);
     if (this.index === this.props.talks.length) {
       this.props.onClose()
       return
@@ -54,7 +53,7 @@ class Talk extends Component {
         this.talkArray.push(talk.substr(i, 7 * 2));
       }
     })
-    console.log(this.index)
+    this.styles.talk.height = this.talkArray.length
     this.index++;
   }
 
@@ -71,7 +70,6 @@ class Talk extends Component {
                 style={{
                   x: 0.5,
                   y: index,
-                  width: this.width,
                   height: 1,
                 }}
               >

@@ -25,15 +25,15 @@ export default class Component {
     return this.$c(tag, props, ...children.map((c) => this.createNodeByConfig(c)))
   }
 
-  updateSaveData(context, gets, n = 1) {
+  setSave(context, gets, n = 0) {
     if (Array.isArray(gets)) {
-      gets.forEach(([id, value]) => this.updateSaveData(context, id, value));
+      gets.forEach(([id, value]) => this.setSave(context, id, value));
     } else if (typeof gets === "string") {
       const saveData = context ? this.$state.save[context] : this.$state.save;
       saveData[gets] = saveData[gets] || 0;
       saveData[gets] += Number(n);
     } else if (typeof gets === "object") {
-      this.updateSaveData(context, Object.entries(gets));
+      this.setSave(context, Object.entries(gets));
     } else {
       // console.error(gets, n)
     }
@@ -71,6 +71,23 @@ export default class Component {
           }
         }
       }
+      return n;
+    };
+  }
+
+  
+  createLoop(start = 0, end = 10, interval = 1, delta = 1) {
+    let n = start;
+    let tick = 0;
+    return () => {
+      if (tick === interval) {
+        tick = 0;
+        n += delta;
+        if (n === end) {
+          n = 0
+        }
+      }
+      tick++;
       return n;
     };
   }

@@ -227,7 +227,7 @@
                 {
                     "type": "if",
                     "condition": "items.yellowKey",
-                    "true": [
+                    "yes": [
                         {
                             "type": "talk",
                             "data": [

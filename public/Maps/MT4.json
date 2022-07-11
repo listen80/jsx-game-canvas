@@ -210,9 +210,9 @@
                 {
                     "type": "if",
                     "condition": "flags.thief:0",
-                    "true": [
+                    "yes": [
                         {
-                            "type": "updateSaveData",
+                            "type": "setSave",
                             "data": "flags.thief:-1"
                         },
                         {
@@ -249,7 +249,7 @@
                         {
                             "type": "if",
                             "condition": "items.pickaxe:-1",
-                            "true": [
+                            "yes": [
                                 {
                                     "type": "talk",
                                     "data": [

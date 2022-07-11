@@ -49,10 +49,10 @@ export const findPath = (start, dist, mapJSON) => {
   function getNextSteps(start) {
     const { x, y } = start
     const arr = [
-      { x: x - 1, y, sy: 1, dir: 'left' },
-      { x: x + 1, y, sy: 2, dir: 'right' },
-      { x, y: y + 1, sy: 0, dir: 'bottom' },
-      { x, y: y - 1, sy: 3, dir: 'top' }
+      { x: x - 1, y, sy: 1, rad: Math.PI, dir: 'left' },
+      { x: x + 1, y, sy: 2, rad: 0, dir: 'right' },
+      { x, y: y + 1, sy: 0, rad: Math.PI * .5, dir: 'bottom' },
+      { x, y: y - 1, sy: 3, rad: Math.PI * 1.5, dir: 'top' }
     ].map((v) => { v.start = start; return v }).filter(checkStep)
     return arr
   }

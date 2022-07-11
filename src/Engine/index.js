@@ -8,6 +8,7 @@ import { checkChromeVersion } from "./utils/ua";
 
 import { hooks, registry } from "./core/Hook"
 import Component from "./core/Component"
+export * as utils from "./utils/format"
 
 export default class Engine {
   constructor($gameJSX) {
