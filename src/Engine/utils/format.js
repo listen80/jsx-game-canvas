@@ -1,4 +1,4 @@
-export function convertPropertyStr (str) {
+export function convertPropertyStr(str) {
   const arr = str.split('.')
   if (arr.length === 1) {
     arr.unshift('')
@@ -8,11 +8,13 @@ export function convertPropertyStr (str) {
   return [key, properties]
 }
 
-export const formatText = (data) => {
-  const o = []
-  data = data.split(/\r?\n/)
-  const keys = data.shift().split(',')
-  data.forEach((row, index) => {
+const map = {}
+
+export const formatText = (text) => {
+  const o = Object.create(null)
+  const dataArray = text.split(/\r?\n/)
+  const keys = dataArray.shift().split(',')
+  dataArray.forEach((row, index) => {
     if (!row.trim()) {
       return
     }
@@ -24,17 +26,14 @@ export const formatText = (data) => {
       if (!value) {
         return
       }
-      if (key === 'property') {
-        item[key] = convertPropertyStr(value)
-      } else if (['id', 'name', 'type'].includes(key)) {
+      if (['id', 'name', 'type'].includes(key)) {
         item[key] = value
       } else {
         item[key] = isNaN(value) ? value : Number(value)
       }
     })
     o[id] = item
-    o.push(item)
-    return data
   })
+
   return o
 }

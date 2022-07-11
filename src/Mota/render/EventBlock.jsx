@@ -1,5 +1,5 @@
 import { Component, utils } from "Engine"
-console.log(utils.convertPropertyStr)
+
 function transform($state, value, x, y) {
   const info = $state.mapping[value];
   const { type, name } = info;

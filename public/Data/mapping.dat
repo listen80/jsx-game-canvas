@@ -1,4 +1,4 @@
-mappingid,type,name
+id,type,name
 1,terrains,yellowWall
 2,terrains,whiteWall
 3,terrains,blueWall
