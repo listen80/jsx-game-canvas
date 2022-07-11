@@ -101,6 +101,7 @@ export default class Render {
       // console.log($nodes)
       $nodes.reverse().some(($node) => {
         if ($node && $node.props[name]) {
+          // console.log($node)
           return $node.props[name].call($node.$parent, event, $node);
         }
       });

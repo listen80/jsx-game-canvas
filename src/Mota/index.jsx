@@ -1,9 +1,10 @@
 import FPS from "./render/helper/FPS";
-import Loading from "./render/helper/Loading";
+import Loading from "./render/base/Loading";
 import Title from "./render/base/Title";
 import Map from "./render/Map";
 import ScrollText from "./render/base/ScrollText";
 import Message from "./render/helper/Message";
+import Talks from "./render/helper/Talks";
 import Test from "./render/Test";
 import Battle from "./render/battle/Battle";
 
@@ -13,8 +14,6 @@ import table from "./components/Table.jsx";
 import scroll from "./components/Scroll.jsx";
 import { registryComponents, Component } from "Engine"
 
-registryComponents({ animate, select, table, scroll, })
-
 export default class Mota extends Component {
   styles = {
     app: {
@@ -22,6 +21,10 @@ export default class Mota extends Component {
       height: 13,
     },
   };
+
+  onCreate() {
+    registryComponents({ animate, select, table, scroll, })
+  }
 
   renderMap() {
     const $res = this.$state.$res
@@ -48,6 +51,7 @@ export default class Mota extends Component {
         <Battle />
         <Message />
         <FPS />
+        <Talks />
       </div>
     );
   }

@@ -61,6 +61,9 @@ export default class Resource {
   }
 
   loadMap(id) {
+    this.loaded = 0;
+    this.total = 0;
+    
     this.total++;
     loadJSON(`Maps/${id}.json`).then((data) => {
       this.$state.map = data;

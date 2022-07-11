@@ -9,8 +9,6 @@ import { checkChromeVersion } from "./utils/ua";
 import { hooks, registry } from "./core/Hook"
 import Component from "./core/Component"
 
-registryComponents({ Component })
-
 export default class Engine {
   constructor($gameJSX) {
     this.$gameJSX = $gameJSX;
@@ -21,6 +19,7 @@ export default class Engine {
   }
 
   init(config) {
+    registryComponents({ Component })
     document.title = config.title;
 
     this.$state = {
@@ -29,9 +28,7 @@ export default class Engine {
       image: Object.create(null),
       sound: Object.create(null),
     };
-    const $res = new Resource(this.$state);
-    this.$state.$res = $res
-
+    this.$state.$res = new Resource(this.$state);
     this.$hook = (...others) => hooks(this.$state, ...others)
     this.$registry = registry
     this.$render = new Render(this.$state);

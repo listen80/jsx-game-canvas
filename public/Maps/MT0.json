@@ -267,6 +267,12 @@
                     }
                 },
                 {
+                    "type": "talk",
+                    "data": [
+                        "仙子：勇敢地去吧，勇士！"
+                    ]
+                },
+                {
                     "type": "if",
                     "condition": "items.cross.-1",
                     "true": [

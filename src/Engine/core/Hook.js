@@ -6,12 +6,13 @@ const registry = (key, cb) => {
   map[key] = cb
 }
 
-const hooks = function ($state, key, data, cb) {
+const hooks = function ($state, key, data, next) {
   if (typeof key === typeof null) {
     data = key.data
-    cb = key.cb
+    next = key.next
     key = key.type
   }
+  console.info(data, next)
 
   const $res = $state.$res
   switch (key) {
@@ -44,12 +45,12 @@ const hooks = function ($state, key, data, cb) {
       break;
 
     case "updateSaveDataX":
-      updateSaveDataX($state, data, cb)
+      updateSaveDataX($state, data, next)
       break;
 
     default:
       if (map[key]) {
-        return map[key]($state, data, cb)
+        return map[key]($state, data, next)
       } else {
         console.error(key, data)
       }

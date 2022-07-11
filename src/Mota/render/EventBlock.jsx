@@ -36,12 +36,20 @@ export default class Event extends Component {
     this.data = transform(this.$state, this.props.value)
     this.event = this.props.event
   }
+  runEvent(i = 0) {
+    const { data, key, next, condition } = this.props.event[i]
+    if (key === 'if') {
+      console.log(condition)
+    }
+    this.$hook({
+      ...this.props.event[i],
+      next: () => this.runEvent(i + 1)
+    })
+  }
   onZhuangji() {
     const { type, enemy, name } = this.data
     if (this.props.event) {
-      this.props.event.forEach((v) => {
-        this.$hook(v)
-      })
+      this.runEvent()
       return
     }
 
@@ -100,6 +108,8 @@ export default class Event extends Component {
           return true;
         }
       } else {
+        this.$hook('setMessage', `你没有${name}`);
+
         // debugger
 
       }
@@ -111,6 +121,7 @@ export default class Event extends Component {
     const { type, enemy, name } = this.data
 
     this.props.onClick(this)
+    return true
   }
 
   render() {

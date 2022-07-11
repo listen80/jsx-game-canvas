@@ -48,7 +48,6 @@ export default class GameMap extends Component {
       });
     });
     this.$state.map.mapEvents.forEach(element => {
-      console.log(element)
       const [x, y, value, event] = element
       map[y][x] = value
       map[y + ',' + x] = event
