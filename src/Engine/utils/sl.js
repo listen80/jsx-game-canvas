@@ -9,7 +9,6 @@ export function loadGame () {
 }
 
 export const setSave = ($state, context, gets, n = 1) => {
-  debugger
   const setSave = (context, gets, n = 1) => {
     if (Array.isArray(gets)) {
       gets.forEach(([id, value]) => setSave(context, id, value));

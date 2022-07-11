@@ -11,10 +11,9 @@ export default class Hero extends Component {
   }
 
   setPath = ({ dist, map }) => {
-    const { x, y } = dist
-    const path = findPath(this.$state.save.position, { x, y }, map)
-    this.path = path
-    this.tick = 0
+    this.map = map
+    this.dist = dist;
+    this.needFind = true
   }
 
   onKeyDown({ code, $key }) {
@@ -63,16 +62,18 @@ export default class Hero extends Component {
   }
 
   runSteps() {
-    // if (this.moving) {
-    //   return
-    // }
-    // this.moving = true
+
     if (this.current) {
       this.runOneStep()
       return
     }
-
     const map = this.props.map
+    if (this.needFind) {
+      const { x, y } = this.dist
+      this.path = findPath(this.$state.save.position, { x, y }, this.map)
+      this.needFind = false
+    }
+
     if (this.path && this.path.length) {
       const path = this.path.pop()
       const { x, y, sy } = path;

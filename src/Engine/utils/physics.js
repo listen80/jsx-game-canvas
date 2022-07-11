@@ -39,7 +39,14 @@ export const findPath = (start, dist, mapJSON) => {
       }
       return false
     }
-    if ((x < 0 || y < 0 || x >= width || y >= height) || map[y][x] || arrivedMap.has([x, y] + '') || (x === start.x && y === start.y)) {
+    if (
+      (x < 0
+      || y < 0
+      || x >= width
+      || y >= height)
+      || map[y][x]
+      || arrivedMap.has([x, y] + '')
+      || (x === start.x && y === start.y)) {
       return false
     }
 
