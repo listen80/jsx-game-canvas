@@ -41,20 +41,17 @@ export default class Event extends Component {
 
     if (type === 'if') {
       const data = utils.convertPropertyStr(condition)
-      if (this.checkSaveData(...data)) {
+      if (this.$hook('checkSaveData', data)) {
         this.event = yes
         this.runEvent()
-        // const y = utils.convertPropertyStr(yes)
-        // this.setSave(...y)
+        const y = utils.convertPropertyStr(yes)
+        this.setSave(y)
       } else {
         console.log('no')
       }
       return
     }
-    this.$hook({
-      ...this.event[i],
-      next: () => this.runEvent(i + 1)
-    })
+    this.$hook(type, data, () => this.runEvent(i + 1))
   }
   onZhuangji() {
     const { type, enemy, name } = this.data
@@ -73,13 +70,11 @@ export default class Event extends Component {
       const item = this.$state.items[name];
       const { type } = item;
       if (type === "1" || type === "3") {
-        // this.remove(mapEvent);
         this.$hook("getItems", name);
         this.$hook('setMessage', `获得${item.name}`);
         this.$sound.play("se", type === "1" ? "item.mp3" : "constants.mp3");
         this.$hook('removeMapEvent', this)
       } else if (type === "2") {
-        // this.remove(mapEvent);
         this.setSave(...item.property);
         const [name, property] = item.property;
         let msg = `获得${item.name}`;

@@ -1,4 +1,4 @@
-import { loadGame, saveGame, setSave } from "../utils/sl";
+import { loadGame, saveGame, setSave, checkSaveData } from "../utils/sl";
 
 const map = {}
 
@@ -7,12 +7,6 @@ const registry = (key, cb) => {
 }
 
 const hooks = function ($state, key, data, next) {
-  if (typeof key === typeof null) {
-    data = key.data
-    next = key.next
-    key = key.type
-  }
-
   const $res = $state.$res
   switch (key) {
 
@@ -46,6 +40,9 @@ const hooks = function ($state, key, data, next) {
     case "setSave":
       setSave($state, data, next)
       break;
+
+    case "checkSaveData":
+      return checkSaveData($state, data, next)
 
     default:
       if (map[key]) {

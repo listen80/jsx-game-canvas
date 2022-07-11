@@ -14,7 +14,7 @@ const mouseEvents = [
   "Wheel",
   "MouseDown",
   // "MouseUp",
-  // "MouseMove",
+  "MouseMove",
 ];
 const keyEvents = ["KeyDown", "KeyUp"];
 
@@ -25,7 +25,6 @@ export default class Render {
     this.initCanvas();
     this.bindEvents();
     this.$state = $state;
-    // this.$images = game.$images
   }
 
   getImage(src) {

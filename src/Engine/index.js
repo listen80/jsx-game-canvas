@@ -20,7 +20,6 @@ export default class Engine {
   }
 
   init(config) {
-    registryComponents({ Component })
     document.title = config.title;
 
     this.$state = {

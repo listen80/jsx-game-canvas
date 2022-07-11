@@ -1,10 +1,10 @@
 import { setStorage, getStorage } from './storage'
 
-export function saveGame (save) {
+export function saveGame(save) {
   return setStorage('game', save)
 }
 
-export function loadGame () {
+export function loadGame() {
   return getStorage('game')
 }
 
@@ -23,4 +23,18 @@ export const setSave = ($state, context, gets, n = 1) => {
     }
   }
   setSave(context, gets, n = 1)
+}
+
+export const checkSaveData = ($state, context, gets, n = 1) => {
+  if (Array.isArray(gets)) {
+    return gets.some(([id, value]) => checkSaveData(context, id, value));
+  } else if (typeof gets === "string") {
+    const saveData = context ? $state.save[context] : $state.save;
+    saveData[gets] = saveData[gets] || 0;
+    return saveData[gets] + Number(n) >= 0;
+  } else if (typeof gets === "object") {
+    return checkSaveData(context, Object.entries(gets), null, 0);
+  } else {
+    return false;
+  }
 }

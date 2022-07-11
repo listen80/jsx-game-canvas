@@ -38,13 +38,13 @@ export default class Hero extends Component {
       // this.$sound.play('se', 'step.mp3')
     } else if (code === "KeyS") {
       this.$hook('saveGame')
-      this.$sound.play("se", "load.mp3");
       this.$hook('setMessage', "存储成功")
+      this.$sound.play("se", "load.mp3");
       // this.setMessage("存储成功");
     } else if (code === "KeyL") {
       this.$hook('loadGame')
-      this.$sound.play("se", "load.mp3");
       this.$hook('setMessage', "读取成功")
+      this.$sound.play("se", "load.mp3");
     } else if (code === "KeyX") {
       this.showEnemyInfo = !this.showEnemyInfo;
     } else if (code === "KeyB") {
