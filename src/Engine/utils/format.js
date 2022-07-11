@@ -5,7 +5,6 @@ export function convertPropertyStr (str) {
   }
   const [key, propertyStr] = arr
   const properties = propertyStr.split(';').map(v => v.split(':'))
-  console.log(str, key, properties)
   return [key, properties]
 }
 
