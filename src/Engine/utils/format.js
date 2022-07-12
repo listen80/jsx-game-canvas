@@ -15,7 +15,7 @@ export const formatText = (text) => {
   const dataArray = text.split(/\r?\n/)
   const keys = dataArray.shift().split(',')
   dataArray.forEach((row, index) => {
-    if (!row.trim()) {
+    if (!row.trim() || row.startsWith('//') || row.startsWith('#')) {
       return
     }
     const properties = row.split(',')

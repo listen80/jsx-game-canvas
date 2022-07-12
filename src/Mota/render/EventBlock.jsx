@@ -75,6 +75,7 @@ export default class Event extends Component {
         this.$sound.play("se", type === "1" ? "item.mp3" : "constants.mp3");
         this.$hook('removeMapEvent', this)
       } else if (type === "2") {
+        console.log(item.property)
         this.setSave(...item.property);
         const [name, property] = item.property;
         let msg = `获得${item.name}`;
