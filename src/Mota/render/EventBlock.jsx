@@ -41,7 +41,7 @@ export default class Event extends Component {
 
     if (type === 'if') {
       const data = utils.convertPropertyStr(condition)
-      if (this.$hook('checkSaveData', data)) {
+      if (this.$hook('checkSave', data)) {
         this.event = yes
         this.runEvent()
         const y = utils.convertPropertyStr(yes)
@@ -75,23 +75,22 @@ export default class Event extends Component {
         this.$sound.play("se", type === "1" ? "item.mp3" : "constants.mp3");
         this.$hook('removeMapEvent', this)
       } else if (type === "2") {
-        console.log(item.property)
-        this.setSave(...item.property);
-        const [name, property] = item.property;
-        let msg = `获得${item.name}`;
-        property.forEach((property) => {
-          const [key, value] = property;
-          let propertyName = key;
-          if (name === "hero") {
-            propertyName = propertyNames[key];
-          } else if (name === "items") {
-            propertyName = this.$state.items[key].name;
-          } else if (key === "money") {
-            propertyName = "金币";
-          }
-          msg += ` ${propertyName}${value > 0 ? "+" : "-"}${value}`;
-          this.$hook('setMessage', msg);
-        });
+        this.$hook("setSaveByStr", item.property);
+        // const [name, property] = item.property;
+        // let msg = `获得${item.name}`;
+        // property.forEach((property) => {
+        //   const [key, value] = property;
+        //   let propertyName = key;
+        //   if (name === "hero") {
+        //     propertyName = propertyNames[key];
+        //   } else if (name === "items") {
+        //     propertyName = this.$state.items[key].name;
+        //   } else if (key === "money") {
+        //     propertyName = "金币";
+        //   }
+        //   msg += ` ${propertyName}${value > 0 ? "+" : "-"}${value}`;
+        //   this.$hook('setMessage', msg);
+        // });
         this.$hook('removeMapEvent', this)
         this.$sound.play("se", "item.mp3");
       }

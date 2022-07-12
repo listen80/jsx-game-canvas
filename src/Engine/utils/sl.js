@@ -1,4 +1,5 @@
 import { setStorage, getStorage } from './storage'
+import { convertPropertyStr } from './format'
 
 export function saveGame(save) {
   return setStorage('game', save)
@@ -25,16 +26,24 @@ export const setSave = ($state, context, gets, n = 1) => {
   setSave(context, gets, n = 1)
 }
 
-export const checkSaveData = ($state, context, gets, n = 1) => {
+export const checkSave = ($state, context, gets, n = 1) => {
   if (Array.isArray(gets)) {
-    return gets.some(([id, value]) => checkSaveData(context, id, value));
+    return gets.some(([id, value]) => checkSave(context, id, value));
   } else if (typeof gets === "string") {
     const saveData = context ? $state.save[context] : $state.save;
     saveData[gets] = saveData[gets] || 0;
     return saveData[gets] + Number(n) >= 0;
   } else if (typeof gets === "object") {
-    return checkSaveData(context, Object.entries(gets), null, 0);
+    return checkSave(context, Object.entries(gets), null, 0);
   } else {
     return false;
   }
+}
+
+export const setSaveByStr = ($state, str) => {
+  return setSave($state, ...convertPropertyStr(str))
+}
+
+export const checkSaveByStr = ($state, str) => {
+  return checkSave($state, ...convertPropertyStr(str))
 }

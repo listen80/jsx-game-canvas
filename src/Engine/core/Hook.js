@@ -1,4 +1,4 @@
-import { loadGame, saveGame, setSave, checkSaveData } from "../utils/sl";
+import { loadGame, saveGame, setSave, checkSave, setSaveByStr } from "../utils/sl";
 
 const map = {}
 
@@ -41,8 +41,16 @@ const hooks = function ($state, key, data, next) {
       setSave($state, data, next)
       break;
 
-    case "checkSaveData":
-      return checkSaveData($state, data, next)
+    case "checkSave":
+      return checkSave($state, data, next)
+
+    case "setSaveByStr":
+      setSaveByStr($state, data, next)
+      break;
+
+    case "checkSaveByStr":
+      setSaveByStr($state, data, next)
+      break;
 
     default:
       if (map[key]) {
