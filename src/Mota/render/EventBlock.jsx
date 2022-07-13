@@ -31,23 +31,32 @@ function transform($state, value, x, y) {
   return data
 }
 
+function run() {
+
+}
+
 export default class Event extends Component {
   onCreate() {
     this.data = transform(this.$state, this.props.value)
     this.event = this.props.event
   }
   runEvent(i = 0) {
-    const { data, type, next, condition, yes, no } = this.event[i]
-
+    const e = this.event[i]
+    if (!e) {
+      return
+    }
+    const { data, type, next, condition, yes, no } = e
     if (type === 'if') {
-      const data = utils.convertPropertyStr(condition)
-      if (this.$hook('checkSave', data)) {
+      if (this.$hook('checkSaveByStr', condition)) {
         this.event = yes
         this.runEvent()
-        const y = utils.convertPropertyStr(yes)
-        this.setSave(y)
       } else {
-        console.log('no')
+        if (Array.isArray(no)) {
+          this.event = no
+          this.runEvent()
+        } else {
+          this.runEvent(i + 1)
+        }
       }
       return
     }
@@ -55,27 +64,56 @@ export default class Event extends Component {
   }
   onZhuangji() {
     const { type, enemy, name } = this.data
-    if (this.event) {
+    if (this.props.event) {
+      this.event = this.props.event
       this.runEvent()
       return
     }
 
-    const propertyNames = this.$state.config.propertyNames
-
     if (type === 'enemys') {
-      this.$hook('battle', enemy, () => {
-        this.$hook('removeMapEvent', this)
-      })
+      this.event = [
+        {
+          type: 'battle',
+          data: enemy,
+        },
+        {
+          type: 'removeMapEventByKey',
+          data: this.props.id
+        }
+      ]
+      this.runEvent()
     } else if (type === "items") {
       const item = this.$state.items[name];
-      const { type } = item;
-      if (type === "1" || type === "3") {
-        this.$hook("getItems", name);
-        this.$hook('setMessage', `获得${item.name}`);
-        this.$sound.play("se", type === "1" ? "item.mp3" : "constants.mp3");
-        this.$hook('removeMapEvent', this)
-      } else if (type === "2") {
-        this.$hook("setSaveByStr", item.property);
+      const { type, property } = item;
+      if (type === "normal" || type === "special") {
+        this.event = [
+          {
+            type: 'setMessage',
+            data: `获得${item.name}`
+          },
+          {
+            type: 'getItem',
+            data: name,
+          },
+          {
+            type: 'removeMapEventByKey',
+            data: this.props.id
+          }
+        ]
+        this.runEvent()
+      } else if (type === "update") {
+        this.event = [
+          {
+            type: 'setSaveByStr',
+            data: property,
+          },
+          {
+            type: 'removeMapEventByKey',
+            data: this.props.id
+          }
+        ]
+
+        // const propertyNames = this.$state.config.propertyNames
         // const [name, property] = item.property;
         // let msg = `获得${item.name}`;
         // property.forEach((property) => {
@@ -91,7 +129,8 @@ export default class Event extends Component {
         //   msg += ` ${propertyName}${value > 0 ? "+" : "-"}${value}`;
         //   this.$hook('setMessage', msg);
         // });
-        this.$hook('removeMapEvent', this)
+        this.runEvent()
+        
         this.$sound.play("se", "item.mp3");
       }
       return true;
@@ -108,7 +147,7 @@ export default class Event extends Component {
         const key = name.slice(0, -4) + "Key";
         if (this.$state.save.items[key]) {
           this.$state.save.items[key]--;
-          this.$hook('removeMapEvent', this)
+          this.$hook('removeMapEventByKey', this.props.id)
           this.$sound.play("se", "door.mp3");
           return true;
         }
@@ -117,7 +156,6 @@ export default class Event extends Component {
 
       }
     } else {
-      // debugger
     }
   }
   onMouseDown() {

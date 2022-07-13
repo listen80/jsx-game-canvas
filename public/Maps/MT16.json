@@ -235,7 +235,7 @@
                     ]
                 },
                 {
-                    "type": "setSave",
+                    "type": "setSaveByStr",
                     "data": "items.ff:1"
                 },
                 {

@@ -265,11 +265,11 @@
                                     ]
                                 },
                                 {
-                                    "type": "setSave",
+                                    "type": "setSaveByStr",
                                     "data": "flags.15loldman:-1"
                                 },
                                 {
-                                    "type": "setSave",
+                                    "type": "setSaveByStr",
                                     "data": "hero.atk:120;exp:-500"
                                 }
                             ],
@@ -326,15 +326,15 @@
                                     ]
                                 },
                                 {
-                                    "type": "setSave",
+                                    "type": "setSaveByStr",
                                     "data": "flags.15lbussinessman:-1"
                                 },
                                 {
-                                    "type": "setSave",
+                                    "type": "setSaveByStr",
                                     "data": "hero.def:120"
                                 },
                                 {
-                                    "type": "setSave",
+                                    "type": "setSaveByStr",
                                     "data": "money:-500"
                                 }
                             ],

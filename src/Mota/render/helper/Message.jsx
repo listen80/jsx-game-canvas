@@ -39,7 +39,7 @@ export default class Message extends Component {
   messages = []
   tempMessages = []
   onCreate() {
-    this.$registry('setMessage', ($state, data) => {
+    this.$registry('setMessage', ($state, data, next) => {
       if (!data) {
         return
       }
@@ -51,6 +51,7 @@ export default class Message extends Component {
         tick: 180,
         width,
       })
+      next && next()
     })
   }
 
@@ -60,20 +61,22 @@ export default class Message extends Component {
     })
     return this.messages.map((config, index) => {
       const { message, width } = config
-      return (<div
-        style={{
-          backgroundColor: 'rgba(0,0,0,.7)',
-          globalAlpha: config.tick / 180,
-          x: (1 * 18 - width) / 2,
-          y: 1 * 2 + index * 1.2,
-          height: 1,
-          width: width,
-        }}
-      >
-        <div style={{ textAlign: 'center', fontSize: 20, x: width / 2, height: 1 }}>
-          {message}
+      return (
+        <div
+          style={{
+            backgroundColor: 'rgba(0,0,0,.7)',
+            globalAlpha: config.tick / 180,
+            x: (1 * 13 - width) / 2,
+            y: 1 * 2 + index * 1.2,
+            height: 1,
+            width: width,
+          }}
+        >
+          <div style={{ textAlign: 'center', fontSize: 20, x: width / 2, height: 1 }}>
+            {message}
+          </div>
         </div>
-      </div>)
+      )
     })
 
   }

@@ -230,14 +230,6 @@ export default class Render {
     const { backgroundImage, backgroundColor, height, width } =
       node.props.style;
 
-    // let width = 0
-    // if (typeof _ !== "number") {
-    //   width = _ * offsetParent.props.style.width
-    //   console.log(this.getStyle('width', width, offsetParent) === width)
-    //   debugger
-    // } else {
-    //   width = _
-    // }
     if (backgroundColor) {
       context.save();
       context.beginPath();

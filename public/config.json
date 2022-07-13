@@ -23,9 +23,8 @@
     },
     "money": 0,
     "hero": {
-      "name": "勇士",
       "lv": 1,
-      "atk": 1000,
+      "atk": 10,
       "def": 10,
       "hp": 1000,
       "exp": 0
@@ -224,6 +223,7 @@
     "mapping.dat"
   ],
   "propertyNames": {
+    "hero": "勇士",
     "lv": "等级",
     "money": "金币",
     "hp": "生命",

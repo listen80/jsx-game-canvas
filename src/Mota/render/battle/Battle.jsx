@@ -30,6 +30,7 @@ export default class Battle extends Component {
       this.callback = callback
       this.turn = false
       this.tick = 0
+      this.battleMsg = null
     })
   }
 
@@ -77,7 +78,7 @@ export default class Battle extends Component {
     }
   }
 
-  loop = this.createLoop(1.5, 1.75, 2, 1 / 32)
+  loop = this.createLoop(1.5, 2, 2, 1 / 32, true)
   render() {
     if (!this.enemy) {
       return
@@ -123,10 +124,10 @@ export default class Battle extends Component {
       <img src="Battlebacks/mota.jpg" style={this.styles.battle} onMouseDown={this.onMouseDown}>
         {
           this.battleMsg &&
-          <div style={msgStyle}>
-            {this.battleMsg}
-            <div style={{ x: 8, y, height: 1 }}>↓</div>
-          </div>
+            <div style={msgStyle}>
+              {this.battleMsg}
+              <div style={{ x: 8, y, height: 1 }}>↓</div>
+            </div>
         }
 
         <div style={this.styles.enemy}>

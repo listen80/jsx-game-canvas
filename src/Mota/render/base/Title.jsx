@@ -35,6 +35,7 @@ const config = {
           {
             text: "继续",
             event: "loadGame",
+            disabled: !localStorage.getItem('game')
           }
         ]
       }

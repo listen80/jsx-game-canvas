@@ -1,14 +1,24 @@
 export function convertPropertyStr(str) {
-  const arr = str.split('.')
-  if (arr.length === 1) {
-    arr.unshift('')
-  }
-  const [key, propertyStr] = arr
-  const properties = propertyStr.split(';').map(v => v.split(':'))
-  return [key, properties]
+  const o = {}
+  str.split('&').map((str) => {
+    const arr = str.split('.')
+    if (arr.length === 1) {
+      arr.unshift('')
+    }
+    if (arr.length === 3) {
+      console.error(str)
+    }
+    const [context, propertyStr] = arr
+    o[context] = {}
+    propertyStr.split(';').map(v => {
+      const [key, value] = v.split(':')
+      o[context][key] = Number(value) || 0
+    })
+  })
+  return o
 }
 
-const map = {}
+console.log(convertPropertyStr('flags.fairy&hero.atk:3;def:31&money:3'))
 
 export const formatText = (text) => {
   const o = Object.create(null)

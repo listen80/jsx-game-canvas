@@ -9,41 +9,32 @@ export function loadGame() {
   return getStorage('game')
 }
 
-export const setSave = ($state, context, gets, n = 1) => {
-  const setSave = (context, gets, n = 1) => {
-    if (Array.isArray(gets)) {
-      gets.forEach(([id, value]) => setSave(context, id, value));
-    } else if (typeof gets === "string") {
-      const saveData = context ? $state.save[context] : $state.save;
-      saveData[gets] = saveData[gets] || 0;
-      saveData[gets] += Number(n);
-    } else if (typeof gets === "object") {
-      setSave(context, Object.entries(gets));
-    } else {
-      // console.error(gets, n)
-    }
-  }
-  setSave(context, gets, n = 1)
-}
-
-export const checkSave = ($state, context, gets, n = 1) => {
-  if (Array.isArray(gets)) {
-    return gets.some(([id, value]) => checkSave(context, id, value));
-  } else if (typeof gets === "string") {
+export const setSave = ($state, data, next) => {
+   Object.entries(data).forEach(([context, keyValues]) => {
     const saveData = context ? $state.save[context] : $state.save;
-    saveData[gets] = saveData[gets] || 0;
-    return saveData[gets] + Number(n) >= 0;
-  } else if (typeof gets === "object") {
-    return checkSave(context, Object.entries(gets), null, 0);
-  } else {
-    return false;
-  }
+    return Object.entries(keyValues).forEach(([key, value]) => {
+      saveData[key] = (saveData[key] || 0) + value
+      console.log(saveData)
+    })
+  })
+  next()
 }
 
-export const setSaveByStr = ($state, str) => {
-  return setSave($state, ...convertPropertyStr(str))
+export const checkSave = ($state, data) => {
+  console.log(data)
+  return Object.entries(data).every(([context, keyValues]) => {
+    const saveData = context ? $state.save[context] : $state.save;
+    return Object.entries(keyValues).every(([key, value]) => {
+      console.log(key, value, keyValues)
+      return (saveData[key] || 0) + value >= 0
+    })
+  })
 }
 
-export const checkSaveByStr = ($state, str) => {
-  return checkSave($state, ...convertPropertyStr(str))
+export const setSaveByStr = ($state, data, next) => {
+  setSave($state, convertPropertyStr(data), next)
+}
+
+export const checkSaveByStr = ($state, data) => {
+  return checkSave($state, convertPropertyStr(data))
 }

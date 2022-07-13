@@ -1,7 +1,7 @@
 import { Component } from "Engine";
 
 export default class Select extends Component {
-  loop = this.createLoop(155, 222, 1, 2)
+  loop = this.createLoop(155, 222, 1, 2, true)
 
   onCreate() {
     const { activeIndex = 0 } = this.props;
@@ -66,7 +66,10 @@ export default class Select extends Component {
     const rgb = this.loop()
     let y = 0
 
-    const selects = this.props.options.map(({ text }, index) => {
+    const selects = this.props.options.map(({ text, disabled }, index) => {
+      if (disabled) {
+        return
+      }
       const activeStyle = {
         borderWidth: this.activeIndex === index ? 2 : 0,
         backgroundColor: this.activeIndex === index ? `rgb(${rgb},${rgb},${rgb}, 0.5)` : null,

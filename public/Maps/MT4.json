@@ -212,7 +212,7 @@
                     "condition": "flags.thief:0",
                     "yes": [
                         {
-                            "type": "setSave",
+                            "type": "setSaveByStr",
                             "data": "flags.thief:-1"
                         },
                         {

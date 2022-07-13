@@ -20,9 +20,8 @@ export default class GameMap extends Component {
   };
 
   onCreate() {
-    this.$registry('removeMapEvent', ($state, data) => {
-      const { x, y } = data.props;
-      $state.save.destroy[this.getKey(x, y)] = 1;
+    this.$registry('removeMapEventByKey', ($state, id) => {
+      $state.save.destroy[id] = 1;
       this.map = this.createMap()
     })
 
@@ -83,7 +82,15 @@ export default class GameMap extends Component {
   }
 
   renderMapTerrains() {
-    return this.map.map((line, y) => line.map((value, x) => value ? <EventBlock value={value} x={x} y={y} onClick={this.onEventClick} event={this.map[y + ',' + x]} /> : null));
+    return this.map.map((line, y) => line.map((value, x) => value ?
+      <EventBlock
+        value={value}
+        x={x}
+        y={y}
+        id={this.getKey(x, y)}
+        onClick={this.onEventClick}
+        event={this.map[y + ',' + x]}
+      /> : null));
   }
 
   render() {
