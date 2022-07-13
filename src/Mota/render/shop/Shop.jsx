@@ -26,7 +26,6 @@ export default class Shop extends Component {
           width: 18,
           height: 13,
           borderColor: '#deb887',
-          // backgroundColor: 'red',
         }}
         onMouseDown={() => true}
       >
@@ -39,11 +38,11 @@ export default class Shop extends Component {
             height: 8,
             borderWidth: 4,
             borderColor: '#deb887',
-            swidth: 500 / 32,
-            sheight: 701 / 32,
             textAlign: 'center',
+            backgroundColor: 'rgba(0,0,0,.4)',
+
           }}
-          
+
         >
           <div style={{ y: 1, width: 7, fontSize: 24 }}>{this.shop.title}</div>
           <div style={{ x: 0, y: 2, fontSize: 14 }}>
