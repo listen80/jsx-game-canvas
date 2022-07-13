@@ -5,6 +5,7 @@ import GameMap from "./render/GameMap";
 import ScrollText from "./render/base/ScrollText";
 import Message from "./render/helper/Message";
 import Talks from "./render/helper/Talks";
+import Shop from "./render/shop/Shop";
 import Test from "./render/Test";
 import Battle from "./render/battle/Battle";
 
@@ -48,6 +49,9 @@ export default class Mota extends Component {
     return (
       <div style={this.styles.app}>
         {this.renderMap()}
+        {
+          this.$state.shopid && <Shop shopid={this.$state.shopid}/>
+        }
         <Battle />
         <Message />
         <Talks />

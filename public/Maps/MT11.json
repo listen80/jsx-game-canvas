@@ -209,7 +209,7 @@
             [
                 {
                     "type": "openShop",
-                    "id": "moneyShop2"
+                    "data": "moneyShop2"
                 }
             ]
         ],

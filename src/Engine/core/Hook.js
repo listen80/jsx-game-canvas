@@ -56,6 +56,10 @@ const hooks = function ($state, key, data, next) {
     case "checkSaveByStr":
       return checkSaveByStr($state, data, next)
 
+    case "openShop":
+      $state.shopid = data;
+      break
+
     default:
       if (map[key]) {
         return map[key]($state, data, next)

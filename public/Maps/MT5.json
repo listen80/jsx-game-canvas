@@ -209,7 +209,7 @@
             [
                 {
                     "type": "openShop",
-                    "id": "keyShop1"
+                    "data": "keyShop1"
                 }
             ]
         ],
@@ -220,7 +220,7 @@
             [
                 {
                     "type": "openShop",
-                    "id": "expShop1"
+                    "data": "expShop1"
                 }
             ]
         ],

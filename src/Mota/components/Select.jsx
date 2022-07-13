@@ -90,11 +90,3 @@ export default class Select extends Component {
     return <div style={this.props.style}>{selects}</div>;
   }
 }
-
-class Column {
-  render() {
-    let y = 0
-    let height
-
-  }
-}
