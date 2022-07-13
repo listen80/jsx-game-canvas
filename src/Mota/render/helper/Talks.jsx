@@ -31,7 +31,7 @@ class Talk extends Component {
     }
   };
 
-  onMouseDown({ code }) {
+  onMouseDown = () => {
     this.next();
     return true
   }

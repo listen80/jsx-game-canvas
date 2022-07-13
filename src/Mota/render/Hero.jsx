@@ -110,7 +110,7 @@ export default class Hero extends Component {
       sy: this.$state.save.position.sy,
     }
     return (
-      <div onMouseDown={this.onMouseDown}>
+      <div>
         <div style={this.$state.save.position}>
           <animate {...data} />
         </div>

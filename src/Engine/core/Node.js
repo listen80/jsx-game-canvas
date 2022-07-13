@@ -15,7 +15,6 @@ export const registryComponents = (map) => {
   })
 }
 
-
 export function createNode(tag, props = {}, ...children) {
   const $parent = this;
   tag = componentsMap[tag] || tag

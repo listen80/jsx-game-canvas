@@ -4,7 +4,7 @@ export default class Component {
   constructor({ props, children }) {
     this.props = props;
     this.$node = null;
-    this.$children = children;
+    // this.$children = children;
     this.$sound.play = () => {
       return {
         pause() { },

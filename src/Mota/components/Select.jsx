@@ -51,12 +51,12 @@ export default class Select extends Component {
     }
   }
 
-  onMouseDown(event, $node) {
+  onMouseDown = (event, $node) => {
     this.activeIndex = $node.props.index;
     this.onConfirm()
   };
 
-  onMouseMove(index, $node) {
+  onMouseMove = (index, $node) => {
     this.activeIndex = $node.props.index;
     this.onChange();
   }

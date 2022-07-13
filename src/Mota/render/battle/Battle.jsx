@@ -34,7 +34,7 @@ export default class Battle extends Component {
     })
   }
 
-  onMouseDown() {
+  onMouseDown = () => {
     if (this.battleMsg) {
       this.enemy = null
       this.callback && this.callback()

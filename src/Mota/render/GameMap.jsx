@@ -60,7 +60,7 @@ export default class GameMap extends Component {
     // this.mapBgm.pause();
   }
 
-  onMouseDown(e) {
+  onMouseDown = (e) => {
     const { gameX: x, gameY: y } = e
 
     const { height, width } = this.$state.map

@@ -158,7 +158,7 @@ export default class Event extends Component {
     } else {
     }
   }
-  onMouseDown() {
+  onMouseDown = () => {
     const { type, enemy, name } = this.data
     this.props.onClick(this)
     return true

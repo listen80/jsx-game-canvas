@@ -14,7 +14,7 @@ const mouseEvents = [
   "Wheel",
   "MouseDown",
   // "MouseUp",
-  "MouseMove",
+  // "MouseMove",
 ];
 const keyEvents = ["KeyDown", "KeyUp"];
 
@@ -91,26 +91,6 @@ export default class Render {
         this.keyEventsCollectionKeyframe.push(e);
       });
     });
-  }
-
-  runEvents() {
-    this.mouseEventsCollectionKeyframe.forEach((event) => {
-      const { $nodes, name } = event;
-      // const real = []
-      // console.log($nodes)
-      $nodes.reverse().some(($node) => {
-        if ($node && $node.props[name]) {
-          // console.log($node)
-          return $node.props[name].call($node.$parent, event, $node);
-        }
-      });
-    });
-    this.keyEventsCollectionKeyframe.forEach((event) => {
-      const { $context, name } = event;
-      $context && $context[name] && $context[name](event);
-    });
-
-    this.restoreEvents();
   }
 
   toDataURL() {
@@ -199,7 +179,7 @@ export default class Render {
               height * size
             )
           }
-          
+
           context.drawImage(
             image,
             sx * size,
@@ -423,10 +403,17 @@ export default class Render {
         );
       } else if (isString(createdNode.tag)) {
         // div node
+        createdNode.offsetParent = offsetParent
         this.calcNode(createdNode, offsetX, offsetY, offsetParent);
       } else {
+        let s = ''
+        try {
+          s = JSON.stringify(createdNode)
+        } catch (e) {
+          s = e.stack
+        }
         this.drawPrimitive(
-          JSON.stringify(createdNode),
+          s,
           offsetX,
           offsetY,
           offsetParent
@@ -450,6 +437,36 @@ export default class Render {
     });
   }
 
+  runEvents() {
+    
+    function run($node, event, name) {
+      if ($node) {
+        $node.props && $node.props[name] && $node.props[name].call($node.$parent, event, $node);
+        run($node.offsetParent, event, name)
+      }
+    }
+    this.mouseEventsCollectionKeyframe.forEach((event) => {
+      const { $nodes, name } = event;
+      // const real = []
+      // console.log($nodes)
+      $nodes.reverse().some(($node) => {
+        // if ($node && $node.props[name]) {
+        //   // console.log($node)
+        //   return $node.props[name].call($node.$parent, event, $node);
+        // }
+        console.log($node)
+        run($node, event, name)
+        return 1
+      });
+    });
+    this.keyEventsCollectionKeyframe.forEach((event) => {
+      const { $context, name } = event;
+      $context && $context[name] && $context[name](event);
+    });
+
+    this.restoreEvents();
+  }
+
   calcNode(node, offsetX, offsetY, offsetParent) {
     // 非class component
     // div node
@@ -459,6 +476,9 @@ export default class Render {
     const style = node?.props?.style;
     if (style) {
       let { x = 0, y = 0, align, width } = style;
+      if (isString(x)) {
+        x = offsetParent.style.width * x
+      }
       if (align === "center") {
         x = (offsetParent.style.width - width) / 2;
       } else if (align === "right") {
@@ -480,9 +500,15 @@ export default class Render {
     context.restore();
   }
 
+
   render(createdNode) {
     this.clearRect();
-    this.renderAnything(createdNode, 0, 0, this.canvas);
+    this.renderAnything(createdNode, 0, 0, {
+      props: {
+        style: {}
+
+      }
+    });
     this.runEvents();
   }
 }
