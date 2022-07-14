@@ -18,8 +18,6 @@ export function convertPropertyStr(str) {
   return o
 }
 
-console.log(convertPropertyStr('flags.fairy&hero.atk:3;def:31&money:3'))
-
 export const formatText = (text) => {
   const o = Object.create(null)
   const dataArray = text.split(/\r?\n/)

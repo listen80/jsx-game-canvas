@@ -60,7 +60,7 @@ export default class Event extends Component {
       }
       return
     } else if (type === 'removeSelf') {
-
+      this.$hook('removeMapEventByKey', this.props.id, () => this.runEvent(i + 1))
     } else {
       this.$hook(type, data, () => this.runEvent(i + 1))
     }

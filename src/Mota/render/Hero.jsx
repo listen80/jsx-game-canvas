@@ -52,7 +52,7 @@ export default class Hero extends Component {
     } else if (code === "Backspace") {
       this.$hook("setSave", { hero: { lv: 1, hp: 100, atk: 100, def: 100, exp: 100, } },);
       this.$hook("setSave", { items: { yellowKey: 3, blueKey: 2, redKey: 1 } },);
-      this.$hook("setSave", { "": { money: 100 } });
+      this.$hook("setSave", { "": { money: 100 } }); 
     }
 
     if (moveVector) {

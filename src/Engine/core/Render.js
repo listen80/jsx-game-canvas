@@ -75,7 +75,7 @@ export default class Render {
           e.canvasY = (e.offsetY / $offsetHeight) * height;
           e.gameX = (e.canvasX / size) | 0;
           e.gameY = (e.canvasY / size) | 0;
-          e.$nodes = [];
+          e.$node = null;
           this.mouseEventsCollectionKeyframe.push(e);
 
           e.preventDefault();
@@ -432,13 +432,13 @@ export default class Render {
         canvasY >= offsetY * size &&
         canvasY < (style.height + offsetY) * size
       ) {
-        event.$nodes.push(node);
+        event.$node = (node);
       }
     });
   }
 
   runEvents() {
-    
+
     function run($node, event, name) {
       if ($node) {
         $node.props && $node.props[name] && $node.props[name].call($node.$parent, event, $node);
@@ -446,24 +446,13 @@ export default class Render {
       }
     }
     this.mouseEventsCollectionKeyframe.forEach((event) => {
-      const { $nodes, name } = event;
-      // const real = []
-      // console.log($nodes)
-      $nodes.reverse().some(($node) => {
-        // if ($node && $node.props[name]) {
-        //   // console.log($node)
-        //   return $node.props[name].call($node.$parent, event, $node);
-        // }
-        console.log($node)
-        run($node, event, name)
-        return 1
-      });
+      const { $node, name } = event;
+      run($node, event, name)
     });
     this.keyEventsCollectionKeyframe.forEach((event) => {
       const { $context, name } = event;
       $context && $context[name] && $context[name](event);
     });
-
     this.restoreEvents();
   }
 
