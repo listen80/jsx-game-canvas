@@ -10,13 +10,17 @@ export default class Shop extends Component {
   }
 
   onConfirm = (option, index) => {
-    console.log(option, index)
-    // if (index === this.shop.choices.length - 1) {
-    //   this.props.onClose()
-    // } else {
-    //   const { need, effect } = this.shop.choices[index]
-    //   this.props.onShopEvent(need, effect)
-    // }
+    const { need, effect } = option
+    if (need) {
+      if (this.$hook('checkSaveByStr', need)) {
+        this.$hook('setSaveByStr', need)
+        this.$hook('setSaveByStr', effect)
+      } else {
+        console.warn('no')
+      }
+    } else {
+      this.$state.shopid = null
+    }
   };
 
   render() {
@@ -27,7 +31,6 @@ export default class Shop extends Component {
           height: 13,
           borderColor: '#deb887',
         }}
-        onMouseDown={() => true}
       >
         <div
           src="shop.webp"

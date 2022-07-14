@@ -17,7 +17,7 @@ export const setSave = ($state, data, next) => {
       console.log(saveData)
     })
   })
-  next()
+  next && next()
 }
 
 export const checkSave = ($state, data) => {

@@ -336,7 +336,7 @@
                     "data": "redBat"
                 },
                 {
-                    "type": "removeBlock",
+                    "type": "removeSelf",
                     "data": [
                         6,
                         3

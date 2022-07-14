@@ -59,8 +59,11 @@ export default class Event extends Component {
         }
       }
       return
+    } else if (type === 'removeSelf') {
+
+    } else {
+      this.$hook(type, data, () => this.runEvent(i + 1))
     }
-    this.$hook(type, data, () => this.runEvent(i + 1))
   }
   onZhuangji() {
     const { type, enemy, name } = this.data
@@ -130,7 +133,7 @@ export default class Event extends Component {
         //   this.$hook('setMessage', msg);
         // });
         this.runEvent()
-        
+
         this.$sound.play("se", "item.mp3");
       }
       return true;

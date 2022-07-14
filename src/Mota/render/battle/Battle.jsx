@@ -32,6 +32,16 @@ export default class Battle extends Component {
       this.tick = 0
       this.battleMsg = null
     })
+
+    this.$registry('enemy', ($state, id, callback) => {
+      this.enemy = JSON.parse(JSON.stringify($state.enemys[id]))
+      this.callback = callback
+      this.turn = false
+      this.tick = 0
+      this.battleMsg = null
+    })
+
+
   }
 
   onMouseDown = () => {
@@ -124,10 +134,10 @@ export default class Battle extends Component {
       <img src="Battlebacks/mota.jpg" style={this.styles.battle} onMouseDown={this.onMouseDown}>
         {
           this.battleMsg &&
-            <div style={msgStyle}>
-              {this.battleMsg}
-              <div style={{ x: 8, y, height: 1 }}>↓</div>
-            </div>
+          <div style={msgStyle}>
+            {this.battleMsg}
+            <div style={{ x: 8, y, height: 1 }}>↓</div>
+          </div>
         }
 
         <div style={this.styles.enemy}>
