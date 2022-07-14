@@ -19,9 +19,10 @@ fs.readdirSync(dir).forEach((file) => {
     //     mapEvents.splice(i, 1)
     //   }
     // }
-    mapEvents.forEach(() => {
-      
-    })
+    // mapEvents.forEach((item, index, arr) => {
+    //   const [x, y, value, events] = item
+    //   arr[index] = { x, y, value, events }
+    // })
   }
   // console.log()
   // mapEvents && mapEvents.forEach((mapEvent, i) => {
@@ -33,5 +34,5 @@ fs.readdirSync(dir).forEach((file) => {
   //     }
   //   })
   // })
-  fs.writeFileSync(path.join(dir, file), JSON.stringify(s, null, 4))
+  fs.writeFileSync(path.join(dir, file), JSON.stringify(s, null, 2))
 })

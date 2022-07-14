@@ -47,9 +47,9 @@ export default class GameMap extends Component {
       });
     });
     this.$state.map.mapEvents.forEach(element => {
-      const [x, y, value, event] = element
+      const { x, y, value, events } = element
       map[y][x] = value
-      map[y + ',' + x] = event
+      map[y + ',' + x] = events
     });
     return map
   }
