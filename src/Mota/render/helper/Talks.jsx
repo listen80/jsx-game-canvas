@@ -25,7 +25,7 @@ class Talk extends Component {
       height: 2,
     },
     right: {
-      x: 4,
+      x: 3,
       y: 6,
       height: 2,
     }
@@ -65,14 +65,13 @@ class Talk extends Component {
       <div style={this.styles.wrap} onMouseDown={this.onMouseDown}>
         <div style={{ ...this.styles.talk }}>
           {this.talkArray.map((talk, index) => {
+            const style = {
+              x: 0.5,
+              y: index,
+              height: 1,
+            }
             return (
-              <div
-                style={{
-                  x: 0.5,
-                  y: index,
-                  height: 1,
-                }}
-              >
+              <div style={style}>
                 {talk}
               </div>
             );
