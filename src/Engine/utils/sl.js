@@ -10,18 +10,16 @@ export function loadGame() {
 }
 
 export const setSave = ($state, data, next) => {
-   Object.entries(data).forEach(([context, keyValues]) => {
+  Object.entries(data).forEach(([context, keyValues]) => {
     const saveData = context ? $state.save[context] : $state.save;
     return Object.entries(keyValues).forEach(([key, value]) => {
       saveData[key] = (saveData[key] || 0) + value
-      console.log(saveData)
     })
   })
   next && next()
 }
 
 export const checkSave = ($state, data) => {
-  console.log(data)
   return Object.entries(data).every(([context, keyValues]) => {
     const saveData = context ? $state.save[context] : $state.save;
     return Object.entries(keyValues).every(([key, value]) => {

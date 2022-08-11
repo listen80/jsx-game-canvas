@@ -69,7 +69,7 @@ if (process.env.NODE_ENV === "development") {
   plugins.push(
     serve({
       // open: true,
-      port: 9999,
+      port: 9000,
       contentBase: "public",
     })
   );
@@ -80,8 +80,9 @@ if (process.env.NODE_ENV === "development") {
 export default {
   plugins,
   input: {
-    Engine: "src/Engine",
-    Mota: "src/Mota",
+    // Engine: "src/Engine",
+    // Mota: "src/Mota",
+    game: "src/",
   },
   // input:  "src/Mota/index.jsx",
   // Engine: "src/Engine/index.js",

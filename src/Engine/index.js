@@ -7,13 +7,11 @@ import { loadJSON } from "./utils/http";
 import { checkChromeVersion } from "./utils/ua";
 
 import { hooks, registry } from "./core/Hook"
-import Component from "./core/Component"
 export * as utils from "./utils/format"
 
 export default class Engine {
   constructor($gameJSX) {
     this.$gameJSX = $gameJSX;
-    this.Component = Component
     checkChromeVersion()
       ? loadJSON("config.json").catch(() => alert('config.json不存在')).then((game) => this.init(game))
       : alert("不能直接运行index.html")

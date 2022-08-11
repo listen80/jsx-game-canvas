@@ -49,9 +49,7 @@ export default class Mota extends Component {
     return (
       <div style={this.styles.app}>
         {this.renderMap()}
-        {
-          this.$state.shopid && <Shop shopid={this.$state.shopid}/>
-        }
+        {this.$state.shopid && <Shop shopid={this.$state.shopid} />}
         <Battle />
         <Message />
         <Talks />
