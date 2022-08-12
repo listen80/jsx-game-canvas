@@ -7,7 +7,7 @@ export default class Status extends Component {
       for (let y = 0; y < 13; y++) {
         if (x === 4 || y === 0 || y === 12) {
           this.walls.push(
-            <img
+            <div
               src="terrains"
               style={{
                 sx: 0,
@@ -15,7 +15,7 @@ export default class Status extends Component {
                 x: x * 1,
                 y: y * 1,
               }}
-            ></img>,
+            ></div>,
           )
         }
       }
@@ -43,7 +43,7 @@ export default class Status extends Component {
         {rowProperty.map((value, index) => {
           return (
             <div style={{ x: 0, y: (index + 1) * 1, width: 1 }}>
-              <img
+              <div
                 src="icons"
                 style={{
                   sy: index * 1,

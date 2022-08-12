@@ -23,7 +23,7 @@ export default class ShopList extends Component {
 
   render() {
     return (
-      <img
+      <div
         src="shop.webp"
         style={{
           x: 3 * 1,
@@ -45,7 +45,7 @@ export default class ShopList extends Component {
           onConfirm={this.onConfirm}
           onClose={this.props.onClose}
         />
-      </img>
+      </div>
     )
   }
 }
