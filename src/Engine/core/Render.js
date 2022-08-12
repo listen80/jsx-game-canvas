@@ -166,20 +166,6 @@ export default class Render {
         if (!image) {
           // console.warn(image, this.$state.image, props);
         } else {
-          if (height === 2) {
-            console.log(
-              image,
-              sx * size,
-              sy * size,
-              (swidth || width) * size,
-              (sheight || height) * size,
-              offsetX * size,
-              offsetY * size,
-              width * size,
-              height * size
-            )
-          }
-
           context.drawImage(
             image,
             sx * size,
@@ -320,15 +306,18 @@ export default class Render {
     context.save();
     const { props, tag } = node;
     if (props) {
-      const { style } = props;
+      const { style, src } = props;
       this.mergeStyle(style);
       if (style) {
         this.drawBack(node, offsetX, offsetY, offsetParent);
         this.drawBorder(node, offsetX, offsetY, offsetParent);
       }
+      if (src) {
+        this.drawImage(node, offsetX, offsetY);
+      }
     }
     if (tag === "img") {
-      this.drawImage(node, offsetX, offsetY);
+      // this.drawImage(node, offsetX, offsetY);
     } else if (tag === "circle") {
       this.drawCircle(node, offsetX, offsetY);
     } else if (tag === "line") {

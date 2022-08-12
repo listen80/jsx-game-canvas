@@ -108,8 +108,8 @@ export default class Battle extends Component {
       y: 1 * 4.5,
       swidth: 1,
       sheight: 1,
-      width: 64,
-      height: 64,
+      width: 2,
+      height: 2,
       sy: 0,
     }
     const enemyImageStyle = {
@@ -117,8 +117,8 @@ export default class Battle extends Component {
       y: 1 * 4.5,
       swidth: 1,
       sheight: 1,
-      width: 64,
-      height: 64,
+      width: 2,
+      height: 2,
       sy: enemy.sy * 1,
     }
     const size64 = 64
@@ -130,6 +130,7 @@ export default class Battle extends Component {
     }
     const y = this.loop()
     const msgStyle = { fontSize: 24, height: 1, y: 1 * 8, width: 1 * 15, textAlign: 'center' }
+    console.log(enemyImageStyle)
     return (
       <img src="Battlebacks/mota.jpg" style={this.styles.battle} onMouseDown={this.onMouseDown}>
         {
