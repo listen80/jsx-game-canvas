@@ -46,7 +46,6 @@ const hooks = function ($state, key, data, next) {
       break;
 
     case "checkSave":
-      console.log('checkSave', data)
       return checkSave($state, data, next)
 
     case "setSaveByStr":

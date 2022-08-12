@@ -24,7 +24,7 @@ export default class GameMap extends Component {
       $state.save.destroy[id] = 1;
       this.map = this.createMap()
     })
-
+    
     // const bgm = this.props.map.bgm;
     // this.mapBgm = this.$sound.play('bgm', bgm)
     this.map = this.createMap()

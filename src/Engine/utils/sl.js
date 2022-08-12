@@ -23,7 +23,6 @@ export const checkSave = ($state, data) => {
   return Object.entries(data).every(([context, keyValues]) => {
     const saveData = context ? $state.save[context] : $state.save;
     return Object.entries(keyValues).every(([key, value]) => {
-      console.log(key, value, keyValues)
       return (saveData[key] || 0) + value >= 0
     })
   })
