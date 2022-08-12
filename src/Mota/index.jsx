@@ -13,6 +13,7 @@ import animate from "./components/Animate.jsx";
 import select from "./components/Select.jsx";
 import table from "./components/Table.jsx";
 import scroll from "./components/Scroll.jsx";
+
 import { registryComponents, Component } from "Engine"
 
 export default class Mota extends Component {
