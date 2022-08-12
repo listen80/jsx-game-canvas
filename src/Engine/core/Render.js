@@ -316,15 +316,6 @@ export default class Render {
         this.drawImage(node, offsetX, offsetY);
       }
     }
-    if (tag === "img") {
-      // this.drawImage(node, offsetX, offsetY);
-    } else if (tag === "circle") {
-      this.drawCircle(node, offsetX, offsetY);
-    } else if (tag === "line") {
-      this.drawLine(node, offsetX, offsetX);
-    } else if (tag !== "div" && tag !== "view") {
-      console.error(`drawNode not support, check jsx <${tag} ....`, node);
-    }
     this.renderAnything(node.children, offsetX, offsetY, node);
     context.restore();
   }
