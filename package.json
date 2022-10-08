@@ -1,5 +1,5 @@
 {
-  "name": "rollup",
+  "name": "mota",
   "version": "1.0.0",
   "scripts": {
     "build": "rollup -c --environment NODE_ENV:production",
