@@ -5,7 +5,7 @@
     "build": "rollup -c --environment NODE_ENV:production",
     "start": "rollup -c --environment NODE_ENV:development -w --sourcemap",
     "lint": "eslint --ext .js,.jsx .",
-    "server": "http-server public"
+    "server": "http-server public -p 8010"
   },
   "license": "MIT",
   "devDependencies": {
