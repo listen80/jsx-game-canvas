@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === "development") {
   plugins.push(
     serve({
       // open: true,
-      port: 9000,
+      port: 8010,
       contentBase: "public",
     })
   );
