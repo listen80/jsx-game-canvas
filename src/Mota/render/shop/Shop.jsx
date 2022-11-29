@@ -1,7 +1,7 @@
 import { Component } from 'Engine'
 
 export default class Shop extends Component {
-  onCreate() {
+  onCreate () {
     this.shop = JSON.parse(JSON.stringify(this.$state.config.shop[this.props.shopid]))
     this.shop.choices.push({
       text: '离开',
@@ -23,7 +23,7 @@ export default class Shop extends Component {
     }
   };
 
-  render() {
+  render () {
     return (
       <div
         style={{

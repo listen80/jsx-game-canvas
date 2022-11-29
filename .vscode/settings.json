@@ -1,15 +1,15 @@
 {
   "eslint.alwaysShowStatus": true,
   "eslint.format.enable": true,
+  "editor.tabSize": 2,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "editor.tabSize": 2,
-  "terminal.integrated.defaultProfile.windows": "Git Bash",
   "git.enableSmartCommit": true,
   "git.confirmSync": false,
   "git.autofetch": true,
   "files.autoSave": "afterDelay",
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
   "terminal.integrated.persistentSessionReviveProcess": "never",
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
