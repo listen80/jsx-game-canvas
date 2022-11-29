@@ -1,6 +1,5 @@
 
-
-import { registryComponents, Component } from "Engine"
+import { registryComponents, Component } from 'Engine'
 
 const getTime = () => performance.now()
 
@@ -16,7 +15,7 @@ export default class FPS extends Component {
   timeStamp = getTime();
   interval = 30;
   tick = 0;
-  render() {
+  render () {
     if (this.tick === 0) {
       const timeStamp = getTime()
       this.fps = (1000 / (timeStamp - this.timeStamp)).toFixed()

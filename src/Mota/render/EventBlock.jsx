@@ -1,9 +1,9 @@
-import { Component, utils } from "Engine"
+import { Component, utils } from 'Engine'
 
-function transform($state, value, x, y) {
-  const info = $state.mapping[value];
-  const { type, name } = info;
-  const detail = $state[type][name];
+function transform ($state, value, x, y) {
+  const info = $state.mapping[value]
+  const { type, name } = info
+  const detail = $state[type][name]
   let maxTick = 1
   const data = {
     src: type,
@@ -15,14 +15,14 @@ function transform($state, value, x, y) {
     // y: y,
     maxInterval: 10,
   }
-  if (type === "animates") {
+  if (type === 'animates') {
     maxTick = 4
-  } else if (type === "terrains" || type === "items") {
+  } else if (type === 'terrains' || type === 'items') {
     maxTick = 1
-  } else if (type === "npcs" || type === "enemys") {
+  } else if (type === 'npcs' || type === 'enemys') {
     maxTick = 2
   }
-  if (type === "enemys") {
+  if (type === 'enemys') {
     const enemy = $state.enemys[name]
     data.enemy = enemy
     maxTick = 2
@@ -31,16 +31,17 @@ function transform($state, value, x, y) {
   return data
 }
 
-function run() {
+function run () {
 
 }
 
 export default class Event extends Component {
-  onCreate() {
+  onCreate () {
     this.data = transform(this.$state, this.props.value)
     this.event = this.props.event
   }
-  runEvent(i = 0) {
+
+  runEvent (i = 0) {
     const e = this.event[i]
     if (!e) {
       return
@@ -58,14 +59,14 @@ export default class Event extends Component {
           this.runEvent(i + 1)
         }
       }
-      return
     } else if (type === 'removeSelf') {
       this.$hook('removeMapEventByKey', this.props.id, () => this.runEvent(i + 1))
     } else {
       this.$hook(type, data, () => this.runEvent(i + 1))
     }
   }
-  onZhuangji() {
+
+  onZhuangji () {
     const { type, enemy, name } = this.data
     if (this.props.event) {
       this.event = this.props.event
@@ -81,18 +82,18 @@ export default class Event extends Component {
         },
         {
           type: 'removeMapEventByKey',
-          data: this.props.id
-        }
+          data: this.props.id,
+        },
       ]
       this.runEvent()
-    } else if (type === "items") {
-      const item = this.$state.items[name];
-      const { type, property } = item;
-      if (type === "normal" || type === "special") {
+    } else if (type === 'items') {
+      const item = this.$state.items[name]
+      const { type, property } = item
+      if (type === 'normal' || type === 'special') {
         this.event = [
           {
             type: 'setMessage',
-            data: `获得${item.name}`
+            data: `获得${item.name}`,
           },
           {
             type: 'getItem',
@@ -100,11 +101,11 @@ export default class Event extends Component {
           },
           {
             type: 'removeMapEventByKey',
-            data: this.props.id
-          }
+            data: this.props.id,
+          },
         ]
         this.runEvent()
-      } else if (type === "update") {
+      } else if (type === 'update') {
         this.event = [
           {
             type: 'setSaveByStr',
@@ -112,8 +113,8 @@ export default class Event extends Component {
           },
           {
             type: 'removeMapEventByKey',
-            data: this.props.id
-          }
+            data: this.props.id,
+          },
         ]
 
         // const propertyNames = this.$state.config.propertyNames
@@ -134,46 +135,44 @@ export default class Event extends Component {
         // });
         this.runEvent()
 
-        this.$sound.play("se", "item.mp3");
+        this.$sound.play('se', 'item.mp3')
       }
-      return true;
-    } else if (type === "terrains") {
+      return true
+    } else if (type === 'terrains') {
       if (
         [
-          "yellowDoor",
-          "redDoor",
-          "blueDoor",
-          "steelDoor",
-          "specialDoor",
+          'yellowDoor',
+          'redDoor',
+          'blueDoor',
+          'steelDoor',
+          'specialDoor',
         ].includes(name)
       ) {
-        const key = name.slice(0, -4) + "Key";
+        const key = name.slice(0, -4) + 'Key'
         if (this.$state.save.items[key]) {
-          this.$state.save.items[key]--;
+          this.$state.save.items[key]--
           this.$hook('removeMapEventByKey', this.props.id)
-          this.$sound.play("se", "door.mp3");
-          return true;
+          this.$sound.play('se', 'door.mp3')
+          return true
         }
-        this.$hook('setMessage', `你没有${name}`);
-      } else {
-
+        this.$hook('setMessage', `你没有${name}`)
       }
-    } else {
     }
   }
+
   onMouseDown = () => {
     const { type, enemy, name } = this.data
     this.props.onClick(this)
     return true
   }
 
-  render() {
-    const { x, y } = this.props;
+  render () {
+    const { x, y } = this.props
     return (
       <div style={{ width: 1, height: 1, x, y }} onMouseDown={this.onMouseDown}>
         <animate {...this.data}></animate>
         {this.enemy}
       </div>
-    );
+    )
   }
 }

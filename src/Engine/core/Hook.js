@@ -1,4 +1,4 @@
-import { loadGame, saveGame, setSave, checkSave, setSaveByStr, checkSaveByStr } from "../utils/sl";
+import { loadGame, saveGame, setSave, checkSave, setSaveByStr, checkSaveByStr } from '../utils/sl'
 
 const map = {}
 
@@ -9,54 +9,53 @@ const registry = (key, cb) => {
 const hooks = function ($state, key, data, next) {
   const $res = $state.$res
   switch (key) {
-
-    case "startGame":
+    case 'startGame':
       Object.assign($state.save, $state.config.save)
-      $res.loadMap($state.save.mapId);
-      break;
+      $res.loadMap($state.save.mapId)
+      break
 
-    case "loadGame":
+    case 'loadGame':
       Object.assign($state.save, loadGame())
-      $res.loadMap($state.save.mapId);
-      break;
+      $res.loadMap($state.save.mapId)
+      break
 
-    case "saveGame":
+    case 'saveGame':
       saveGame($state.save)
-      break;
+      break
 
-    case "loadMap":
+    case 'loadMap':
       Object.assign($state.save, data)
-      $res.loadMap($state.save.mapId);
-      break;
+      $res.loadMap($state.save.mapId)
+      break
 
-    case "toTitle":
-      $state.map = null;
-      break;
+    case 'toTitle':
+      $state.map = null
+      break
 
-    case "getItems":
+    case 'getItems':
       setSave($state, { items: data }, next)
-      break;
+      break
 
-    case "getItem":
+    case 'getItem':
       setSave($state, { items: { [data]: 1 } }, next)
-      break;
+      break
 
-    case "setSave":
+    case 'setSave':
       setSave($state, data, next)
-      break;
+      break
 
-    case "checkSave":
+    case 'checkSave':
       return checkSave($state, data, next)
 
-    case "setSaveByStr":
+    case 'setSaveByStr':
       setSaveByStr($state, data, next)
-      break;
+      break
 
-    case "checkSaveByStr":
+    case 'checkSaveByStr':
       return checkSaveByStr($state, data, next)
 
-    case "openShop":
-      $state.shopid = data;
+    case 'openShop':
+      $state.shopid = data
       break
 
     default:
@@ -66,6 +65,6 @@ const hooks = function ($state, key, data, next) {
         console.error(key, data)
       }
   }
-};
+}
 
 export { hooks, registry }

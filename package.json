@@ -4,9 +4,8 @@
   "scripts": {
     "build": "rollup -c --environment NODE_ENV:production",
     "start": "rollup -c --environment NODE_ENV:development -w --sourcemap",
-    "lint": "eslint --ext .js,.jsx ."
+    "lint": "eslint --ext .js,.jsx -f node_modules/eslint-friendly-formatter ."
   },
-  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.15.8",
     "@babel/eslint-parser": "^7.16.3",

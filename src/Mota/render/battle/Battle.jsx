@@ -1,4 +1,4 @@
-import { registryComponents, Component } from "Engine"
+import { registryComponents, Component } from 'Engine'
 
 export default class Battle extends Component {
   tick = 0;
@@ -24,7 +24,7 @@ export default class Battle extends Component {
     },
   };
 
-  onCreate() {
+  onCreate () {
     this.$registry('battle', ($state, enemy, callback) => {
       this.enemy = JSON.parse(JSON.stringify(enemy))
       this.callback = callback
@@ -40,8 +40,6 @@ export default class Battle extends Component {
       this.tick = 0
       this.battleMsg = null
     })
-
-
   }
 
   onMouseDown = () => {
@@ -52,7 +50,7 @@ export default class Battle extends Component {
     return true
   }
 
-  calc() {
+  calc () {
     const enemy = this.enemy
     const save = this.$state.save
     const hero = save.hero
@@ -89,7 +87,7 @@ export default class Battle extends Component {
   }
 
   loop = this.createLoop(1.5, 2, 2, 1 / 32, true)
-  render() {
+  render () {
     if (!this.enemy) {
       return
     }

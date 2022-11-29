@@ -1,23 +1,23 @@
-import { Component } from "Engine";
+import { Component } from 'Engine'
 
 export default class Select extends Component {
   loop = this.createLoop(155, 222, 1, 2, true)
 
-  onCreate() {
-    const { activeIndex = 0 } = this.props;
-    this.activeIndex = activeIndex;
+  onCreate () {
+    const { activeIndex = 0 } = this.props
+    this.activeIndex = activeIndex
   }
 
-  onChange() {
+  onChange () {
     if (this.props.onChange) {
       this.props.onChange(
         this.props.options[this.activeIndex],
         this.activeIndex,
-      );
+      )
     }
   }
 
-  onConfirm() {
+  onConfirm () {
     const option = this.props.options[this.activeIndex]
     if (option) {
       const { event } = option
@@ -28,47 +28,47 @@ export default class Select extends Component {
         this.props.onConfirm(
           this.props.options[this.activeIndex],
           this.activeIndex,
-        );
+        )
       }
     }
   }
 
-  onKeyDown({ $key }) {
-    if ($key === "down") {
-      this.activeIndex++;
+  onKeyDown ({ $key }) {
+    if ($key === 'down') {
+      this.activeIndex++
       if (this.activeIndex >= this.props.options.length) {
-        this.activeIndex = 0;
+        this.activeIndex = 0
       }
-      this.onChange();
-    } else if ($key === "up") {
-      this.activeIndex--;
+      this.onChange()
+    } else if ($key === 'up') {
+      this.activeIndex--
       if (this.activeIndex < 0) {
-        this.activeIndex += this.props.options.length;
+        this.activeIndex += this.props.options.length
       }
-      this.onChange();
-    } else if ($key === "confirm") {
+      this.onChange()
+    } else if ($key === 'confirm') {
       this.onConfirm()
     }
   }
 
   onMouseDown = (event, $node) => {
-    this.activeIndex = $node.props.index;
+    this.activeIndex = $node.props.index
     this.onConfirm()
   };
 
   onMouseMove = (index, $node) => {
-    this.activeIndex = $node.props.index;
-    this.onChange();
+    this.activeIndex = $node.props.index
+    this.onChange()
   }
 
-  render() {
+  render () {
     const { width = 1, height = 1 } = this.props.optionSize || {}
     const rgb = this.loop()
     let y = 0
 
     const selects = this.props.options.map(({ text, disabled }, index) => {
       if (disabled) {
-        return
+        return null
       }
       const activeStyle = {
         borderWidth: this.activeIndex === index ? 2 : 0,
@@ -82,11 +82,11 @@ export default class Select extends Component {
           onMouseMove={this.onMouseMove}
         >
           {text}
-        </div>;
+        </div>
 
       y += height
-      return select;
+      return select
     })
-    return <div style={this.props.style}>{selects}</div>;
+    return <div style={this.props.style}>{selects}</div>
   }
 }

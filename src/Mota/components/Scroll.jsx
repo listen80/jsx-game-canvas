@@ -1,8 +1,7 @@
-import { Component } from "Engine";
+import { Component } from 'Engine'
 
 export default class Scroll extends Component {
-
-  onCreate() {
+  onCreate () {
     this.scrollTop = 0
     this.height = this.props.height || 0
     this.width = this.props.width || 10
@@ -11,7 +10,7 @@ export default class Scroll extends Component {
 
   onWheel = (event) => {
     const { deltaY } = event
-    const ratio = 4;
+    const ratio = 4
     this.scrollTop +=
       ratio * (deltaY > 0 ? Math.ceil(deltaY / 100) : Math.floor(deltaY / 100))
     if (this.scrollTop > this.contentHeight - this.height) {
@@ -22,7 +21,7 @@ export default class Scroll extends Component {
     console.log(this.scrollTop)
   };
 
-  render() {
+  render () {
     return (
       <div
         style={{

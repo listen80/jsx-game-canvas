@@ -1,6 +1,5 @@
 import { Component } from 'Engine'
 
-
 export default class ScrollText extends Component {
   styles = {
     text: {
@@ -19,20 +18,20 @@ export default class ScrollText extends Component {
       y: 5,
       textAlign: 'center',
       fontSize: 50,
-    }
+    },
   };
 
-  onCreate() {
+  onCreate () {
     const { text, bgm } = this.$state.map
     this.text = text.split('\n')
     this.mapBgm = this.$sound.play('bgm', bgm)
   }
 
-  onDestroy() {
+  onDestroy () {
     this.mapBgm.pause()
   }
 
-  onKeyDown({ code }) {
+  onKeyDown ({ code }) {
     if (code === 'Space') {
       this.onMouseDown()
     }
@@ -44,7 +43,6 @@ export default class ScrollText extends Component {
         this.$state.map.event.forEach((v) => {
           this.$hook(v)
         })
-        return
       }
       // if (type === 'loadMap') {
       //   this.props.onClose(data)
@@ -54,7 +52,7 @@ export default class ScrollText extends Component {
     }
   };
 
-  render() {
+  render () {
     const style = this.styles.scroll
     if (style.y > -1 * this.text.length) {
       style.y -= 1 / 16
@@ -64,7 +62,9 @@ export default class ScrollText extends Component {
     return (
       <div style={this.styles.text} onMouseDown={this.onMouseDown}>
         {
-          this.ready ? <div style={this.styles.continue}>点击继续</div> : <div style={this.styles.scroll}>
+          this.ready
+            ? <div style={this.styles.continue}>点击继续</div>
+            : <div style={this.styles.scroll}>
             {this.text.map((text, index) => (
               <div style={{ y: index }}>{text}</div>
             ))}

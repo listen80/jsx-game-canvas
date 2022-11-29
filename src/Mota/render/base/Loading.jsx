@@ -1,16 +1,16 @@
 
-import { registryComponents, Component } from "Engine"
+import { registryComponents, Component } from 'Engine'
 
 export default class Loading extends Component {
-  render() {
+  render () {
     const loadFontStyle = {
       y: 4,
       x: 9,
       textAlign: 'center',
-      fontSize: 128
+      fontSize: 128,
     }
 
-    const x = 6;
+    const x = 6
     const width = (18 - 2 * x)
     const height = 0.5
     const wrapStyle = {
@@ -18,7 +18,7 @@ export default class Loading extends Component {
       y: 8,
       width,
       height,
-      backgroundColor: '#fff'
+      backgroundColor: '#fff',
     }
     const progressStyle = {
       width: width * this.props.rate || 0,

@@ -1,17 +1,17 @@
 import { setStorage, getStorage } from './storage'
 import { convertPropertyStr } from './format'
 
-export function saveGame(save) {
+export function saveGame (save) {
   return setStorage('game', save)
 }
 
-export function loadGame() {
+export function loadGame () {
   return getStorage('game')
 }
 
 export const setSave = ($state, data, next) => {
   Object.entries(data).forEach(([context, keyValues]) => {
-    const saveData = context ? $state.save[context] : $state.save;
+    const saveData = context ? $state.save[context] : $state.save
     return Object.entries(keyValues).forEach(([key, value]) => {
       saveData[key] = (saveData[key] || 0) + value
     })
@@ -21,7 +21,7 @@ export const setSave = ($state, data, next) => {
 
 export const checkSave = ($state, data) => {
   return Object.entries(data).every(([context, keyValues]) => {
-    const saveData = context ? $state.save[context] : $state.save;
+    const saveData = context ? $state.save[context] : $state.save
     return Object.entries(keyValues).every(([key, value]) => {
       return (saveData[key] || 0) + value >= 0
     })

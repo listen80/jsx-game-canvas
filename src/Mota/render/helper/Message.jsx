@@ -34,11 +34,10 @@ export function splitStringByWidth (str, w) {
   return re
 }
 
-
 export default class Message extends Component {
   messages = []
   tempMessages = []
-  onCreate() {
+  onCreate () {
     this.$registry('setMessage', ($state, data, next) => {
       if (!data) {
         return
@@ -55,7 +54,7 @@ export default class Message extends Component {
     })
   }
 
-  render() {
+  render () {
     this.messages = this.messages.filter((config) => {
       return config.tick--
     })
@@ -78,6 +77,5 @@ export default class Message extends Component {
         </div>
       )
     })
-
   }
 }

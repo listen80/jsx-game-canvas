@@ -1,7 +1,7 @@
 import { Component } from 'Engine'
 
 export default class ShopList extends Component {
-  onCreate() {
+  onCreate () {
     const shops = this.$state.save.shops || [{}, {}]
     this.options = Object.entries(shops).map(([shopid, text]) => {
       return { text, shopid }
@@ -15,13 +15,13 @@ export default class ShopList extends Component {
     }
   };
 
-  onKeyDown({ code }) {
+  onKeyDown ({ code }) {
     if (code === 'KeyB') {
       this.props.onClose()
     }
   }
 
-  render() {
+  render () {
     return (
       <div
         src="shop.webp"

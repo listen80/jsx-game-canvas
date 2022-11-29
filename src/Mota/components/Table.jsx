@@ -1,9 +1,9 @@
-import { Component } from "Engine";
+import { Component } from 'Engine'
 
 export default class Table extends Component {
-  render() {
+  render () {
     const { dataSource, columns, data } = this.props
-    let x = 0;
+    let x = 0
     return columns.map((column, index) => {
       const { title, dataIndex, width = 1, height = 1, render } = column
       let y = height
@@ -11,7 +11,7 @@ export default class Table extends Component {
         <div style={{ x, width, height }}>{title}</div>
         {dataSource.map((rowData, rowIndex) => {
           y += height
-          const style = { x, y, width, height, }
+          const style = { x, y, width, height }
           return (
             <div style={style} >
               {render ? render.call(this, rowData, data, rowIndex, index) : rowData[dataIndex]}

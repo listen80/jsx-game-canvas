@@ -5,7 +5,7 @@ import {
   isUndefined,
   isString,
   isBoolean,
-} from "../utils/common";
+} from '../utils/common'
 
 const componentsMap = Object.create(null)
 
@@ -15,8 +15,8 @@ export const registryComponents = (map) => {
   })
 }
 
-export function createNode(tag, props = {}, ...children) {
-  const $parent = this;
+export function createNode (tag, props = {}, ...children) {
+  const $parent = this
   tag = componentsMap[tag] || tag
   if (props?.hidden) {
     return null
@@ -27,78 +27,78 @@ export function createNode(tag, props = {}, ...children) {
     props,
     children,
     $parent,
-  };
+  }
 }
 
-function createInstance(next) {
-  const Class = next.tag;
-  next.$context = new Class(next);
+function createInstance (next) {
+  const Class = next.tag
+  next.$context = new Class(next)
 
-  next.$context.$state = next.$parent.$state;
-  next.$context.$hook = next.$parent.$hook;
-  next.$context.$registry = next.$parent.$registry;
+  next.$context.$state = next.$parent.$state
+  next.$context.$hook = next.$parent.$hook
+  next.$context.$registry = next.$parent.$registry
 
   // next.$context.$parent = next.$parent;
-  next.$context.onCreate && next.$context.onCreate();
-  renderNode(next);
+  next.$context.onCreate && next.$context.onCreate()
+  renderNode(next)
 }
 
-function destoryInstance(pre) {
+function destoryInstance (pre) {
   // && isBoolean(pre)
   if (!isPrimitive(pre) && !isUndefined(pre)) {
     if (isFunc(pre.tag)) {
-      destoryInstance(pre.$context.$node);
-      pre.$context.destroy && pre.$context.onDestroy();
+      destoryInstance(pre.$context.$node)
+      pre.$context.destroy && pre.$context.onDestroy()
     } else if (isArray(pre)) {
       while (pre.length) {
-        destoryInstance(pre.pop());
+        destoryInstance(pre.pop())
       }
     } else {
-      destoryInstance(pre.children);
+      destoryInstance(pre.children)
     }
   }
 }
 
-function updateInstance(pre, next) {
-  next.$context = pre.$context;
-  next.$context.props = next.props;
-  renderNode(next);
+function updateInstance (pre, next) {
+  next.$context = pre.$context
+  next.$context.props = next.props
+  renderNode(next)
 }
 
-function renderNode(next) {
-  next.$context.$node = patchNode(next.$context.$node, next.$context.render());
+function renderNode (next) {
+  next.$context.$node = patchNode(next.$context.$node, next.$context.render())
 }
 
-export function patchNode(pre, next) {
+export function patchNode (pre, next) {
   // undefined null
   // string number
   // array
   // class component
   // div node
   if (isUndefined(next) || isPrimitive(next) || isBoolean(next)) {
-    destoryInstance(pre);
+    destoryInstance(pre)
   } else if (isArray(next)) {
     if (isArray(pre)) {
       for (let i = 0; i < next.length; i++) {
         // diff array
-        patchNode(pre[i], next[i]);
+        patchNode(pre[i], next[i])
       }
     } else {
-      destoryInstance(pre);
+      destoryInstance(pre)
       for (let i = 0; i < next.length; i++) {
-        patchNode(null, next[i]);
+        patchNode(null, next[i])
       }
     }
   } else if (isFunc(next.tag)) {
     if (pre && pre.tag === next.tag && pre.props?.key === next.props?.key) {
-      updateInstance(pre, next);
+      updateInstance(pre, next)
     } else {
-      destoryInstance(pre);
-      createInstance(next);
+      destoryInstance(pre)
+      createInstance(next)
     }
   } else if (isString(next.tag)) {
-    const preChildren = pre && pre.children;
-    patchNode(preChildren, next.children);
+    const preChildren = pre && pre.children
+    patchNode(preChildren, next.children)
   }
-  return next;
+  return next
 }

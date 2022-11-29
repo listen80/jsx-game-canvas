@@ -1,4 +1,4 @@
-export function isCoincided(A, B) {
+export function isCoincided (A, B) {
   if (
     A.x >= B.x + B.width ||
     A.x + A.width <= B.x ||
@@ -10,7 +10,7 @@ export function isCoincided(A, B) {
   return true
 }
 
-export function updateVector(vector, obj) {
+export function updateVector (vector, obj) {
   vector = Object.assign(Object.onCreate(null), vector)
   Object.entries(obj).forEach(([key, value]) => {
     vector[key] += value
@@ -18,7 +18,7 @@ export function updateVector(vector, obj) {
   return vector
 }
 
-export function assignVector(vector, obj) {
+export function assignVector (vector, obj) {
   return Object.assign(vector, obj)
 }
 
@@ -29,7 +29,7 @@ export const findPath = (start, dist, mapJSON) => {
   if (start.x === dist.x && start.y === dist.y) {
     return []
   }
-  function checkStep(step) {
+  function checkStep (step) {
     const { x, y } = step
 
     if (x === dist.x && y === dist.y) {
@@ -40,26 +40,26 @@ export const findPath = (start, dist, mapJSON) => {
       return false
     }
     if (
-      (x < 0
-      || y < 0
-      || x >= width
-      || y >= height)
-      || map[y][x]
-      || arrivedMap.has([x, y] + '')
-      || (x === start.x && y === start.y)) {
+      (x < 0 ||
+      y < 0 ||
+      x >= width ||
+      y >= height) ||
+      map[y][x] ||
+      arrivedMap.has([x, y] + '') ||
+      (x === start.x && y === start.y)) {
       return false
     }
 
     arrivedMap.set([x, y] + '', 1)
     return true
   }
-  function getNextSteps(start) {
+  function getNextSteps (start) {
     const { x, y } = start
     const arr = [
       { x: x - 1, y, sy: 1, rad: Math.PI, dir: 'left' },
       { x: x + 1, y, sy: 2, rad: 0, dir: 'right' },
-      { x, y: y + 1, sy: 0, rad: Math.PI * .5, dir: 'bottom' },
-      { x, y: y - 1, sy: 3, rad: Math.PI * 1.5, dir: 'top' }
+      { x, y: y + 1, sy: 0, rad: Math.PI * 0.5, dir: 'bottom' },
+      { x, y: y - 1, sy: 3, rad: Math.PI * 1.5, dir: 'top' },
     ].map((v) => { v.start = start; return v }).filter(checkStep)
     return arr
   }
@@ -71,7 +71,7 @@ export const findPath = (start, dist, mapJSON) => {
       return
     }
     const next = []
-    for (let start of starts) {
+    for (const start of starts) {
       const t = getNextSteps(start)
       if (path.length) {
         return
@@ -79,7 +79,6 @@ export const findPath = (start, dist, mapJSON) => {
 
       next.push(...t)
     }
-
 
     find(next, depth - 1)
     return next

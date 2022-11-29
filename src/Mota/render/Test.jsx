@@ -1,4 +1,4 @@
-import { Component } from "Engine"
+import { Component } from 'Engine'
 
 export default class Test extends Component {
   styles = {
@@ -10,63 +10,64 @@ export default class Test extends Component {
       backgroundColor: '#ccc',
       backgroundImage: 'ground.png',
       rotate: 90,
-    }
+    },
   }
+
   onKeyDown = ({ code }) => {
   };
 
-  onCreate() {
+  onCreate () {
     // this.$state.map = mockMap
     this.options = [
       {
-        text: "开始",
-        event: "startGame",
+        text: '开始',
+        event: 'startGame',
         option: [
           {
-            text: "开始",
-            event: "startGame",
+            text: '开始',
+            event: 'startGame',
           },
           {
-            text: "继续",
-            event: "loadGame",
+            text: '继续',
+            event: 'loadGame',
           },
           {
-            text: "继续",
-            event: "loadGame",
+            text: '继续',
+            event: 'loadGame',
           },
         ],
       },
       {
-        text: "继续",
-        event: "loadGame",
+        text: '继续',
+        event: 'loadGame',
         option: [
           {
-            text: "开始2",
-            event: "startGame",
+            text: '开始2',
+            event: 'startGame',
           },
           {
-            text: "继续2",
-            event: "loadGame",
+            text: '继续2',
+            event: 'loadGame',
           },
           {
-            text: "继续2",
-            event: "loadGame",
-          }
-        ]
+            text: '继续2',
+            event: 'loadGame',
+          },
+        ],
       },
       {
-        text: "继续",
-        event: "loadGame",
+        text: '继续',
+        event: 'loadGame',
       },
       {
-        text: "继续",
-        event: "loadGame",
+        text: '继续',
+        event: 'loadGame',
       },
       {
-        text: "继续",
-        event: "loadGame",
+        text: '继续',
+        event: 'loadGame',
       },
-    ];
+    ]
   }
 
   onConfirm = (option, index) => {
@@ -81,16 +82,17 @@ export default class Test extends Component {
     this.rightIndex = index
   }
 
-  renderMap() {
+  renderMap () {
     // return mockMap.map.map((line, y) => line.map((value, x) => value ? <Animate data={transform(this.$state, value, x, y)}></Animate> : null));
   }
-  render() {
+
+  render () {
     if (this.path && this.path.length) {
       const path = this.path.pop()
-      const { x, y, sy } = path;
-      this.$state.save.position.x = x;
-      this.$state.save.position.y = y;
-      this.$state.save.position.sy = sy;
+      const { x, y, sy } = path
+      this.$state.save.position.x = x
+      this.$state.save.position.y = y
+      this.$state.save.position.sy = sy
     }
     const rightOptions = this.options[this.index]?.option
     // const bottomOption = rightOptions?.[this.rightIndex];
@@ -108,13 +110,13 @@ export default class Test extends Component {
         >
         </select>
         <select
-          style={{ x: 3, y: 0, }}
+          style={{ x: 3, y: 0 }}
           hidden={!rightOptions}
           optionSize={{ width: 3, height: 1 }}
           options={rightOptions}
           onConfirm={this.onConfirmRight}
         ></select>
       </div>
-    );
+    )
   }
 }

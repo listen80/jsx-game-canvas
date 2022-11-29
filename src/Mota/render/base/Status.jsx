@@ -1,7 +1,7 @@
 import { Component } from 'Engine'
 
 export default class Status extends Component {
-  onCreate() {
+  onCreate () {
     this.walls = []
     for (let x = 0; x < 5; x++) {
       for (let y = 0; y < 13; y++) {
@@ -22,7 +22,7 @@ export default class Status extends Component {
     }
   }
 
-  render() {
+  render () {
     const { save, map } = this.$state
     const rowProperty = [
       this.$state.config.title,
@@ -53,7 +53,7 @@ export default class Status extends Component {
                   sheight: 1,
                 }}
               />
-              <div style={{ x: 1.5, y: 0, height: 1, width: 1 * 2.5, }}>{value}</div>
+              <div style={{ x: 1.5, y: 0, height: 1, width: 1 * 2.5 }}>{value}</div>
             </div>
           )
         })}

@@ -1,4 +1,4 @@
-import { Component } from "Engine";
+import { Component } from 'Engine'
 
 class Talk extends Component {
   index = 0;
@@ -12,12 +12,12 @@ class Talk extends Component {
     talk: {
       width: this.width,
       height: 3,
-      backgroundColor: "black",
+      backgroundColor: 'black',
       borderWidth: 2,
-      borderColor: "white",
+      borderColor: 'white',
       fontSize: 16,
-      textAlign: "left",
-      textBaseline: "middle",
+      textAlign: 'left',
+      textBaseline: 'middle',
     },
     left: {
       x: 2,
@@ -28,19 +28,19 @@ class Talk extends Component {
       x: 3,
       y: 6,
       height: 2,
-    }
+    },
   };
 
   onMouseDown = () => {
-    this.next();
+    this.next()
     return true
   }
 
-  onCreate() {
+  onCreate () {
     this.next()
   }
 
-  next() {
+  next () {
     if (this.index === this.props.talks.length) {
       this.props.onClose()
       return
@@ -50,14 +50,14 @@ class Talk extends Component {
     Object.assign(this.styles.talk, this.index % 2 ? this.styles.right : this.styles.left)
     talk.split(/\n/).forEach((talk) => {
       for (let i = 0; i < talk.length; i = i + 7 * 2) {
-        this.talkArray.push(talk.substr(i, 7 * 2));
+        this.talkArray.push(talk.substr(i, 7 * 2))
       }
     })
     this.styles.talk.height = this.talkArray.length
-    this.index++;
+    this.index++
   }
 
-  render() {
+  render () {
     if (!this.talkArray) {
       return
     }
@@ -74,19 +74,19 @@ class Talk extends Component {
               <div style={style}>
                 {talk}
               </div>
-            );
+            )
           })}
         </div>
       </div>
-    );
+    )
   }
 }
 
 export default class Talks extends Component {
-  onCreate() {
+  onCreate () {
     this.$registry('talk', ($state, data, next) => {
-      this.talks = data;
-      this.next = next;
+      this.talks = data
+      this.next = next
     })
   }
 
@@ -95,7 +95,7 @@ export default class Talks extends Component {
     this.next()
   }
 
-  render() {
+  render () {
     return this.talks ? <Talk talks={this.talks} onClose={this.onClose} /> : null
   }
 }

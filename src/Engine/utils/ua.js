@@ -1,7 +1,7 @@
 export const checkChromeVersion = (value) => {
-  if (location.protocol === "file:") {
+  if (location.protocol === 'file:') {
     return false
   } else {
-    return true;
+    return true
   }
 }

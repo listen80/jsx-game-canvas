@@ -1,6 +1,6 @@
-export function convertPropertyStr(str) {
+export function convertPropertyStr (str) {
   const o = {}
-  str.split('&').map((str) => {
+  str.split('&').forEach((str) => {
     const arr = str.split('.')
     if (arr.length === 1) {
       arr.unshift('')
@@ -10,7 +10,7 @@ export function convertPropertyStr(str) {
     }
     const [context, propertyStr] = arr
     o[context] = {}
-    propertyStr.split(';').map(v => {
+    propertyStr.split(';').forEach(v => {
       const [key, value] = v.split(':')
       o[context][key] = Number(value) || 0
     })
