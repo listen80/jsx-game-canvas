@@ -26,7 +26,6 @@ const plugins = [
   babel({
     babelHelpers: 'bundled', // 多次使用辅助函数只保留一个  比如 class 在转换成es5时会使用多个辅助函数则只保留一个
   }),
-  // livereload()
 ]
 
 if (process.env.NODE_ENV === 'development') {
