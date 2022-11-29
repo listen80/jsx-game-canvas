@@ -43,13 +43,9 @@ if (process.env.NODE_ENV === 'development') {
 export default {
   plugins,
   input: {
-    // Engine: "src/Engine",
-    // Mota: "src/Mota",
     game: 'src/',
   },
   output: {
-    // file: 'public/bundle.js',
-    // format: "umd",
     dir: 'public/Bundle',
   },
 }

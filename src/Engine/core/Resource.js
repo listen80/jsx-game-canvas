@@ -23,7 +23,7 @@ export default class Resource {
   }
 
   loadMapping () {
-    this.$state.config.mapping.foreEach((v) => {
+    this.$state.config.mapping.forEach((v) => {
       this.total++
       loadText(`Data/${v}`).then((data) => {
         this.loaded++
@@ -33,7 +33,7 @@ export default class Resource {
   }
 
   loadImage () {
-    this.$state.config.images.foreEach((v) => {
+    this.$state.config.images.forEach((v) => {
       this.total++
       loadImage(`Image/${v}`).then((data) => {
         this.$state.image[v] = data
@@ -44,7 +44,7 @@ export default class Resource {
   }
 
   loadSprite () {
-    this.$state.config.sprites.foreEach((v) => {
+    this.$state.config.sprites.forEach((v) => {
       this.total++
       loadImage(`Sprite/${v}.png`).then((data) => {
         this.$state.image[v] = data
