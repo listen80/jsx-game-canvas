@@ -1,7 +1,7 @@
 import Render from './core/Render'
 import Resource from './core/Resource'
 
-import { createNode, patchNode, registryComponents } from './core/Node'
+import { createNode, patchNode } from './core/Node'
 
 import { loadJSON } from './utils/http'
 import { checkChromeVersion } from './utils/ua'
@@ -26,6 +26,7 @@ export default class Engine {
       image: Object.create(null),
       sound: Object.create(null),
     }
+
     this.$state.$res = new Resource(this.$state)
     this.$hook = (...others) => hooks(this.$state, ...others)
     this.$registry = registry
@@ -36,25 +37,16 @@ export default class Engine {
 
   gameStop () {
     cancelAnimationFrame(this.ident)
-    this.ident = -1
   }
 
   gameStart () {
     const next = () => {
-      requestAnimationFrame(() => {
+      this.ident = requestAnimationFrame(() => {
         this.keyFrame()
         next()
       })
     }
     next()
-    // this.ident = setInterval(() => {
-    //   // try {
-    //     this.keyFrame();
-    //   // } catch (e) {
-    //   //   console.log(e)
-    //   //   clearInterval(this.ident)
-    //   // }
-    // }, 16)
   }
 
   keyFrame () {
