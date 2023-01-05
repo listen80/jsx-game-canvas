@@ -1,6 +1,25 @@
 import { Component } from 'Engine'
 
 export default class Shop extends Component {
+  styles = {
+    wrap: {
+      width: 18,
+      height: 13,
+      borderColor: '#deb887',
+    },
+    shop: {
+      x: 3,
+      y: 2,
+      width: 7,
+      height: 8,
+      borderWidth: 4,
+      borderColor: '#deb887',
+      textAlign: 'center',
+      backgroundColor: 'rgba(0,0,0,.4)',
+
+    },
+  }
+
   onCreate () {
     this.shop = JSON.parse(JSON.stringify(this.$state.config.shop[this.props.shopid]))
     this.shop.choices.push({
@@ -26,26 +45,11 @@ export default class Shop extends Component {
   render () {
     return (
       <div
-        style={{
-          width: 18,
-          height: 13,
-          borderColor: '#deb887',
-        }}
+        style={this.styles.wrap}
       >
         <div
           src="shop.webp"
-          style={{
-            x: 3,
-            y: 2,
-            width: 7,
-            height: 8,
-            borderWidth: 4,
-            borderColor: '#deb887',
-            textAlign: 'center',
-            backgroundColor: 'rgba(0,0,0,.4)',
-
-          }}
-
+          style={this.styles.shop}
         >
           <div style={{ y: 1, width: 7, fontSize: 24 }}>{this.shop.title}</div>
           <div style={{ x: 0, y: 2, fontSize: 14 }}>
