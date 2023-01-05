@@ -8,8 +8,6 @@ import serve from 'rollup-plugin-serve' // 启动服务
 
 import replace from 'rollup-plugin-replace' // 注入环境变量
 
-// import livereload from 'rollup-plugin-livereload' // 实时刷新
-
 const plugins = [
   alias({
     entries: {
