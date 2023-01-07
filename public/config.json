@@ -172,14 +172,14 @@
       ]
     }
   },
-  "font": {
+  "fonts": {
     "name": "华文行楷",
-    "url": "Fonts/华文行楷.ttf",
+    "url": "华文行楷.ttf",
     "load": false
   },
   "images": [
     "Characters/hero.png",
-    "ground.png",
+    "Background/ground.png",
     "Battlebacks/mota.jpg"
   ],
   "sounds": [

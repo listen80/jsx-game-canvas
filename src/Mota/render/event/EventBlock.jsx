@@ -1,5 +1,5 @@
 import { Component, utils } from 'Engine'
-import Animate from '../../components/Animate.jsx'
+import Animate from '../../components/Animate'
 
 function transform ($state, value, x, y) {
   const info = $state.mapping[value]
@@ -166,7 +166,7 @@ export default class Event extends Component {
 
   onMouseDown = () => {
     const { type, enemy, name } = this.data
-    this.props.onClick(this)
+    this.props?.onMouseDown(this)
     return true
   }
 

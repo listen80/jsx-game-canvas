@@ -1,8 +1,14 @@
-import { Component } from 'Engine'
+import { Component } from "Engine";
+import Line from "../../components/Line";
 
 export default class Status extends Component {
-  onCreate () {
-    this.walls = []
+  styles = {
+    wrap: { fontSize: 24, textAlign: "center", textBaseLine: "middle" },
+    section: { y: 1 },
+  };
+
+  onCreate() {
+    this.walls = [];
     for (let x = 0; x < 2; x++) {
       for (let y = 0; y < 13; y++) {
         if (x === 2 - 1 || y === 0 || y === 13 - 1) {
@@ -15,53 +21,62 @@ export default class Status extends Component {
                 x: x * 1,
                 y: y * 1,
               }}
-            ></div>,
-          )
+            ></div>
+          );
         }
       }
     }
+    const src = "icons";
+    this.rowProperty = [
+      {
+        src,
+        style: { sy: 11, height: 1, width: 1 },
+        onMouseDown() {
+          console.log(...arguments);
+        },
+      },
+      {
+        src,
+        style: { sy: 12, height: 1, width: 1 },
+        onMouseDown() {
+          console.log(...arguments);
+        },
+      },
+      {
+        src,
+        style: { sy: 13, height: 1, width: 1 },
+        onMouseDown() {
+          console.log(...arguments);
+        },
+      },
+      {
+        src,
+        style: { sy: 14, height: 1, width: 1 },
+        onMouseDown() {
+          console.log(...arguments);
+        },
+      },
+      {
+        src,
+        style: { sy: 15, height: 1, width: 1 },
+        onMouseDown() {
+          console.log(...arguments);
+        },
+      },
+    ];
   }
 
-  render () {
-    const { save, map } = this.$state
-    const rowProperty = [
-      this.$state.config.title,
-      map.name,
-      save.hero.lv,
-      save.hero.hp,
-      save.hero.atk,
-      save.hero.def,
-      save.hero.exp,
-      save.money,
-      save.items.yellowKey,
-      save.items.blueKey,
-      save.items.redKey,
-    ]
+  render() {
+    
+    const { styles, rowProperty } = this;
+
     return (
-      <div
-        style={{ fontSize: 24, textAlign: 'center', textBaseLine: 'middle' }}
-      >
+      <div style={styles.wrap}>
         {this.walls}
-        {rowProperty.map((value, index) => {
-          return (
-            <div style={{ x: 0, y: (index + 1) * 1, width: 1 }}>
-              <div
-                src="icons"
-                style={{
-                  sy: index * 1,
-                  width: 1,
-                  height: 1,
-                  swidth: 1,
-                  sheight: 1,
-                }}
-              />
-              <div style={{ x: 1.5, y: 0, height: 1, width: 1 * 2.5 }}>
-                {value}
-              </div>
-            </div>
-          )
-        })}
+        <div style={styles.section}>
+          <Line rows={rowProperty}></Line>
+        </div>
       </div>
-    )
+    );
   }
 }

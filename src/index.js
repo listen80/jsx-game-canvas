@@ -3,6 +3,6 @@ import Mota from './Mota'
 
 const mota = new Engine(Mota)
 
-if (process.env.NODE_ENV === 'development') {
+if (__DEV__) {
   window.game = mota
 }

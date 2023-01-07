@@ -8,6 +8,8 @@ import serve from 'rollup-plugin-serve' // 启动服务
 
 import replace from 'rollup-plugin-replace' // 注入环境变量
 
+const __DEV__ = process.env.NODE_ENV === 'development'
+
 const plugins = [
   alias({
     entries: {
@@ -19,14 +21,15 @@ const plugins = [
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
   }),
   replace({
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    __DEV__,
+    // 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
   }),
   babel({
     babelHelpers: 'bundled', // 多次使用辅助函数只保留一个  比如 class 在转换成es5时会使用多个辅助函数则只保留一个
   }),
 ]
 
-if (process.env.NODE_ENV === 'development') {
+if (__DEV__) {
   plugins.push(
     serve({
       // open: true,

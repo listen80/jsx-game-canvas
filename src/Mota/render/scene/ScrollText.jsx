@@ -23,7 +23,7 @@ export default class ScrollText extends Component {
 
   onCreate () {
     const { text, bgm } = this.$state.map
-    this.text = text.split('\n')
+    this.textArr = text.split('\n')
     this.mapBgm = this.$sound.play('bgm', bgm)
   }
 
@@ -65,7 +65,7 @@ export default class ScrollText extends Component {
           this.ready
             ? <div style={this.styles.continue}>点击继续</div>
             : <div style={this.styles.scroll}>
-            {this.text.map((text, index) => (
+            {this.textArr.map((text, index) => (
               <div style={{ y: index }}>{text}</div>
             ))}
           </div>

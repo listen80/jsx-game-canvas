@@ -94,7 +94,7 @@ export default class GameMap extends Component {
             x={x}
             y={y}
             id={this.getKey(x, y)}
-            onClick={this.onEventClick}
+            onMouseDown={this.onEventClick}
             event={this.map[y + ',' + x]}
           />
             )
