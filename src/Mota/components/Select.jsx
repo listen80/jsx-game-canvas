@@ -12,7 +12,6 @@ export default class Select extends Component {
   }
 
   onChange() {
-    console.log(this.props.options[this.activeIndex], this.activeIndex);
     this.props.onChange?.(
       this.props.options[this.activeIndex],
       this.activeIndex

@@ -1,18 +1,16 @@
 import { Component } from "Engine";
 import Select from "../../components/Select";
+import TitleText from "./TitleText";
+import { screenWidth } from "../config";
+
+const selectWidth = 3;
 
 export default class Title extends Component {
   styles = {
-    titleText: {
-      y: 2,
-      width: 18,
-      height: 4,
-      textAlign: "center",
-      fontSize: 128,
-    },
     titleSelect: {
-      x: 7.5,
+      x: (screenWidth - selectWidth) / 2,
       y: 8,
+      width: selectWidth,
       fontSize: 24,
       textAlign: "center",
       textBaseline: "middle",
@@ -31,20 +29,27 @@ export default class Title extends Component {
     },
   ];
 
-  onCreate () {
-    if (__DEV__) {
-      this.$emit("loadGame")
-    }
+  onCreate() {
+    // if (__DEV__) {
+    //   this.$emit("loadGame")
+    // }
   }
+
+  onConfirm = (option) => {
+    const { event } = option;
+    if (event) {
+      this.$emit(event);
+    }
+  };
 
   render() {
     return (
       <div>
-        <div style={this.styles.titleText}>魔塔</div>
+        <TitleText />
         <Select
           style={this.styles.titleSelect}
-          optionSize={{ width: 3 }}
           options={this.options}
+          onConfirm={this.onConfirm}
         ></Select>
       </div>
     );
