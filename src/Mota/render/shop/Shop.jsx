@@ -1,11 +1,11 @@
 import { Component } from "Engine";
 import Select from "Mota/components/Select";
+import { screenWidth } from "../../config";
 
-const screen = 13;
 const width = 7,
   height = 8;
 
-const x = (screen - width) / 2;
+const x = (screenWidth - width) / 2;
 const y = 2;
 
 export default class Shop extends Component {

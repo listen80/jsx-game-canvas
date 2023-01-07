@@ -1,19 +1,15 @@
 import { Component } from "Engine";
 import Select from "Mota/components/Select";
+import { screenWidth } from "../../config";
 
-const screen = 13;
 const width = 7,
   height = 8;
 
-const x = (screen - width) / 2;
+const x = (screenWidth - width) / 2;
 const y = 2;
 
 export default class ShopList extends Component {
   styles = {
-    wrap: {
-      width: 20,
-      height: 13,
-    },
     shopList: {
       x,
       y,
@@ -51,16 +47,14 @@ export default class ShopList extends Component {
   render() {
     const { styles } = this;
     return (
-      <div style={styles.wrap}>
-        <div style={styles.shopList}>
-          <div style={styles.title}>商店选择</div>
-          <Select
-            style={styles.select}
-            options={this.options}
-            optionSize={{ height: 0.8 }}
-            onConfirm={this.onConfirm}
-          />
-        </div>
+      <div style={styles.shopList}>
+        <div style={styles.title}>商店选择</div>
+        <Select
+          style={styles.select}
+          options={this.options}
+          optionSize={{ height: 0.8 }}
+          onConfirm={this.onConfirm}
+        />
       </div>
     );
   }

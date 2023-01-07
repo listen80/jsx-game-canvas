@@ -6,7 +6,7 @@ export default class Dialog extends Component {
     wrap: {
       width: screenWidth,
       height: 13,
-      // backgroundColor: "rgba(0,0,0,0.4)",
+      backgroundColor: "rgba(0,0,0,0.4)",
     },
   };
 

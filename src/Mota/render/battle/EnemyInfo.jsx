@@ -1,6 +1,7 @@
 import { Component } from "Engine";
 import Table from "../../components/Table";
 import Animate from "../../components/Animate";
+import { screenWidth } from "../../config";
 
 const columns = [
   {
@@ -103,24 +104,29 @@ function transform($state, value, x, y) {
   return data;
 }
 
-const size = 13;
+const width = 11;
+const y = 1;
+const x = (screenWidth - width) / 2;
+
 
 export default class EnemyInfo extends Component {
   styles = {
-    wrap: {
-      x: 1,
-      y: 1,
-      width: size - 2,
-      height: size - 2,
+    enemyList: {
+      x,
+      y,
+      width: width,
+      height: width,
+      borderWidth: 2,
+      borderColor: "white",
       fontSize: 16,
-      backgroundImage: "Background/ground.png",
+      backgroundColor: "black",
     },
     close: {
       x: 10,
       y: 10,
       height: 1,
       width: 1,
-      textAlign: 'center',
+      textAlign: "center",
     },
   };
 
@@ -153,7 +159,7 @@ export default class EnemyInfo extends Component {
   render() {
     const { dataSource, styles } = this;
     return (
-      <div style={styles.wrap}>
+      <div style={styles.enemyList}>
         <Table
           dataSource={dataSource}
           columns={columns}

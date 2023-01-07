@@ -3,7 +3,7 @@ import Operation from "../helper/OperationBar";
 import Hero from "../Hero";
 import EventBlock from "../event/EventBlock";
 import { Component } from "Engine";
-import { screenWidth } from "../../config";
+import { screenWidth, screenHeight } from "../../config";
 
 export default class GameMap extends Component {
   styles = {
@@ -13,21 +13,21 @@ export default class GameMap extends Component {
       height: 13,
     },
     map: {
-      x: 0,
+      x: 5,
     },
     statusBar: {
-      x: 13,
+      x: 18,
     },
     operationBar: {
-      x: 18,
+      x: 1,
     },
   };
 
   createWall() {
     this.walls = [];
-    for (let x = 13; x < screenWidth; x++) {
+    for (let x = 0; x < screenWidth; x++) {
       for (let y = 0; y < 13; y++) {
-        if (x === 17 || x === 22 || y === 0 || y === 13 - 1) {
+        if (x === 0 || x === screenWidth - 1 || y === 0 || y === screenHeight - 1) {
           this.walls.push(<div src="terrains" style={{ sy: 2, x, y }}></div>);
         }
       }
