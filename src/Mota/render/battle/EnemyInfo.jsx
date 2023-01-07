@@ -116,7 +116,7 @@ export default class EnemyInfo extends Component {
       y,
       width: width,
       height: width,
-      borderWidth: 2,
+      borderWidth: 4,
       borderColor: "white",
       fontSize: 16,
       backgroundColor: "black",

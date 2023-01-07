@@ -62,6 +62,7 @@ export default class Message extends Component {
     });
     return this.messages.map((config, index) => {
       const { message, width } = config;
+
       return (
         <div
           style={{
@@ -71,7 +72,7 @@ export default class Message extends Component {
             y: 2 + index * 1.2,
             height: 1,
             width: width,
-            borderWidth: 4,
+            borderWidth: 2,
             borderColor: "white",
           }}
         >
