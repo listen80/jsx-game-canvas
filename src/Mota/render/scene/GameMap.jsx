@@ -1,26 +1,24 @@
-import Hero from '../Hero'
 import Status from '../helper/Status'
 import Operation from '../helper/Operation'
+import Hero from '../Hero'
 import EventBlock from '../event/EventBlock'
 import { Component } from 'Engine'
 
 export default class GameMap extends Component {
   styles = {
-    map: {
-      width: 13,
-      height: 13,
-      x: 0,
+    wrap: {
       backgroundImage: 'ground.png',
+      width: 20,
+      height: 13,
+    },
+    map: {
+      x: 0,
     },
     statusBar: {
       x: 13,
-      width: 5,
-      height: 13,
-      backgroundImage: 'ground.png',
     },
     operationBar: {
       x: 18,
-      width: 2,
     },
   };
 
@@ -106,12 +104,11 @@ export default class GameMap extends Component {
   }
 
   render () {
-    this.terrains = this.renderMapTerrains()
     const { styles } = this
     return (
       <div style={styles.wrap}>
         <div style={styles.map} onMouseDown={this.onMouseDown}>
-          {this.terrains}
+          {this.renderMapTerrains()}
           <Hero map={this.map} terrains={this.terrains} />
         </div>
         <div style={styles.statusBar}>

@@ -3,9 +3,9 @@ import { Component } from 'Engine'
 export default class Status extends Component {
   onCreate () {
     this.walls = []
-    for (let x = 0; x < 5; x++) {
+    for (let x = 0; x < 2; x++) {
       for (let y = 0; y < 13; y++) {
-        if (x === 4 || y === 0 || y === 12) {
+        if (x === 2 - 1 || y === 0 || y === 13 - 1) {
           this.walls.push(
             <div
               src="terrains"
@@ -38,7 +38,9 @@ export default class Status extends Component {
       save.items.redKey,
     ]
     return (
-      <div style={{ fontSize: 24, textAlign: 'center', textBaseLine: 'middle' }}>
+      <div
+        style={{ fontSize: 24, textAlign: 'center', textBaseLine: 'middle' }}
+      >
         {this.walls}
         {rowProperty.map((value, index) => {
           return (
@@ -53,7 +55,9 @@ export default class Status extends Component {
                   sheight: 1,
                 }}
               />
-              <div style={{ x: 1.5, y: 0, height: 1, width: 1 * 2.5 }}>{value}</div>
+              <div style={{ x: 1.5, y: 0, height: 1, width: 1 * 2.5 }}>
+                {value}
+              </div>
             </div>
           )
         })}
