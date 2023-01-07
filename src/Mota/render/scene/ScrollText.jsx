@@ -22,7 +22,6 @@ export default class ScrollText extends Component {
       y: 5,
       width: continueMessageWidth,
       height: continueMessageHeight,
-      backgroundColor: "red",
       textAlign: "center",
       fontSize: continueMessageFontSize,
     },

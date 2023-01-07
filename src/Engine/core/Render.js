@@ -22,7 +22,7 @@ const size = 32
 
 export default class Render {
   constructor ($state) {
-    this.initCanvas()
+    this.initCanvas($state.config.screen)
     this.bindEvents()
     this.$state = $state
   }
@@ -36,10 +36,10 @@ export default class Render {
     const canvas = document.createElement('canvas')
     this.canvas = canvas
     this.context = canvas.getContext('2d')
-    const { el, width = size * (13 + 5 + 2), height = size * 13 } = screen
+    const { el, width = 13, height = 13 } = screen
     this.screen = screen
-    this.canvas.width = width
-    this.canvas.height = height
+    this.canvas.width = width * size
+    this.canvas.height = height * size
     const dom = document.querySelector(el || '#game') || document.body
     dom && dom.appendChild(this.canvas)
     this.mergeStyle(baseStyle)

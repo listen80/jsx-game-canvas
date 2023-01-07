@@ -4,7 +4,6 @@ import Line from "../../components/Line";
 export default class Status extends Component {
   styles = {
     wrap: { fontSize: 24, textAlign: "center", textBaseLine: "middle" },
-    section: { y: 1 },
   };
 
   onCreate() {

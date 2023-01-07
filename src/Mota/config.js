@@ -1,7 +1,7 @@
 export const playWidth = 13
 export const playHeight = 13
 
-export const operationWidth = 2
+export const operationWidth = 5
 export const operationHeight = 13
 
 export const statusbarWidth = 5
