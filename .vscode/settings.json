@@ -11,10 +11,10 @@
   "files.autoSave": "afterDelay",
   "terminal.integrated.defaultProfile.windows": "Git Bash",
   "terminal.integrated.persistentSessionReviveProcess": "never",
-  "[javascript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  }
+  // "[javascript]": {
+  //   "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  // },
+  // "[javascriptreact]": {
+  //   "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  // }
 }

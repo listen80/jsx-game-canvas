@@ -139,14 +139,15 @@ export default class Event extends Component {
       }
       return true
     } else if (type === 'terrains') {
+      const terrains = [
+        'yellowDoor',
+        'redDoor',
+        'blueDoor',
+        'steelDoor',
+        'specialDoor',
+      ]
       if (
-        [
-          'yellowDoor',
-          'redDoor',
-          'blueDoor',
-          'steelDoor',
-          'specialDoor',
-        ].includes(name)
+        terrains.includes(name)
       ) {
         const key = name.slice(0, -4) + 'Key'
         if (this.$state.save.items[key]) {
@@ -155,7 +156,9 @@ export default class Event extends Component {
           this.$sound.play('se', 'door.mp3')
           return true
         }
-        this.$hook('setMessage', `你没有${name}`)
+        const i18n = ['黄色钥匙', '红色钥匙', '蓝色钥匙']
+
+        this.$hook('setMessage', `你没有${i18n[terrains.indexOf(name)]}`)
       }
     }
   }
