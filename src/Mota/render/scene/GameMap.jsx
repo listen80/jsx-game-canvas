@@ -7,7 +7,7 @@ import { Component } from 'Engine'
 export default class GameMap extends Component {
   styles = {
     wrap: {
-      backgroundImage: 'ground.png',
+      backgroundImage: 'Background/ground.png',
       width: 20,
       height: 13,
     },

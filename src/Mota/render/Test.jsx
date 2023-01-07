@@ -8,7 +8,7 @@ export default class Test extends Component {
       borderColor: 'red',
       borderwidth: 2,
       backgroundColor: '#ccc',
-      backgroundImage: 'ground.png',
+      backgroundImage: 'Background/ground.png',
       rotate: 90,
     },
   }

@@ -64,6 +64,18 @@ const columns = [
 ]
 
 export default class EnemyInfo extends window.Component {
+  styles = {
+    wrap: {
+      textAlign: 'left',
+      fontSize: 18,
+      backgroundImage: 'Background/ground.png',
+      width: 1 * (13 + 5 - 2),
+      x: 1,
+      y: 1,
+      height: 1 * (13 - 2),
+    },
+  };
+
   onKeyDown ({ $key }) {
     if ($key === 'confirm') {
       this.props.onClose()
@@ -72,18 +84,6 @@ export default class EnemyInfo extends window.Component {
 
   onMouseDown = () => {
     this.props.onClose()
-  };
-
-  styles = {
-    wrap: {
-      textAlign: 'left',
-      fontSize: 18,
-      backgroundImage: 'ground.png',
-      width: 1 * (13 + 5 - 2),
-      x: 1,
-      y: 1,
-      height: 1 * (13 - 2),
-    },
   };
 
   render () {

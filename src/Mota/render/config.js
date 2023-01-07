@@ -1,8 +1,11 @@
-export const screenWidth = 13
-export const screenHeight = 13
-
 export const playWidth = 13
 export const playHeight = 13
 
-export const operationWidth = 13
+export const operationWidth = 2
 export const operationHeight = 13
+
+export const statusbarWidth = 2
+export const statusbarHeight = 13
+
+export const screenWidth = playWidth + operationWidth + statusbarWidth
+export const screenHeight = 13
