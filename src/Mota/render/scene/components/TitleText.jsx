@@ -1,5 +1,5 @@
 import { Component } from "Engine";
-import { screenWidth } from "../config";
+import { screenWidth } from "../../../config";
 
 export default class Title extends Component {
   styles = {

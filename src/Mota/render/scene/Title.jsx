@@ -1,7 +1,7 @@
 import { Component } from "Engine";
 import Select from "../../components/Select";
-import TitleText from "./TitleText";
-import { screenWidth } from "../config";
+import TitleText from "./components/TitleText";
+import { screenWidth } from "../../config";
 
 const selectWidth = 3;
 
@@ -30,9 +30,9 @@ export default class Title extends Component {
   ];
 
   onCreate() {
-    // if (__DEV__) {
-    //   this.$emit("loadGame")
-    // }
+    if (__DEV__) {
+      // this.$emit("loadGame")
+    }
   }
 
   onConfirm = (option) => {

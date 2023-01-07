@@ -13,9 +13,6 @@ export default class Test extends Component {
     },
   }
 
-  onKeyDown = ({ code }) => {
-  };
-
   onCreate () {
     // this.$state.map = mockMap
     this.options = [

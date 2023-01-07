@@ -30,7 +30,7 @@ export default class Shop extends Component {
   };
 
   onCreate() {
-    const shopid = this.props.shopid;
+    const shopid = this.$state.shopid;
 
     if (!this.$state.save.shops.includes(shopid)) {
       this.$state.save.shops.push(shopid);

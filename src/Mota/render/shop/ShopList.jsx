@@ -48,12 +48,6 @@ export default class ShopList extends Component {
     }
   };
 
-  onKeyDown({ code }) {
-    if (code === "KeyB") {
-      this.props.onClose();
-    }
-  }
-
   render() {
     const { styles } = this;
     return (

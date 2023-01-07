@@ -1,55 +1,53 @@
-import { createNode } from './Node'
-
+import { createNode } from "./Node";
+import Sound from "./Sound";
 export default class Component {
-  constructor ({ props, children }) {
-    this.props = props
-    this.$node = null
+  constructor({ props, children }) {
+    this.props = props;
+    this.$node = null;
     this.$children = children;
-    this.$sound.play = () => {
-      return {
-        pause () { },
-      }
+  }
+
+  $createElement() {
+    return createNode.apply(this, arguments);
+  }
+
+  createNodeByConfig(config) {
+    if (typeof config === "string") {
+      return config;
     }
-    this.$sound.pause = () => { }
+    const { tag = "div", props, children = [] } = config;
+    return this.$createElement(
+      tag,
+      props,
+      ...children.map((c) => this.createNodeByConfig(c))
+    );
   }
 
-  $createElement () {
-    return createNode.apply(this, arguments)
-  }
-
-  createNodeByConfig (config) {
-    if (typeof config === 'string') {
-      return config
-    }
-    const { tag = 'div', props, children = [] } = config
-    return this.$createElement(tag, props, ...children.map((c) => this.createNodeByConfig(c)))
-  }
-
-  createLoop (start = 0, end = 10, interval = 1, delta = 1, loop = false) {
-    let n = start
-    let tick = 0
+  createLoop(start = 0, end = 10, interval = 1, delta = 1, loop = false) {
+    let n = start;
+    let tick = 0;
     return () => {
       if (tick === interval) {
-        tick = 0
-        n += delta
+        tick = 0;
+        n += delta;
         if (n >= end) {
           if (loop) {
-            delta = -delta
+            delta = -delta;
           } else {
-            n = start
+            n = start;
           }
         } else if (n <= start) {
           if (loop) {
-            delta = -delta
+            delta = -delta;
           } else {
-            n = end
+            n = end;
           }
         }
       }
-      tick++
-      return n
-    }
+      tick++;
+      return n;
+    };
   }
 
-  $sound () { }
+  $sound() {}
 }

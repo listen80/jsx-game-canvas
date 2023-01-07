@@ -1,37 +1,36 @@
-import { loadSound } from '../utils/http'
+import { loadSound } from "../utils/http";
 
 export default class Sound {
-  constructor (sounds) {
-    this.sounds = sounds || Object.onCreate(null)
-    this.loaded = 0
-    this.total = Infinity
+  constructor(sounds) {
+    this.sounds = sounds || Object.create(null);
+    this.total = Infinity;
   }
 
-  control (type, name, control) {
-    const current = this.sounds[`${type}/${name}`].cloneNode()
-    current.loop = type === 'bgm'
-    current[control]()
-    return current
+  control(type, name, control) {
+    return loadSound(`Sound/${type}/${name}`, (src, el) => {
+      el.loop = type === "bgm";
+      el[control]();
+    });
   }
 
-  load (dataArray) {
-    this.total = dataArray.length
+  load(dataArray) {
+    this.total = dataArray.length;
     return Promise.all(
       dataArray.map((sound) =>
         loadSound(`Sound/${sound}`, (src, el) => {
-          this.loaded++
-          this.sounds[sound] = el
+          this.loaded++;
+          this.sounds[sound] = el;
           // sounds.forEach((Sound, i) => (this.sounds[dataArray[i]] = Sound));
-        }),
-      ),
-    )
+        })
+      )
+    );
   }
 
-  play (type, name) {
-    return this.control(type, name, 'play')
+  play(type, name) {
+    return this.control(type, name, "play");
   }
 
-  pause (type, name) {
-    return this.control(type, name, 'pause')
+  pause(type, name) {
+    return this.control(type, name, "pause");
   }
 }

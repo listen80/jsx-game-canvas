@@ -42,7 +42,7 @@ export default class Battle extends Component {
   };
 
   onCreate() {
-    this.enemy = JSON.parse(JSON.stringify(this.props.enemy));
+    this.enemy = JSON.parse(JSON.stringify(this.$state.enemy));
     this.callback = callback;
     this.turn = false;
     this.tick = 0;

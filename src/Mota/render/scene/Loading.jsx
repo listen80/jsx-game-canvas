@@ -1,6 +1,6 @@
 import { Component } from "Engine";
-import TitleText from "./TitleText";
-import ProgressBar from "./ProgressBar";
+import TitleText from "./components/TitleText";
+import ProgressBar from "./components/ProgressBar";
 
 export default class Loading extends Component {
   render() {

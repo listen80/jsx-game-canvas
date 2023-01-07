@@ -1,76 +1,80 @@
-import { Component } from 'Engine'
+import { Component } from "Engine";
+import { screenWidth } from "../../config";
+
+const continueMessageFontSize = 64;
+const continueMessageWidth = (64 / 32) * 4;
+const continueMessageHeight = 64 / 32;
 
 export default class ScrollText extends Component {
   styles = {
-    text: {
-      fontSize: 20,
-      textAlign: 'left',
-      textBaseline: 'top',
-      width: 18,
-      height: 13,
+    wrap: {
+      fontSize: 24,
+      textAlign: "left",
+      textBaseline: "top",
+      width: screenWidth,
     },
-    scroll: {
+    scrollText: {
       x: 1,
-      y: 5,
+      y: 13,
     },
-    continue: {
-      x: 9,
+    continueMessage: {
+      x: (screenWidth - continueMessageWidth) / 2,
       y: 5,
-      textAlign: 'center',
-      fontSize: 50,
+      width: continueMessageWidth,
+      height: continueMessageHeight,
+      backgroundColor: "red",
+      textAlign: "center",
+      fontSize: continueMessageFontSize,
     },
   };
 
-  onCreate () {
-    const { text, bgm } = this.$state.map
-    this.textArr = text.split('\n')
-    this.mapBgm = this.$sound.play('bgm', bgm)
+  scrollSpeed = 1 / 8;
+  lineHeight = 1.5;
+
+  onCreate() {
+    const { text, bgm } = this.$state.map;
+    this.textArr = text.split("\n");
+    this.mapBgm = this.$sound.play("bgm", bgm);
   }
 
-  onDestroy () {
-    this.mapBgm.pause()
-  }
-
-  onKeyDown ({ code }) {
-    if (code === 'Space') {
-      this.onMouseDown()
-    }
+  onDestroy() {
+    this.mapBgm.pause();
   }
 
   onMouseDown = () => {
-    if (this.ready) {
-      if (this.$state.map.event) {
-        this.$state.map.event.forEach((v) => {
-          this.$emit(v)
-        })
-      }
-      // if (type === 'loadMap') {
-      //   this.props.onClose(data)
-      // } else if (type === 'title') {
-      //   this.props.onTitle(data)
-      // }
+    if (this.$state.map.events) {
+      this.$state.map.events.forEach((event) => {
+        const { type, data } = event;
+        this.$emit(type, data);
+      });
     }
   };
 
-  render () {
-    const style = this.styles.scroll
-    if (style.y > -1 * this.text.length) {
-      style.y -= 1 / 16
+  render() {
+    const { lineHeight } = this;
+    const scrollTextStyle = this.styles.scrollText;
+    if (scrollTextStyle.y + this.textArr.length * lineHeight > 0) {
+      scrollTextStyle.y -= this.scrollSpeed;
     } else {
-      this.ready = true
+      this.ready = true;
     }
     return (
-      <div style={this.styles.text} onMouseDown={this.onMouseDown}>
-        {
-          this.ready
-            ? <div style={this.styles.continue}>点击继续</div>
-            : <div style={this.styles.scroll}>
+      <div style={this.styles.wrap}>
+        {this.ready ? (
+          <div
+            style={this.styles.continueMessage}
+            onMouseDown={this.onMouseDown}
+          >
+            点击继续
+          </div>
+        ) : (
+          <div style={scrollTextStyle}>
             {this.textArr.map((text, index) => (
-              <div style={{ y: index }}>{text}</div>
+              <div style={{ y: index * lineHeight }}>{text}</div>
             ))}
           </div>
-        }
+        )}
       </div>
-    )
+    );
   }
 }

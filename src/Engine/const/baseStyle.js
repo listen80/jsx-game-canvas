@@ -49,6 +49,6 @@ export const baseStyle = {
   shadowOffsetY: 0,
   strokeStyle: 'white',
   textAlign: 'start',
-  // textBaseline: "alphabetic",
+  textBaseline: "alphabetic",
   textBaseline: 'middle',
 }

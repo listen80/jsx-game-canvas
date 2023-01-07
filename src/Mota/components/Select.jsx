@@ -30,23 +30,23 @@ export default class Select extends Component {
     }
   }
 
-  onKeyDown({ $key }) {
-    if ($key === "down") {
-      this.activeIndex++;
-      if (this.activeIndex >= this.props.options.length) {
-        this.activeIndex = 0;
-      }
-      this.onChange();
-    } else if ($key === "up") {
-      this.activeIndex--;
-      if (this.activeIndex < 0) {
-        this.activeIndex += this.props.options.length;
-      }
-      this.onChange();
-    } else if ($key === "confirm") {
-      this.onConfirm();
-    }
-  }
+  // onKeyDown({ $key }) {
+  //   if ($key === "down") {
+  //     this.activeIndex++;
+  //     if (this.activeIndex >= this.props.options.length) {
+  //       this.activeIndex = 0;
+  //     }
+  //     this.onChange();
+  //   } else if ($key === "up") {
+  //     this.activeIndex--;
+  //     if (this.activeIndex < 0) {
+  //       this.activeIndex += this.props.options.length;
+  //     }
+  //     this.onChange();
+  //   } else if ($key === "confirm") {
+  //     this.onConfirm();
+  //   }
+  // }
 
   onMouseDown = (event, $node) => {
     this.activeIndex = $node.props.index;

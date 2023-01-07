@@ -13,25 +13,14 @@ import Battle from "./render/battle/Battle";
 import EnemyInfo from "./render/battle/EnemyInfo";
 import Dialog from "./components/Dialog";
 
-import Test from "./render/Test";
+import Test from "./render/test/Test";
 
 import { Component } from "Engine";
-export default class Mota extends Component {
-  styles = {
-    app: {
-      width: 20,
-      height: 13,
-    },
-  };
 
+export default class Mota extends Component {
   renderMap() {
     const { $state } = this;
-    const { $res, map, mapKey } = $state;
-
-    if ($res.loaded !== $res.total) {
-      return <Loading rate={$res.loaded / $res.total} />;
-    }
-
+    const { map, mapKey } = $state;
     if (map) {
       if (map.text) {
         return <ScrollText key={mapKey} />;
@@ -39,21 +28,16 @@ export default class Mota extends Component {
       return <GameMap key={mapKey} />;
     }
 
-    if (location.hash === "#test") {
-      return <Test />;
-    }
-
     return <Title />;
   }
 
-  render() {
-    const { styles, $state } = this;
+  renderDialog() {
+    const { $state } = this;
     return (
-      <div style={styles.app}>
-        {this.renderMap()}
+      <div>
         {$state.shopid && (
           <Dialog>
-            <Shop shopid={$state.shopid} />
+            <Shop />
           </Dialog>
         )}
         {$state.showShopList && (
@@ -73,9 +57,29 @@ export default class Mota extends Component {
         )}
         {$state.enemy && (
           <Dialog>
-            <Battle enemy={$state.enemy} />
+            <Battle />
           </Dialog>
         )}
+      </div>
+    );
+  }
+
+  render() {
+    const { $state } = this;
+    const { $res } = $state;
+
+    if ($res.loaded !== $res.total) {
+      return <Loading rate={$res.loaded / $res.total} />;
+    }
+
+    if (location.hash === "#test") {
+      return <Test />;
+    }
+
+    return (
+      <div>
+        {this.renderMap()}
+        {this.renderDialog()}
         <Message />
         <Talks />
         <FPS />
