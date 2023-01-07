@@ -8,14 +8,6 @@ export default class Status extends Component {
   };
 
   onCreate() {
-    this.walls = [];
-    for (let x = 0; x < operationWidth; x++) {
-      for (let y = 0; y < screenHeight; y++) {
-        if (x === operationWidth - 1 || y === 0 || y === screenHeight - 1) {
-          this.walls.push(<div src="terrains" style={{ sy: 2, x, y }}></div>);
-        }
-      }
-    }
     const src = "icons";
     this.rowProperty = [
       {

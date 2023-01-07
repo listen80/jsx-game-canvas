@@ -1,8 +1,6 @@
 import { Component } from "Engine";
 import { statusbarWidth, screenHeight } from "../../config";
 
-import Line from "../../components/Line";
-
 export default class Status extends Component {
   styles = {
     wrap: { fontSize: 24, textAlign: "center", textBaseLine: "middle" },
@@ -10,15 +8,6 @@ export default class Status extends Component {
   };
 
   onCreate() {
-    this.walls = [];
-    for (let x = 0; x < statusbarWidth; x++) {
-      for (let y = 0; y < screenHeight; y++) {
-        if (x === statusbarWidth - 1 || y === 0 || y === screenHeight - 1) {
-          this.walls.push(<div src="terrains" style={{ sy: 2, x, y }}></div>);
-        }
-      }
-    }
-
     const src = "icons";
     this.rowProperty = [
       {

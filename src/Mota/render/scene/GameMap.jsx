@@ -23,6 +23,17 @@ export default class GameMap extends Component {
     },
   };
 
+  createWall() {
+    this.walls = [];
+    for (let x = 13; x < screenWidth; x++) {
+      for (let y = 0; y < 13; y++) {
+        if (x === 17 || x === 22 || y === 0 || y === 13 - 1) {
+          this.walls.push(<div src="terrains" style={{ sy: 2, x, y }}></div>);
+        }
+      }
+    }
+  }
+
   onCreate() {
     this.$on("removeMapEventByKey", ($state, id) => {
       $state.save.destroy[id] = 1;
@@ -32,6 +43,7 @@ export default class GameMap extends Component {
     // const bgm = this.props.map.bgm;
     // this.mapBgm = this.$sound.play('bgm', bgm)
     this.map = this.createMap();
+    this.createWall();
   }
 
   getKey(x, y) {
@@ -116,6 +128,7 @@ export default class GameMap extends Component {
         <div style={styles.operationBar}>
           <Operation></Operation>
         </div>
+        {this.walls}
       </div>
     );
   }
