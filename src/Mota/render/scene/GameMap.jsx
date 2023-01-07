@@ -27,7 +27,12 @@ export default class GameMap extends Component {
     this.walls = [];
     for (let x = 0; x < screenWidth; x++) {
       for (let y = 0; y < 13; y++) {
-        if (x === 0 || x === screenWidth - 1 || y === 0 || y === screenHeight - 1) {
+        if (
+          x === 0 ||
+          x === screenWidth - 1 ||
+          y === 0 ||
+          y === screenHeight - 1
+        ) {
           this.walls.push(<div src="terrains" style={{ sy: 2, x, y }}></div>);
         }
       }
@@ -44,6 +49,7 @@ export default class GameMap extends Component {
     // this.mapBgm = this.$sound.play('bgm', bgm)
     this.map = this.createMap();
     this.createWall();
+    this.$emit("setMessage", this.$state.map.name);
   }
 
   getKey(x, y) {

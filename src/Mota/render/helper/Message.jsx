@@ -41,9 +41,7 @@ export default class Message extends Component {
   tempMessages = [];
   onCreate() {
     this.$on("setMessage", ($state, data, next) => {
-      if (!data) {
-        return;
-      }
+      data = data + "";
       const length = calcLength(data);
       const fontSize = 20;
       const width = ((fontSize / 2) * length + fontSize) / 32;
@@ -58,7 +56,8 @@ export default class Message extends Component {
 
   render() {
     this.messages = this.messages.filter((config) => {
-      return config.tick--;
+      config.tick--;
+      return config.tick > 0;
     });
     return this.messages.map((config, index) => {
       const { message, width } = config;

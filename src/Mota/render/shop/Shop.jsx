@@ -40,7 +40,7 @@ export default class Shop extends Component {
     this.options.push({
       text: "离开",
     });
-    this.text = this.shop.text.split(/\n/);
+    this.textArr = this.shop.text.split(/\n/);
   }
 
   onConfirm = (option, index) => {
@@ -58,7 +58,7 @@ export default class Shop extends Component {
   };
 
   renderText() {
-    return this.text.map((text, index) => (
+    return this.textArr.map((text, index) => (
       <div style={{ x: width / 2, y: index / 2 }}>{text}</div>
     ));
   }

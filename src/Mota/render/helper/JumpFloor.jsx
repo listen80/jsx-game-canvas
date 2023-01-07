@@ -38,6 +38,7 @@ export default class Status extends Component {
   onConfirm = (option, index) => {
     const { mapId } = option;
 
+    this.$state.showJumpFloor = false;
     if (mapId) {
       this.$emit("loadMap", {
         mapId,
@@ -46,8 +47,6 @@ export default class Status extends Component {
           y: 2,
         },
       });
-    } else {
-      this.$state.showJumpFloor = false;
     }
   };
 
