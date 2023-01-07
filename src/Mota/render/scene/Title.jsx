@@ -31,7 +31,7 @@ export default class Title extends Component {
 
   onCreate() {
     if (__DEV__) {
-      // this.$emit("loadGame")
+      this.$emit("loadGame")
     }
   }
 

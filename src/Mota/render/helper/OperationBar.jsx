@@ -1,34 +1,29 @@
 import { Component } from "Engine";
+import { statusbarWidth, screenHeight } from "../../config";
+
 import Line from "../../components/Line";
 
 export default class Status extends Component {
   styles = {
     wrap: { fontSize: 24, textAlign: "center", textBaseLine: "middle" },
+    section: { y: 1 },
   };
 
   onCreate() {
     this.walls = [];
-    for (let x = 0; x < 2; x++) {
-      for (let y = 0; y < 13; y++) {
-        if (x === 2 - 1 || y === 0 || y === 13 - 1) {
-          this.walls.push(
-            <div
-              src="terrains"
-              style={{
-                sx: 0,
-                sy: 2,
-                x: x * 1,
-                y: y * 1,
-              }}
-            ></div>
-          );
+    for (let x = 0; x < statusbarWidth; x++) {
+      for (let y = 0; y < screenHeight; y++) {
+        if (x === statusbarWidth - 1 || y === 0 || y === screenHeight - 1) {
+          this.walls.push(<div src="terrains" style={{ sy: 2, x, y }}></div>);
         }
       }
     }
+
     const src = "icons";
     this.rowProperty = [
       {
         src,
+        data: "信息",
         style: { sy: 11, height: 1, width: 1 },
         onMouseDown() {
           this.$state.showEnemyInfo = !this.$state.showEnemyInfo;
@@ -36,6 +31,7 @@ export default class Status extends Component {
       },
       {
         src,
+        data: "楼层",
         style: { sy: 12, height: 1, width: 1 },
         onMouseDown() {
           this.$state.showJumpFloor = !this.$state.showJumpFloor;
@@ -43,6 +39,7 @@ export default class Status extends Component {
       },
       {
         src,
+        data: "商店",
         style: { sy: 13, height: 1, width: 1 },
         onMouseDown() {
           this.$state.showShopList = true;
@@ -50,6 +47,7 @@ export default class Status extends Component {
       },
       {
         src,
+        data: "存档",
         style: { sy: 14, height: 1, width: 1 },
         onMouseDown() {
           this.$emit("saveGame");
@@ -59,6 +57,7 @@ export default class Status extends Component {
       },
       {
         src,
+        data: "读档",
         style: { sy: 15, height: 1, width: 1 },
         onMouseDown() {
           this.$emit("loadGame");
@@ -70,13 +69,23 @@ export default class Status extends Component {
   }
 
   render() {
-    const { styles, rowProperty } = this;
+    const { styles, $state, rowProperty } = this;
+    const { save, map } = $state;
 
     return (
       <div style={styles.wrap}>
         {this.walls}
         <div style={styles.section}>
-          <Line rows={rowProperty}></Line>
+          {rowProperty.map((value, index) => {
+            return (
+              <div style={{ y: index }} onMouseDown={value.onMouseDown}>
+                <div src="icons" style={value.style} />
+                <div style={{ x: 1.5, y: 0, height: 1, width: 2.5 }}>
+                  {value.data}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     );

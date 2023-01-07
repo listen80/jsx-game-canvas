@@ -1,14 +1,15 @@
-import Status from '../helper/Status'
-import Operation from '../helper/Operation'
-import Hero from '../Hero'
-import EventBlock from '../event/EventBlock'
-import { Component } from 'Engine'
+import Status from "../helper/Status";
+import Operation from "../helper/OperationBar";
+import Hero from "../Hero";
+import EventBlock from "../event/EventBlock";
+import { Component } from "Engine";
+import { screenWidth } from "../../config";
 
 export default class GameMap extends Component {
   styles = {
     wrap: {
-      backgroundImage: 'Background/ground.png',
-      width: 20,
+      backgroundImage: "Background/ground.png",
+      width: screenWidth,
       height: 13,
     },
     map: {
@@ -22,89 +23,87 @@ export default class GameMap extends Component {
     },
   };
 
-  onCreate () {
-    this.$on('removeMapEventByKey', ($state, id) => {
-      $state.save.destroy[id] = 1
-      this.map = this.createMap()
-    })
+  onCreate() {
+    this.$on("removeMapEventByKey", ($state, id) => {
+      $state.save.destroy[id] = 1;
+      this.map = this.createMap();
+    });
 
     // const bgm = this.props.map.bgm;
     // this.mapBgm = this.$sound.play('bgm', bgm)
-    this.map = this.createMap()
+    this.map = this.createMap();
   }
 
-  getKey (x, y) {
-    const mapId = this.$state.save.mapId
-    const key = [mapId, x, y] + ''
-    return key
+  getKey(x, y) {
+    const mapId = this.$state.save.mapId;
+    const key = [mapId, x, y] + "";
+    return key;
   }
 
-  createMap () {
+  createMap() {
     const map = this.$state.map.mapTerrains.map((line, y) => {
       return line.map((value, x) => {
         if (value && !this.$state.save.destroy[this.getKey(x, y)]) {
-          return value
+          return value;
         } else {
-          return null
+          return null;
         }
-      })
-    })
+      });
+    });
     this.$state.map.mapEvents.forEach((element) => {
-      const { x, y, value, events } = element
-      map[y][x] = value
-      map[y + ',' + x] = events
-    })
-    return map
+      const { x, y, value, events } = element;
+      map[y][x] = value;
+      map[y + "," + x] = events;
+    });
+    return map;
   }
 
-  onDestroy () {
+  onDestroy() {
     // const bgm = this.props.map.bgm;
     // this.$sound.pause('bgm', bgm)
     // this.mapBgm.pause();
   }
 
   onMouseDown = (e) => {
-    const { gameX: x, gameY: y } = e
+    const { gameX: x, gameY: y } = e;
 
-    const { height, width } = this.$state.map
-    const { map } = this
-    this.$emit('setPath', {
+    const { height, width } = this.$state.map;
+    const { map } = this;
+    this.$emit("setPath", {
       map: { height, width, map },
       dist: { x, y },
-    })
+    });
   };
 
   onEventClick = (block) => {
-    const { x, y } = block.props
-    const { height, width } = this.$state.map
-    const { map } = this
-    this.$emit('setPath', {
+    const { x, y } = block.props;
+    const { height, width } = this.$state.map;
+    const { map } = this;
+    this.$emit("setPath", {
       map: { height, width, map },
       dist: { x, y },
-    })
+    });
   };
 
-  renderMapTerrains () {
+  renderMapTerrains() {
     return this.map.map((line, y) =>
       line.map((value, x) =>
-        value
-          ? (
+        value ? (
           <EventBlock
             value={value}
             x={x}
             y={y}
             id={this.getKey(x, y)}
             onMouseDown={this.onEventClick}
-            event={this.map[y + ',' + x]}
+            event={this.map[y + "," + x]}
           />
-            )
-          : null,
-      ),
-    )
+        ) : null
+      )
+    );
   }
 
-  render () {
-    const { styles } = this
+  render() {
+    const { styles } = this;
     return (
       <div style={styles.wrap}>
         <div style={styles.map} onMouseDown={this.onMouseDown}>
@@ -118,6 +117,6 @@ export default class GameMap extends Component {
           <Operation></Operation>
         </div>
       </div>
-    )
+    );
   }
 }

@@ -10,11 +10,6 @@ const y = 2;
 
 export default class Status extends Component {
   styles = {
-    wrap: {
-      width: 20,
-      height: 13,
-      backgroundColor: "rgba(0,0,0,0.4)",
-    },
     shopList: {
       x,
       y,
@@ -59,16 +54,14 @@ export default class Status extends Component {
   render() {
     const { styles } = this;
     return (
-      <div style={styles.wrap}>
-        <div style={styles.shopList}>
-          <div style={styles.title}>楼层选择</div>
-          <Select
-            style={styles.select}
-            options={this.options}
-            optionSize={{ height: 0.8 }}
-            onConfirm={this.onConfirm}
-          />
-        </div>
+      <div style={styles.shopList}>
+        <div style={styles.title}>楼层选择</div>
+        <Select
+          style={styles.select}
+          options={this.options}
+          optionSize={{ height: 0.8 }}
+          onConfirm={this.onConfirm}
+        />
       </div>
     );
   }

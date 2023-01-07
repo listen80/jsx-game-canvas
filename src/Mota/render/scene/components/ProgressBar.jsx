@@ -1,7 +1,7 @@
 import { Component } from "Engine";
 import { screenWidth } from "../../../config";
 
-const progressBarWidth = 6;
+const progressBarWidth = 8;
 const progressBarHeight = 0.5;
 
 export default class ProgressBar extends Component {

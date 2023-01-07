@@ -1,9 +1,10 @@
 import { Component } from "Engine";
+import { screenWidth } from "../config";
 
 export default class Dialog extends Component {
   styles = {
     wrap: {
-      width: 20,
+      width: screenWidth,
       height: 13,
       // backgroundColor: "rgba(0,0,0,0.4)",
     },

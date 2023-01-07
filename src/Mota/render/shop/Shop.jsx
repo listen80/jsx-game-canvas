@@ -10,10 +10,6 @@ const y = 2;
 
 export default class Shop extends Component {
   styles = {
-    wrap: {
-      width: 20,
-      height: 13,
-    },
     shop: {
       x,
       y,
@@ -63,23 +59,21 @@ export default class Shop extends Component {
 
   renderText() {
     return this.text.map((text, index) => (
-      <div style={{ x: (1 / 2) * 7, y: index / 2 }}>{text}</div>
+      <div style={{ x: width / 2, y: index / 2 }}>{text}</div>
     ));
   }
 
   render() {
     const { styles } = this;
     return (
-      <div style={styles.wrap}>
-        <div style={styles.shop}>
-          <div style={styles.title}>{this.shop.title}</div>
-          <div style={styles.text}>{this.renderText()}</div>
-          <Select
-            style={styles.select}
-            options={this.options}
-            onConfirm={this.onConfirm}
-          />
-        </div>
+      <div style={styles.shop}>
+        <div style={styles.title}>{this.shop.title}</div>
+        <div style={styles.text}>{this.renderText()}</div>
+        <Select
+          style={styles.select}
+          options={this.options}
+          onConfirm={this.onConfirm}
+        />
       </div>
     );
   }
