@@ -1,4 +1,4 @@
-import { registryComponents, Component } from 'Engine'
+import { Component } from 'Engine'
 
 export default class Battle extends Component {
   tick = 0;

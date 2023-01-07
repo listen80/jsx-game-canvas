@@ -36,7 +36,7 @@ export default class Render {
     const canvas = document.createElement('canvas')
     this.canvas = canvas
     this.context = canvas.getContext('2d')
-    const { el, width = size * (13 + 5), height = size * 13 } = screen
+    const { el, width = size * (13 + 5 + 2), height = size * 13 } = screen
     this.screen = screen
     this.canvas.width = width
     this.canvas.height = height

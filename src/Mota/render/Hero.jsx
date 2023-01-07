@@ -1,5 +1,6 @@
 
-import { findPath, registryComponents, Component } from 'Engine'
+import { findPath, Component } from 'Engine'
+import Animate from '../components/Animate.jsx'
 
 export default class Hero extends Component {
   moving = false
@@ -111,7 +112,7 @@ export default class Hero extends Component {
     return (
       <div>
         <div style={this.$state.save.position}>
-          <animate {...data} />
+          <Animate {...data} />
         </div>
       </div>
     )

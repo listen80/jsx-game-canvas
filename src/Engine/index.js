@@ -56,5 +56,4 @@ export default class Engine {
 }
 
 export { default as Component } from './core/Component'
-export { registryComponents } from './core/Node'
 export { findPath } from './utils/physics'

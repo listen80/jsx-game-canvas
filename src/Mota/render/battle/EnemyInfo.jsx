@@ -4,7 +4,7 @@ const columns = [
     width: 1,
     render (rowData) {
       return (
-        <animate
+        <Animate
           data={{
             src: 'enemys.png',
             maxTick: 2,
@@ -48,7 +48,13 @@ const columns = [
         } else {
           const atkCount = Math.floor(enemy.hp / (hero.atk - enemy.def))
           const needHp = (enemy.atk - hero.def) * atkCount
-          return hero.hp > needHp ? needHp : <div style={{ color: 'red', height: 1 }}>{needHp}</div>
+          return hero.hp > needHp
+            ? (
+                needHp
+              )
+            : (
+            <div style={{ color: 'red', height: 1 }}>{needHp}</div>
+              )
         }
       } else {
         return '-'
@@ -68,22 +74,24 @@ export default class EnemyInfo extends window.Component {
     this.props.onClose()
   };
 
-  render () {
-    const styles = {
-      wrap: {
-        textAlign: 'left',
-        fontSize: 18,
-        backgroundImage: 'ground.png',
-        width: 1 * (13 + 5 - 2),
-        x: 1,
-        y: 1,
-        height: 1 * (13 - 2),
-      },
-    }
+  styles = {
+    wrap: {
+      textAlign: 'left',
+      fontSize: 18,
+      backgroundImage: 'ground.png',
+      width: 1 * (13 + 5 - 2),
+      x: 1,
+      y: 1,
+      height: 1 * (13 - 2),
+    },
+  };
 
-    const dataSource = Object.keys(this.props.enemys).map((enemyId) => this.$state.enemys[enemyId])
+  render () {
+    const dataSource = Object.keys(this.props.enemys).map(
+      (enemyId) => this.$state.enemys[enemyId],
+    )
     return (
-      <div style={styles.wrap} onMouseDown={this.onMouseDown}>
+      <div style={this.styles.wrap} onMouseDown={this.onMouseDown}>
         <Table
           dataSource={dataSource}
           columns={columns}

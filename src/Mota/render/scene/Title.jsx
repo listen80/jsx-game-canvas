@@ -1,4 +1,5 @@
 import { Component } from 'Engine'
+import Select from '../../components/Select.jsx'
 
 const config = {
   children: [
@@ -61,27 +62,29 @@ export default class Title extends Component {
     },
   };
 
+  options = [
+    {
+      text: '开始',
+      event: 'startGame',
+    },
+    {
+      text: '继续',
+      event: 'loadGame',
+      disabled: !localStorage.getItem('game'),
+    },
+  ];
+
   render () {
     return (
       <div>
         <div style={this.styles.titleText}>魔塔</div>
-        <select
+        <Select
           style={this.styles.titleSelect}
           optionSize={{
             width: 3,
           }}
-          options={[
-            {
-              text: '开始',
-              event: 'startGame',
-            },
-            {
-              text: '继续',
-              event: 'loadGame',
-              disabled: !localStorage.getItem('game'),
-            },
-          ]}
-        ></select>
+          options={this.options}
+        ></Select>
       </div>
     )
   }

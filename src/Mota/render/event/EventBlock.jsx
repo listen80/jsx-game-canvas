@@ -1,4 +1,5 @@
 import { Component, utils } from 'Engine'
+import Animate from '../../components/Animate.jsx'
 
 function transform ($state, value, x, y) {
   const info = $state.mapping[value]
@@ -173,7 +174,7 @@ export default class Event extends Component {
     const { x, y } = this.props
     return (
       <div style={{ width: 1, height: 1, x, y }} onMouseDown={this.onMouseDown}>
-        <animate {...this.data}></animate>
+        <Animate {...this.data}></Animate>
         {this.enemy}
       </div>
     )

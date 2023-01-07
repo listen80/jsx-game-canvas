@@ -1,7 +1,8 @@
-import Hero from './Hero'
-import Status from './base/Status'
-import EventBlock from './EventBlock'
-import { registryComponents, Component } from 'Engine'
+import Hero from '../Hero'
+import Status from '../helper/Status'
+import Operation from '../helper/Operation'
+import EventBlock from '../event/EventBlock'
+import { Component } from 'Engine'
 
 export default class GameMap extends Component {
   styles = {
@@ -16,6 +17,10 @@ export default class GameMap extends Component {
       width: 5,
       height: 13,
       backgroundImage: 'ground.png',
+    },
+    operationBar: {
+      x: 18,
+      width: 2,
     },
   };
 
@@ -46,7 +51,7 @@ export default class GameMap extends Component {
         }
       })
     })
-    this.$state.map.mapEvents.forEach(element => {
+    this.$state.map.mapEvents.forEach((element) => {
       const { x, y, value, events } = element
       map[y][x] = value
       map[y + ',' + x] = events
@@ -69,7 +74,7 @@ export default class GameMap extends Component {
       map: { height, width, map },
       dist: { x, y },
     })
-  }
+  };
 
   onEventClick = (block) => {
     const { x, y } = block.props
@@ -79,31 +84,41 @@ export default class GameMap extends Component {
       map: { height, width, map },
       dist: { x, y },
     })
-  }
+  };
 
   renderMapTerrains () {
-    return this.map.map((line, y) => line.map((value, x) => value
-      ? <EventBlock
-        value={value}
-        x={x}
-        y={y}
-        id={this.getKey(x, y)}
-        onClick={this.onEventClick}
-        event={this.map[y + ',' + x]}
-      />
-      : null))
+    return this.map.map((line, y) =>
+      line.map((value, x) =>
+        value
+          ? (
+          <EventBlock
+            value={value}
+            x={x}
+            y={y}
+            id={this.getKey(x, y)}
+            onClick={this.onEventClick}
+            event={this.map[y + ',' + x]}
+          />
+            )
+          : null,
+      ),
+    )
   }
 
   render () {
     this.terrains = this.renderMapTerrains()
+    const { styles } = this
     return (
-      <div>
-        <div style={this.styles.map} onMouseDown={this.onMouseDown}>
+      <div style={styles.wrap}>
+        <div style={styles.map} onMouseDown={this.onMouseDown}>
           {this.terrains}
           <Hero map={this.map} terrains={this.terrains} />
         </div>
-        <div style={this.styles.statusBar}>
+        <div style={styles.statusBar}>
           <Status />
+        </div>
+        <div style={styles.operationBar}>
+          <Operation></Operation>
         </div>
       </div>
     )

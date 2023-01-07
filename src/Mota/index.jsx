@@ -1,20 +1,15 @@
 import FPS from './render/helper/FPS'
-import Loading from './render/base/Loading'
-import Title from './render/base/Title'
-import GameMap from './render/GameMap'
-import ScrollText from './render/base/ScrollText'
+import Loading from './render/scene/Loading'
+import Title from './render/scene/Title'
+import GameMap from './render/scene/GameMap'
+import ScrollText from './render/scene/ScrollText'
 import Message from './render/helper/Message'
 import Talks from './render/helper/Talks'
 import Shop from './render/shop/Shop'
-import Test from './render/Test'
 import Battle from './render/battle/Battle'
+import Test from './render/Test'
 
-import animate from './components/Animate.jsx'
-import select from './components/Select.jsx'
-import table from './components/Table.jsx'
-import scroll from './components/Scroll.jsx'
-
-import { registryComponents, Component } from 'Engine'
+import { Component } from 'Engine'
 
 export default class Mota extends Component {
   styles = {
@@ -24,21 +19,21 @@ export default class Mota extends Component {
     },
   };
 
-  onCreate () {
-    registryComponents({ animate, select, table, scroll })
-  }
-
   renderMap () {
-    const $res = this.$state.$res
+    const { $state } = this
+    const { $res, map, mapKey } = $state
+
     if ($res.loaded !== $res.total) {
       return <Loading rate={$res.loaded / $res.total} />
     }
-    if (this.$state.map) {
-      if (this.$state.map.text) {
-        return <ScrollText key={this.$state.mapKey} />
+
+    if (map) {
+      if (map.text) {
+        return <ScrollText key={mapKey} />
       }
-      return <GameMap key={this.$state.mapKey} />
+      return <GameMap key={mapKey} />
     }
+
     if (location.hash === '#test') {
       return <Test />
     }

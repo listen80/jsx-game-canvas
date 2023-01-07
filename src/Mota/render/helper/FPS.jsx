@@ -1,5 +1,4 @@
-
-import { registryComponents, Component } from 'Engine'
+import { Component } from 'Engine'
 
 const getTime = () => performance.now()
 
@@ -27,10 +26,6 @@ export default class FPS extends Component {
       }
     }
 
-    return (
-      <div style={this.styles.fps}>
-        {`${this.fps}fps`}
-      </div>
-    )
+    return <div style={this.styles.fps}>{`${this.fps}fps`}</div>
   }
 }
