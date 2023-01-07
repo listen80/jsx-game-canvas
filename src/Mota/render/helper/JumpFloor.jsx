@@ -13,6 +13,7 @@ export default class Status extends Component {
     wrap: {
       width: 20,
       height: 13,
+      backgroundColor: "rgba(0,0,0,0.4)",
     },
     shopList: {
       x,
@@ -32,7 +33,7 @@ export default class Status extends Component {
   onCreate() {
     const floors = this.$state.save.floors;
     this.options = floors.map((text) => {
-      return { text, floor: true };
+      return { text, mapId: text.split(".")[0] };
     });
     this.options.push({
       text: "离开",
@@ -40,10 +41,18 @@ export default class Status extends Component {
   }
 
   onConfirm = (option, index) => {
-    const { shopid } = option;
-    this.$state.showShopList = !this.$state.showShopList;
-    if (shopid) {
-      this.$state.shopid = shopid;
+    const { mapId } = option;
+
+    if (mapId) {
+      this.$emit("loadMap", {
+        mapId,
+        position: {
+          x: 1,
+          y: 2,
+        },
+      });
+    } else {
+      this.$state.showJumpFloor = false;
     }
   };
 

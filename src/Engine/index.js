@@ -29,7 +29,7 @@ export default class Engine {
 
     this.$state.$res = new Resource(this.$state)
     this.$emit = (...others) => hooks(this.$state, ...others)
-    this.$registry = registry
+    this.$on = registry
     this.$render = new Render(this.$state)
     this.$node = null
     this.gameStart()

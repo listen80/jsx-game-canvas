@@ -23,7 +23,7 @@ export default class GameMap extends Component {
   };
 
   onCreate () {
-    this.$registry('removeMapEventByKey', ($state, id) => {
+    this.$on('removeMapEventByKey', ($state, id) => {
       $state.save.destroy[id] = 1
       this.map = this.createMap()
     })

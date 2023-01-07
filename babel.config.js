@@ -8,8 +8,8 @@ module.exports = {
       }],
     [
       '@babel/preset-react', {
-        pragma: 'this.$c',
-        pragmaFrag: 'this.$c',
+        pragma: 'this.$createElement',
+        pragmaFrag: 'this.$createElement',
       },
     ],
   ],

@@ -1,26 +1,35 @@
-import { Component } from 'Engine'
+import { Component } from "Engine";
 
 export default class Table extends Component {
-  render () {
-    const { dataSource, columns, dataExtra } = this.props
-    let x = 0
-    return columns.map((column, index) => {
-      const { title, dataIndex, width = 1, height = 1, render } = column
-      let y = height
-      const rowEle = <div style={{ x: 0, y: 0, textAlign: 'start' }}>
-        <div style={{ x, width, height }}>{title}</div>
-        {dataSource.map((rowData, rowIndex) => {
-          y += height
-          const style = { x, y, width, height }
-          return (
-            <div style={style} >
-              {render ? render.call(this, rowData, dataExtra, rowIndex, index) : rowData[dataIndex]}
+  render() {
+    const { dataSource, columns, dataExtra, style } = this.props;
+    let x = 0;
+    return (
+      <div style={style}>
+        {columns.map((column, index) => {
+          const { title, dataIndex, width = 1, height = 1, render } = column;
+          let y = 0;
+          y += height;
+          const rowEle = (
+            <div style={{ x }}>
+              <div style={{ width, height }}>{title}</div>
+              {dataSource.map((rowData, rowIndex) => {
+                const line = (
+                  <div style={{ y, width, height }}>
+                    {render
+                      ? render.call(this, rowData, dataExtra, rowIndex, index)
+                      : rowData[dataIndex]}
+                  </div>
+                );
+                y += height;
+                return line;
+              })}
             </div>
-          )
+          );
+          x += width;
+          return rowEle;
         })}
       </div>
-      x += width
-      return rowEle
-    })
+    );
   }
 }

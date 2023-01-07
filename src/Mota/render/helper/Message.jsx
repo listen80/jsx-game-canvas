@@ -38,7 +38,7 @@ export default class Message extends Component {
   messages = []
   tempMessages = []
   onCreate () {
-    this.$registry('setMessage', ($state, data, next) => {
+    this.$on('setMessage', ($state, data, next) => {
       if (!data) {
         return
       }

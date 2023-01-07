@@ -18,10 +18,6 @@ export const registryComponents = (map) => {
 export function createNode (tag, props = {}, ...children) {
   const $parent = this
   tag = componentsMap[tag] || tag
-  if (props?.hidden) {
-    return null
-  }
-
   return {
     tag,
     props,
@@ -36,7 +32,7 @@ function createInstance (next) {
 
   next.$context.$state = next.$parent.$state
   next.$context.$emit = next.$parent.$emit
-  next.$context.$registry = next.$parent.$registry
+  next.$context.$on = next.$parent.$on
 
   // next.$context.$parent = next.$parent;
   next.$context.onCreate && next.$context.onCreate()

@@ -22,24 +22,40 @@ export default class Battle extends Component {
       x: 10,
       y: 1,
     },
+    heroImageStyle: {
+      x: 1,
+      y: 4.5,
+      swidth: 1,
+      sheight: 1,
+      width: 2,
+      height: 2,
+      sy: 0,
+    },
+    enemyImageStyle: {
+      x: 1,
+      y: 4.5,
+      swidth: 1,
+      sheight: 1,
+      width: 2,
+      height: 2,
+    },
   };
 
   onCreate() {
-    this.$registry("battle", ($state, enemy, callback) => {
-      this.enemy = JSON.parse(JSON.stringify(enemy));
-      this.callback = callback;
-      this.turn = false;
-      this.tick = 0;
-      this.battleMsg = null;
-    });
+    this.enemy = JSON.parse(JSON.stringify(this.props.enemy));
+    this.callback = callback;
+    this.turn = false;
+    this.tick = 0;
+    this.battleMsg = null;
+    // this.$on("battle", ($state, enemy, callback) => {
+    //   this.enemy = JSON.parse(JSON.stringify(enemy));
+    //   this.callback = callback;
+    //   this.turn = false;
+    //   this.tick = 0;
+    //   this.battleMsg = null;
+    // });
 
-    this.$registry("enemy", ($state, id, callback) => {
-      this.enemy = JSON.parse(JSON.stringify($state.enemys[id]));
-      this.callback = callback;
-      this.turn = false;
-      this.tick = 0;
-      this.battleMsg = null;
-    });
+    // this.$on("enemy", ($state, id, callback) => {});
   }
 
   onMouseDown = () => {
@@ -85,29 +101,19 @@ export default class Battle extends Component {
   }
 
   loop = this.createLoop(1.5, 2, 2, 1 / 32, true);
+
+  proprety = [
+    { text: "名称", key: "name" },
+    { text: "生命", key: "hp" },
+    { text: "攻击", key: "atk" },
+    { text: "防御", key: "def" },
+  ];
+
   render() {
-    if (!this.enemy) {
-      return;
-    }
     this.calc();
     const enemy = this.enemy;
     const hero = this.$state.save.hero;
 
-    const proprety = [
-      { text: "名称", key: "name" },
-      { text: "生命", key: "hp" },
-      { text: "攻击", key: "atk" },
-      { text: "防御", key: "def" },
-    ];
-    const heroImageStyle = {
-      x: 1,
-      y: 4.5,
-      swidth: 1,
-      sheight: 1,
-      width: 2,
-      height: 2,
-      sy: 0,
-    };
     const enemyImageStyle = {
       x: 1,
       y: 4.5,
@@ -119,7 +125,7 @@ export default class Battle extends Component {
     };
     const size64 = 64;
     const vsStyle = {
-      x: (5 + 1.5),
+      x: 5 + 1.5,
       y: 2,
       height: size64,
       width: size64,
@@ -132,6 +138,7 @@ export default class Battle extends Component {
       width: 15,
       textAlign: "center",
     };
+    const { styles } = this;
     return (
       <div
         src="Battlebacks/mota.jpg"
@@ -146,8 +153,8 @@ export default class Battle extends Component {
         )}
 
         <div style={this.styles.enemy}>
-          <div src="enemys" style={enemyImageStyle} />
-          {proprety.map((item, index) => {
+          <div src="enemys" style={styles.enemyImageStyle} />
+          {this.proprety.map((item, index) => {
             return (
               <div style={{ x: 0 * 1, y: index * 1 }}>
                 <div style={{ width: 4, textAlign: "left", height: 1 }}>
@@ -162,8 +169,8 @@ export default class Battle extends Component {
         </div>
         <div style={vsStyle}>VS</div>
         <div style={this.styles.hero}>
-          <div src="Characters/hero.png" style={heroImageStyle} />
-          {proprety.map((item, index) => {
+          <div src="Characters/hero.png" style={styles.heroImageStyle} />
+          {this.proprety.map((item, index) => {
             return (
               <div style={{ x: 0 * 1, y: index * 1 }}>
                 <div style={{ width: 4, textAlign: "left", height: 1 }}>

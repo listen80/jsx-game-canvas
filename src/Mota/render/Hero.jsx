@@ -4,7 +4,7 @@ import Animate from "../components/Animate";
 export default class Hero extends Component {
   moving = false;
   onCreate() {
-    this.$registry("setPath", ($state, data) => {
+    this.$on("setPath", ($state, data) => {
       this.setPath(data);
     });
   }
@@ -46,8 +46,10 @@ export default class Hero extends Component {
       this.$sound.play("se", "load.mp3");
     } else if (code === "KeyX") {
       this.$state.showEnemyInfo = !this.$state.showEnemyInfo;
+    } else if (code === "KeyJ") {
+      this.$state.showJumpFloor = !this.$state.showJumpFloor;
     } else if (code === "KeyB") {
-      this.buying = true;
+      this.$state.showShopList = !this.$state.showShopList;
     } else if (code === "Backspace") {
       this.$emit("setSave", {
         hero: { lv: 1, hp: 100, atk: 100, def: 100, exp: 100 },

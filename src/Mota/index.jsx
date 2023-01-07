@@ -11,6 +11,8 @@ import ShopList from "./render/shop/ShopList";
 
 import Battle from "./render/battle/Battle";
 import EnemyInfo from "./render/battle/EnemyInfo";
+import Dialog from "./components/Dialog";
+
 import Test from "./render/Test";
 
 import { Component } from "Engine";
@@ -49,11 +51,31 @@ export default class Mota extends Component {
     return (
       <div style={styles.app}>
         {this.renderMap()}
-        {$state.shopid && <Shop shopid={$state.shopid} />}
-        {$state.showShopList && <ShopList />}
-        {$state.showEnemyInfo && <EnemyInfo />}
-        {$state.showJumpFloor && <JumpFloor />}
-        <Battle />
+        {$state.shopid && (
+          <Dialog>
+            <Shop shopid={$state.shopid} />
+          </Dialog>
+        )}
+        {$state.showShopList && (
+          <Dialog>
+            <ShopList />
+          </Dialog>
+        )}
+        {$state.showEnemyInfo && (
+          <Dialog>
+            <EnemyInfo />
+          </Dialog>
+        )}
+        {$state.showJumpFloor && (
+          <Dialog>
+            <JumpFloor />
+          </Dialog>
+        )}
+        {$state.enemy && (
+          <Dialog>
+            <Battle enemy={$state.enemy} />
+          </Dialog>
+        )}
         <Message />
         <Talks />
         <FPS />

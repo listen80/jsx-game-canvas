@@ -6,6 +6,7 @@ const columns = [
   {
     title: null,
     width: 1,
+    height: 0.7,
     render(rowData) {
       return (
         <Animate
@@ -23,27 +24,32 @@ const columns = [
   },
   {
     title: "名字",
-    dataIndex: "name",
     width: 2.5,
+    height: 0.7,
+    dataIndex: "name",
   },
   {
     title: "生命",
-    dataIndex: "hp",
     width: 1.5,
+    height: 0.7,
+    dataIndex: "hp",
   },
   {
     title: "攻击",
-    dataIndex: "atk",
     width: 2,
+    height: 0.7,
+    dataIndex: "atk",
   },
   {
     title: "防御",
-    dataIndex: "def",
     width: 2,
+    height: 0.7,
+    dataIndex: "def",
   },
   {
     title: "损失",
     width: 2,
+    height: 0.7,
     dataIndex: "battleResult",
   },
 ];
@@ -97,20 +103,27 @@ function transform($state, value, x, y) {
   return data;
 }
 
-const size = 13
+const size = 13;
 
 export default class EnemyInfo extends Component {
   styles = {
     wrap: {
-      textAlign: "left",
-      fontSize: 18,
-      backgroundImage: "Background/ground.png",
-      width:  (size - 2),
       x: 1,
       y: 1,
-      height:  (size - 2),
+      width: size - 2,
+      height: size - 2,
+      fontSize: 16,
+      backgroundImage: "Background/ground.png",
+    },
+    close: {
+      x: 10,
+      y: 10,
+      height: 1,
+      width: 1,
+      backgroundColor: 'red',
     },
   };
+
   onCreate() {
     const set = new Set(
       this.$state.map.mapTerrains
@@ -133,15 +146,22 @@ export default class EnemyInfo extends Component {
     });
   }
 
+  onMouseDown = () => {
+    this.$state.showEnemyInfo = false;
+  };
+
   render() {
     const { dataSource, styles } = this;
     return (
-      <div style={styles.wrap} onMouseDown={this.onMouseDown}>
+      <div style={styles.wrap}>
         <Table
           dataSource={dataSource}
           columns={columns}
           dataExtra={this.$state.save.hero}
         />
+        <div style={styles.close} onMouseDown={this.onMouseDown}>
+          X
+        </div>
       </div>
     );
   }

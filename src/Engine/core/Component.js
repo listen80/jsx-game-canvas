@@ -4,7 +4,7 @@ export default class Component {
   constructor ({ props, children }) {
     this.props = props
     this.$node = null
-    // this.$children = children;
+    this.$children = children;
     this.$sound.play = () => {
       return {
         pause () { },
@@ -13,7 +13,7 @@ export default class Component {
     this.$sound.pause = () => { }
   }
 
-  $c () {
+  $createElement () {
     return createNode.apply(this, arguments)
   }
 
@@ -22,7 +22,7 @@ export default class Component {
       return config
     }
     const { tag = 'div', props, children = [] } = config
-    return this.$c(tag, props, ...children.map((c) => this.createNodeByConfig(c)))
+    return this.$createElement(tag, props, ...children.map((c) => this.createNodeByConfig(c)))
   }
 
   createLoop (start = 0, end = 10, interval = 1, delta = 1, loop = false) {

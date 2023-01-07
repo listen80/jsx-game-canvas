@@ -84,7 +84,7 @@ class Talk extends Component {
 
 export default class Talks extends Component {
   onCreate () {
-    this.$registry('talk', ($state, data, next) => {
+    this.$on('talk', ($state, data, next) => {
       this.talks = data
       this.next = next
     })
