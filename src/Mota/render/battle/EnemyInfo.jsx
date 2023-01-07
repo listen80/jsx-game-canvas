@@ -120,6 +120,7 @@ export default class EnemyInfo extends Component {
       y: 10,
       height: 1,
       width: 1,
+      textAlign: 'center',
     },
   };
 
