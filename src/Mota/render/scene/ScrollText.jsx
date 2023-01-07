@@ -41,7 +41,7 @@ export default class ScrollText extends Component {
     if (this.ready) {
       if (this.$state.map.event) {
         this.$state.map.event.forEach((v) => {
-          this.$hook(v)
+          this.$emit(v)
         })
       }
       // if (type === 'loadMap') {

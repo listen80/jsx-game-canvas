@@ -1,5 +1,6 @@
 import { Component } from "Engine";
 import Table from "../../components/Table";
+import Animate from "../../components/Animate";
 
 const columns = [
   {
@@ -23,12 +24,12 @@ const columns = [
   {
     title: "名字",
     dataIndex: "name",
-    width: 3,
+    width: 2.5,
   },
   {
     title: "生命",
     dataIndex: "hp",
-    width: 2,
+    width: 1.5,
   },
   {
     title: "攻击",
@@ -42,27 +43,61 @@ const columns = [
   },
   {
     title: "损失",
-    dataIndex: "address",
     width: 2,
-    render(enemy, hero) {
-      if (hero.atk > enemy.def) {
-        if (hero.def >= enemy.atk) {
-          return 0;
-        } else {
-          const atkCount = Math.floor(enemy.hp / (hero.atk - enemy.def));
-          const needHp = (enemy.atk - hero.def) * atkCount;
-          return hero.hp > needHp ? (
-            needHp
-          ) : (
-            <div style={{ color: "red", height: 1 }}>{needHp}</div>
-          );
-        }
-      } else {
-        return "-";
-      }
-    },
+    dataIndex: "battleResult",
   },
 ];
+
+function checkBattle(enemy, hero) {
+  if (hero.atk > enemy.def) {
+    if (hero.def >= enemy.atk) {
+      return 0;
+    } else {
+      const atkCount = Math.floor(enemy.hp / (hero.atk - enemy.def));
+      const needHp = (enemy.atk - hero.def) * atkCount;
+      return hero.hp > needHp ? (
+        needHp
+      ) : (
+        <div style={{ color: "red", height: 1 }}>{needHp}</div>
+      );
+    }
+  } else {
+    return "-";
+  }
+}
+
+function transform($state, value, x, y) {
+  const info = $state.mapping[value];
+  const { type, name } = info;
+  const detail = $state[type][name];
+  let maxTick = 1;
+  const data = {
+    src: type,
+    sy: detail.sy,
+    type,
+    name,
+    // ...info,
+    // x: x,
+    // y: y,
+    maxInterval: 10,
+  };
+  if (type === "animates") {
+    maxTick = 4;
+  } else if (type === "terrains" || type === "items") {
+    maxTick = 1;
+  } else if (type === "npcs" || type === "enemys") {
+    maxTick = 2;
+  }
+  if (type === "enemys") {
+    const enemy = $state.enemys[name];
+    data.enemy = enemy;
+    maxTick = 2;
+  }
+  data.maxTick = maxTick;
+  return data;
+}
+
+const size = 13
 
 export default class EnemyInfo extends Component {
   styles = {
@@ -70,27 +105,33 @@ export default class EnemyInfo extends Component {
       textAlign: "left",
       fontSize: 18,
       backgroundImage: "Background/ground.png",
-      width: 1 * (13 + 5 - 2),
+      width:  (size - 2),
       x: 1,
       y: 1,
-      height: 1 * (13 - 2),
+      height:  (size - 2),
     },
   };
   onCreate() {
-    this.dataSource = Object.keys(this.props.enemys || []).map(
-      (enemyId) => this.$state.enemys[enemyId]
+    const set = new Set(
+      this.$state.map.mapTerrains
+        .map((line, y) => line.map((value, x) => value))
+        .flat()
     );
-  }
 
-  onKeyDown({ $key }) {
-    // if ($key === 'confirm') {
-    //   this.props.onClose()
-    // }
-  }
+    const values = Array.from(set)
+      .map((value) => (value ? transform(this.$state, value) : null))
+      .filter((v) => {
+        return v && v.type === "enemys";
+      });
 
-  onMouseDown = () => {
-    // this.props.onClose()
-  };
+    this.dataSource = values.map(({ name, enemy }) => {
+      this.$state.enemys[name].battleResult = checkBattle(
+        enemy,
+        this.$state.save.hero
+      );
+      return this.$state.enemys[name];
+    });
+  }
 
   render() {
     const { dataSource, styles } = this;
@@ -99,7 +140,7 @@ export default class EnemyInfo extends Component {
         <Table
           dataSource={dataSource}
           columns={columns}
-          data={this.$state.save.hero}
+          dataExtra={this.$state.save.hero}
         />
       </div>
     );

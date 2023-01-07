@@ -22,13 +22,13 @@ export default class Engine {
 
     this.$state = {
       config,
-      save: Object.create(null),
+      save: config.save,
       image: Object.create(null),
       sound: Object.create(null),
     }
 
     this.$state.$res = new Resource(this.$state)
-    this.$hook = (...others) => hooks(this.$state, ...others)
+    this.$emit = (...others) => hooks(this.$state, ...others)
     this.$registry = registry
     this.$render = new Render(this.$state)
     this.$node = null

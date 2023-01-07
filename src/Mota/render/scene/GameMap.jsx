@@ -68,7 +68,7 @@ export default class GameMap extends Component {
 
     const { height, width } = this.$state.map
     const { map } = this
-    this.$hook('setPath', {
+    this.$emit('setPath', {
       map: { height, width, map },
       dist: { x, y },
     })
@@ -78,7 +78,7 @@ export default class GameMap extends Component {
     const { x, y } = block.props
     const { height, width } = this.$state.map
     const { map } = this
-    this.$hook('setPath', {
+    this.$emit('setPath', {
       map: { height, width, map },
       dist: { x, y },
     })

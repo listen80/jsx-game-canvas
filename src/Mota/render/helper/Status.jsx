@@ -11,7 +11,7 @@ export default class Status extends Component {
               src="terrains"
               style={{
                 sx: 0,
-                sy: 1 * 2,
+                sy: 2,
                 x: x * 1,
                 y: y * 1,
               }}
@@ -53,7 +53,7 @@ export default class Status extends Component {
                   sheight: 1,
                 }}
               />
-              <div style={{ x: 1.5, y: 0, height: 1, width: 1 * 2.5 }}>{value}</div>
+              <div style={{ x: 1.5, y: 0, height: 1, width: 2.5 }}>{value}</div>
             </div>
           )
         })}

@@ -28,7 +28,7 @@ export default class Loading extends Component {
   render () {
     return (
       <div>
-        <div style={this.styles.loadFontStyle}>Loading</div>
+        <div style={this.styles.loadFontStyle}>魔塔</div>
         <div style={this.styles.wrapStyle}>
           <div
             style={{

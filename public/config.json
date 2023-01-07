@@ -2,7 +2,7 @@
   "title": "魔 塔",
   "size": 32,
   "screen": {
-    "width": 13,
+    "width": 20,
     "height": 13
   },
   "control": {
@@ -34,11 +34,26 @@
       "blueKey": 0,
       "redKey": 0
     },
-    "shops": {},
+    "shops": [
+      "moneyShop1",
+      "moneyShop2",
+      "expShop1",
+      "expShop2",
+      "keyShop1",
+      "keyShop2"
+    ],
+    "floors": [
+      "MT0.json",
+      "MT1.json",
+      "MT2.json",
+      "MT3.json",
+      "MT5.json",
+      "MT6.json"
+    ],
     "flags": {},
     "destroy": {}
   },
-  "shop": {
+  "shopList": {
     "moneyShop1": {
       "id": "moneyShop1",
       "title": "3楼商店",
@@ -180,7 +195,8 @@
   "images": [
     "Characters/hero.png",
     "Background/ground.png",
-    "Battlebacks/mota.jpg"
+    "Battlebacks/mota.jpg",
+    "shop.webp"
   ],
   "sounds": [
     "bgm/area1.mp3",
@@ -218,9 +234,7 @@
     "blue": "#acaadc",
     "red": "#dc6664"
   },
-  "mapping": [
-    "mapping.dat"
-  ],
+  "mapping": ["mapping.dat"],
   "propertyNames": {
     "hero": "勇士",
     "lv": "等级",

@@ -2,7 +2,7 @@ import { Component } from 'Engine'
 
 export default class Table extends Component {
   render () {
-    const { dataSource, columns, data } = this.props
+    const { dataSource, columns, dataExtra } = this.props
     let x = 0
     return columns.map((column, index) => {
       const { title, dataIndex, width = 1, height = 1, render } = column
@@ -14,7 +14,7 @@ export default class Table extends Component {
           const style = { x, y, width, height }
           return (
             <div style={style} >
-              {render ? render.call(this, rowData, data, rowIndex, index) : rowData[dataIndex]}
+              {render ? render.call(this, rowData, dataExtra, rowIndex, index) : rowData[dataIndex]}
             </div>
           )
         })}

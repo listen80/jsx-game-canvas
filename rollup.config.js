@@ -14,6 +14,7 @@ const plugins = [
   alias({
     entries: {
       Engine: require('path').resolve('src/Engine'),
+      Mota: require('path').resolve('src/Mota'),
     },
   }),
   commonjs(),

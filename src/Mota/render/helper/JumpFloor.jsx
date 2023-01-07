@@ -8,7 +8,7 @@ const width = 7,
 const x = (screen - width) / 2;
 const y = 2;
 
-export default class ShopList extends Component {
+export default class Status extends Component {
   styles = {
     wrap: {
       width: 20,
@@ -30,10 +30,9 @@ export default class ShopList extends Component {
   };
 
   onCreate() {
-    const shops = this.$state.save.shops;
-    this.options = shops.map((shopid) => {
-      const shop = this.$state.config.shopList[shopid];
-      return { text: shop.title, shopid };
+    const floors = this.$state.save.floors;
+    this.options = floors.map((text) => {
+      return { text, floor: true };
     });
     this.options.push({
       text: "离开",
@@ -48,18 +47,12 @@ export default class ShopList extends Component {
     }
   };
 
-  onKeyDown({ code }) {
-    if (code === "KeyB") {
-      this.props.onClose();
-    }
-  }
-
   render() {
     const { styles } = this;
     return (
       <div style={styles.wrap}>
         <div style={styles.shopList}>
-          <div style={styles.title}>商店选择</div>
+          <div style={styles.title}>楼层选择</div>
           <Select
             style={styles.select}
             options={this.options}

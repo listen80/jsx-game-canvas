@@ -65,8 +65,8 @@ export default class Message extends Component {
           style={{
             backgroundColor: 'rgba(0,0,0,.7)',
             globalAlpha: config.tick / 180,
-            x: (1 * 13 - width) / 2,
-            y: 1 * 2 + index * 1.2,
+            x: (13 - width) / 2,
+            y: 2 + index * 1.2,
             height: 1,
             width: width,
           }}

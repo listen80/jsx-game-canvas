@@ -35,7 +35,7 @@ function createInstance (next) {
   next.$context = new Class(next)
 
   next.$context.$state = next.$parent.$state
-  next.$context.$hook = next.$parent.$hook
+  next.$context.$emit = next.$parent.$emit
   next.$context.$registry = next.$parent.$registry
 
   // next.$context.$parent = next.$parent;

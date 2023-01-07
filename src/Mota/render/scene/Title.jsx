@@ -1,43 +1,43 @@
-import { Component } from 'Engine'
-import Select from '../../components/Select'
+import { Component } from "Engine";
+import Select from "../../components/Select";
 
 export default class Title extends Component {
-  onCreate () {
-    if (__DEV__) {
-
-    }
-  }
-
   styles = {
     titleText: {
       y: 2,
       width: 18,
       height: 4,
-      textAlign: 'center',
+      textAlign: "center",
       fontSize: 128,
     },
     titleSelect: {
       x: 7.5,
       y: 8,
       fontSize: 24,
-      textAlign: 'center',
-      textBaseline: 'middle',
+      textAlign: "center",
+      textBaseline: "middle",
     },
   };
 
   options = [
     {
-      text: '开始',
-      event: 'startGame',
+      text: "开始",
+      event: "startGame",
     },
     {
-      text: '继续',
-      event: 'loadGame',
-      disabled: !localStorage.getItem('game'),
+      text: "继续",
+      event: "loadGame",
+      disabled: !localStorage.getItem("game"),
     },
   ];
 
-  render () {
+  onCreate () {
+    if (__DEV__) {
+      this.$emit("loadGame")
+    }
+  }
+
+  render() {
     return (
       <div>
         <div style={this.styles.titleText}>魔塔</div>
@@ -47,6 +47,6 @@ export default class Title extends Component {
           options={this.options}
         ></Select>
       </div>
-    )
+    );
   }
 }

@@ -5,7 +5,10 @@ import GameMap from "./render/scene/GameMap";
 import ScrollText from "./render/scene/ScrollText";
 import Message from "./render/helper/Message";
 import Talks from "./render/helper/Talks";
+import JumpFloor from "./render/helper/JumpFloor";
 import Shop from "./render/shop/Shop";
+import ShopList from "./render/shop/ShopList";
+
 import Battle from "./render/battle/Battle";
 import EnemyInfo from "./render/battle/EnemyInfo";
 import Test from "./render/Test";
@@ -14,7 +17,7 @@ import { Component } from "Engine";
 export default class Mota extends Component {
   styles = {
     app: {
-      width: 18,
+      width: 20,
       height: 13,
     },
   };
@@ -42,11 +45,14 @@ export default class Mota extends Component {
   }
 
   render() {
+    const { styles, $state } = this;
     return (
-      <div style={this.styles.app}>
+      <div style={styles.app}>
         {this.renderMap()}
-        {this.$state.shopid && <Shop shopid={this.$state.shopid} />}
-        <EnemyInfo enemys={[]}/>
+        {$state.shopid && <Shop shopid={$state.shopid} />}
+        {$state.showShopList && <ShopList />}
+        {$state.showEnemyInfo && <EnemyInfo />}
+        {$state.showJumpFloor && <JumpFloor />}
         <Battle />
         <Message />
         <Talks />

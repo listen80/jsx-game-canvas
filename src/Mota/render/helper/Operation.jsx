@@ -17,7 +17,7 @@ export default class Status extends Component {
               src="terrains"
               style={{
                 sx: 0,
-                sy: 1 * 2,
+                sy: 2,
                 x: x * 1,
                 y: y * 1,
               }}
@@ -32,42 +32,45 @@ export default class Status extends Component {
         src,
         style: { sy: 11, height: 1, width: 1 },
         onMouseDown() {
-          console.log(...arguments);
+          this.$state.showEnemyInfo = !this.$state.showEnemyInfo;
         },
       },
       {
         src,
         style: { sy: 12, height: 1, width: 1 },
         onMouseDown() {
-          console.log(...arguments);
+          this.$state.showJumpFloor = !this.$state.showJumpFloor;
         },
       },
       {
         src,
         style: { sy: 13, height: 1, width: 1 },
         onMouseDown() {
-          console.log(...arguments);
+          this.$state.showShopList = true;
         },
       },
       {
         src,
         style: { sy: 14, height: 1, width: 1 },
         onMouseDown() {
-          console.log(...arguments);
+          this.$emit("saveGame");
+          this.$emit("setMessage", "存储成功");
+          this.$sound.play("se", "load.mp3");
         },
       },
       {
         src,
         style: { sy: 15, height: 1, width: 1 },
         onMouseDown() {
-          console.log(...arguments);
+          this.$emit("loadGame");
+          this.$emit("setMessage", "读取成功");
+          this.$sound.play("se", "load.mp3");
         },
       },
     ];
   }
 
   render() {
-    
     const { styles, rowProperty } = this;
 
     return (

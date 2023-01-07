@@ -164,7 +164,7 @@ export default class Render {
         const { context } = this
         const image = this.getImage(props.src)
         if (!image) {
-          // console.warn(image, this.$state.image, props);
+          console.warn(image, this.$state.image, props);
         } else {
           context.drawImage(
             image,
@@ -206,9 +206,14 @@ export default class Render {
       context.restore()
     }
     if (backgroundImage) {
+      if (!this.getImage(backgroundImage)) {
+        console.warn(backgroundImage)
+        return
+      }
       context.save()
       context.beginPath()
       context.rect(offsetX * size, offsetY * size, width * size, height * size)
+      
       context.fillStyle = context.createPattern(
         this.getImage(backgroundImage),
         'repeat',
