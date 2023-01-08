@@ -1,5 +1,5 @@
 import { findPath, Component } from "Engine";
-import Animate from "../components/Animate";
+import Animate from "../../components/Animate";
 
 export default class Hero extends Component {
   moving = false;

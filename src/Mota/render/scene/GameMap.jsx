@@ -1,6 +1,6 @@
 import Status from "../helper/Status";
 import Operation from "../helper/OperationBar";
-import Hero from "../Hero";
+import Hero from "../char/Hero";
 import EventBlock from "../event/EventBlock";
 import { Component } from "Engine";
 import { screenWidth, screenHeight } from "../../config";
