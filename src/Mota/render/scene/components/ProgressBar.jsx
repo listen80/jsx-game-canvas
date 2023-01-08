@@ -1,14 +1,14 @@
 import { Component } from "Engine";
 import { screenWidth } from "../../../config";
 
-const progressBarWidth = 8;
-const progressBarHeight = 0.5;
+const progressBarWidth = 7;
+const progressBarHeight = 0.2;
 
 export default class ProgressBar extends Component {
   styles = {
     progressBarStyle: {
       x: (screenWidth - progressBarWidth) / 2,
-      y: 8.75,
+      y: 8.9,
       width: progressBarWidth,
       height: progressBarHeight,
       backgroundColor: "#fff",
