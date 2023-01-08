@@ -4,10 +4,11 @@ import ProgressBar from "./components/ProgressBar";
 
 export default class Loading extends Component {
   render() {
+    const { $loader } = this;
     return (
       <div>
         <TitleText />
-        <ProgressBar rate={this.props.rate} />
+        <ProgressBar rate={$loader.loaded / $loader.total} />
       </div>
     );
   }

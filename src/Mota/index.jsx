@@ -71,11 +71,10 @@ export default class Mota extends Component {
   }
 
   render() {
-    const { $state } = this;
-    const { $res } = $state;
+    const { $state, $loader } = this;
 
-    if ($res.loaded !== $res.total) {
-      return <Loading rate={$res.loaded / $res.total} />;
+    if ($loader.loading) {
+      return <Loading />;
     }
 
     if (location.hash === "#test") {

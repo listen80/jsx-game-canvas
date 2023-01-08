@@ -24,6 +24,7 @@ const hooks = function ($state, key, data, next) {
       break
 
     case 'loadMap':
+      $state.mapKey = Math.random();
       Object.assign($state.save, data)
       $res.loadMap($state.save.mapId)
       break

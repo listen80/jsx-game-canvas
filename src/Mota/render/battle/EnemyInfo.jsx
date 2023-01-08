@@ -73,8 +73,8 @@ function checkBattle(enemy, hero) {
   }
 }
 
-function transform($state, value, x, y) {
-  const info = $state.mapping[value];
+function transform($state, $loader, value, x, y) {
+  const info = $loader.$resource.mapping[value];
   const { type, name } = info;
   const detail = $state[type][name];
   let maxTick = 1;

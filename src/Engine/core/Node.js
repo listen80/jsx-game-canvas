@@ -34,6 +34,7 @@ function createInstance(next) {
   next.$context.$emit = next.$parent.$emit;
   next.$context.$on = next.$parent.$on;
   next.$context.$sound = next.$parent.$sound;
+  next.$context.$loader = next.$parent.$loader;
 
   // next.$context.$parent = next.$parent;
   next.$context.onCreate && next.$context.onCreate();

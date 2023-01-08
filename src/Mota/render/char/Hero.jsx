@@ -1,4 +1,5 @@
-import { findPath, Component } from "Engine";
+import { Component } from "Engine";
+import { findPath } from "../../utils/physics";
 import Animate from "../../components/Animate";
 
 export default class Hero extends Component {

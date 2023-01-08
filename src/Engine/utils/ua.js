@@ -1,7 +1,7 @@
-export const checkChromeVersion = (value) => {
-  if (location.protocol === 'file:') {
-    return false
+export const checkRunTime = () => {
+  if (location.protocol === "file:" && navigator.userAgentData) {
+    return false;
   } else {
-    return true
+    return true;
   }
-}
+};

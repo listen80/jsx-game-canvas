@@ -1,23 +1,24 @@
 import Render from "./core/Render";
-import Resource from "./core/Resource";
+import Loader from "./core/Loader";
 import Sound from "./core/Sound";
 
 import { createNode, patchNode } from "./core/Node";
 
 import { loadJSON } from "./utils/http";
-import { checkChromeVersion } from "./utils/ua";
+import { checkRunTime } from "./utils/ua";
 
 import { hooks, registry } from "../Mota/Hook";
-export * as utils from "./utils/format";
 
 export default class Engine {
   constructor($gameJSX) {
     this.$gameJSX = $gameJSX;
-    checkChromeVersion()
-      ? loadJSON("config.json")
-          .catch(() => alert("config.json不存在"))
-          .then((game) => this.init(game))
-      : alert("不能直接运行index.html");
+    if (checkRunTime()) {
+      loadJSON("config.json")
+        .catch(() => alert("config.json不存在"))
+        .then((game) => this.init(game));
+    } else {
+      alert("不能直接运行index.html 或者 Chrome版本太老");
+    }
   }
 
   init(config) {
@@ -26,15 +27,17 @@ export default class Engine {
     this.$state = {
       config,
       save: config.save,
-      image: Object.create(null),
-      sound: Object.create(null),
     };
 
-    this.$state.$res = new Resource(this.$state);
+    this.$render = new Render(this.$state);
+
+    this.$loader = new Loader(this.$state);
+    this.$sound = new Sound(config);
+
+    this.$state.$res = this.$loader;
+    this.$event = null;
     this.$emit = (...others) => hooks(this.$state, ...others);
     this.$on = registry;
-    this.$render = new Render(this.$state);
-    this.$sound = new Sound();
 
     this.$node = null;
     this.gameStart();
@@ -61,4 +64,3 @@ export default class Engine {
 }
 
 export { default as Component } from "./core/Component";
-export { findPath } from "./utils/physics";
