@@ -38,7 +38,7 @@ export default class Status extends Component {
         style: { sy: 15 },
         onMouseDown() {
           this.$emit("loadGame");
-          this.$emit("setMessage", "读取成功");
+          // this.$emit("setMessage", "读取成功");
           this.$sound.play("se", "load.mp3");
         },
       },

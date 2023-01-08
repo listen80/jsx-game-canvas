@@ -43,8 +43,8 @@ export default class Status extends Component {
       this.$emit("loadMap", {
         mapId,
         position: {
-          x: 1,
-          y: 2,
+          x: 6,
+          y: 6,
         },
       });
     }
