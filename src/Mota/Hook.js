@@ -1,4 +1,4 @@
-import { loadGame, saveGame, setSave, checkSave, setSaveByStr, checkSaveByStr } from '../Engine/utils/sl'
+import { loadGame, saveGame, setSave, checkSave, setSaveByStr, checkSaveByStr } from './utils/game'
 
 const map = {}
 
