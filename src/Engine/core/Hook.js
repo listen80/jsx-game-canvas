@@ -28,7 +28,7 @@ const hooks = function ($state, key, data, next) {
       $res.loadMap($state.save.mapId)
       break
 
-    case 'toTitle':
+    case 'gotoTitle':
       $state.map = null
       break
 

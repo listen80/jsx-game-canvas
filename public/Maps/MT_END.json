@@ -3,7 +3,7 @@
   "bgm": "terror.mp3",
   "events": [
     {
-      "type": "toTitle"
+      "type": "gotoTitle"
     }
   ]
 }

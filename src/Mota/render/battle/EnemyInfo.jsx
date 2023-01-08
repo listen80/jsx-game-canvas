@@ -121,12 +121,17 @@ export default class EnemyInfo extends Component {
       fontSize: 16,
       backgroundColor: "black",
     },
+    table: {
+      y: 0.5
+    },
     close: {
       x: 10,
       y: 10,
       height: 1,
       width: 1,
       textAlign: "center",
+      // backgroundColor: "red",
+      fontSize: 24,
     },
   };
 
@@ -160,13 +165,13 @@ export default class EnemyInfo extends Component {
     const { dataSource, styles } = this;
     return (
       <div style={styles.enemyList}>
-        <Table
+        <Table style={styles.table}
           dataSource={dataSource}
           columns={columns}
           dataExtra={this.$state.save.hero}
         />
         <div style={styles.close} onMouseDown={this.onMouseDown}>
-          X
+          x
         </div>
       </div>
     );
