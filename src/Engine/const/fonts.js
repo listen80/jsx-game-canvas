@@ -15,10 +15,10 @@ export const fontsIos = [
   "宋体-简",
 ];
 
-export const fontsMS = ["黑体", "宋体", "微软雅黑", "仿宋", "楷体"];
-
 export const fontsAndroid = ["Roboto", "Noto Sans", "Droid"];
 
-export const fonts = [...fontsMS, ...fontsIos, ...fontsAndroid];
+export const fontsMircroSoft = ["楷体", "黑体", "宋体", "微软雅黑", "仿宋"];
+
+export const fonts = [...fontsMircroSoft, ...fontsIos, ...fontsAndroid];
 
 export const fontFamily = fonts.find(checkFont);

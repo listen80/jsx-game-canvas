@@ -55,14 +55,15 @@ export default class Status extends Component {
         data: "设置",
         style: { sy: 16 },
         onMouseDown() {
-          this.$emit("gotoTitle", "设置");
+          this.$state.showConfig = !this.$state.showConfig
         },
       },
       {
         data: "统计",
         style: { sy: 17 },
         onMouseDown() {
-          this.$emit("setMessage", "统计");
+          this.$emit("gotoTitle", "设置");
+          // this.$emit("setMessage", "统计");
         },
       },
     ];

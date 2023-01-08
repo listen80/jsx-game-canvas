@@ -14,6 +14,7 @@ import EnemyInfo from "./render/battle/EnemyInfo";
 import Dialog from "./components/Dialog";
 
 import Test from "./render/test/Test";
+import Config from "./render/tool/Config";
 
 import { Component } from "Engine";
 
@@ -58,6 +59,11 @@ export default class Mota extends Component {
         {$state.enemy && (
           <Dialog>
             <Battle />
+          </Dialog>
+        )}
+        {$state.showConfig && (
+          <Dialog>
+            <Config />
           </Dialog>
         )}
       </div>
