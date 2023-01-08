@@ -7,7 +7,7 @@ import { createNode, patchNode } from "./core/Node";
 import { loadJSON } from "./utils/http";
 import { checkChromeVersion } from "./utils/ua";
 
-import { hooks, registry } from "./core/Hook";
+import { hooks, registry } from "../Mota/Hook";
 export * as utils from "./utils/format";
 
 export default class Engine {

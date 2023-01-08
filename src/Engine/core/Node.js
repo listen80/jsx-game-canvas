@@ -5,7 +5,7 @@ import {
   isUndefined,
   isString,
   isBoolean,
-} from "../utils/common";
+} from "../utils/type";
 
 const componentsMap = Object.create(null);
 

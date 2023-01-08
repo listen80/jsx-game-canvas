@@ -6,7 +6,7 @@ import {
   isUndefined,
   isBoolean,
   isString,
-} from '../utils/common'
+} from '../utils/type'
 
 const mouseEvents = [
   // "ContextMenu",
