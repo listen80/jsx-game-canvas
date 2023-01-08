@@ -21,4 +21,4 @@ export const fontsMircroSoft = ["楷体", "黑体", "宋体", "微软雅黑", "�
 
 export const fonts = [...fontsMircroSoft, ...fontsIos, ...fontsAndroid];
 
-export const fontFamily = fonts.find(checkFont);
+export const fontFamily = fonts.find(checkFont) || "楷体";
