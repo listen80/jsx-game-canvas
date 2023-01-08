@@ -195,8 +195,7 @@
   "images": [
     "Characters/hero.png",
     "Background/ground.png",
-    "Battlebacks/mota.jpg",
-    "shop.webp"
+    "Battlebacks/mota.jpg"
   ],
   "sounds": [
     "bgm/area1.mp3",

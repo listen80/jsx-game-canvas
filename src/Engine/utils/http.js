@@ -17,7 +17,7 @@ export const loadSound = (src, callback) => {
   audio.addEventListener("canplay", () => {
     callback && callback(src, audio);
   });
-  audio.addEventListener("error", () => reject(audio));
+  audio.addEventListener("error", () => callback(audio));
   audio.src = src;
   return audio;
 };

@@ -11,7 +11,7 @@ import {
 const mouseEvents = [
   // "ContextMenu",
   // "Click",
-  'Wheel',
+  // 'Wheel',
   'MouseDown',
   // "MouseUp",
   // "MouseMove",
@@ -84,13 +84,13 @@ export default class Render {
       )
     })
 
-    keyEvents.forEach((name) => {
-      document.addEventListener(name.toLowerCase(), (e) => {
-        e.name = `on${name}`
-        e.$key = this.$state.config.control[e.code]
-        this.keyEventsCollectionKeyframe.push(e)
-      })
-    })
+    // keyEvents.forEach((name) => {
+    //   document.addEventListener(name.toLowerCase(), (e) => {
+    //     e.name = `on${name}`
+    //     e.$key = this.$state.config.control[e.code]
+    //     this.keyEventsCollectionKeyframe.push(e)
+    //   })
+    // })
   }
 
   toDataURL () {

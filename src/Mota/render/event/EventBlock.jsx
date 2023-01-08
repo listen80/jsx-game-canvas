@@ -140,8 +140,6 @@ export default class Event extends Component {
         'yellowDoor',
         'redDoor',
         'blueDoor',
-        'steelDoor',
-        'specialDoor',
       ]
       if (
         terrains.includes(name)

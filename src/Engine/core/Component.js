@@ -1,26 +1,13 @@
 import { createNode } from "./Node";
-import Sound from "./Sound";
+
 export default class Component {
   constructor({ props, children }) {
     this.props = props;
-    this.$node = null;
     this.$children = children;
   }
 
   $createElement() {
     return createNode.apply(this, arguments);
-  }
-
-  createNodeByConfig(config) {
-    if (typeof config === "string") {
-      return config;
-    }
-    const { tag = "div", props, children = [] } = config;
-    return this.$createElement(
-      tag,
-      props,
-      ...children.map((c) => this.createNodeByConfig(c))
-    );
   }
 
   createLoop(start = 0, end = 10, interval = 1, delta = 1, loop = false) {
@@ -48,6 +35,4 @@ export default class Component {
       return n;
     };
   }
-
-  $sound() {}
 }
