@@ -108,9 +108,9 @@ export default class Mota extends Component {
       </div>
     );
   }
-  // render() {
-  //   return <div style={{x: 0, y: 1, backgroundColor: 'red', width: 1, height: 1}}>
-  //     [1234]
-  //   </div>
-  // }
+  render() {
+    return <div text="1212233">
+      [1234]
+    </div>
+  }
 }

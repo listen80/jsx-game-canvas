@@ -1,23 +1,47 @@
-import { Component } from 'Engine'
+import { Component } from "Engine";
 
 export default class Animate extends Component {
-  loop = this.createLoop(0, this.props.maxTick, this.props.maxInterval)
-  render () {
-    const { image, x = 0, y = 0, width = 1, height = 1, center = false, sy = 0, ...others } = this.props
-    const sx = this.loop()
+  onCreate() {
+    this.createAnimateConfig();
+  }
+
+  createAnimateConfig() {
+    const defaultAnimateConfig = {
+      start: 0,
+      end: 3,
+      interval: 60,
+      delta: 1,
+      sx: 0,
+      sy: 0,
+      tick: -1,
+    };
+    this.animateConfig = Object.assign(
+      Object.create(null),
+      defaultAnimateConfig,
+      this.props.animate
+    );
+  }
+
+  runAnimateNext() {
+    const { animateConfig } = this;
+    animateConfig.tick++;
+    if (animateConfig.tick >= animateConfig.interval) {
+      animateConfig.tick = 0;
+      animateConfig.sx++;
+      if (animateConfig.sx > animateConfig.end) {
+        animateConfig.sx = 0;
+      }
+    }
+  }
+
+  render() {
+    this.runAnimateNext();
+    const { sx, sy } = this.animateConfig;
     return (
       <div
-        image={image}
-        style={{
-          ...others,
-          x: x + (center ? -width / 2 : 0),
-          y: y + (center ? -height / 2 : 0),
-          sx: sx * width,
-          sy: height * sy,
-          width: width,
-          height: height,
-        }}
+        image={this.props.image}
+        style={{ ...this.props.style, sx, sy }}
       ></div>
-    )
+    );
   }
 }

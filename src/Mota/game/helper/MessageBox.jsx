@@ -17,7 +17,6 @@ export default class MessageBox extends Component {
       style: {
         backgroundColor: "rgba(0,0,0,.7)",
         x: (screenWidth - width) / 2,
-        y: 2 + index * 1.2,
         height: 1,
         width: width,
         borderWidth: 2,
@@ -48,6 +47,8 @@ export default class MessageBox extends Component {
     return this.messages.map((config, index) => {
       const { message, messageStyle, style } = config;
       style.globalAlpha = config.tick / 180;
+      style.y = 2 + index * 1.2;
+
       return (
         <div style={style}>
           <div style={messageStyle}>{message}</div>

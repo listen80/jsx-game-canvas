@@ -104,21 +104,25 @@ export default class Hero extends Component {
   }
 
   render() {
-    this.runSteps();
-    const data = {
-      image: "Characters/hero.png",
-      width: 1,
-      height: 1,
-      maxTick: 4,
-      maxInterval: 10,
-      sy: this.$state.save.position.sy,
-    };
+    // this.runSteps();
+   
     return (
-      <div>
-        <div style={this.$state.save.position}>
-          <Animate {...data} />
-        </div>
-      </div>
+      <Animate
+        image={"Characters/hero.png"}
+        position={{
+          x: 0,
+          y: 2,
+        }}
+        style={{
+          left: 3,
+          width: 1,
+          height: 1,
+        }}
+        animate={{
+          maxTick: 2,
+          maxInterval: 10,
+        }}
+      />
     );
   }
 }

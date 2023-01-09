@@ -8,9 +8,12 @@ export default class Loader {
 
     this.$resource = Object.create(null);
     this.$resource.maps = Object.create(null);
+    this.$resource.image = Object.create(null);
+    this.$resource.sprites = Object.create(null);
   }
 
   init(config) {
+    this.loading = true;
     this.config = config.resource;
     this.loadMapping();
     this.loadImage();
@@ -37,7 +40,6 @@ export default class Loader {
   }
 
   loadImage() {
-    this.$resource.image = Object.create(null);
     this.config.images.forEach((name) => {
       this.total++;
       loadImage(`Image/${name}`).then((data) => {
@@ -49,7 +51,6 @@ export default class Loader {
   }
 
   loadSprite() {
-    this.$resource.sprites = Object.create(null);
 
     this.config.sprites.forEach((name) => {
       this.total++;

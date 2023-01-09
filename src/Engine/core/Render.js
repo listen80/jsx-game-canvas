@@ -43,6 +43,7 @@ export default class Render {
 
     const dom = document.querySelector(el || "#game") || document.body;
     dom && dom.appendChild(this.canvas);
+
     this.mergeStyle(baseStyle);
     self.addEventListener("onresize", this.getCanvasRenderRect);
     this.getCanvasRenderRect();
@@ -101,6 +102,8 @@ export default class Render {
   }
 
   mergeStyle = (style) => {
+    Object.assign(this.context, style);
+    return;
     if (style) {
       const {
         fontSize,
@@ -167,9 +170,11 @@ export default class Render {
         } = style;
         const { context } = this;
         const image = this.getImage(props.image);
+
         if (!image) {
-          console.warn(image, this.$state.image, props);
+          console.warn(props);
         } else {
+          // context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
           context.drawImage(
             image,
             sx * size,
@@ -312,22 +317,41 @@ export default class Render {
     context.stroke();
   }
 
+  drawBackgroundColor(context, node, offsetX, offsetY, offsetParent) {
+    const { backgroundColor } = node;
+    const { height, width } = node;
+    if (backgroundColor) {
+      context.beginPath();
+      context.rect(offsetX * size, offsetY * size, width * size, height * size);
+      context.save();
+      context.fillStyle = backgroundColor;
+      context.fill();
+      context.restore();
+      context.closePath();
+    }
+  }
+
   drawNode(node, offsetX, offsetY, offsetParent) {
     const { context } = this;
     context.save();
-    const { props, tag } = node;
-    if (props) {
-      const { style, src } = props;
-      this.mergeStyle(style);
-      if (style) {
-        this.drawBack(node, offsetX, offsetY, offsetParent);
-        this.drawBorder(node, offsetX, offsetY, offsetParent);
-      }
-      if (src) {
-        this.drawImage(node, offsetX, offsetY);
-      }
+    const { children, props } = node;
+    const { style, image, text } = props;
+    this.mergeStyle(style);
+
+    // this.drawBackgroundColor(context, node, offsetX, offsetY, offsetParent);
+
+    if (image) {
+      this.drawImage(node, offsetX, offsetY);
     }
-    this.renderAnything(node.children, offsetX, offsetY, node);
+
+    if (text) {
+      this.drawPrimitive(text, offsetX, offsetY, parent);
+    }
+
+    children.forEach((child) =>
+      this.renderAnything(child, offsetX, offsetY, offsetParent)
+    );
+
     context.restore();
   }
 
@@ -371,10 +395,8 @@ export default class Render {
     // new class component
     // div node
 
-    if (!isUndefined(createdNode) && !isBoolean(createdNode)) {
-      if (isPrimitive(createdNode)) {
-        this.drawPrimitive(createdNode, offsetX, offsetY, offsetParent);
-      } else if (isArray(createdNode)) {
+    if (createdNode) {
+      if (isArray(createdNode)) {
         createdNode.forEach((child) =>
           this.renderAnything(child, offsetX, offsetY, offsetParent)
         );
@@ -397,14 +419,6 @@ export default class Render {
         // div node
         // createdNode.offsetParent = offsetParent;
         this.calcNode(createdNode, offsetX, offsetY, offsetParent);
-      } else {
-        let s = "";
-        try {
-          s = JSON.stringify(createdNode);
-        } catch (e) {
-          s = e.stack;
-        }
-        this.drawPrimitive(s, offsetX, offsetY, offsetParent);
       }
     }
   }
@@ -451,28 +465,12 @@ export default class Render {
     const { context } = this;
     context.save();
 
-    const style = node?.props?.style;
-    if (style) {
-      let { x = 0, y = 0, align, width } = style;
-      if (isString(x)) {
-        x = offsetParent.style.width * x;
-      }
-      if (align === "center") {
-        x = (offsetParent.style.width - width) / 2;
-      } else if (align === "right") {
-        x = offsetParent.style.width - width;
-      } else if (typeof x === "string") {
-        x = x * offsetParent.style.width;
-      }
-      offsetX += x;
-      offsetY += y;
+    const { x = 0, y = 0 } = node.props;
 
-      this.calcEvent(offsetX, offsetY, style, node);
-      if (style && style.overflow) {
-        // context.rect(0, 0, 33, 30)
-        context.clip();
-      }
-    }
+    offsetX += x;
+    offsetY += y;
+
+    this.calcEvent(offsetX, offsetY, style, node);
     this.drawNode(node, offsetX, offsetY, offsetParent);
 
     context.restore();
