@@ -1,20 +1,25 @@
 import FPS from "./render/helper/FPS";
-import Loading from "./render/scene/Loading";
-import Title from "./render/scene/Title";
-import GameMap from "./render/scene/GameMap";
-import ScrollText from "./render/scene/ScrollText";
 import Message from "./render/helper/Message";
 import Talks from "./render/helper/Talks";
 import JumpFloor from "./render/helper/JumpFloor";
+
 import Shop from "./render/shop/Shop";
 import ShopList from "./render/shop/ShopList";
 
 import Battle from "./render/battle/Battle";
 import EnemyInfo from "./render/battle/EnemyInfo";
-import Dialog from "./components/Dialog";
+
+import Loading from "./render/scene/Loading";
+import Title from "./render/scene/Title";
+import GameMap from "./render/scene/GameMap";
+import ScrollText from "./render/scene/ScrollText";
+
+import Config from "./render/tool/Config";
+import Statistics from "./render/tool/Statistics";
 
 import Test from "./render/test/Test";
-import Config from "./render/tool/Config";
+
+import Dialog from "./components/Dialog";
 
 import { Component } from "Engine";
 
@@ -25,13 +30,17 @@ export default class Mota extends Component {
     const { $state } = this;
     const { map, mapKey } = $state;
     if (map) {
-      if (map.text) {
+      const { text, movie } = map;
+      if (text) {
+        return <ScrollText key={mapKey} />;
+      }
+      if (movie) {
         return <ScrollText key={mapKey} />;
       }
       return <GameMap key={mapKey} />;
+    } else {
+      return <Title />;
     }
-
-    return <Title />;
   }
 
   renderDialog() {
@@ -41,8 +50,9 @@ export default class Mota extends Component {
       showShopList,
       showEnemyInfo,
       showJumpFloor,
-      enemy,
+      showBattle,
       showConfig,
+      showStatistics,
     } = $state;
     return (
       <div>
@@ -58,11 +68,14 @@ export default class Mota extends Component {
         <Dialog show={showJumpFloor}>
           <JumpFloor />
         </Dialog>
-        <Dialog show={enemy}>
+        <Dialog show={showBattle}>
           <Battle />
         </Dialog>
         <Dialog show={showConfig}>
           <Config />
+        </Dialog>
+        <Dialog show={showStatistics}>
+          <Statistics />
         </Dialog>
       </div>
     );

@@ -11,7 +11,7 @@ export default class Loader {
   }
 
   init(config) {
-    this.config = config;
+    this.config = config.resource;
     this.loadMapping();
     this.loadImage();
     this.loadSprite();

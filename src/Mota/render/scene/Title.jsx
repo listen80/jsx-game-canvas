@@ -1,5 +1,5 @@
 import { Component } from "Engine";
-import Select from "../../components/Select";
+import Select from "Mota/components/Select";
 import TitleText from "./components/TitleText";
 import { screenWidth } from "../../config";
 
