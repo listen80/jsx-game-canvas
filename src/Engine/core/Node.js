@@ -7,22 +7,11 @@ import {
   isBoolean,
 } from "../utils/type";
 
-const componentsMap = Object.create(null);
-
-export const registryComponents = (map) => {
-  Object.entries(map).forEach(([key, value]) => {
-    componentsMap[key] = value;
-  });
-};
-
 export function createNode(tag, props = {}, ...children) {
-  const $parent = this;
-  tag = componentsMap[tag] || tag;
   return {
     tag,
     props,
     children,
-    $parent,
   };
 }
 
