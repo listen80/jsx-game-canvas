@@ -46,11 +46,11 @@ export default class Shop extends Component {
   onConfirm = (option, index) => {
     const { need, effect } = option;
     if (need) {
-      if (this.$emit("checkSaveByStr", need)) {
-        this.$emit("setSaveByStr", need);
-        this.$emit("setSaveByStr", effect);
+      if (this.$event.emit("checkSaveByStr", need)) {
+        this.$event.emit("setSaveByStr", need);
+        this.$event.emit("setSaveByStr", effect);
       } else {
-        this.$emit("setMessage", "不行");
+        this.$event.emit("setMessage", "不行");
       }
     } else {
       this.$state.shopid = null;

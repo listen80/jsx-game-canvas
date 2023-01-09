@@ -47,7 +47,7 @@ export default class Event extends Component {
     }
     const { data, type, next, condition, yes, no } = e;
     if (type === "if") {
-      if (this.$emit("checkSaveByStr", condition)) {
+      if (this.$event.emit("checkSaveByStr", condition)) {
         this.event = yes;
         this.runEvent();
       } else {
@@ -59,11 +59,11 @@ export default class Event extends Component {
         }
       }
     } else if (type === "removeSelf") {
-      this.$emit("removeMapEventByKey", this.props.id, () =>
+      this.$event.emit("removeMapEventByKey", this.props.id, () =>
         this.runEvent(i + 1)
       );
     } else {
-      this.$emit(type, data, () => this.runEvent(i + 1));
+      this.$event.emit(type, data, () => this.runEvent(i + 1));
     }
   }
 
@@ -140,7 +140,7 @@ export default class Event extends Component {
         //     propertyName = "金币";
         //   }
         //   msg += ` ${propertyName}${value > 0 ? "+" : "-"}${value}`;
-        //   this.$emit('setMessage', msg);
+        //   this.$event.emit('setMessage', msg);
         // });
         this.runEvent();
 
@@ -153,13 +153,13 @@ export default class Event extends Component {
         const key = name.slice(0, -4) + "Key";
         if (this.$state.save.items[key]) {
           this.$state.save.items[key]--;
-          this.$emit("removeMapEventByKey", this.props.id);
+          this.$event.emit("removeMapEventByKey", this.props.id);
           this.$sound.play("se", "door.mp3");
           return true;
         }
         const i18n = ["黄色钥匙", "红色钥匙", "蓝色钥匙"];
 
-        this.$emit("setMessage", `你没有${i18n[terrains.indexOf(name)]}`);
+        this.$event.emit("setMessage", `你没有${i18n[terrains.indexOf(name)]}`);
       }
     }
   }

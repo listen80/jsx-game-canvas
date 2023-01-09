@@ -50,7 +50,7 @@ export default class Engine {
       $sound: this.$sound,
     });
 
-    // this.$emit = (...others) =>
+    // this.$event.emit = (...others) =>
     //   hooks(this.$state, this.$loader, this.$sound, ...others);
     // this.$event.on = registry;
 

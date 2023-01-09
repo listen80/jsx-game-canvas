@@ -40,7 +40,7 @@ export default class Status extends Component {
 
     this.$state.showJumpFloor = false;
     if (mapId) {
-      this.$emit("loadMap", {
+      this.$event.emit("loadMap", {
         mapId,
         position: {
           x: 6,

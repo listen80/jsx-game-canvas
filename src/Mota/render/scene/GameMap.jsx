@@ -49,7 +49,7 @@ export default class GameMap extends Component {
     // this.mapBgm = this.$sound.play('bgm', bgm)
     this.map = this.createMap();
     this.createWall();
-    this.$emit("setMessage", this.$state.map.name);
+    this.$event.emit("setMessage", this.$state.map.name);
   }
 
   getKey(x, y) {
@@ -87,7 +87,7 @@ export default class GameMap extends Component {
 
     const { height, width } = this.$state.map;
     const { map } = this;
-    this.$emit("setPath", {
+    this.$event.emit("setPath", {
       map: { height, width, map },
       dist: { x, y },
     });
@@ -97,7 +97,7 @@ export default class GameMap extends Component {
     const { x, y } = block.props;
     const { height, width } = this.$state.map;
     const { map } = this;
-    this.$emit("setPath", {
+    this.$event.emit("setPath", {
       map: { height, width, map },
       dist: { x, y },
     });

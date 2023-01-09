@@ -44,7 +44,7 @@ export default class ScrollText extends Component {
     if (this.$state.map.events) {
       this.$state.map.events.forEach((event) => {
         const { type, data } = event;
-        this.$emit(type, data);
+        this.$event.emit(type, data);
       });
     }
   };

@@ -37,13 +37,13 @@ export default class Hero extends Component {
   //     postion.sy = 2;
   //     // this.$sound.play('se', 'step.mp3')
   //   } else if (code === "KeyS") {
-  //     this.$emit("saveGame");
-  //     this.$emit("setMessage", "存储成功");
+  //     this.$event.emit("saveGame");
+  //     this.$event.emit("setMessage", "存储成功");
   //     this.$sound.play("se", "load.mp3");
   //     // this.setMessage("存储成功");
   //   } else if (code === "KeyL") {
-  //     this.$emit("loadGame");
-  //     this.$emit("setMessage", "读取成功");
+  //     this.$event.emit("loadGame");
+  //     this.$event.emit("setMessage", "读取成功");
   //     this.$sound.play("se", "load.mp3");
   //   } else if (code === "KeyX") {
   //     this.$state.showEnemyInfo = !this.$state.showEnemyInfo;
@@ -52,11 +52,11 @@ export default class Hero extends Component {
   //   } else if (code === "KeyB") {
   //     this.$state.showShopList = !this.$state.showShopList;
   //   } else if (code === "Backspace") {
-  //     this.$emit("setSave", {
+  //     this.$event.emit("setSave", {
   //       hero: { lv: 1, hp: 100, atk: 100, def: 100, exp: 100 },
   //     });
-  //     this.$emit("setSave", { items: { yellowKey: 3, blueKey: 2, redKey: 1 } });
-  //     this.$emit("setSave", { "": { money: 100 } });
+  //     this.$event.emit("setSave", { items: { yellowKey: 3, blueKey: 2, redKey: 1 } });
+  //     this.$event.emit("setSave", { "": { money: 100 } });
   //   }
 
   //   if (moveVector) {

@@ -38,7 +38,7 @@ export default class Title extends Component {
   onConfirm = (option) => {
     const { event } = option;
     if (event) {
-      this.$emit(event);
+      this.$event.emit(event);
     }
   };
 
