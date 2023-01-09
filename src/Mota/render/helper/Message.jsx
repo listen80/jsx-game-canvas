@@ -6,7 +6,7 @@ export default class Message extends Component {
   messages = [];
   tempMessages = [];
   onCreate() {
-    this.$on("setMessage", ($state, data, next) => {
+    this.$event.on("setMessage", ($state, data, next) => {
       data = data + "";
       const length = calcLength(data);
       const fontSize = 20;

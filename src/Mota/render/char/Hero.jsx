@@ -5,7 +5,7 @@ import Animate from "../../components/Animate";
 export default class Hero extends Component {
   moving = false;
   onCreate() {
-    this.$on("setPath", ($state, data) => {
+    this.$event.on("setPath", ($state, data) => {
       this.setPath(data);
     });
   }

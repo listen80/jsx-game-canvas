@@ -47,7 +47,7 @@ export default class Battle extends Component {
     this.turn = false;
     this.tick = 0;
     this.battleMsg = null;
-    // this.$on("battle", ($state, enemy, callback) => {
+    // this.$event.on("battle", ($state, enemy, callback) => {
     //   this.enemy = JSON.parse(JSON.stringify(enemy));
     //   this.callback = callback;
     //   this.turn = false;
@@ -55,7 +55,7 @@ export default class Battle extends Component {
     //   this.battleMsg = null;
     // });
 
-    // this.$on("enemy", ($state, id, callback) => {});
+    // this.$event.on("enemy", ($state, id, callback) => {});
   }
 
   onMouseDown = () => {

@@ -30,8 +30,10 @@ function createInstance(next) {
   const Class = next.tag;
   next.$context = new Class(next);
 
+  next.$context.$config = next.$parent.$config;
   next.$context.$state = next.$parent.$state;
   next.$context.$emit = next.$parent.$emit;
+  next.$context.$event = next.$parent.$event;
   next.$context.$on = next.$parent.$on;
   next.$context.$sound = next.$parent.$sound;
   next.$context.$loader = next.$parent.$loader;

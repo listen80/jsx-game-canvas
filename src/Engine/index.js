@@ -33,8 +33,10 @@ export default class Engine {
   init(config) {
     document.title = config.title;
 
+    this.$config = config; // 游戏配置，不允许更改
+
     this.$state = {
-      save: config.save,
+      save: config.save, // 游戏存档，可以修改
     };
 
     this.$loader.init(config);
@@ -48,9 +50,9 @@ export default class Engine {
       $sound: this.$sound,
     });
 
-    this.$emit = (...others) =>
-      hooks(this.$state, this.$loader, this.$sound, ...others);
-    this.$on = registry;
+    // this.$emit = (...others) =>
+    //   hooks(this.$state, this.$loader, this.$sound, ...others);
+    // this.$event.on = registry;
 
     this.$node = null;
     this.gameStart();
