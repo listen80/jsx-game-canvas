@@ -19,9 +19,8 @@ import Config from "./render/tool/Config";
 import { Component } from "Engine";
 
 export default class Mota extends Component {
-  onCreate() {
-    
-  }
+  onCreate() {}
+
   renderMap() {
     const { $state } = this;
     const { map, mapKey } = $state;

@@ -7,6 +7,7 @@ export default class Loader {
     this.loading = false;
 
     this.$resource = Object.create(null);
+    this.$resource.maps = Object.create(null);
   }
 
   init(config) {
@@ -67,8 +68,9 @@ export default class Loader {
   }
 
   loadMap(id) {
-    this.$resource.maps = Object.create(null);
-
+    if (this.$resource.maps[id]) {
+      return Promise.resolve(this.$resource.maps[id]);
+    }
     this.loaded = 0;
     this.total = 0;
 
@@ -81,6 +83,6 @@ export default class Loader {
   }
 
   loadConfig() {
-    return loadJSON("config.json")
+    return loadJSON("config.json");
   }
 }
