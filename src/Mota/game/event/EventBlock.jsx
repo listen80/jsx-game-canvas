@@ -93,7 +93,7 @@ export default class Event extends Component {
       if (type === "normal" || type === "special") {
         this.event = [
           {
-            type: "setMessage",
+            type: "message",
             data: `获得${item.name}`,
           },
           {
@@ -140,7 +140,7 @@ export default class Event extends Component {
         //     propertyName = "金币";
         //   }
         //   msg += ` ${propertyName}${value > 0 ? "+" : "-"}${value}`;
-        //   this.$event.emit('setMessage', msg);
+        //   this.$event.emit('message', msg);
         // });
         this.runEvent();
 
@@ -159,7 +159,7 @@ export default class Event extends Component {
         }
         const i18n = ["黄色钥匙", "红色钥匙", "蓝色钥匙"];
 
-        this.$event.emit("setMessage", `你没有${i18n[terrains.indexOf(name)]}`);
+        this.$event.emit("message", `你没有${i18n[terrains.indexOf(name)]}`);
       }
     }
   }

@@ -27,7 +27,7 @@ export default class Render {
   }
 
   getImage(src) {
-    const image = this.$state.image[src];
+    const image = this.$loader.$resource.image[src];
     return image;
   }
 

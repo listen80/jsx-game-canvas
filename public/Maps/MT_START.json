@@ -5,7 +5,11 @@
     {
       "type": "loadMap",
       "data": {
-        "mapId": "MT0"
+        "map": "MT1",
+        "x": 6,
+        "y": 11,
+        "sx": 0,
+        "sy": 0
       }
     }
   ]

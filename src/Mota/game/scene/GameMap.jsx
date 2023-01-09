@@ -49,7 +49,7 @@ export default class GameMap extends Component {
     // this.mapBgm = this.$sound.play('bgm', bgm)
     this.map = this.createMap();
     this.createWall();
-    this.$event.emit("setMessage", this.$state.map.name);
+    this.$event.emit("message", this.$state.map.name);
   }
 
   getKey(x, y) {
@@ -104,6 +104,7 @@ export default class GameMap extends Component {
   };
 
   renderMapTerrains() {
+    return null;
     return this.map.map((line, y) =>
       line.map((value, x) =>
         value ? (
@@ -128,12 +129,12 @@ export default class GameMap extends Component {
           {this.renderMapTerrains()}
           <Hero map={this.map} terrains={this.terrains} />
         </div>
-        <div style={styles.statusBar}>
+        {/* <div style={styles.statusBar}>
           <Status />
         </div>
         <div style={styles.operationBar}>
           <Operation></Operation>
-        </div>
+        </div> */}
         {this.walls}
       </div>
     );

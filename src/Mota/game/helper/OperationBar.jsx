@@ -38,7 +38,7 @@ export default class Status extends Component {
         style: { sy: 15 },
         onMouseDown() {
           this.$event.emit("loadGame");
-          // this.$event.emit("setMessage", "读取成功");
+          // this.$event.emit("message", "读取成功");
           this.$sound.play("se", "load.mp3");
         },
       },
@@ -47,7 +47,7 @@ export default class Status extends Component {
         style: { sy: 14 },
         onMouseDown() {
           this.$event.emit("saveGame");
-          this.$event.emit("setMessage", "存储成功");
+          this.$event.emit("message", "存储成功");
           this.$sound.play("se", "load.mp3");
         },
       },
@@ -63,7 +63,7 @@ export default class Status extends Component {
         style: { sy: 17 },
         onMouseDown() {
           this.$event.emit("gotoTitle", "设置");
-          // this.$event.emit("setMessage", "统计");
+          // this.$event.emit("message", "统计");
         },
       },
     ];

@@ -12,6 +12,7 @@ export default class EventEmitter {
 
   //发送监听
   emit(type, data) {
+    console.log(type, data);
     this.event[type] = this.event[type] || [];
     this.event[type].forEach((fn) => fn.call(this, data, this.extData));
   }
@@ -21,5 +22,13 @@ export default class EventEmitter {
     this.event[type] = this.event[type] || [];
     const index = this.event[type].indexOf(listener);
     this.event[type].splice(index, 1);
+  }
+
+  registry(...events) {
+    events.forEach((event) => {
+      Object.entries(event).forEach(([key, value]) => {
+        this.on(key, value);
+      });
+    });
   }
 }

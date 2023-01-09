@@ -104,9 +104,7 @@ function transform($state, $loader, value, x, y) {
   return data;
 }
 
-const width = 11;
-const y = 1;
-const x = (screenWidth - width) / 2;
+
 
 
 export default class EnemyInfo extends Component {
@@ -114,8 +112,8 @@ export default class EnemyInfo extends Component {
     enemyList: {
       x,
       y,
-      width: width,
-      height: width,
+      // width: width,
+      // height: width,
       borderWidth: 4,
       borderColor: "white",
       fontSize: 16,
@@ -136,6 +134,13 @@ export default class EnemyInfo extends Component {
   };
 
   onCreate() {
+    const { width, height } = this.$config.screen;
+    const x = (width - wrapWidth) / 2;
+    const y = 1;
+    this.styles.enemyList.x = x
+    this.styles.enemyList.y = y
+    const wrapWidth = 11;
+
     const set = new Set(
       this.$state.map.mapTerrains
         .map((line, y) => line.map((value, x) => value))

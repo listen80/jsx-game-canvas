@@ -1,16 +1,16 @@
 import { Component } from "Engine";
-import { screenWidth } from "../config";
 
 export default class Dialog extends Component {
-  styles = {
-    wrap: {
-      backgroundColor: "rgba(0,0,0,0.4)",
-    },
-  };
-
   onCreate() {
-    this.styles.width = screenWidth
-    this.styles.height = 13
+    const { width, height } = this.$config.screen;
+
+    this.styles = {
+      wrap: {
+        backgroundColor: "rgba(0,0,0,0.4)",
+        width,
+        height,
+      },
+    };
   }
 
   render() {

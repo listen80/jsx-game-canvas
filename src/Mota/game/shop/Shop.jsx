@@ -50,7 +50,7 @@ export default class Shop extends Component {
         this.$event.emit("setSaveByStr", need);
         this.$event.emit("setSaveByStr", effect);
       } else {
-        this.$event.emit("setMessage", "不行");
+        this.$event.emit("message", "不行");
       }
     } else {
       this.$state.shopid = null;

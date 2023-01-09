@@ -1,5 +1,5 @@
 import FPS from "./game/helper/FPS";
-import Message from "./game/helper/Message";
+import Message from "./game/helper/MessageBox";
 import Talks from "./game/helper/Talks";
 import JumpFloor from "./game/helper/JumpFloor";
 
@@ -22,21 +22,14 @@ import Test from "./game/test/Test";
 import Dialog from "./components/Dialog";
 
 import { Component } from "Engine";
+
 import common from "./events/common";
 import mota from "./events/mota";
 import sound from "./events/sound";
 
 export default class Mota extends Component {
   onCreate() {
-    this.registryEvent(common);
-    this.registryEvent(mota);
-    this.registryEvent(sound);
-  }
-
-  registryEvent(event) {
-    Object.entries(event).forEach(([key, value]) => {
-      this.$event.on(key, value);
-    });
+    this.$event.registry(common, mota, sound);
   }
 
   renderMap() {

@@ -38,12 +38,12 @@ export default class Hero extends Component {
   //     // this.$sound.play('se', 'step.mp3')
   //   } else if (code === "KeyS") {
   //     this.$event.emit("saveGame");
-  //     this.$event.emit("setMessage", "存储成功");
+  //     this.$event.emit("message", "存储成功");
   //     this.$sound.play("se", "load.mp3");
-  //     // this.setMessage("存储成功");
+  //     // this.message("存储成功");
   //   } else if (code === "KeyL") {
   //     this.$event.emit("loadGame");
-  //     this.$event.emit("setMessage", "读取成功");
+  //     this.$event.emit("message", "读取成功");
   //     this.$sound.play("se", "load.mp3");
   //   } else if (code === "KeyX") {
   //     this.$state.showEnemyInfo = !this.$state.showEnemyInfo;
