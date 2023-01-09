@@ -34,16 +34,19 @@ export default class Engine {
     document.title = config.title;
 
     this.$state = {
-      config,
       save: config.save,
     };
-
-    this.$event = new EventEmitter();
 
     this.$loader.init(config);
 
     this.$render = new Render(config, this.$loader);
     this.$sound = new Sound(config, this.$loader);
+
+    this.$event = new EventEmitter({
+      $state: this.$state,
+      $render: this.$render,
+      $sound: this.$sound,
+    });
 
     this.$emit = (...others) =>
       hooks(this.$state, this.$loader, this.$sound, ...others);
@@ -72,4 +75,3 @@ export default class Engine {
     this.$render.render(this.$node);
   }
 }
-

@@ -19,6 +19,9 @@ import Config from "./render/tool/Config";
 import { Component } from "Engine";
 
 export default class Mota extends Component {
+  onCreate() {
+    
+  }
   renderMap() {
     const { $state } = this;
     const { map, mapKey } = $state;
@@ -34,44 +37,40 @@ export default class Mota extends Component {
 
   renderDialog() {
     const { $state } = this;
+    const {
+      shopid,
+      showShopList,
+      showEnemyInfo,
+      showJumpFloor,
+      enemy,
+      showConfig,
+    } = $state;
     return (
       <div>
-        {$state.shopid && (
-          <Dialog>
-            <Shop />
-          </Dialog>
-        )}
-        {$state.showShopList && (
-          <Dialog>
-            <ShopList />
-          </Dialog>
-        )}
-        {$state.showEnemyInfo && (
-          <Dialog>
-            <EnemyInfo />
-          </Dialog>
-        )}
-        {$state.showJumpFloor && (
-          <Dialog>
-            <JumpFloor />
-          </Dialog>
-        )}
-        {$state.enemy && (
-          <Dialog>
-            <Battle />
-          </Dialog>
-        )}
-        {$state.showConfig && (
-          <Dialog>
-            <Config />
-          </Dialog>
-        )}
+        <Dialog show={shopid}>
+          <Shop />
+        </Dialog>
+        <Dialog show={showShopList}>
+          <ShopList />
+        </Dialog>
+        <Dialog show={showEnemyInfo}>
+          <EnemyInfo />
+        </Dialog>
+        <Dialog show={showJumpFloor}>
+          <JumpFloor />
+        </Dialog>
+        <Dialog show={enemy}>
+          <Battle />
+        </Dialog>
+        <Dialog show={showConfig}>
+          <Config />
+        </Dialog>
       </div>
     );
   }
 
   render() {
-    const { $state, $loader } = this;
+    const { $loader } = this;
 
     if ($loader.loading) {
       return <Loading />;

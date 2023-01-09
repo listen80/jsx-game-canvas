@@ -1,6 +1,7 @@
 export default class EventEmitter {
-  constructor() {
+  constructor(extData) {
     this.event = {};
+    this.extData = extData;
   }
 
   // 监听
@@ -10,15 +11,15 @@ export default class EventEmitter {
   }
 
   //发送监听
-  emit(type, ...rest) {
+  emit(type, data) {
     this.event[type] = this.event[type] || [];
-    this.event[type].map((fn) => fn.apply(this, rest));
+    this.event[type].forEach((fn) => fn.call(this, data, this.extData));
   }
 
   //移除监听器
   off(type, listener) {
     this.event[type] = this.event[type] || [];
-    const index = this.event[type].indexOf(listener)
-    this.event[type].splice(index, 1)
+    const index = this.event[type].indexOf(listener);
+    this.event[type].splice(index, 1);
   }
 }

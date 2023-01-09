@@ -4,14 +4,19 @@ import { screenWidth } from "../config";
 export default class Dialog extends Component {
   styles = {
     wrap: {
-      width: screenWidth,
-      height: 13,
       backgroundColor: "rgba(0,0,0,0.4)",
     },
   };
 
+  onCreate() {
+    this.styles.width = screenWidth
+    this.styles.height = 13
+  }
+
   render() {
     const { styles } = this;
-    return <div style={styles.wrap}>{this.$children}</div>;
+    if (this.props.show) {
+      return <div style={styles.wrap}>{this.$children}</div>;
+    }
   }
 }

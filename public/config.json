@@ -1,17 +1,9 @@
 {
-  "title": "魔 塔",
-  "size": 32,
+  "title": "魔塔",
   "screen": {
     "width": 23,
-    "height": 13
-  },
-  "control": {
-    "ArrowDown": "down",
-    "ArrowUp": "up",
-    "ArrowLeft": "left",
-    "ArrowRight": "right",
-    "Space": "confirm",
-    "Escape": "cancel"
+    "height": 13,
+    "size": 32
   },
   "save": {
     "mapId": "MT_START",
@@ -187,60 +179,48 @@
       ]
     }
   },
-  "fonts": {
-    "name": "华文行楷",
-    "url": "华文行楷.ttf",
-    "load": false
-  },
-  "images": [
-    "Characters/hero.png",
-    "Background/ground.png",
-    "Battlebacks/mota.jpg"
-  ],
-  "sounds": [
-    "bgm/area1.mp3",
-    "bgm/area2.mp3",
-    "bgm/area3.mp3",
-    "bgm/prologue.mp3",
-    "bgm/terror.mp3",
-    "enemy/blackMagician.mp3",
-    "enemy/brownWizard.mp3",
-    "enemy/redWizard.mp3",
-    "enemy/whiteKing.mp3",
-    "se/attack.mp3",
-    "se/buy.mp3",
-    "se/constants.mp3",
-    "se/dialogue.mp3",
-    "se/door.mp3",
-    "se/floor.mp3",
-    "se/item.mp3",
-    "se/load.mp3",
-    "se/relieve.mp3",
-    "se/sell.mp3",
-    "se/step.mp3"
-  ],
-  "sprites": [
-    "enemys",
-    "items",
-    "animates",
-    "icons",
-    "npcs",
-    "terrains",
-    "boss"
-  ],
-  "colors": {
-    "yellow": "#deb887",
-    "blue": "#acaadc",
-    "red": "#dc6664"
-  },
-  "mapping": ["mapping.dat"],
-  "propertyNames": {
-    "hero": "勇士",
-    "lv": "等级",
-    "money": "金币",
-    "hp": "生命",
-    "atk": "攻击",
-    "def": "防御",
-    "exp": "经验"
+  "resource": {
+    "fonts": {
+      "name": "华文行楷",
+      "url": "华文行楷.ttf",
+      "load": false
+    },
+    "images": [
+      "Characters/hero.png",
+      "Background/ground.png",
+      "Battlebacks/mota.jpg"
+    ],
+    "sounds": [
+      "bgm/area1.mp3",
+      "bgm/area2.mp3",
+      "bgm/area3.mp3",
+      "bgm/prologue.mp3",
+      "bgm/terror.mp3",
+      "enemy/blackMagician.mp3",
+      "enemy/brownWizard.mp3",
+      "enemy/redWizard.mp3",
+      "enemy/whiteKing.mp3",
+      "se/attack.mp3",
+      "se/buy.mp3",
+      "se/constants.mp3",
+      "se/dialogue.mp3",
+      "se/door.mp3",
+      "se/floor.mp3",
+      "se/item.mp3",
+      "se/load.mp3",
+      "se/relieve.mp3",
+      "se/sell.mp3",
+      "se/step.mp3"
+    ],
+    "sprites": [
+      "enemys",
+      "items",
+      "animates",
+      "icons",
+      "npcs",
+      "terrains",
+      "boss"
+    ],
+    "mapping": ["mapping.dat"]
   }
 }

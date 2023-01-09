@@ -21,14 +21,14 @@ export default class Loader {
       const timer = setTimeout(() => {
         this.loading = false;
         clearTimeout(timer);
-      }, 116);
+      }, 200);
     }
   }
 
   loadMapping() {
-    this.config.mapping.forEach((v) => {
+    this.config.mapping.forEach((name) => {
       this.total++;
-      loadText(`Data/${v}`).then((data) => {
+      loadText(`Data/${name}`).then((data) => {
         this.loaded++;
         this.$resource.mapping = data;
       });
@@ -37,10 +37,10 @@ export default class Loader {
 
   loadImage() {
     this.$resource.image = Object.create(null);
-    this.config.images.forEach((v) => {
+    this.config.images.forEach((name) => {
       this.total++;
-      loadImage(`Image/${v}`).then((data) => {
-        this.$resource.image[v] = data;
+      loadImage(`Image/${name}`).then((data) => {
+        this.$resource.image[name] = data;
         this.loaded++;
         this.checkStatus();
       });
@@ -48,16 +48,18 @@ export default class Loader {
   }
 
   loadSprite() {
-    this.config.sprites.forEach((v) => {
+    this.$resource.sprites = Object.create(null);
+
+    this.config.sprites.forEach((name) => {
       this.total++;
-      loadImage(`Sprite/${v}.png`).then((data) => {
-        this.$resource.image[v] = data;
+      loadImage(`Sprite/${name}.png`).then((data) => {
+        this.$resource.sprites[name] = data;
         this.loaded++;
         this.checkStatus();
       });
       this.total++;
-      loadText(`Sprite/${v}.dat`).then((data) => {
-        this.$resource[v] = data;
+      loadText(`Sprite/${name}.dat`).then((data) => {
+        this.$resource.sprites[name] = data;
         this.loaded++;
         this.checkStatus();
       });

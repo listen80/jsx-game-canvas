@@ -117,7 +117,15 @@ export default class Event extends Component {
             data: this.props.id,
           },
         ];
-
+        // "propertyNames": {
+        //   "hero": "勇士",
+        //   "lv": "等级",
+        //   "money": "金币",
+        //   "hp": "生命",
+        //   "atk": "攻击",
+        //   "def": "防御",
+        //   "exp": "经验"
+        // }
         // const propertyNames = this.$state.config.propertyNames
         // const [name, property] = item.property;
         // let msg = `获得${item.name}`;
