@@ -1,10 +1,12 @@
 import Render from "./core/Render";
 import Loader from "./core/Loader";
 import Sound from "./core/Sound";
+import EventEmitter from "./core/EventEmitter";
 
 import { createNode, patchNode } from "./core/Node";
 
 import { hooks, registry } from "../Mota/Hook";
+export { default as Component } from "./core/Component";
 
 export default class Engine {
   constructor($gameJSX) {
@@ -36,12 +38,13 @@ export default class Engine {
       save: config.save,
     };
 
+    this.$event = new EventEmitter();
+
     this.$loader.init(config);
 
     this.$render = new Render(config, this.$loader);
     this.$sound = new Sound(config, this.$loader);
 
-    this.$event = null;
     this.$emit = (...others) =>
       hooks(this.$state, this.$loader, this.$sound, ...others);
     this.$on = registry;
@@ -70,4 +73,3 @@ export default class Engine {
   }
 }
 
-export { default as Component } from "./core/Component";
