@@ -1,31 +1,39 @@
-import FPS from "./render/helper/FPS";
-import Message from "./render/helper/Message";
-import Talks from "./render/helper/Talks";
-import JumpFloor from "./render/helper/JumpFloor";
+import FPS from "./game/helper/FPS";
+import Message from "./game/helper/Message";
+import Talks from "./game/helper/Talks";
+import JumpFloor from "./game/helper/JumpFloor";
 
-import Shop from "./render/shop/Shop";
-import ShopList from "./render/shop/ShopList";
+import Shop from "./game/shop/Shop";
+import ShopList from "./game/shop/ShopList";
 
-import Battle from "./render/battle/Battle";
-import EnemyInfo from "./render/battle/EnemyInfo";
+import Battle from "./game/battle/Battle";
+import EnemyInfo from "./game/battle/EnemyInfo";
 
-import Loading from "./render/scene/Loading";
-import Title from "./render/scene/Title";
-import GameMap from "./render/scene/GameMap";
-import ScrollText from "./render/scene/ScrollText";
+import Loading from "./game/scene/Loading";
+import Title from "./game/scene/Title";
+import GameMap from "./game/scene/GameMap";
+import ScrollText from "./game/scene/ScrollText";
 
-import Config from "./render/tool/Config";
-import Statistics from "./render/tool/Statistics";
+import Config from "./game/tool/Config";
+import Statistics from "./game/tool/Statistics";
 
-import Test from "./render/test/Test";
+import Test from "./game/test/Test";
 
 import Dialog from "./components/Dialog";
 
 import { Component } from "Engine";
-import event from "./events/common";
+import common from "./events/common";
+import mota from "./events/mota";
+import sound from "./events/sound";
 
 export default class Mota extends Component {
   onCreate() {
+    this.registryEvent(common);
+    this.registryEvent(mota);
+    this.registryEvent(sound);
+  }
+
+  registryEvent(event) {
     Object.entries(event).forEach(([key, value]) => {
       this.$event.on(key, value);
     });
