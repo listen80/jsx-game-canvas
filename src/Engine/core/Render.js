@@ -18,13 +18,12 @@ const mouseEvents = [
 ]
 const keyEvents = ['KeyDown', 'KeyUp']
 
-const size = 32
-
 export default class Render {
-  constructor ($state) {
-    this.initCanvas($state.config.screen)
+  constructor (config, $loader) {
+    this.config = config
+    this.$loader = $loader;
+    this.initCanvas(config.screen)
     this.bindEvents()
-    this.$state = $state
   }
 
   getImage (src) {
@@ -32,7 +31,9 @@ export default class Render {
     return image
   }
 
-  initCanvas (screen = {}) {
+  initCanvas () {
+    const { screen, size } = this.config;
+
     const canvas = document.createElement('canvas')
     this.canvas = canvas
     this.context = canvas.getContext('2d')
@@ -63,6 +64,8 @@ export default class Render {
   }
 
   bindEvents () {
+    const { size } = this.config;
+
     this.restoreEvents()
     const canvas = this.canvas
     const { $offsetWidth, $offsetHeight, width, height } = canvas
@@ -149,6 +152,8 @@ export default class Render {
   }
 
   drawImage (node, offsetX, offsetY, offsetParent) {
+    const { size } = this.config;
+
     const { props } = node
     if (props) {
       const { style = {} } = props
@@ -192,6 +197,7 @@ export default class Render {
   }
 
   drawBack (node, offsetX, offsetY, offsetParent) {
+    const { size } = this.config;
     const { context } = this
     const { backgroundImage, backgroundColor, height, width } =
       node.props.style
@@ -225,6 +231,7 @@ export default class Render {
   }
 
   drawBorder (node, offsetX, offsetY) {
+    const { size } = this.config;
     const { context } = this
     const { borderWidth, borderColor, height, width } = node.props.style
     if (borderWidth && borderColor) {
@@ -327,6 +334,7 @@ export default class Render {
 
   drawPrimitive (text, offsetX, offsetY, parent) {
     const { context } = this
+    const { size } = this.config;
     const { textAlign, textBaseline } = context
     const { width = 0, height = 0 } = parent?.props?.style || {}
     const x = { start: 0, left: 0, center: 0.5, right: 1, end: 0 }
@@ -409,6 +417,7 @@ export default class Render {
 
   calcEvent (offsetX, offsetY, style, node) {
     // events of mouse
+    const { size } = this.config;
     this.mouseEventsCollectionKeyframe.forEach((event) => {
       const { canvasX, canvasY } = event
       if (

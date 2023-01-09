@@ -4,20 +4,27 @@ import Sound from "./core/Sound";
 
 import { createNode, patchNode } from "./core/Node";
 
-import { loadJSON } from "./utils/http";
-import { checkRunTime } from "./utils/ua";
-
 import { hooks, registry } from "../Mota/Hook";
 
 export default class Engine {
   constructor($gameJSX) {
     this.$gameJSX = $gameJSX;
-    if (checkRunTime()) {
-      loadJSON("config.json")
-        .catch(() => alert("config.json不存在"))
-        .then((game) => this.init(game));
+    this.$loader = new Loader();
+    if (this.checkRunTime()) {
+      this.$loader
+        .loadConfig()
+        .catch((error) => alert("config.json不存在" + error))
+        .then((config) => this.init(config));
     } else {
       alert("不能直接运行index.html 或者 Chrome版本太老");
+    }
+  }
+
+  checkRunTime() {
+    if (location.protocol === "file:" || !navigator.userAgentData) {
+      return false;
+    } else {
+      return true;
     }
   }
 
@@ -29,14 +36,14 @@ export default class Engine {
       save: config.save,
     };
 
-    this.$render = new Render(this.$state);
+    this.$loader.init(config);
 
-    this.$loader = new Loader(this.$state);
-    this.$sound = new Sound(config);
+    this.$render = new Render(config, this.$loader);
+    this.$sound = new Sound(config, this.$loader);
 
-    this.$state.$res = this.$loader;
     this.$event = null;
-    this.$emit = (...others) => hooks(this.$state, ...others);
+    this.$emit = (...others) =>
+      hooks(this.$state, this.$loader, this.$sound, ...others);
     this.$on = registry;
 
     this.$node = null;

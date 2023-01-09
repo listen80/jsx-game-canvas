@@ -1,8 +1,9 @@
 import { loadSound } from "../utils/http";
 
 export default class Sound {
-  constructor(sounds) {
-    this.sounds = sounds || Object.create(null);
+  constructor(config) {
+    this.config = config;
+    this.sounds = Object.create(null);
     this.total = Infinity;
   }
 

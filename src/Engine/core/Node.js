@@ -37,7 +37,7 @@ function createInstance(next) {
   next.$context.$loader = next.$parent.$loader;
 
   // next.$context.$parent = next.$parent;
-  next.$context.onCreate && next.$context.onCreate();
+  next.$context.onCreate?.();
   renderNode(next);
 }
 
@@ -46,7 +46,7 @@ function destoryInstance(pre) {
   if (!isPrimitive(pre) && !isUndefined(pre)) {
     if (isFunc(pre.tag)) {
       destoryInstance(pre.$context.$node);
-      pre.$context.destroy && pre.$context.onDestroy();
+      pre.$context.destroy?.();
     } else if (isArray(pre)) {
       while (pre.length) {
         destoryInstance(pre.pop());

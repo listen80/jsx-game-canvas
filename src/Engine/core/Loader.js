@@ -1,14 +1,16 @@
 import { loadJSON, loadText, loadImage, loadSound } from "../utils/http";
 
 export default class Loader {
-  constructor($state) {
+  constructor() {
     this.loaded = 0;
     this.total = 0;
     this.loading = false;
 
-    this.$state = $state;
     this.$resource = Object.create(null);
-    this.config = this.$state.config;
+  }
+
+  init(config) {
+    this.config = config;
     this.loadMapping();
     this.loadImage();
     this.loadSprite();
@@ -55,7 +57,7 @@ export default class Loader {
       });
       this.total++;
       loadText(`Sprite/${v}.dat`).then((data) => {
-        this.$state[v] = data;
+        this.$resource[v] = data;
         this.loaded++;
         this.checkStatus();
       });
@@ -63,7 +65,6 @@ export default class Loader {
   }
 
   loadMap(id) {
-
     this.$resource.maps = Object.create(null);
 
     this.loaded = 0;
@@ -75,5 +76,9 @@ export default class Loader {
       this.loaded++;
       this.checkStatus();
     });
+  }
+
+  loadConfig() {
+    return loadJSON("config.json")
   }
 }
