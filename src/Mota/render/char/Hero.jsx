@@ -106,7 +106,7 @@ export default class Hero extends Component {
   render() {
     this.runSteps();
     const data = {
-      src: "Characters/hero.png",
+      image: "Characters/hero.png",
       width: 1,
       height: 1,
       maxTick: 4,

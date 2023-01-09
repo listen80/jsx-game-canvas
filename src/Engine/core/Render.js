@@ -166,7 +166,7 @@ export default class Render {
           sheight,
         } = style;
         const { context } = this;
-        const image = this.getImage(props.src);
+        const image = this.getImage(props.image);
         if (!image) {
           console.warn(image, this.$state.image, props);
         } else {

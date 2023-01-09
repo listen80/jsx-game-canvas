@@ -22,9 +22,14 @@ import Test from "./render/test/Test";
 import Dialog from "./components/Dialog";
 
 import { Component } from "Engine";
+import event from "./events/common";
 
 export default class Mota extends Component {
-  onCreate() {}
+  onCreate() {
+    Object.entries(event).forEach(([key, value]) => {
+      this.$event.on(key, value);
+    });
+  }
 
   renderMap() {
     const { $state } = this;
@@ -102,7 +107,9 @@ export default class Mota extends Component {
       </div>
     );
   }
-  render() {
-    return [1234]
-  }
+  // render() {
+  //   return <div style={{x: 0, y: 1, backgroundColor: 'red', width: 1, height: 1}}>
+  //     [1234]
+  //   </div>
+  // }
 }

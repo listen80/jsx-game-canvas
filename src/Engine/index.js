@@ -34,7 +34,7 @@ export default class Engine {
 
     this.$config = config; // 游戏配置，不允许更改
 
-    this.$state = { save: config.save }; // 游戏存档，可以修改
+    this.$state = {}; // 游戏存档，可以修改
 
     this.$loader.init(config);
 
@@ -42,6 +42,8 @@ export default class Engine {
     this.$sound = new Sound(config, this.$loader);
 
     this.$event = new EventEmitter({
+      $config: this.$config,
+      $loader: this.$loader,
       $state: this.$state,
       $render: this.$render,
       $sound: this.$sound,

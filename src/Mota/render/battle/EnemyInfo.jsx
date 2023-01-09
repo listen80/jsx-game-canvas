@@ -12,7 +12,7 @@ const columns = [
       return (
         <Animate
           data={{
-            src: "enemys.png",
+            image: "enemys.png",
             maxTick: 2,
             width: 1,
             height: 1,
@@ -79,7 +79,7 @@ function transform($state, $loader, value, x, y) {
   const detail = $state[type][name];
   let maxTick = 1;
   const data = {
-    src: type,
+    image: type,
     sy: detail.sy,
     type,
     name,

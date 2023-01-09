@@ -7,7 +7,7 @@ function transform($state, $loader, value, x, y) {
   const detail = $state[type][name];
   let maxTick = 1;
   const data = {
-    src: type,
+    image: type,
     sy: detail.sy,
     type,
     name,

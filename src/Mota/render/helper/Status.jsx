@@ -28,7 +28,7 @@ export default class Status extends Component {
         {rowProperty.map(({ style, data }, index) => {
           return (
             <div style={{ y: index * 1.16 + 0.3 }}>
-              <div src="icons" style={style} />
+              <div image="icons" style={style} />
               <div style={{ x: 1.5, height: 1, width: 2.5 }}>{data}</div>
             </div>
           );

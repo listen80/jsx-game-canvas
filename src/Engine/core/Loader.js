@@ -75,10 +75,11 @@ export default class Loader {
     this.total = 0;
 
     this.total++;
-    loadJSON(`Maps/${id}.json`).then((data) => {
+    return loadJSON(`Maps/${id}.json`).then((data) => {
       this.$resource.maps[id] = data;
       this.loaded++;
       this.checkStatus();
+      return data;
     });
   }
 

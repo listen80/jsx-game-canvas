@@ -141,7 +141,7 @@ export default class Battle extends Component {
     const { styles } = this;
     return (
       <div
-        src="Battlebacks/mota.jpg"
+        image="Battlebacks/mota.jpg"
         style={this.styles.battle}
         onMouseDown={this.onMouseDown}
       >
@@ -153,7 +153,7 @@ export default class Battle extends Component {
         )}
 
         <div style={this.styles.enemy}>
-          <div src="enemys" style={styles.enemyImageStyle} />
+          <div image="enemys" style={styles.enemyImageStyle} />
           {this.proprety.map((item, index) => {
             return (
               <div style={{ x: 0 * 1, y: index * 1 }}>
@@ -169,7 +169,7 @@ export default class Battle extends Component {
         </div>
         <div style={vsStyle}>VS</div>
         <div style={this.styles.hero}>
-          <div src="Characters/hero.png" style={styles.heroImageStyle} />
+          <div image="Characters/hero.png" style={styles.heroImageStyle} />
           {this.proprety.map((item, index) => {
             return (
               <div style={{ x: 0 * 1, y: index * 1 }}>

@@ -3,11 +3,11 @@ import { Component } from 'Engine'
 export default class Animate extends Component {
   loop = this.createLoop(0, this.props.maxTick, this.props.maxInterval)
   render () {
-    const { src, x = 0, y = 0, width = 1, height = 1, center = false, sy = 0, ...others } = this.props
+    const { image, x = 0, y = 0, width = 1, height = 1, center = false, sy = 0, ...others } = this.props
     const sx = this.loop()
     return (
       <div
-        src={src}
+        image={image}
         style={{
           ...others,
           x: x + (center ? -width / 2 : 0),

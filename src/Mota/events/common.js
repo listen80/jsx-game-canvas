@@ -5,12 +5,14 @@ import {
   checkSave,
   setSaveByStr,
   checkSaveByStr,
-} from "./utils/game";
+} from "../utils/game";
+
+import { clone } from "../utils/object.js";
 
 const config = {
-  startGame(data, { $state, $sound, $loader }) {
-    Object.assign($state.save, $state.config.save);
-    $loader.loadMap($state.save.mapId);
+  startGame(data, { $state, $sound, $loader, $config }) {
+    $state.save = clone($config.save);
+    this.emit("loadMap", $state.save.position);
   },
 
   loadGame(data, { $state, $sound, $loader }) {
@@ -22,10 +24,12 @@ const config = {
     saveGame($state.save);
   },
 
-  loadMap(data, { $state, $sound, $loader }) {
+  loadMap(position, { $state, $sound, $loader }) {
+    $state.save.position = position;
     $state.mapKey = Math.random();
-    Object.assign($state.save, data);
-    $loader.loadMap($state.save.mapId);
+    $loader.loadMap($state.save.position.map).then((map) => {
+      $state.map = map;
+    });
   },
 
   gotoTitle(data, { $state, $sound, $loader }) {
@@ -54,14 +58,6 @@ const config = {
 
   checkSaveByStr(data, { $state, $sound, $loader }) {
     return checkSaveByStr($state, data, next);
-  },
-
-  openShop(data, { $state, $sound, $loader }) {
-    $state.shopid = data;
-  },
-
-  play(data, { $state, $sound, $loader }) {
-    return $sound.play(data);
   },
 };
 

@@ -1,21 +1,9 @@
 import { Component } from "Engine";
 import Select from "Mota/components/Select";
 import TitleText from "./components/TitleText";
-import { screenWidth } from "../../config";
-
-const selectWidth = 3;
 
 export default class Title extends Component {
-  styles = {
-    titleSelect: {
-      x: (screenWidth - selectWidth) / 2,
-      y: 8,
-      width: selectWidth,
-      fontSize: 24,
-      textAlign: "center",
-      textBaseline: "middle",
-    },
-  };
+  styles = {};
 
   options = [
     {
@@ -30,9 +18,19 @@ export default class Title extends Component {
   ];
 
   onCreate() {
-    if (__DEV__) {
-      this.$event.emit("loadGame")
-    }
+    const { width } = this.$config.screen;
+    const selectWidth = 3;
+    this.styles.titleSelect = {
+      x: (width - selectWidth) / 2,
+      y: 8,
+      width: selectWidth,
+      fontSize: 24,
+      textAlign: "center",
+      textBaseline: "middle",
+    };
+    // if (__DEV__) {
+    //   this.$event.emit("loadGame")
+    // }
   }
 
   onConfirm = (option) => {

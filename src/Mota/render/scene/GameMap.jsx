@@ -33,7 +33,7 @@ export default class GameMap extends Component {
           y === 0 ||
           y === screenHeight - 1
         ) {
-          this.walls.push(<div src="terrains" style={{ sy: 2, x, y }}></div>);
+          this.walls.push(<div image="terrains" style={{ sy: 2, x, y }}></div>);
         }
       }
     }
