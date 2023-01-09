@@ -8,9 +8,9 @@ const width = 7,
 const x = (screenWidth - width) / 2;
 const y = 2;
 
-export default class Status extends Component {
+export default class JumpFloor extends Component {
   styles = {
-    shopList: {
+    jumpFloor: {
       x,
       y,
       width,
@@ -53,7 +53,7 @@ export default class Status extends Component {
   render() {
     const { styles } = this;
     return (
-      <div style={styles.shopList}>
+      <div style={styles.jumpFloor}>
         <div style={styles.title}>楼层选择</div>
         <Select
           style={styles.select}

@@ -102,4 +102,7 @@ export default class Mota extends Component {
       </div>
     );
   }
+  render() {
+    return [1234]
+  }
 }

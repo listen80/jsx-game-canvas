@@ -5,7 +5,6 @@ import EventEmitter from "./core/EventEmitter";
 
 import { createNode, patchNode } from "./core/Node";
 
-import { hooks, registry } from "../Mota/Hook";
 export { default as Component } from "./core/Component";
 
 export default class Engine {
@@ -35,9 +34,7 @@ export default class Engine {
 
     this.$config = config; // 游戏配置，不允许更改
 
-    this.$state = {
-      save: config.save, // 游戏存档，可以修改
-    };
+    this.$state = { save: config.save }; // 游戏存档，可以修改
 
     this.$loader.init(config);
 
@@ -49,10 +46,6 @@ export default class Engine {
       $render: this.$render,
       $sound: this.$sound,
     });
-
-    // this.$event.emit = (...others) =>
-    //   hooks(this.$state, this.$loader, this.$sound, ...others);
-    // this.$event.on = registry;
 
     this.$node = null;
     this.gameStart();

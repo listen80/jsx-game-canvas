@@ -7,11 +7,15 @@ import {
   isBoolean,
 } from "../utils/type";
 
+
 export function createNode(tag, props = {}, ...children) {
+  const $parent = this; // 创建的组件
+  
   return {
     tag,
     props,
     children,
+    $parent,
   };
 }
 
@@ -21,13 +25,10 @@ function createInstance(next) {
 
   next.$context.$config = next.$parent.$config;
   next.$context.$state = next.$parent.$state;
-  next.$context.$emit = next.$parent.$emit;
-  next.$context.$event = next.$parent.$event;
-  next.$context.$on = next.$parent.$on;
-  next.$context.$sound = next.$parent.$sound;
   next.$context.$loader = next.$parent.$loader;
+  next.$context.$event = next.$parent.$event;
+  next.$context.$sound = next.$parent.$sound;
 
-  // next.$context.$parent = next.$parent;
   next.$context.onCreate?.();
   renderNode(next);
 }

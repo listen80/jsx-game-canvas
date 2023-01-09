@@ -65,7 +65,7 @@ function checkBattle(enemy, hero) {
       return hero.hp > needHp ? (
         needHp
       ) : (
-        <div style={{ color: "red", height: 1 }}>{needHp}</div>
+        <div style={{ fillStyle: "red", height: 1 }}>{needHp}</div>
       );
     }
   } else {

@@ -108,7 +108,6 @@ export default class Render {
         font,
         textAlign,
         textBaseline,
-        color,
         globalAlpha,
         fillStyle,
       } = style;
@@ -121,8 +120,8 @@ export default class Render {
       if (textBaseline) {
         this.context.textBaseline = textBaseline;
       }
-      if (color || fillStyle) {
-        this.context.fillStyle = color || fillStyle;
+      if (fillStyle) {
+        this.context.fillStyle = fillStyle;
       }
       if (font) {
         this.context.font = font;
@@ -369,7 +368,7 @@ export default class Render {
     // undefined null
     // string number
     // array
-    // class component
+    // new class component
     // div node
 
     if (!isUndefined(createdNode) && !isBoolean(createdNode)) {
@@ -381,12 +380,12 @@ export default class Render {
         );
       } else if (isFunc(createdNode.tag)) {
         // events of keyboard
-        this.keyEventsCollectionKeyframe.forEach((event) => {
-          const $context = createdNode.$context;
-          if (keyEvents.some((name) => $context[`on${name}`])) {
-            event.$context = $context;
-          }
-        });
+        // this.keyEventsCollectionKeyframe.forEach((event) => {
+        //   const $context = createdNode.$context;
+        //   if (keyEvents.some((name) => $context[`on${name}`])) {
+        //     event.$context = $context;
+        //   }
+        // });
         // tag 是 function
         this.renderAnything(
           createdNode.$context.$node,
@@ -396,7 +395,7 @@ export default class Render {
         );
       } else if (isString(createdNode.tag)) {
         // div node
-        createdNode.offsetParent = offsetParent;
+        // createdNode.offsetParent = offsetParent;
         this.calcNode(createdNode, offsetX, offsetY, offsetParent);
       } else {
         let s = "";
