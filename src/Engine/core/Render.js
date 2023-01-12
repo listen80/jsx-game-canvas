@@ -452,10 +452,10 @@ export default class Render {
       const { $node, name } = event;
       run($node, event, name);
     });
-    this.keyEventsCollectionKeyframe.forEach((event) => {
-      const { $context, name } = event;
-      $context && $context[name] && $context[name](event);
-    });
+    // this.keyEventsCollectionKeyframe.forEach((event) => {
+    //   const { $context, name } = event;
+    //   $context && $context[name] && $context[name](event);
+    // });
     this.restoreEvents();
   }
 

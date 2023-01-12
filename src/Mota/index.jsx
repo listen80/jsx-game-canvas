@@ -109,8 +109,10 @@ export default class Mota extends Component {
     );
   }
   render() {
-    return <div text="1212233">
-      [1234]
-    </div>
+    return (
+      <div text="1212233">
+        {[1111111111111]}
+      </div>
+    );
   }
 }

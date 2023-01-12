@@ -7,12 +7,21 @@ import {
   isBoolean,
 } from "../utils/type";
 
-
 export function createNode(tag, props = {}, ...children) {
   const $parent = this; // 创建的组件
-  
+  const type = typeof tag;
+  if (type === "string") {
+    return {
+      type,
+      tag,
+      attr: props,
+      children,
+      // $parent,
+    };
+  }
   return {
     tag,
+    type,
     props,
     children,
     $parent,
@@ -56,7 +65,7 @@ function updateInstance(pre, next) {
 }
 
 function renderNode(next) {
-  next.$context.$node = patchNode(next.$context.$node, next.$context.render());
+  next.$node = patchNode(next.$node, next.$context.render());
 }
 
 export function patchNode(pre, next) {

@@ -49,17 +49,17 @@ export default class Engine {
       $sound: this.$sound,
     });
 
-    this.$node = null;
+    this.$root = null;
     this.gameStart();
   }
 
   gameStop() {
-    cancelAnimationFrame(this.ident);
+    cancelAnimationFrame(this.$ident);
   }
 
   gameStart() {
     const next = () => {
-      this.ident = requestAnimationFrame(() => {
+      this.$ident = requestAnimationFrame(() => {
         this.keyFrame();
         next();
       });
@@ -68,7 +68,7 @@ export default class Engine {
   }
 
   keyFrame() {
-    this.$node = patchNode(this.$node, createNode.call(this, this.$gameJSX));
-    this.$render.render(this.$node);
+    this.$root = patchNode(this.$root, createNode.call(this, this.$gameJSX));
+    this.$render.render(this.$root);
   }
 }
