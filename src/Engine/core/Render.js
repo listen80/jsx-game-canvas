@@ -98,7 +98,7 @@ export default class Render extends Draw {
     Object.assign(this.context, style);
   }
 
-  drawNode(node, offsetX, offsetY, offsetParent) {
+  drawNode(node, offsetX, offsetY) {
     const { context } = this;
     context.save();
     const { children, attrs } = node;
@@ -130,13 +130,13 @@ export default class Render extends Draw {
     }
 
     children.forEach((child) =>
-      this.renderAnything(child, offsetX, offsetY, offsetParent)
+      this.renderAnything(child, offsetX, offsetY,)
     );
 
     context.restore();
   }
 
-  renderAnything(createdNode, offsetX, offsetY, offsetParent) {
+  renderAnything(createdNode, offsetX, offsetY,) {
     // undefined null
     // string number
     // array
@@ -145,14 +145,13 @@ export default class Render extends Draw {
     if (createdNode) {
       if (Array.isArray(createdNode)) {
         createdNode.forEach((child) =>
-          this.renderAnything(child, offsetX, offsetY, offsetParent)
+          this.renderAnything(child, offsetX, offsetYF)
         );
       } else if (createdNode.type === "object") {
-        this.renderAnything(createdNode.$node, offsetX, offsetY, offsetParent);
+        this.renderAnything(createdNode.$node, offsetX, offsetY);
       } else if (createdNode.type === "string") {
         // div node
-        // createdNode.offsetParent = offsetParent;
-        this.renderNode(createdNode, offsetX, offsetY, offsetParent);
+        this.renderNode(createdNode, offsetX, offsetY);
       }
     }
   }
