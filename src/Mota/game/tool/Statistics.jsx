@@ -1,8 +1,4 @@
 
-import Select from "Mota/components/Select";
-
-
-
 export default class Statistics extends Component {
 
   onCreate() {

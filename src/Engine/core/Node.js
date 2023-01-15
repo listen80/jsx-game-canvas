@@ -48,11 +48,16 @@ function createInstance(next) {
   $instance.$loader = $parent.$loader;
   $instance.$event = $parent.$event;
   $instance.$sound = $parent.$sound;
+  $instance.$render = $parent.$render;
 
   $instance.props = next.props;
+  $instance.$children = next.children;
 
   $instance.onCreate?.();
+
+  // createNode上面生成实例
   next.$instance = $instance;
+  next.$node = null;
 
   renderNode(next);
 }
@@ -73,49 +78,55 @@ function destoryInstance(pre) {
   }
 }
 
+// next
+// { tag, children, }
+// createNode上面更新实例
+
 function updateInstance(pre, next) {
   next.$instance = pre.$instance;
+  next.$node = pre.$node;
   next.$instance.props = next.props;
+  // pre.props = next.props;
+  // pre.$instance.props = next.props;
   renderNode(next);
 }
 
-// const com = new Component({})
-
 function renderNode(next) {
-  next.$node = patchNode(next.$node, next.$instance.render());
+  const $node = next.$instance.render()
+  next.$node = patchNode(next.$node, $node);
 }
 
-export function patchNode(pre, next) {
+export function patchNode(preNode, nextNode) {
   // undefined null
   // string number
   // array
   // class component
   // div node
 
-  if (isUndefined(next) || isPrimitive(next) || isBoolean(next)) {
-    destoryInstance(pre);
-  } else if (isArray(next)) {
-    if (isArray(pre)) {
-      for (let i = 0; i < next.length; i++) {
+  if (isUndefined(nextNode) || isPrimitive(nextNode) || isBoolean(nextNode)) {
+    destoryInstance(preNode);
+  } else if (isArray(nextNode)) {
+    if (isArray(preNode)) {
+      for (let i = 0; i < nextNode.length; i++) {
         // diff array
-        patchNode(pre[i], next[i]);
+        patchNode(preNode[i], nextNode[i]);
       }
     } else {
-      destoryInstance(pre);
-      for (let i = 0; i < next.length; i++) {
-        patchNode(null, next[i]);
+      destoryInstance(preNode);
+      for (let i = 0; i < nextNode.length; i++) {
+        patchNode(null, nextNode[i]);
       }
     }
-  } else if (typeof next.tag === "object") {
-    if (pre && pre.tag === next.tag && pre.props?.key === next.props?.key) {
-      updateInstance(pre, next);
+  } else if (typeof nextNode.tag === "object") {
+    if (preNode && preNode.tag === nextNode.tag && preNode.props?.key === nextNode.props?.key) {
+      updateInstance(preNode, nextNode);
     } else {
-      destoryInstance(pre);
-      createInstance(next);
+      destoryInstance(preNode);
+      createInstance(nextNode);
     }
-  } else if (isString(next.tag)) {
-    const preChildren = pre && pre.children;
-    patchNode(preChildren, next.children);
+  } else if (isString(nextNode.tag)) {
+    const preNodeChildren = preNode && preNode.children;
+    patchNode(preNodeChildren, nextNode.children);
   }
-  return next;
+  return nextNode;
 }

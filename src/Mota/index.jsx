@@ -1,4 +1,11 @@
+import Loading from "./game/scene/Loading";
+
 import FPS from "./game/helper/FPS";
+import Title from "./game/scene/Title";
+import ScrollText from "./game/scene/ScrollText";
+import GameMap from "./game/scene/GameMap";
+
+
 // import Message from "./game/helper/MessageBox";
 // import Talks from "./game/helper/Talks";
 // import JumpFloor from "./game/helper/JumpFloor";
@@ -9,18 +16,14 @@ import FPS from "./game/helper/FPS";
 // import Battle from "./game/battle/Battle";
 // import EnemyInfo from "./game/battle/EnemyInfo";
 
-// import Loading from "./game/scene/Loading";
-// import Title from "./game/scene/Title";
-// import GameMap from "./game/scene/GameMap";
-// import ScrollText from "./game/scene/ScrollText";
+
 
 // import Config from "./game/tool/Config";
 // import Statistics from "./game/tool/Statistics";
 
-// import Test from "./game/test/Test";
-
 // import Dialog from "./components/Dialog";
 
+// 全局事件
 import commonEvent from "./events/common";
 import motaEvent from "./events/mota";
 import soundEvent from "./events/sound";
@@ -85,27 +88,28 @@ export default {
   //   );
   // },
 
-
-  render() {
+  renderApp() {
     const { $loader } = this;
-    this.x += 1
 
-    // if ($loader.loading) {
-    //   return <Loading />;
-    // }
-
-    // if (location.hash === "#test") {
-    //   return <Test />;
-    // }
-
-    return (
-      <div text={this.x} position={{ x: 3, y: 3 }}>
-        {/* {this.renderMap()} */}
+    if ($loader.loading) {
+      return <Loading />;
+    } else {
+      return <div>
+        {this.renderMap()}
         {/* {this.renderDialog()} */}
         {/* <Message /> */}
         {/* <Talks /> */}
+      </div>
+    }
+  },
+
+  render() {
+    return (
+      <div>
+        {this.renderApp()}
         <FPS />
       </div>
     );
   },
 };
+

@@ -1,30 +1,43 @@
 
-import { screenWidth } from "../../../config";
+export default {
+  onCreate() {
+    const screenWidth = this.$config.screen.width;
+    const progressBarWidth = 7;
+    const progressBarHeight = 0.2;
 
-const progressBarWidth = 7;
-const progressBarHeight = 0.2;
+    this.attrs = {
+      progressBar: {
+        position: {
+          x: (screenWidth - progressBarWidth) / 2,
+          y: 8.9,
+        },
+        size: {
+          width: progressBarWidth,
+          height: progressBarHeight,
+        },
+        backgroundColor: "#fff",
+      },
+      progress: {
+        size: {
+          width: 0,
+          height: progressBarHeight,
+        },
+        backgroundColor: "#666",
+      }
+    }
+  },
 
-export default class ProgressBar extends Component {
-  styles = {
-    progressBarStyle: {
-      x: (screenWidth - progressBarWidth) / 2,
-      y: 8.9,
-      width: progressBarWidth,
-      height: progressBarHeight,
-      backgroundColor: "#fff",
-    },
-    progressStyle: {
-      width: 0,
-      height: progressBarHeight,
-      backgroundColor: "#666",
-    },
-  };
+  getProgressOn() {
+    this.attrs.progress.size.width = this.props.rate * this.attrs.progressBar.size.width
+  },
 
   render() {
-    this.styles.progressStyle.width = progressBarWidth * this.props.rate;
+    this.getProgressOn()
+    const { progressBar, progress } = this.attrs
+
     return (
-      <div style={this.styles.progressBarStyle}>
-        <div style={this.styles.progressStyle}></div>
+      <div {...progressBar}>
+        <div {...progress}></div>
       </div>
     );
   }

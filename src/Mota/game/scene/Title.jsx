@@ -2,11 +2,12 @@ import Select from "../../components/Select";
 import TitleText from "./components/TitleText";
 
 export default {
-
   onCreate() {
-    const { width } = this.$config.screen;
+
+    this.style = { font: "24px 楷体" }
+
     this.position = {
-      x: width / 2,
+      x: this.$config.screen.width / 2,
       y: 8,
     };
 
@@ -22,9 +23,9 @@ export default {
       },
     ]
 
-    // if (__DEV__) {
-    //   this.$event.emit("loadGame")
-    // }
+    if (__DEV__) {
+      this.$event.emit('loadGame')
+    }
   },
 
   onConfirm(option) {
@@ -39,7 +40,7 @@ export default {
       <div>
         <TitleText />
         <Select
-          style={{ font: "24px 楷体" }}
+          style={this.style}
           position={this.position}
           options={this.options}
           onConfirm={this.onConfirm}

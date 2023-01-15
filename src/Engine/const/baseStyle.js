@@ -2,6 +2,7 @@ import { fontFamily } from "./fonts";
 
 export const baseStyle = {
   direction: "ltr",
+  fillStyle: "black",
   fillStyle: "#fff",
   // filter: 'grayscale(.9)',
   filter: "none",

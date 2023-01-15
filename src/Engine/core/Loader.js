@@ -25,7 +25,7 @@ export default class Loader {
       const timer = setTimeout(() => {
         this.loading = false;
         clearTimeout(timer);
-      }, 200);
+      }, 0);
     }
   }
 
@@ -55,7 +55,7 @@ export default class Loader {
     this.config.sprites.forEach((name) => {
       this.total++;
       loadImage(`Sprite/${name}.png`).then((data) => {
-        this.$resource.sprites[name] = data;
+        this.$resource.image[name] = data;
         this.loaded++;
         this.checkStatus();
       });

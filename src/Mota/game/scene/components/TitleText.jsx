@@ -4,7 +4,7 @@ export default {
       text: "魔塔",
       position: { x: this.$config.screen.width / 2, y: 4 },
       style: {
-        font: "128px 宋体",
+        font: "128px 楷体",
       },
     };
   },

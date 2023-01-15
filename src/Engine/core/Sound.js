@@ -10,7 +10,7 @@ export default class Sound {
   control(type, name, control) {
     return loadSound(`Sound/${type}/${name}`, (src, el) => {
       el.loop = type === "bgm";
-      el[control]();
+      el[control]().then((e) => console.log(e)).catch((e) => console.log(e));
     });
   }
 

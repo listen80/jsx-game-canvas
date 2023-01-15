@@ -32,7 +32,7 @@ export default class Engine {
 
     this.$config = config; // 游戏配置，不允许更改
 
-    this.$state = {}; // 游戏存档，可以修改
+    this.$state = { save: {} }; // 游戏存档，可以修改
 
     this.$loader.init(config); // 资源加载器
 

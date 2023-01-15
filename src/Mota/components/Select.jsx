@@ -1,3 +1,6 @@
+import Text from "./Text";
+import LinearGradient from "./LinearGradient";
+
 export default {
   onCreate() {
     const { activeIndex = 0 } = this.props;
@@ -6,7 +9,16 @@ export default {
     this.optionSize.width = this.optionSize.width || this.props?.style?.width;
     this.optionSize.height = this.optionSize.height || 1;
   },
-
+  createLinearGradient(y) {
+    const lineGradient = this.$render.context.createLinearGradient(0, y * 32, 0, y * 32 + 32);
+    lineGradient.addColorStop(0, 'rgba(0,0,0,1)');
+    lineGradient.addColorStop(0.1, 'rgba(244,244,31,.1)');
+    lineGradient.addColorStop(0.9, 'rgba(244,244,31,.1)');
+    lineGradient.addColorStop(1, 'rgba(0,0,0,1)');
+    lineGradient.y = y
+    // this.lineGradient = lineGradient;
+    return lineGradient
+  },
   onChange() {
     this.props.onChange?.(
       this.props.options[this.activeIndex],
@@ -17,12 +29,10 @@ export default {
   onConfirm() {
     const option = this.props.options[this.activeIndex];
     if (option) {
-      if (this.props.onConfirm) {
-        this.props.onConfirm(
-          this.props.options[this.activeIndex],
-          this.activeIndex
-        );
-      }
+      this.props.onConfirm?.(
+        this.props.options[this.activeIndex],
+        this.activeIndex
+      );
     }
   },
 
@@ -44,8 +54,8 @@ export default {
   //   }
   // }
 
-  onClick(event, $node) {
-    this.activeIndex = $node.props.index;
+  onClick(attrs) {
+    this.activeIndex = attrs.index;
     this.onConfirm();
   },
 
@@ -55,19 +65,23 @@ export default {
   },
 
   render() {
-    const { width, height } = this.optionSize || {};
-    const selects = this.props.options.map(({ text }, index) => {
+    // return <div position={{ x: 1, y: this.y }} size={{ width: 3 }}></div>
+    const selects = this.props.options.map(({ text }, y) => {
       const select = (
-        <div
-          index={index}
-          position={{ y: index }}
-          size={{ width: 1, height: 1 }}
-          text={text}
+        <Text
+          position={{ y: y }}
+          align="center"
+          size={{ width: 3 }}
+          index={y}
+          value={text}
           onClick={this.onClick}
-          onMouseMove={this.onMouseMove}
-        ></div>
-      );
-
+          // backgroundColor={this.lineGradient}
+          border={{ width: 3, }}
+          backgroundColor={`rgba(244,244,31,.1)`}
+          // backgroundColor={this.createLinearGradient(y + 8)}
+        >
+        </Text>
+      )
       return select;
     });
     return <div {...this.props}>{selects}</div>;

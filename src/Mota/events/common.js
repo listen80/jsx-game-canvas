@@ -15,9 +15,9 @@ export default {
     this.emit("loadMap", $state.save.position);
   },
 
-  loadGame(data, { $state, $sound, $loader }) {
-    Object.assign($state.save, loadGame());
-    $loader.loadMap($state.save.mapId);
+  loadGame(data, { $state, $sound, $loader, $config }) {
+    Object.assign($state.save, $config.save, loadGame());
+    this.emit("loadMap", $state.save.position);
   },
 
   saveGame(data, { $state, $sound, $loader }) {

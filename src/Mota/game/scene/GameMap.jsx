@@ -1,62 +1,63 @@
-import Status from "../helper/Status";
-import Operation from "../helper/OperationBar";
-import Hero from "../char/Hero";
-import EventBlock from "../event/EventBlock";
+// import Status from "../helper/Status";
+// import Operation from "../helper/OperationBar";
+// import Hero from "../char/Hero";
+// import EventBlock from "../event/EventBlock";
 
-import { screenWidth, screenHeight } from "../../config";
-
-export default class GameMap extends Component {
-  styles = {
-    wrap: {
-      backgroundImage: "Background/ground.png",
-      width: screenWidth,
-      height: 13,
-    },
-    map: {
-      x: 5,
-    },
-    statusBar: {
-      x: 18,
-    },
-    operationBar: {
-      x: 1,
-    },
-  };
+export default {
 
   createWall() {
     this.walls = [];
-    for (let x = 0; x < screenWidth; x++) {
+    for (let x = 0; x < this.$config.screen.width; x++) {
       for (let y = 0; y < 13; y++) {
         if (
           x === 0 ||
-          x === screenWidth - 1 ||
+          x === this.$config.screen.width - 1 ||
           y === 0 ||
-          y === screenHeight - 1
+          y === this.$config.screen.height - 1
         ) {
           this.walls.push(<div image="terrains" style={{ sy: 2, x, y }}></div>);
         }
       }
     }
-  }
+  },
 
   onCreate() {
-    this.$event.on("removeMapEventByKey", ($state, id) => {
-      $state.save.destroy[id] = 1;
-      this.map = this.createMap();
-    });
+    this.position = {
+      x: this.$config.screen.width / 2,
+      y: 8,
+    };
+    this.attrs = {
+      wrap: {
+        backgroundImage: "Background/ground.png",
+        size: {
+          width: this.$config.screen.width,
+          height: 13,
+        }
+      },
+
+      map: {
+        x: 5,
+      },
+      statusBar: {
+        x: 18,
+      },
+      operationBar: {
+        x: 1,
+      },
+    };
 
     // const bgm = this.props.map.bgm;
     // this.mapBgm = this.$sound.play('bgm', bgm)
     this.map = this.createMap();
     this.createWall();
     this.$event.emit("message", this.$state.map.name);
-  }
+  },
 
   getKey(x, y) {
     const mapId = this.$state.save.mapId;
     const key = [mapId, x, y] + "";
     return key;
-  }
+  },
 
   createMap() {
     const map = this.$state.map.mapTerrains.map((line, y) => {
@@ -75,15 +76,15 @@ export default class GameMap extends Component {
       map[y + "," + x] = events;
     });
     return map;
-  }
+  },
 
   onDestroy() {
     // const bgm = this.props.map.bgm;
     // this.$sound.pause('bgm', bgm)
     // this.mapBgm.pause();
-  }
+  },
 
-  onClick = (e) => {
+  onClick(e) {
     const { gameX: x, gameY: y } = e;
 
     const { height, width } = this.$state.map;
@@ -92,9 +93,9 @@ export default class GameMap extends Component {
       map: { height, width, map },
       dist: { x, y },
     });
-  };
+  },
 
-  onEventClick = (block) => {
+  onEventClick(block) {
     const { x, y } = block.props;
     const { height, width } = this.$state.map;
     const { map } = this;
@@ -102,7 +103,7 @@ export default class GameMap extends Component {
       map: { height, width, map },
       dist: { x, y },
     });
-  };
+  },
 
   renderMapTerrains() {
     return null;
@@ -120,15 +121,15 @@ export default class GameMap extends Component {
         ) : null
       )
     );
-  }
+  },
 
   render() {
-    const { styles } = this;
+    const { attrs } = this;
     return (
-      <div style={styles.wrap}>
-        <div style={styles.map} onClick={this.onClick}>
+      <div {...attrs.wrap}>
+        <div onClick={this.onClick}>
           {this.renderMapTerrains()}
-          <Hero map={this.map} terrains={this.terrains} />
+          {/* <Hero map={this.map} terrains={this.terrains} /> */}
         </div>
         {/* <div style={styles.statusBar}>
           <Status />
