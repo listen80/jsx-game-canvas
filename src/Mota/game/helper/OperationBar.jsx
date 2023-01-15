@@ -1,16 +1,13 @@
-
-
-export default class Status extends Component {
-  styles = {
-    wrap: { fontSize: 24, textAlign: "center", textBaseLine: "middle", y: 1 },
-  };
-
+export default {
   onCreate() {
-    const { $state } = this;
+    this.styles = {
+      wrap: { fontSize: 24, textAlign: "center", textBaseLine: "middle", y: 1 },
+    }
+    const { $state, $config } = this;
     const { map } = $state;
 
     this.rowProperty = [
-      { data: $state.config.title, style: { sy: 0 } },
+      { data: $config.title, style: { sy: 0 } },
       { data: map.name, style: { sy: 1 } },
       {
         data: "怪物",
@@ -67,7 +64,7 @@ export default class Status extends Component {
         },
       },
     ];
-  }
+  },
 
   render() {
     const { styles, rowProperty } = this;
@@ -76,8 +73,8 @@ export default class Status extends Component {
       <div style={styles.wrap}>
         {rowProperty.map(({ style, data, onClick }, index) => {
           return (
-            <div style={{ y: index * 1.16 + 0.3, width: 3, height: 1 }} onClick={onClick}>
-              <div image="icons" style={style} />
+            <div position={{ y: index * 1.16 + 0.3, width: 3, height: 1 }} onClick={onClick}>
+              <div image="icons" sposition={style} />
               <div style={{ x: 1.5, y: 0, height: 1, width: 2.5 }}>{data}</div>
             </div>
           );

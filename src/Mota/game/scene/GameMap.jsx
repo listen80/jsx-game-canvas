@@ -1,5 +1,5 @@
-// import Status from "../helper/Status";
-// import Operation from "../helper/OperationBar";
+import Status from "../helper/Status";
+import Operation from "../helper/OperationBar";
 // import Hero from "../char/Hero";
 // import EventBlock from "../event/EventBlock";
 
@@ -34,22 +34,15 @@ export default {
           height: 13,
         }
       },
-
-      map: {
-        x: 5,
-      },
-      statusBar: {
-        x: 18,
-      },
-      operationBar: {
-        x: 1,
-      },
+      mapContainer: { position: { x: 5, } },
+      statusBar: { position: { x: 18, } },
+      operationBar: { position: { x: 1, } },
     };
 
-    // const bgm = this.props.map.bgm;
-    // this.mapBgm = this.$sound.play('bgm', bgm)
+    const bgm = this.$state.map.bgm;
+    this.mapBgm = this.$sound.play('bgm', bgm)
     this.map = this.createMap();
-    this.createWall();
+    // this.createWall();
     this.$event.emit("message", this.$state.map.name);
   },
 
@@ -86,7 +79,7 @@ export default {
 
   onClick(e) {
     const { gameX: x, gameY: y } = e;
-
+    console.log(e)
     const { height, width } = this.$state.map;
     const { map } = this;
     this.$event.emit("setPath", {
@@ -123,22 +116,33 @@ export default {
     );
   },
 
+  renderBlueWall() {
+    return <div>
+      <div size={{ width: this.$config.screen.width }} backgroundImage="Background/blueWall.png"></div>
+      <div position={{ y: this.$config.screen.height - 1 }} size={{ width: this.$config.screen.width }} backgroundImage="Background/blueWall.png"></div>
+      <div position={{ y: 1 }} size={{ height: 13 }} backgroundImage="Background/blueWall.png"></div>
+      <div position={{ x: this.$config.screen.width - 1, y: 1 }} size={{ height: 13 }} backgroundImage="Background/blueWall.png"></div>
+    </div>
+  },
+
   render() {
     const { attrs } = this;
+
     return (
       <div {...attrs.wrap}>
-        <div onClick={this.onClick}>
-          {this.renderMapTerrains()}
+        {this.renderBlueWall()}
+        <div {...attrs.mapContainer} onClick={this.onClick}>
+          {/* {this.renderMapTerrains()} */}
           {/* <Hero map={this.map} terrains={this.terrains} /> */}
         </div>
-        {/* <div style={styles.statusBar}>
+        <div {...attrs.statusBar}>
           <Status />
         </div>
-        <div style={styles.operationBar}>
+        <div {...attrs.operationBar}>
           <Operation></Operation>
-        </div> */}
+        </div>
         {this.walls}
-      </div>
+      </div >
     );
   }
 }

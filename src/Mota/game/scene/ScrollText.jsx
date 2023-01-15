@@ -70,6 +70,9 @@ export default {
     if (scrollTextStyle.y + this.max > 0) {
       scrollTextStyle.y -= this.scrollSpeed;
     } else {
+      if (__DEV__) {
+        this.onClick()
+      }
       this.ready = true;
     }
 

@@ -188,6 +188,7 @@
     "images": [
       "Characters/hero.png",
       "Background/ground.png",
+      "Background/blueWall.png",
       "Battlebacks/mota.jpg"
     ],
     "sounds": [
