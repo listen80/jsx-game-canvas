@@ -5,8 +5,6 @@ export default {
     this.styles = {
       wrap: {
         // fontSize: 24,
-        // textAlign: "center", 
-        // textBaseLine: "middle", 
         position: { y: 1 }
       },
     }

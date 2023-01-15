@@ -1,7 +1,11 @@
+import Text from "../../components/Text";
+
 export default {
   onCreate() {
     this.styles = {
-      wrap: { fontSize: 24, textAlign: "center", textBaseLine: "middle", y: 1 },
+      wrap: {
+        position: { fontSize: 24, y: 1 },
+      }
     }
     const { $state, $config } = this;
     const { map } = $state;
@@ -75,7 +79,7 @@ export default {
           return (
             <div position={{ y: index * 1.16 + 0.3, width: 3, height: 1 }} onClick={onClick}>
               <div image="icons" sposition={style} />
-              <div style={{ x: 1.5, y: 0, height: 1, width: 2.5 }}>{data}</div>
+              <Text style={{ x: 1.5, y: 0, height: 1, width: 2.5 }} text={data}></Text>
             </div>
           );
         })}

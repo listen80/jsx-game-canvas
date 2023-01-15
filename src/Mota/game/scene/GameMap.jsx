@@ -34,7 +34,13 @@ export default {
           height: 13,
         }
       },
-      mapContainer: { position: { x: 5, } },
+      mapContainer: {
+        position: { x: 5, },
+        size: {
+          width: 13,
+          height: 13,
+        }
+      },
       statusBar: { position: { x: 18, } },
       operationBar: { position: { x: 1, } },
     };
@@ -77,7 +83,7 @@ export default {
     // this.mapBgm.pause();
   },
 
-  onClick(e) {
+  onClick(attrs, e) {
     const { gameX: x, gameY: y } = e;
     console.log(e)
     const { height, width } = this.$state.map;

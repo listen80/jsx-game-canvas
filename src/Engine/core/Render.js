@@ -102,7 +102,7 @@ export default class Render extends Draw {
     const { context } = this;
     context.save();
     const { children, attrs } = node;
-    const { style, image, text, border, backgroundImage, backgroundColor } = attrs;
+    const { style, image, text, border, backgroundImage, backgroundColor, lineGradient } = attrs;
     this.mergeStyle(style);
 
     if (backgroundColor) {
@@ -125,8 +125,9 @@ export default class Render extends Draw {
       this.drawBorder(node, offsetX, offsetY);
     }
 
-    this.drawLineGradient(node, offsetX, offsetY)
-
+    if (lineGradient) {
+      this.drawLineGradient(node, offsetX, offsetY)
+    }
 
     children.forEach((child) =>
       this.renderAnything(child, offsetX, offsetY, offsetParent)
@@ -174,18 +175,11 @@ export default class Render extends Draw {
   }
 
   runEvents() {
-    function run($node, event, name) {
-      if ($node) {
-        $node.props &&
-          $node.props[name] &&
-          $node.props[name].call($node.$parent, event, $node);
-        run($node.offsetParent, event, name);
-      }
-    }
-
     this.mouseEventsCollectionKeyframe.forEach((event) => {
       const { $node, name } = event;
-      $node?.attrs[name]($node.attrs)
+      if ($node) {
+        $node?.attrs[name]($node.attrs, event)
+      }
       // run($node, event, name);
     });
     // this.keyEventsCollectionKeyframe.forEach((event) => {
