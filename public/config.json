@@ -3,7 +3,7 @@
   "screen": {
     "width": 23,
     "height": 13,
-    "size": 32
+    "pixelRatio": 32
   },
   "save": {
     "position": {

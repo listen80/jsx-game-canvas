@@ -9,7 +9,7 @@ import {
 
 import { clone } from "../utils/object.js";
 
-const config = {
+export default {
   startGame(data, { $state, $sound, $loader, $config }) {
     $state.save = clone($config.save);
     this.emit("loadMap", $state.save.position);
@@ -60,5 +60,3 @@ const config = {
     return checkSaveByStr($state, data, next);
   },
 };
-
-export default config;

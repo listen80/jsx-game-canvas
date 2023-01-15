@@ -9,10 +9,10 @@ import {
 } from "../utils/type";
 
 const mouseEvents = [
+  "Click",
   // "ContextMenu",
-  // "Click",
   // 'Wheel',
-  "MouseDown",
+  // "MouseDown",
   // "MouseUp",
   // "MouseMove",
 ];
@@ -32,20 +32,20 @@ export default class Render {
   }
 
   initCanvas() {
-    const { size, el, width = 13, height = 13 } = this.config;
+    const { pixelRatio, el, width = 13, height = 13 } = this.config;
 
     const canvas = document.createElement("canvas");
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
 
-    this.canvas.width = width * size;
-    this.canvas.height = height * size;
+    this.canvas.width = width * pixelRatio;
+    this.canvas.height = height * pixelRatio;
 
     const dom = document.querySelector(el || "#game") || document.body;
     dom && dom.appendChild(this.canvas);
 
     this.mergeStyle(baseStyle);
-    self.addEventListener("onresize", this.getCanvasRenderRect);
+    self.addEventListener("onrepixelRatio", this.getCanvasRenderRect);
     this.getCanvasRenderRect();
   }
 
@@ -65,7 +65,7 @@ export default class Render {
   }
 
   bindEvents() {
-    const { size } = this.config;
+    const { pixelRatio } = this.config;
 
     this.restoreEvents();
     const canvas = this.canvas;
@@ -77,8 +77,8 @@ export default class Render {
           e.name = `on${name}`;
           e.canvasX = (e.offsetX / $offsetWidth) * width;
           e.canvasY = (e.offsetY / $offsetHeight) * height;
-          e.gameX = (e.canvasX / size) | 0;
-          e.gameY = (e.canvasY / size) | 0;
+          e.gameX = (e.canvasX / pixelRatio) | 0;
+          e.gameY = (e.canvasY / pixelRatio) | 0;
           e.$node = null;
           this.mouseEventsCollectionKeyframe.push(e);
 
@@ -103,42 +103,6 @@ export default class Render {
 
   mergeStyle = (style) => {
     Object.assign(this.context, style);
-    return;
-    if (style) {
-      const {
-        fontSize,
-        fontFamily,
-        font,
-        textAlign,
-        textBaseline,
-        globalAlpha,
-        fillStyle,
-      } = style;
-      if (globalAlpha !== undefined) {
-        this.context.globalAlpha = globalAlpha;
-      }
-      if (textAlign) {
-        this.context.textAlign = textAlign;
-      }
-      if (textBaseline) {
-        this.context.textBaseline = textBaseline;
-      }
-      if (fillStyle) {
-        this.context.fillStyle = fillStyle;
-      }
-      if (font) {
-        this.context.font = font;
-      }
-      if (fontSize) {
-        this.context.font = this.context.font.replace(/\d+px/, `${fontSize}px`);
-      }
-      if (fontFamily) {
-        this.context.font = this.context.font.replace(
-          /[\u4e00-\u9fa5]+/,
-          fontFamily
-        );
-      }
-    }
   };
 
   clearRect() {
@@ -146,48 +110,30 @@ export default class Render {
     context.clearRect(0, 0, canvas.width, canvas.height);
   }
 
-  drawText(node, offsetX, offsetY, offsetParent) {
-    const { style, text } = node;
+  drawImage(node, offsetX, offsetY) {
+    const { pixelRatio } = this.config;
+    const { attrs } = node;
+    const { sposition = {}, spixelRatio = {}, image } = attrs;
+    const { width = 1, height = 1 } = attrs.size || {};
     const { context } = this;
-    const { x = 0, y = 0 } = style;
-    context.fillText(text, offsetX + x, offsetY + y);
-  }
 
-  drawImage(node, offsetX, offsetY, offsetParent) {
-    const { size } = this.config;
-
-    const { props } = node;
-    if (props) {
-      const { style = {} } = props;
-      if (style) {
-        const {
-          sx = 0,
-          sy = 0,
-          width = 1,
-          height = 1,
-          swidth,
-          sheight,
-        } = style;
-        const { context } = this;
-        const image = this.getImage(props.image);
-
-        if (!image) {
-          console.warn(props);
-        } else {
-          // context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
-          context.drawImage(
-            image,
-            sx * size,
-            sy * size,
-            (swidth || width) * size,
-            (sheight || height) * size,
-            offsetX * size,
-            offsetY * size,
-            width * size,
-            height * size
-          );
-        }
-      }
+    const { sx = 0, sy = 0 } = sposition;
+    const { swidth = width, sheight = height } = spixelRatio;
+    const img = this.getImage(image);
+    if (img) {
+      context.drawImage(
+        img,
+        sx * pixelRatio,
+        sy * pixelRatio,
+        swidth * pixelRatio,
+        sheight * pixelRatio,
+        offsetX * pixelRatio,
+        offsetY * pixelRatio,
+        width * pixelRatio,
+        height * pixelRatio
+      );
+    } else {
+      console.warn(attrs);
     }
   }
 
@@ -201,7 +147,7 @@ export default class Render {
   }
 
   drawBack(node, offsetX, offsetY, offsetParent) {
-    const { size } = this.config;
+    const { pixelRatio } = this.config;
     const { context } = this;
     const { backgroundImage, backgroundColor, height, width } =
       node.props.style;
@@ -209,7 +155,12 @@ export default class Render {
     if (backgroundColor) {
       context.save();
       context.beginPath();
-      context.rect(offsetX * size, offsetY * size, width * size, height * size);
+      context.rect(
+        offsetX * pixelRatio,
+        offsetY * pixelRatio,
+        width * pixelRatio,
+        height * pixelRatio
+      );
       context.fillStyle = backgroundColor;
       context.fill();
       context.closePath();
@@ -222,7 +173,12 @@ export default class Render {
       }
       context.save();
       context.beginPath();
-      context.rect(offsetX * size, offsetY * size, width * size, height * size);
+      context.rect(
+        offsetX * pixelRatio,
+        offsetY * pixelRatio,
+        width * pixelRatio,
+        height * pixelRatio
+      );
 
       context.fillStyle = context.createPattern(
         this.getImage(backgroundImage),
@@ -235,18 +191,19 @@ export default class Render {
   }
 
   drawBorder(node, offsetX, offsetY) {
-    const { size } = this.config;
+    const { pixelRatio } = this.config;
     const { context } = this;
-    const { borderWidth, borderColor, height, width } = node.props.style;
-    if (borderWidth && borderColor) {
+    const { borderWidth, borderColor } = node.attrs.border;
+    const { width = 1, height = 1 } = node.attrs.size || {};
+    if (borderWidth) {
       context.save();
       context.lineWidth = borderWidth;
       context.beginPath();
       context.rect(
-        offsetX * size + borderWidth / 2,
-        offsetY * size + borderWidth / 2,
-        width * size - borderWidth,
-        height * size - borderWidth
+        offsetX * pixelRatio + borderWidth / 2,
+        offsetY * pixelRatio + borderWidth / 2,
+        width * pixelRatio - borderWidth,
+        height * pixelRatio - borderWidth
       );
       context.strokeStyle = borderColor;
       context.stroke();
@@ -322,7 +279,12 @@ export default class Render {
     const { height, width } = node;
     if (backgroundColor) {
       context.beginPath();
-      context.rect(offsetX * size, offsetY * size, width * size, height * size);
+      context.rect(
+        offsetX * pixelRatio,
+        offsetY * pixelRatio,
+        width * pixelRatio,
+        height * pixelRatio
+      );
       context.save();
       context.fillStyle = backgroundColor;
       context.fill();
@@ -334,8 +296,8 @@ export default class Render {
   drawNode(node, offsetX, offsetY, offsetParent) {
     const { context } = this;
     context.save();
-    const { children, props } = node;
-    const { style, image, text } = props;
+    const { children, attrs } = node;
+    const { style, image, text, border } = attrs;
     this.mergeStyle(style);
 
     // this.drawBackgroundColor(context, node, offsetX, offsetY, offsetParent);
@@ -345,7 +307,11 @@ export default class Render {
     }
 
     if (text) {
-      this.drawPrimitive(text, offsetX, offsetY, parent);
+      this.drawText(text, offsetX, offsetY);
+    }
+
+    if (border) {
+      this.drawBorder(node, offsetX, offsetY);
     }
 
     children.forEach((child) =>
@@ -355,37 +321,11 @@ export default class Render {
     context.restore();
   }
 
-  drawPrimitive(text, offsetX, offsetY, parent) {
+  drawText(text, offsetX, offsetY) {
     const { context } = this;
-    const { size } = this.config;
-    const { textAlign, textBaseline } = context;
-    const { width = 0, height = 0 } = parent?.props?.style || {};
-    const x = { start: 0, left: 0, center: 0.5, right: 1, end: 0 };
-    const y = {
-      alphabetic: 0,
-      hanging: 0,
-      ideographic: 0,
-      top: 0,
-      middle: 0.5,
-      bottom: 1,
-    };
-    // start 默认。文本在指定的位置开始。
-    // end 文本在指定的位置结束。
-    // center 文本的中心被放置在指定的位置。
-    // left 文本在指定的位置开始。
-    // right 文本在指定的位置结束。
+    const { pixelRatio } = this.config;
 
-    // alphabetic 默认。文本基线是普通的字母基线。
-    // top 文本基线是 em 方框的顶端。
-    // hanging 文本基线是悬挂基线。
-    // middle 文本基线是 em 方框的正中。
-    // ideographic 文本基线是表意基线。
-    // bottom 文本基线是 em 方框的底端。
-    context.fillText(
-      text,
-      (offsetX + width * x[textAlign]) * size,
-      (offsetY + height * y[textBaseline]) * size
-    );
+    context.fillText(text, offsetX * pixelRatio, offsetY * pixelRatio);
   }
 
   renderAnything(createdNode, offsetX, offsetY, offsetParent) {
@@ -394,46 +334,34 @@ export default class Render {
     // array
     // new class component
     // div node
-
     if (createdNode) {
-      if (isArray(createdNode)) {
+      if (Array.isArray(createdNode)) {
         createdNode.forEach((child) =>
           this.renderAnything(child, offsetX, offsetY, offsetParent)
         );
-      } else if (isFunc(createdNode.tag)) {
-        // events of keyboard
-        // this.keyEventsCollectionKeyframe.forEach((event) => {
-        //   const $context = createdNode.$context;
-        //   if (keyEvents.some((name) => $context[`on${name}`])) {
-        //     event.$context = $context;
-        //   }
-        // });
-        // tag 是 function
-        this.renderAnything(
-          createdNode.$context.$node,
-          offsetX,
-          offsetY,
-          offsetParent
-        );
-      } else if (isString(createdNode.tag)) {
+      } else if (createdNode.type === "object") {
+        this.renderAnything(createdNode.$node, offsetX, offsetY, offsetParent);
+      } else if (createdNode.type === "string") {
         // div node
         // createdNode.offsetParent = offsetParent;
-        this.calcNode(createdNode, offsetX, offsetY, offsetParent);
+        this.renderNode(createdNode, offsetX, offsetY, offsetParent);
       }
     }
   }
 
-  calcEvent(offsetX, offsetY, style, node) {
+  calcEvent(node, offsetX, offsetY) {
     // events of mouse
-    const { size } = this.config;
+    const { size = {} } = node;
+    const { width = 0, height = 0 } = size;
     this.mouseEventsCollectionKeyframe.forEach((event) => {
-      const { canvasX, canvasY } = event;
+      const { gameX, gameY } = event;
       if (
-        canvasX >= offsetX * size &&
-        canvasX < (style.width + offsetX) * size &&
-        canvasY >= offsetY * size &&
-        canvasY < (style.height + offsetY) * size
+        gameX >= offsetX &&
+        gameX < width + offsetX &&
+        gameY >= offsetY &&
+        gameY < height + offsetY
       ) {
+        debugger;
         event.$node = node;
       }
     });
@@ -459,18 +387,19 @@ export default class Render {
     this.restoreEvents();
   }
 
-  calcNode(node, offsetX, offsetY, offsetParent) {
+  renderNode(node, offsetX, offsetY, offsetParent) {
     // 非class component
     // div node
+    // { attrs, children }
     const { context } = this;
     context.save();
 
-    const { x = 0, y = 0 } = node.props;
+    const { x = 0, y = 0 } = node.attrs.position || {};
 
     offsetX += x;
     offsetY += y;
 
-    this.calcEvent(offsetX, offsetY, style, node);
+    this.calcEvent(node, offsetX, offsetY);
     this.drawNode(node, offsetX, offsetY, offsetParent);
 
     context.restore();
@@ -478,11 +407,7 @@ export default class Render {
 
   render(createdNode) {
     this.clearRect();
-    this.renderAnything(createdNode, 0, 0, {
-      props: {
-        style: {},
-      },
-    });
+    this.renderAnything(createdNode, 0, 0, {});
     this.runEvents();
   }
 }

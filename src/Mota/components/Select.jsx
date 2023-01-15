@@ -1,22 +1,18 @@
-import { Component } from "Engine";
-
-export default class Select extends Component {
-  loop = this.createLoop(155, 222, 1, 2, true);
-
+export default {
   onCreate() {
     const { activeIndex = 0 } = this.props;
     this.activeIndex = activeIndex;
     this.optionSize = this.props.optionSize || {};
     this.optionSize.width = this.optionSize.width || this.props?.style?.width;
     this.optionSize.height = this.optionSize.height || 1;
-  }
+  },
 
   onChange() {
     this.props.onChange?.(
       this.props.options[this.activeIndex],
       this.activeIndex
     );
-  }
+  },
 
   onConfirm() {
     const option = this.props.options[this.activeIndex];
@@ -28,7 +24,7 @@ export default class Select extends Component {
         );
       }
     }
-  }
+  },
 
   // onKeyDown({ $key }) {
   //   if ($key === "down") {
@@ -48,48 +44,32 @@ export default class Select extends Component {
   //   }
   // }
 
-  onMouseDown = (event, $node) => {
+  onClick(event, $node) {
     this.activeIndex = $node.props.index;
     this.onConfirm();
-  };
+  },
 
-  onMouseMove = (index, $node) => {
+  onMouseMove(index, $node) {
     this.activeIndex = $node.props.index;
     this.onChange();
-  };
+  },
 
   render() {
     const { width, height } = this.optionSize || {};
-    const rgb = this.loop();
-    let y = 0;
-    const selects = this.props.options.map(({ text, disabled }, index) => {
-      if (disabled) {
-        return null;
-      }
-      const activeStyle = {
-        borderWidth: 2,
-        backgroundColor: `rgb(${rgb},${rgb},${rgb}, 0.5)`,
-      };
-
+    const selects = this.props.options.map(({ text }, index) => {
       const select = (
         <div
           index={index}
-          style={{
-            y,
-            height,
-            width,
-            ...(this.activeIndex === index ? activeStyle : null),
-          }}
-          onMouseDown={this.onMouseDown}
+          position={{ y: index }}
+          size={{ width: 1, height: 1 }}
+          text={text}
+          onClick={this.onClick}
           onMouseMove={this.onMouseMove}
-        >
-          {text}
-        </div>
+        ></div>
       );
 
-      y += height;
       return select;
     });
-    return <div style={this.props.style}>{selects}</div>;
-  }
-}
+    return <div {...this.props}>{selects}</div>;
+  },
+};

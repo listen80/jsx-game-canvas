@@ -1,4 +1,4 @@
-import { Component } from "Engine";
+
 import { screenWidth } from "../../../config";
 
 const progressBarWidth = 7;

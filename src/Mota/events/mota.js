@@ -1,7 +1,5 @@
-const config = {
+export default {
   openShop(data, { $state, $sound, $loader }) {
     $state.shopid = data;
   },
 };
-
-export default config;

@@ -1,4 +1,4 @@
-import { Component } from "Engine";
+
 import { findPath } from "../../utils/physics";
 import Animate from "../../components/Animate";
 
@@ -81,7 +81,7 @@ export default class Hero extends Component {
       const path = this.path.pop();
       const { x, y, sy } = path;
       if (map[y][x]) {
-        this.props.terrains[y][x].$context.onZhuangji(this);
+        // this.props.terrains[y][x].$context.onZhuangji(this);
         this.$state.save.position.sy = sy;
       } else {
         this.current = path;

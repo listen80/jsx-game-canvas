@@ -1,4 +1,4 @@
-import { Component } from "Engine";
+
 
 export default class Battle extends Component {
   tick = 0;
@@ -58,7 +58,7 @@ export default class Battle extends Component {
     // this.$event.on("enemy", ($state, id, callback) => {});
   }
 
-  onMouseDown = () => {
+  onClick = () => {
     if (this.battleMsg) {
       this.enemy = null;
       this.callback && this.callback();
@@ -143,7 +143,7 @@ export default class Battle extends Component {
       <div
         image="Battlebacks/mota.jpg"
         style={this.styles.battle}
-        onMouseDown={this.onMouseDown}
+        onClick={this.onClick}
       >
         {this.battleMsg && (
           <div style={msgStyle}>

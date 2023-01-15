@@ -1,4 +1,3 @@
-import { Component } from "Engine";
 
 export default class Animate extends Component {
   onCreate() {

@@ -1,4 +1,4 @@
-import { Component } from 'Engine'
+
 
 export default class Scroll extends Component {
   onCreate () {

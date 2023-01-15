@@ -7,38 +7,53 @@ import {
   isBoolean,
 } from "../utils/type";
 
-export function createNode(tag, props = {}, ...children) {
+export function createNode(tag, props, ...children) {
   const $parent = this; // 创建的组件
   const type = typeof tag;
   if (type === "string") {
     return {
       type,
       tag,
-      attr: props,
+      attrs: props ?? {},
       children,
-      // $parent,
+      $parent,
     };
   }
+
   return {
-    tag,
     type,
-    props,
+    tag,
+    props: props ?? {},
     children,
     $parent,
   };
 }
 
 function createInstance(next) {
-  const Class = next.tag;
-  next.$context = new Class(next);
+  const $instance = { ...next.tag };
+  const $parent = next.$parent;
+  const entries = Object.entries($instance);
 
-  next.$context.$config = next.$parent.$config;
-  next.$context.$state = next.$parent.$state;
-  next.$context.$loader = next.$parent.$loader;
-  next.$context.$event = next.$parent.$event;
-  next.$context.$sound = next.$parent.$sound;
+  entries.forEach(([key, value]) => {
+    if (value.bind) {
+      $instance[key] = value.bind($instance);
+    }
+  });
 
-  next.$context.onCreate?.();
+  $instance.$createElement = createNode;
+
+
+  $instance.$config = $parent.$config;
+  $instance.$state = $parent.$state;
+  $instance.$loader = $parent.$loader;
+  $instance.$event = $parent.$event;
+  $instance.$sound = $parent.$sound;
+
+  $instance.props = next.props;
+
+  $instance.onCreate?.();
+  next.$instance = $instance;
+
   renderNode(next);
 }
 
@@ -46,8 +61,8 @@ function destoryInstance(pre) {
   // && isBoolean(pre)
   if (!isPrimitive(pre) && !isUndefined(pre)) {
     if (isFunc(pre.tag)) {
-      destoryInstance(pre.$context.$node);
-      pre.$context.destroy?.();
+      destoryInstance(pre.$instance.$node);
+      pre.$instance.destroy?.();
     } else if (isArray(pre)) {
       while (pre.length) {
         destoryInstance(pre.pop());
@@ -59,13 +74,15 @@ function destoryInstance(pre) {
 }
 
 function updateInstance(pre, next) {
-  next.$context = pre.$context;
-  next.$context.props = next.props;
+  next.$instance = pre.$instance;
+  next.$instance.props = next.props;
   renderNode(next);
 }
 
+// const com = new Component({})
+
 function renderNode(next) {
-  next.$node = patchNode(next.$node, next.$context.render());
+  next.$node = patchNode(next.$node, next.$instance.render());
 }
 
 export function patchNode(pre, next) {
@@ -74,6 +91,7 @@ export function patchNode(pre, next) {
   // array
   // class component
   // div node
+
   if (isUndefined(next) || isPrimitive(next) || isBoolean(next)) {
     destoryInstance(pre);
   } else if (isArray(next)) {
@@ -88,7 +106,7 @@ export function patchNode(pre, next) {
         patchNode(null, next[i]);
       }
     }
-  } else if (isFunc(next.tag)) {
+  } else if (typeof next.tag === "object") {
     if (pre && pre.tag === next.tag && pre.props?.key === next.props?.key) {
       updateInstance(pre, next);
     } else {

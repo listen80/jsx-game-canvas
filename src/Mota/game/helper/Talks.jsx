@@ -1,4 +1,4 @@
-import { Component } from 'Engine'
+
 
 class Talk extends Component {
   index = 0;
@@ -31,7 +31,7 @@ class Talk extends Component {
     },
   };
 
-  onMouseDown = () => {
+  onClick = () => {
     this.next()
     return true
   }
@@ -62,7 +62,7 @@ class Talk extends Component {
       return
     }
     return (
-      <div style={this.styles.wrap} onMouseDown={this.onMouseDown}>
+      <div style={this.styles.wrap} onClick={this.onClick}>
         <div style={{ ...this.styles.talk }}>
           {this.talkArray.map((talk, index) => {
             const style = {

@@ -2,7 +2,7 @@ import Status from "../helper/Status";
 import Operation from "../helper/OperationBar";
 import Hero from "../char/Hero";
 import EventBlock from "../event/EventBlock";
-import { Component } from "Engine";
+
 import { screenWidth, screenHeight } from "../../config";
 
 export default class GameMap extends Component {
@@ -83,7 +83,7 @@ export default class GameMap extends Component {
     // this.mapBgm.pause();
   }
 
-  onMouseDown = (e) => {
+  onClick = (e) => {
     const { gameX: x, gameY: y } = e;
 
     const { height, width } = this.$state.map;
@@ -114,7 +114,7 @@ export default class GameMap extends Component {
             x={x}
             y={y}
             id={this.getKey(x, y)}
-            onMouseDown={this.onEventClick}
+            onClick={this.onEventClick}
             event={this.map[y + "," + x]}
           />
         ) : null
@@ -126,7 +126,7 @@ export default class GameMap extends Component {
     const { styles } = this;
     return (
       <div style={styles.wrap}>
-        <div style={styles.map} onMouseDown={this.onMouseDown}>
+        <div style={styles.map} onClick={this.onClick}>
           {this.renderMapTerrains()}
           <Hero map={this.map} terrains={this.terrains} />
         </div>

@@ -1,4 +1,4 @@
-import { Component } from "Engine";
+
 import Hero from "../char/Hero";
 
 export default class Test extends Component {

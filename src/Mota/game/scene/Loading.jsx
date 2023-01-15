@@ -1,4 +1,4 @@
-import { Component } from "Engine";
+
 import TitleText from "./components/TitleText";
 import ProgressBar from "./components/ProgressBar";
 

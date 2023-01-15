@@ -1,36 +1,34 @@
 import FPS from "./game/helper/FPS";
-import Message from "./game/helper/MessageBox";
-import Talks from "./game/helper/Talks";
-import JumpFloor from "./game/helper/JumpFloor";
+// import Message from "./game/helper/MessageBox";
+// import Talks from "./game/helper/Talks";
+// import JumpFloor from "./game/helper/JumpFloor";
 
-import Shop from "./game/shop/Shop";
-import ShopList from "./game/shop/ShopList";
+// import Shop from "./game/shop/Shop";
+// import ShopList from "./game/shop/ShopList";
 
-import Battle from "./game/battle/Battle";
-import EnemyInfo from "./game/battle/EnemyInfo";
+// import Battle from "./game/battle/Battle";
+// import EnemyInfo from "./game/battle/EnemyInfo";
 
-import Loading from "./game/scene/Loading";
-import Title from "./game/scene/Title";
-import GameMap from "./game/scene/GameMap";
-import ScrollText from "./game/scene/ScrollText";
+// import Loading from "./game/scene/Loading";
+// import Title from "./game/scene/Title";
+// import GameMap from "./game/scene/GameMap";
+// import ScrollText from "./game/scene/ScrollText";
 
-import Config from "./game/tool/Config";
-import Statistics from "./game/tool/Statistics";
+// import Config from "./game/tool/Config";
+// import Statistics from "./game/tool/Statistics";
 
-import Test from "./game/test/Test";
+// import Test from "./game/test/Test";
 
-import Dialog from "./components/Dialog";
+// import Dialog from "./components/Dialog";
 
-import { Component } from "Engine";
+import commonEvent from "./events/common";
+import motaEvent from "./events/mota";
+import soundEvent from "./events/sound";
 
-import common from "./events/common";
-import mota from "./events/mota";
-import sound from "./events/sound";
-
-export default class Mota extends Component {
+export default {
   onCreate() {
-    this.$event.registry(common, mota, sound);
-  }
+    this.$event.registry(commonEvent, motaEvent, soundEvent);
+  },
 
   renderMap() {
     const { $state } = this;
@@ -47,72 +45,67 @@ export default class Mota extends Component {
     } else {
       return <Title />;
     }
-  }
+  },
 
-  renderDialog() {
-    const { $state } = this;
-    const {
-      shopid,
-      showShopList,
-      showEnemyInfo,
-      showJumpFloor,
-      showBattle,
-      showConfig,
-      showStatistics,
-    } = $state;
-    return (
-      <div>
-        <Dialog show={shopid}>
-          <Shop />
-        </Dialog>
-        <Dialog show={showShopList}>
-          <ShopList />
-        </Dialog>
-        <Dialog show={showEnemyInfo}>
-          <EnemyInfo />
-        </Dialog>
-        <Dialog show={showJumpFloor}>
-          <JumpFloor />
-        </Dialog>
-        <Dialog show={showBattle}>
-          <Battle />
-        </Dialog>
-        <Dialog show={showConfig}>
-          <Config />
-        </Dialog>
-        <Dialog show={showStatistics}>
-          <Statistics />
-        </Dialog>
-      </div>
-    );
-  }
+  // renderDialog() {
+  //   const { $state } = this;
+  //   const {
+  //     shopid,
+  //     showShopList,
+  //     showEnemyInfo,
+  //     showJumpFloor,
+  //     showBattle,
+  //     showConfig,
+  //     showStatistics,
+  //   } = $state;
+  //   return (
+  //     <div>
+  //       <Dialog show={shopid}>
+  //         <Shop />
+  //       </Dialog>
+  //       <Dialog show={showShopList}>
+  //         <ShopList />
+  //       </Dialog>
+  //       <Dialog show={showEnemyInfo}>
+  //         <EnemyInfo />
+  //       </Dialog>
+  //       <Dialog show={showJumpFloor}>
+  //         <JumpFloor />
+  //       </Dialog>
+  //       <Dialog show={showBattle}>
+  //         <Battle />
+  //       </Dialog>
+  //       <Dialog show={showConfig}>
+  //         <Config />
+  //       </Dialog>
+  //       <Dialog show={showStatistics}>
+  //         <Statistics />
+  //       </Dialog>
+  //     </div>
+  //   );
+  // },
+
 
   render() {
     const { $loader } = this;
+    this.x += 1
 
-    if ($loader.loading) {
-      return <Loading />;
-    }
+    // if ($loader.loading) {
+    //   return <Loading />;
+    // }
 
-    if (location.hash === "#test") {
-      return <Test />;
-    }
+    // if (location.hash === "#test") {
+    //   return <Test />;
+    // }
 
     return (
-      <div>
-        {this.renderMap()}
-        {this.renderDialog()}
-        <Message />
-        <Talks />
+      <div text={this.x} position={{ x: 3, y: 3 }}>
+        {/* {this.renderMap()} */}
+        {/* {this.renderDialog()} */}
+        {/* <Message /> */}
+        {/* <Talks /> */}
         <FPS />
       </div>
     );
-  }
-  render() {
-    return (
-      <div text="1212233">
-        {[1111111111111]}
-      </div>
-    );
-  }
-}
+  },
+};

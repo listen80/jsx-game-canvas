@@ -1,4 +1,4 @@
-import { Component } from "Engine";
+
 import Table from "../../components/Table";
 import Animate from "../../components/Animate";
 import { screenWidth } from "../../config";
@@ -162,7 +162,7 @@ export default class EnemyInfo extends Component {
     });
   }
 
-  onMouseDown = () => {
+  onClick = () => {
     this.$state.showEnemyInfo = false;
   };
 
@@ -175,7 +175,7 @@ export default class EnemyInfo extends Component {
           columns={columns}
           dataExtra={this.$state.save.hero}
         />
-        <div style={styles.close} onMouseDown={this.onMouseDown}>
+        <div style={styles.close} onClick={this.onClick}>
           x
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { Component } from "Engine";
+
 import Select from "Mota/components/Select";
 import { screenWidth } from "../../config";
 

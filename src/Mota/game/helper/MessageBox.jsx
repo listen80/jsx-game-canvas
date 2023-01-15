@@ -1,4 +1,4 @@
-import { Component } from "Engine";
+
 import { calcLength } from "../../utils/string";
 
 export default class MessageBox extends Component {

@@ -1,5 +1,5 @@
-import { setStorage, getStorage } from '../../Engine/utils/storage'
-import { convertPropertyStr } from '../../Engine/utils/format'
+import { setStorage, getStorage } from './storage'
+import { convertPropertyStr } from './format'
 
 export function saveGame (save) {
   return setStorage('game', save)

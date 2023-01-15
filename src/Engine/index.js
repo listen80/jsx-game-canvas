@@ -5,11 +5,9 @@ import EventEmitter from "./core/EventEmitter";
 
 import { createNode, patchNode } from "./core/Node";
 
-export { default as Component } from "./core/Component";
-
 export default class Engine {
-  constructor($gameJSX) {
-    this.$gameJSX = $gameJSX;
+  constructor($app) {
+    this.$app = $app;
     this.$loader = new Loader();
     if (this.checkRunTime()) {
       this.$loader
@@ -36,16 +34,15 @@ export default class Engine {
 
     this.$state = {}; // 游戏存档，可以修改
 
-    this.$loader.init(config);
+    this.$loader.init(config); // 资源加载器
 
-    this.$render = new Render(config, this.$loader);
-    this.$sound = new Sound(config, this.$loader);
+    this.$render = new Render(config, this.$loader); // 渲染器 + 事件控制器
+    this.$sound = new Sound(config, this.$loader); // 音频控制器
 
     this.$event = new EventEmitter({
       $config: this.$config,
       $loader: this.$loader,
       $state: this.$state,
-      $render: this.$render,
       $sound: this.$sound,
     });
 
@@ -54,12 +51,12 @@ export default class Engine {
   }
 
   gameStop() {
-    cancelAnimationFrame(this.$ident);
+    cancelAnimationFrame(this.$requestAnimationId);
   }
 
   gameStart() {
     const next = () => {
-      this.$ident = requestAnimationFrame(() => {
+      this.$requestAnimationId = requestAnimationFrame(() => {
         this.keyFrame();
         next();
       });
@@ -68,7 +65,7 @@ export default class Engine {
   }
 
   keyFrame() {
-    this.$root = patchNode(this.$root, createNode.call(this, this.$gameJSX));
-    this.$render.render(this.$root);
+    this.$root = patchNode(this.$root, createNode.call(this, this.$app));
+    this.$render.render(this.$root); // 渲染开始
   }
 }

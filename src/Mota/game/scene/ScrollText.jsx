@@ -1,4 +1,4 @@
-import { Component } from "Engine";
+
 import { screenWidth } from "../../config";
 
 const continueMessageFontSize = 64;
@@ -40,7 +40,7 @@ export default class ScrollText extends Component {
     this.mapBgm.pause();
   }
 
-  onMouseDown = () => {
+  onClick = () => {
     if (this.$state.map.events) {
       this.$state.map.events.forEach((event) => {
         const { type, data } = event;
@@ -62,7 +62,7 @@ export default class ScrollText extends Component {
         {this.ready ? (
           <div
             style={this.styles.continueMessage}
-            onMouseDown={this.onMouseDown}
+            onClick={this.onClick}
           >
             点击继续
           </div>

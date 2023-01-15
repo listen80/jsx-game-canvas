@@ -1,4 +1,4 @@
-import { Component } from "Engine";
+
 import Animate from "../../components/Animate";
 
 function transform($state, $loader, value, x, y) {
@@ -35,7 +35,6 @@ function transform($state, $loader, value, x, y) {
 export default class Event extends Component {
   onCreate() {
     console.log(this.$loader)
-    debugger
     this.data = transform(this.$state, this.$loader, this.props.value);
     this.event = this.props.event;
   }
@@ -164,16 +163,16 @@ export default class Event extends Component {
     }
   }
 
-  onMouseDown = () => {
+  onClick = () => {
     const { type, enemy, name } = this.data;
-    this.props?.onMouseDown(this);
+    this.props?.onClick(this);
     return true;
   };
 
   render() {
     const { x, y } = this.props;
     return (
-      <div style={{ width: 1, height: 1, x, y }} onMouseDown={this.onMouseDown}>
+      <div style={{ width: 1, height: 1, x, y }} onClick={this.onClick}>
         <Animate {...this.data}></Animate>
         {this.enemy}
       </div>

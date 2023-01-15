@@ -1,4 +1,4 @@
-import { formatText } from "./format";
+import { formatText } from "../../Mota/utils/format";
 
 export const loadImage = (src, callback) => {
   return new Promise(function (resolve, reject) {
