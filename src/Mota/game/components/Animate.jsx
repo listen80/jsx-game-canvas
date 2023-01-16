@@ -1,8 +1,7 @@
-
-export default class Animate extends Component {
+export default {
   onCreate() {
     this.createAnimateConfig();
-  }
+  },
 
   createAnimateConfig() {
     const defaultAnimateConfig = {
@@ -19,7 +18,7 @@ export default class Animate extends Component {
       defaultAnimateConfig,
       this.props.animate
     );
-  }
+  },
 
   runAnimateNext() {
     const { animateConfig } = this;
@@ -31,7 +30,7 @@ export default class Animate extends Component {
         animateConfig.sx = 0;
       }
     }
-  }
+  },
 
   render() {
     this.runAnimateNext();
@@ -42,5 +41,5 @@ export default class Animate extends Component {
         style={{ ...this.props.style, sx, sy }}
       ></div>
     );
-  }
-}
+  },
+};

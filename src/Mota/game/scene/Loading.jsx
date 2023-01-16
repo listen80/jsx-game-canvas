@@ -1,6 +1,6 @@
 
 import TitleText from "./components/TitleText";
-import ProgressBar from "../../components/ProgressBar";
+import ProgressBar from "../components/ProgressBar";
 
 export default {
   render() {

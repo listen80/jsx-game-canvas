@@ -1,6 +1,4 @@
-
-
-export default class Dialog extends Component {
+export default {
   onCreate() {
     const { width, height } = this.$config.screen;
 
@@ -11,12 +9,12 @@ export default class Dialog extends Component {
         height,
       },
     };
-  }
+  },
 
   render() {
     const { styles } = this;
     if (this.props.show) {
       return <div style={styles.wrap}>{this.$children}</div>;
     }
-  }
-}
+  },
+};

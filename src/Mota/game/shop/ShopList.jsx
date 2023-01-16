@@ -1,5 +1,5 @@
 
-import Select from "Mota/components/Select";
+import Select from "../components/Select";
 import { screenWidth } from "../../config";
 
 const width = 7,

@@ -1,5 +1,3 @@
-
-
 export default class Battle extends Component {
   tick = 0;
   styles = {

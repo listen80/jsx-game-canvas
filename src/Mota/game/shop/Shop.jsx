@@ -1,5 +1,4 @@
-
-import Select from "Mota/components/Select";
+import Select from "../components/Select";
 import { screenWidth } from "../../config";
 
 const width = 7,
@@ -9,23 +8,22 @@ const x = (screenWidth - width) / 2;
 const y = 2;
 
 export default class Shop extends Component {
-  styles = {
-    shop: {
-      x,
-      y,
-      width,
-      height,
-      borderWidth: 4,
-      borderColor: "white",
-      backgroundColor: "black",
-      textAlign: "center",
-    },
-    title: { x: width / 2, y: 1, fontSize: 24 },
-    text: { x: 0, y: 2, fontSize: 12 },
-    select: { x: 1, y: 7 / 2, width: 5, fontSize: 16 },
-  };
-
   onCreate() {
+    this.styles = {
+      shop: {
+        x,
+        y,
+        width,
+        height,
+        borderWidth: 4,
+        borderColor: "white",
+        backgroundColor: "black",
+        textAlign: "center",
+      },
+      title: { x: width / 2, y: 1, fontSize: 24 },
+      text: { x: 0, y: 2, fontSize: 12 },
+      select: { x: 1, y: 7 / 2, width: 5, fontSize: 16 },
+    };
     const shopid = this.$state.shopid;
 
     if (!this.$state.save.shops.includes(shopid)) {

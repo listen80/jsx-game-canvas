@@ -1,6 +1,4 @@
-
-
-export default class Table extends Component {
+export default {
   render() {
     const { dataSource, columns, dataExtra, style } = this.props;
     let x = 0;
@@ -31,5 +29,5 @@ export default class Table extends Component {
         })}
       </div>
     );
-  }
-}
+  },
+};
