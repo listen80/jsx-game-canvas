@@ -84,8 +84,8 @@ export default class Draw {
     const backgroundColor = node.attrs.backgroundColor;
     const { width = 1, height = 1 } = node.attrs.size || {};
     if (backgroundColor) {
-      if (typeof backgroundColor !== 'string') {
-        debugger
+      if (typeof backgroundColor !== "string") {
+        debugger;
       }
       context.save();
       context.beginPath();
@@ -117,12 +117,7 @@ export default class Draw {
     if (lineGradient) {
       const { context } = this;
       context.fillStyle = lineGradient;
-      context.fillRect(
-        offsetX * pixelRatio,
-        offsetY * pixelRatio,
-        2000,
-        32
-      );
+      context.fillRect(offsetX * pixelRatio, offsetY * pixelRatio, 2000, 32);
     }
   }
 }

@@ -12,7 +12,7 @@ const keyEvents = ["KeyDown", "KeyUp"];
 
 export default class Render extends Draw {
   constructor(config, $loader) {
-    super()
+    super();
     this.config = config.screen;
     this.$loader = $loader;
     this.initCanvas(config);
@@ -70,8 +70,8 @@ export default class Render extends Draw {
           e.name = `on${name}`;
           e.canvasX = (e.offsetX / $offsetWidth) * width;
           e.canvasY = (e.offsetY / $offsetHeight) * height;
-          e.gameX = (e.canvasX / pixelRatio);
-          e.gameY = (e.canvasY / pixelRatio);
+          e.gameX = e.canvasX / pixelRatio;
+          e.gameY = e.canvasY / pixelRatio;
           e.$node = null;
           this.mouseEventsCollectionKeyframe.push(e);
 
@@ -102,7 +102,15 @@ export default class Render extends Draw {
     const { context } = this;
     context.save();
     const { children, attrs } = node;
-    const { style, image, text, border, backgroundImage, backgroundColor, lineGradient } = attrs;
+    const {
+      style,
+      image,
+      text,
+      border,
+      backgroundImage,
+      backgroundColor,
+      lineGradient,
+    } = attrs;
     this.mergeStyle(style);
 
     if (backgroundColor) {
@@ -126,17 +134,15 @@ export default class Render extends Draw {
     }
 
     if (lineGradient) {
-      this.drawLineGradient(node, offsetX, offsetY)
+      this.drawLineGradient(node, offsetX, offsetY);
     }
 
-    children.forEach((child) =>
-      this.renderAnything(child, offsetX, offsetY,)
-    );
+    children.forEach((child) => this.renderAnything(child, offsetX, offsetY));
 
     context.restore();
   }
 
-  renderAnything(createdNode, offsetX, offsetY,) {
+  renderAnything(createdNode, offsetX, offsetY) {
     // undefined null
     // string number
     // array
@@ -145,7 +151,7 @@ export default class Render extends Draw {
     if (createdNode) {
       if (Array.isArray(createdNode)) {
         createdNode.forEach((child) =>
-          this.renderAnything(child, offsetX, offsetYF)
+          this.renderAnything(child, offsetX, offsetY)
         );
       } else if (createdNode.type === "object") {
         this.renderAnything(createdNode.$node, offsetX, offsetY);
@@ -177,7 +183,7 @@ export default class Render extends Draw {
     this.mouseEventsCollectionKeyframe.forEach((event) => {
       const { $node, name } = event;
       if ($node) {
-        $node?.attrs[name]($node.attrs, event)
+        $node?.attrs[name]($node.attrs, event);
       }
       // run($node, event, name);
     });
@@ -188,7 +194,7 @@ export default class Render extends Draw {
     this.restoreEvents();
   }
 
-  renderNode(node, offsetX, offsetY, offsetParent) {
+  renderNode(node, offsetX, offsetY) {
     // 非class component
     // div node
     // { attrs, children }
@@ -196,21 +202,21 @@ export default class Render extends Draw {
     context.save();
 
     const { x = 0, y = 0 } = node.attrs.position || {};
-    const { align = 'left', verticalAlign = "top" } = node.attrs;
+    const { align = "left", verticalAlign = "top" } = node.attrs;
 
-    const offsetAlign = { left: 0, center: -0.5, right: -1 }
-    const offsetVerticalAlign = { top: 0, middle: -0.5, bottom: -1 }
+    const offsetAlign = { left: 0, center: -0.5, right: -1 };
+    const offsetVerticalAlign = { top: 0, middle: -0.5, bottom: -1 };
 
     const { width = 1, height = 1 } = node.attrs.size || {};
 
-    const offsetAlignRate = offsetAlign[align]
-    const offsetVerticalAlignRate = offsetVerticalAlign[verticalAlign]
+    const offsetAlignRate = offsetAlign[align];
+    const offsetVerticalAlignRate = offsetVerticalAlign[verticalAlign];
 
     offsetX += x + width * offsetAlignRate;
     offsetY += y + height * offsetVerticalAlignRate;
 
     this.calcEvent(node, offsetX, offsetY);
-    this.drawNode(node, offsetX, offsetY, offsetParent);
+    this.drawNode(node, offsetX, offsetY);
 
     context.restore();
   }

@@ -1,17 +1,19 @@
 import Text from "../../components/Text";
-export default {
 
+export default {
   onCreate() {
-    this.styles = {
+    this.attrs = {
       wrap: {
-        // fontSize: 24,
-        position: { y: 1 }
+        style: {
+          font: "24px 楷体",
+        },
+        position: { y: 1 },
       },
-    }
+    };
   },
 
   render() {
-    const { styles, $state } = this;
+    const { attrs, $state } = this;
     const { save } = $state;
 
     const rowProperty = [
@@ -27,16 +29,20 @@ export default {
     ];
 
     return (
-      <div {...styles.wrap}>
+      <div {...attrs.wrap}>
         {rowProperty.map(({ sposition, data }, index) => {
           return (
-            <div position={{ y: index * 1.16 + 0.3 }}>
+            <div position={{ y: index * 1.2 + 0.2 }}>
               <div image="icons" sposition={sposition} />
-              <Text position={{ x: 1.5 }} size={{ width: 2.5 }} value={data + ''}></Text>
+              <Text
+                position={{ x: 1.5 }}
+                size={{ width: 2.5 }}
+                value={data + ""}
+              ></Text>
             </div>
           );
         })}
       </div>
     );
-  }
-}
+  },
+};

@@ -4,86 +4,90 @@ export default {
   onCreate() {
     this.styles = {
       wrap: {
-        position: { fontSize: 24, y: 1 },
-      }
-    }
+        position: { y: 1 },
+        style: { font: "24px 楷体" },
+      },
+    };
+
+    this.attrs = {
+      wrap: {
+        style: {
+          font: "24px 楷体",
+        },
+        position: { y: 1 },
+      },
+    };
     const { $state, $config } = this;
     const { map } = $state;
 
     this.rowProperty = [
-      { data: $config.title, style: { sy: 0 } },
-      { data: map.name, style: { sy: 1 } },
+      { text: $config.title, sposition: { sy: 0 } },
+      { text: map.name, sposition: { sy: 1 } },
       {
-        data: "怪物",
-        style: { sy: 11 },
-        onClick() {
-          this.$state.showEnemyInfo = !this.$state.showEnemyInfo;
-        },
+        text: "怪物",
+        sposition: { sy: 11 },
+        event: "toggleShowEnemyInfo",
       },
       {
-        data: "楼层",
-        style: { sy: 12 },
-        onClick() {
-          this.$state.showJumpFloor = !this.$state.showJumpFloor;
-        },
+        text: "楼层",
+        sposition: { sy: 12 },
+        event: "toggleShowJumpFloor",
       },
       {
-        data: "商店",
-        style: { sy: 13 },
-        onClick() {
-          this.$state.showShopList = true;
-        },
+        text: "商店",
+        sposition: { sy: 13 },
+        event: "showShopList",
       },
       {
-        data: "读档",
-        style: { sy: 15 },
-        onClick() {
-          this.$event.emit("loadGame");
-          // this.$event.emit("message", "读取成功");
-          this.$sound.play("se", "load.mp3");
-        },
+        text: "读档",
+        sposition: { sy: 15 },
+        event: "loadGame",
       },
       {
-        data: "存档",
-        style: { sy: 14 },
-        onClick() {
-          this.$event.emit("saveGame");
-          this.$event.emit("message", "存储成功");
-          this.$sound.play("se", "load.mp3");
-        },
+        text: "存档",
+        sposition: { sy: 14 },
+        event: "saveGame",
       },
       {
-        data: "设置",
-        style: { sy: 16 },
-        onClick() {
-          this.$state.showConfig = !this.$state.showConfig
-        },
+        text: "设置",
+        sposition: { sy: 16 },
+        event: "toggleShowConfig",
       },
       {
-        data: "统计",
-        style: { sy: 17 },
-        onClick() {
-          this.$event.emit("gotoTitle", "设置");
-          // this.$event.emit("message", "统计");
-        },
+        text: "统计",
+        sposition: { sy: 17 },
+        event: "gotoTitle",
       },
     ];
   },
 
-  render() {
-    const { styles, rowProperty } = this;
+  onClick(attrs) {
+    console.log(attrs);
+  },
 
-    return (
-      <div style={styles.wrap}>
-        {rowProperty.map(({ style, data, onClick }, index) => {
+  render() {
+    const { attrs, rowProperty } = this;
+
+    const node = (
+      <div {...attrs.wrap}>
+        {rowProperty.map(({ sposition, text }, index) => {
           return (
-            <div position={{ y: index * 1.16 + 0.3, width: 3, height: 1 }} onClick={onClick}>
-              <div image="icons" sposition={style} />
-              <Text style={{ x: 1.5, y: 0, height: 1, width: 2.5 }} text={data}></Text>
+            <div
+              position={{ y: index * 1.2 + 0.2 }}
+              size={{ width: 4 }}
+              onClick={this.onClick}
+            >
+              <div image="icons" sposition={sposition} />
+              <Text
+                position={{ x: 1.5, y: 0 }}
+                size={{ height: 1, width: 2.5 }}
+                value={text}
+              ></Text>
             </div>
           );
         })}
       </div>
     );
-  }
-}
+    return node;
+  },
+};
