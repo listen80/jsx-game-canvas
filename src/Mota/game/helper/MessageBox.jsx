@@ -1,59 +1,61 @@
-
 import { calcLength } from "../../utils/string";
+import Text from "../components/Text";
 
-export default class MessageBox extends Component {
-  messages = [];
-
-  onMessage = (data) => {
-    const { width: screenWidth } = this.$config.screen;
+export default {
+  onMessage(data) {
+    const { width, pixelRatio } = this.$config.screen;
     data = data + "";
     const length = calcLength(data);
-    const fontSize = 20;
-    const width = ((fontSize / 2) * length + fontSize) / 32;
-
-    this.messages.unshift({
+    const fontSize = 16;
+    const fontWidth = ((fontSize / 2) * (length + 1)) / pixelRatio;
+    const msg = {
       message: data,
       tick: 180,
-      style: {
-        backgroundColor: "rgba(0,0,0,.7)",
-        x: (screenWidth - width) / 2,
-        height: 1,
-        width: width,
-        borderWidth: 2,
-        borderColor: "white",
-      },
       messageStyle: {
-        textAlign: "center",
-        fontSize,
-        x: width / 2,
-        height: 1,
+        position: {
+          x: width / 2,
+        },
+        size: {
+          width: fontWidth,
+        },
+        border: {
+          width: 2,
+          color: "white",
+        },
       },
-    });
-  };
+    };
+    this.messages.unshift(msg);
+  },
 
   onCreate() {
+    this.messages = [];
     this.$event.on("message", this.onMessage);
-  }
+  },
 
   onDestroy() {
     this.$event.off("message", this.onMessage);
-  }
-
-  render() {
+  },
+  calc() {
     this.messages = this.messages.filter((config) => {
       config.tick--;
       return config.tick > 0;
     });
+  },
+  render() {
+    this.calc();
     return this.messages.map((config, index) => {
-      const { message, messageStyle, style } = config;
-      style.globalAlpha = config.tick / 180;
-      style.y = 2 + index * 1.2;
-
+      const { message, messageStyle, tick } = config;
+      const style = { globalAlpha: tick / 180 };
       return (
-        <div style={style}>
-          <div style={messageStyle}>{message}</div>
-        </div>
+        <Text
+          style={style}
+          align="center"
+          value={message}
+          position={messageStyle.position}
+          size={messageStyle.size}
+          backgroundColor="rgba(0,0,0,.7)"
+        ></Text>
       );
     });
-  }
-}
+  },
+};

@@ -22,6 +22,7 @@ export default {
 
   saveGame(data, { $state }) {
     saveGame($state.save);
+    this.emit("message", "ok");
   },
 
   loadMap(data, { $state, $loader }) {

@@ -6,7 +6,7 @@ import ScrollText from "./game/scene/ScrollText";
 import GameMap from "./game/scene/GameMap";
 
 
-// import Message from "./game/helper/MessageBox";
+import Message from "./game/helper/MessageBox";
 // import Talks from "./game/helper/Talks";
 // import JumpFloor from "./game/helper/JumpFloor";
 
@@ -25,8 +25,10 @@ import GameMap from "./game/scene/GameMap";
 
 // 全局事件
 import commonEvent from "./events/common";
-import motaEvent from "./events/mota";
+// 全局声音事件
 import soundEvent from "./events/sound";
+// 全局魔塔
+import motaEvent from "./events/mota";
 
 export default {
   onCreate() {
@@ -97,7 +99,7 @@ export default {
       return <div>
         {this.renderMap()}
         {/* {this.renderDialog()} */}
-        {/* <Message /> */}
+        <Message /> 
         {/* <Talks /> */}
       </div>
     }

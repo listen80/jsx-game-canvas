@@ -1,4 +1,4 @@
-import { loadJSON, loadText, loadImage, loadSound } from "../utils/http";
+import { loadJSON, loadText, loadImage } from "../utils/http";
 
 export default class Loader {
   constructor() {
@@ -22,10 +22,7 @@ export default class Loader {
 
   checkStatus() {
     if (this.loaded === this.total) {
-      const timer = setTimeout(() => {
-        this.loading = false;
-        clearTimeout(timer);
-      }, 0);
+      this.loading = false;
     }
   }
 

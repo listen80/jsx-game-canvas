@@ -1,7 +1,7 @@
 export default class EventEmitter {
-  constructor(extData) {
+  constructor(mixin) {
     this.event = {};
-    this.extData = extData;
+    this.mixin = mixin;
   }
 
   // 监听
@@ -13,7 +13,7 @@ export default class EventEmitter {
   //发送监听
   emit(type, data) {
     this.event[type] = this.event[type] || [];
-    this.event[type].forEach((fn) => fn.call(this, data, this.extData));
+    this.event[type].forEach((fn) => fn.call(this, data, this.mixin));
   }
 
   //移除监听器

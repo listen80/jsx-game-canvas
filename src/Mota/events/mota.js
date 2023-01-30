@@ -1,23 +1,23 @@
 export default {
-  openShop(data, { $state, $sound, $loader }) {
+  openShop(data, { $state }) {
     $state.shopid = data;
   },
-  toggleShowEnemyInfo(data, { $state, $sound, $loader }) {
+  toggleShowEnemyInfo(data, { $state }) {
     $state.showEnemyInfo = $state.showEnemyInfo;
   },
-  toggleShowJumpFloor(data, { $state, $sound, $loader }) {
+  toggleShowJumpFloor(data, { $state }) {
     $state.showJumpFloor = !$state.showJumpFloor;
   },
-  openShop(data, { $state, $sound, $loader }) {
-    this.$state.showJumpFloor = !this.$state.showJumpFloor;
+  openShop(data, { $state }) {
+    $state.showJumpFloor = !$state.showJumpFloor;
   },
-  openShop(data, { $state, $sound, $loader }) {
-    this.$state.showShopList = true;
+  openShop(data, { $state }) {
+    $state.showShopList = true;
   },
-  openShop(data, { $state, $sound, $loader }) {
-    this.$state.showConfig = !this.$state.showConfig
+  openShop(data, { $state }) {
+    $state.showConfig = !$state.showConfig;
   },
-  openShop(data, { $state, $sound, $loader }) {
+  openShop(data, { $state }) {
     $state.shopid = data;
   },
 };
