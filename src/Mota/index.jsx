@@ -7,7 +7,7 @@ import GameMap from "./game/scene/GameMap";
 
 
 import Message from "./game/helper/MessageBox";
-// import Talks from "./game/helper/Talks";
+import Dialogue from "./game/helper/Dialogue";
 // import JumpFloor from "./game/helper/JumpFloor";
 
 // import Shop from "./game/shop/Shop";
