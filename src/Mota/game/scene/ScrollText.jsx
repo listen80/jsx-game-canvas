@@ -12,7 +12,7 @@ export default {
 
     const screenWidth = this.$config.screen.width
     const screenHeight = this.$config.screen.height
-    this.scrollSpeed = 1 / 3;
+    this.scrollSpeed = 1 / 16;
     this.lineHeight = 1.5;
 
     const continueMessageFontSize = 64;
