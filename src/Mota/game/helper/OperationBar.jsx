@@ -62,7 +62,7 @@ export default {
   },
 
   onClick(attrs) {
-    console.log(attrs);
+    this.$event.emit(attrs.event)
   },
 
   render() {
@@ -70,9 +70,10 @@ export default {
 
     const node = (
       <div {...attrs.wrap}>
-        {rowProperty.map(({ sposition, text }, index) => {
+        {rowProperty.map(({ sposition, text, event }, index) => {
           return (
             <div
+              event={event}
               position={{ y: index * 1.2 + 0.2 }}
               size={{ width: 4 }}
               onClick={this.onClick}

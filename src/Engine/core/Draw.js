@@ -1,3 +1,5 @@
+import { defaultHeight, defaultWidth } from "../const/box";
+
 export default class Draw {
   clearRect() {
     const { context, canvas } = this;
@@ -8,7 +10,7 @@ export default class Draw {
     const { pixelRatio } = this.config;
     const { attrs } = node;
     const { sposition = {}, spixelRatio = {}, image } = attrs;
-    const { width = 1, height = 1 } = attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } = attrs.size || {};
     const { context } = this;
 
     const { sx = 0, sy = 0 } = sposition;
@@ -35,7 +37,7 @@ export default class Draw {
     const { pixelRatio } = this.config;
     const { context } = this;
     const { width: borderWidth, color: borderColor } = node.attrs.border;
-    const { width = 1, height = 1 } = node.attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } = node.attrs.size || {};
     if (borderWidth) {
       context.save();
       context.lineWidth = borderWidth;
@@ -57,7 +59,7 @@ export default class Draw {
     const { pixelRatio } = this.config;
     const { context } = this;
     const backgroundImage = node.attrs.backgroundImage;
-    const { width = 1, height = 1 } = node.attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } = node.attrs.size || {};
     if (backgroundImage) {
       context.save();
       context.beginPath();
@@ -82,7 +84,7 @@ export default class Draw {
     const { pixelRatio } = this.config;
     const { context } = this;
     const backgroundColor = node.attrs.backgroundColor;
-    const { width = 1, height = 1 } = node.attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } = node.attrs.size || {};
     if (backgroundColor) {
       if (typeof backgroundColor !== "string") {
         debugger;

@@ -1,4 +1,4 @@
-import { baseStyle } from "../const/baseStyle";
+import { baseStyle } from "../const/style";
 import Draw from "./Draw";
 const mouseEvents = [
   "Click",
@@ -25,7 +25,7 @@ export default class Render extends Draw {
   }
 
   initCanvas() {
-    const { pixelRatio, el, width = 13, height = 13 } = this.config;
+    const { pixelRatio, el, width = defaultWidth3, height = defaultHeight3 } = this.config;
 
     const canvas = document.createElement("canvas");
     this.canvas = canvas;
@@ -107,7 +107,7 @@ export default class Render extends Draw {
     const { pixelRatio } = this.config;
     const { attrs } = node;
     const { sposition = {}, spixelRatio = {}, image } = attrs;
-    const { width = 1, height = 1 } = attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } = attrs.size || {};
     const { context } = this;
 
     const { sx = 0, sy = 0 } = sposition;
@@ -134,7 +134,7 @@ export default class Render extends Draw {
     const { pixelRatio } = this.config;
     const { context } = this;
     const { width: borderWidth, color: borderColor } = node.attrs.border;
-    const { width = 1, height = 1 } = node.attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } = node.attrs.size || {};
     if (borderWidth) {
       context.save();
       context.lineWidth = borderWidth;
@@ -218,7 +218,7 @@ export default class Render extends Draw {
     const { pixelRatio } = this.config;
     const { context } = this;
     const backgroundImage = node.attrs.backgroundImage;
-    const { width = 1, height = 1 } = node.attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } = node.attrs.size || {};
     if (backgroundImage) {
       context.save();
       context.beginPath();
@@ -243,7 +243,7 @@ export default class Render extends Draw {
     const { pixelRatio } = this.config;
     const { context } = this;
     const backgroundColor = node.attrs.backgroundColor;
-    const { width = 1, height = 1 } = node.attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } = node.attrs.size || {};
     if (backgroundColor) {
       if (typeof backgroundColor !== "string") {
         debugger;
@@ -320,7 +320,7 @@ export default class Render extends Draw {
 
     // const { context } = this;
     // const backgroundColor = node.attrs.backgroundColor;
-    // const { width = 1, height = 1 } = node.attrs.size || {};
+    // const { width = defaultWidth, height = defaultHeight } = node.attrs.size || {};
     // if (backgroundColor) {
     //   context.save();
     //   context.beginPath();
@@ -361,7 +361,7 @@ export default class Render extends Draw {
 
   calcEvent(node, offsetX, offsetY) {
     // events of mouse
-    const { width = 1, height = 1 } = node.attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } = node.attrs.size || {};
     this.mouseEventsCollectionKeyframe.forEach((event) => {
       const { gameX, gameY, name } = event;
       if (
@@ -411,7 +411,7 @@ export default class Render extends Draw {
     const offsetAlign = { left: 0, center: -0.5, right: -1 };
     const offsetVerticalAlign = { top: 0, middle: -0.5, bottom: -1 };
 
-    const { width = 1, height = 1 } = node.attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } = node.attrs.size || {};
 
     const offsetAlignRate = offsetAlign[align];
     const offsetVerticalAlignRate = offsetVerticalAlign[verticalAlign];

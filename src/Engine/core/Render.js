@@ -1,5 +1,7 @@
-import { baseStyle } from "../const/baseStyle";
+import { baseStyle } from "../const/style";
 import Draw from "./Draw";
+import { defaultHeight, defaultWidth } from "../const/box";
+
 const mouseEvents = [
   "Click",
   // "ContextMenu",
@@ -8,6 +10,7 @@ const mouseEvents = [
   // "MouseUp",
   "MouseMove",
 ];
+
 const keyEvents = ["KeyDown", "KeyUp"];
 
 export default class Render extends Draw {
@@ -164,7 +167,8 @@ export default class Render extends Draw {
 
   calcEvent(node, offsetX, offsetY) {
     // events of mouse
-    const { width = 1, height = 1 } = node.attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } =
+      node.attrs.size || {};
     this.mouseEventsCollectionKeyframe.forEach((event) => {
       const { gameX, gameY, name } = event;
       if (
@@ -207,7 +211,8 @@ export default class Render extends Draw {
     const offsetAlign = { left: 0, center: -0.5, right: -1 };
     const offsetVerticalAlign = { top: 0, middle: -0.5, bottom: -1 };
 
-    const { width = 1, height = 1 } = node.attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } =
+      node.attrs.size || {};
 
     const offsetAlignRate = offsetAlign[align];
     const offsetVerticalAlignRate = offsetVerticalAlign[verticalAlign];

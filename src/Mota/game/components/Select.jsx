@@ -78,8 +78,8 @@ export default {
           value={text}
           position={{ y: y }}
           size={{ width: 3 }}
-          border={{ width: 3 }}
-          backgroundColor={`rgba(244,244,31,.1)`}
+          // border={{ width: 3 }}
+          backgroundColor={`rgba(244,244,31,.5)`}
           onClick={this.onClick}
         ></Text>
       );
