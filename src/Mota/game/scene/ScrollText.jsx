@@ -43,7 +43,8 @@ export default {
           x: screenWidth / 2,
           y: screenHeight / 2,
         },
-        backgroundColor: "red",
+        // backgroundColor: "red",
+        // border: { width: 3 }
       }
     }
 
@@ -70,9 +71,6 @@ export default {
     if (scrollTextStyle.y + this.max > 0) {
       scrollTextStyle.y -= this.scrollSpeed;
     } else {
-      if (__DEV__) {
-        this.onClick()
-      }
       this.ready = true;
     }
 
@@ -80,8 +78,7 @@ export default {
       <Text
         {...this.attrs.continueMessage}
         onClick={this.onClick}
-        border={{ width: 3 }}
-        value={"点击继续"}
+        value="点击继续"
       >
       </Text>
       :

@@ -23,9 +23,9 @@ export default {
       },
     ]
 
-    if (__DEV__) {
-      this.$event.emit('loadGame')
-    }
+    // if (__DEV__) {
+    //   this.$event.emit('loadGame')
+    // }
   },
 
   onConfirm(option) {

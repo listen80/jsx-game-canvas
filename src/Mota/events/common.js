@@ -10,53 +10,53 @@ import {
 import { clone } from "../utils/object.js";
 
 export default {
-  startGame(data, { $state, $sound, $loader, $config }) {
+  startGame(data, { $state, $config }) {
     $state.save = clone($config.save);
     this.emit("loadMap", $state.save.position);
   },
 
-  loadGame(data, { $state, $sound, $loader, $config }) {
+  loadGame(data, { $state, $config }) {
     Object.assign($state.save, $config.save, loadGame());
     this.emit("loadMap", $state.save.position);
   },
 
-  saveGame(data, { $state, $sound, $loader }) {
+  saveGame(data, { $state }) {
     saveGame($state.save);
   },
 
-  loadMap(position, { $state, $sound, $loader }) {
-    $state.save.position = position;
+  loadMap(data, { $state, $loader }) {
+    $state.save.position = data;
     $state.mapKey = Math.random();
     $loader.loadMap($state.save.position.map).then((map) => {
       $state.map = map;
     });
   },
 
-  gotoTitle(data, { $state, $sound, $loader }) {
+  gotoTitle(data, { $state }) {
     $state.map = null;
   },
 
-  getItems(data, { $state, $sound, $loader }) {
+  getItems(data, { $state }) {
     setSave($state, { items: data }, next);
   },
 
-  getItem(data, { $state, $sound, $loader }) {
+  getItem(data, { $state }) {
     setSave($state, { items: { [data]: 1 } }, next);
   },
 
-  setSave(data, { $state, $sound, $loader }) {
+  setSave(data, { $state }) {
     setSave($state, data, next);
   },
 
-  checkSave(data, { $state, $sound, $loader }) {
+  checkSave(data, { $state }) {
     return checkSave($state, data, next);
   },
 
-  setSaveByStr(data, { $state, $sound, $loader }) {
+  setSaveByStr(data, { $state }) {
     setSaveByStr($state, data, next);
   },
 
-  checkSaveByStr(data, { $state, $sound, $loader }) {
+  checkSaveByStr(data, { $state }) {
     return checkSaveByStr($state, data, next);
   },
 };
