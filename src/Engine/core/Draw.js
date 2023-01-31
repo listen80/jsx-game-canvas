@@ -37,7 +37,8 @@ export default class Draw {
     const { pixelRatio } = this.config;
     const { context } = this;
     const { width: borderWidth, color: borderColor } = node.attrs.border;
-    const { width = defaultWidth, height = defaultHeight } = node.attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } =
+      node.attrs.size || {};
     if (borderWidth) {
       context.save();
       context.lineWidth = borderWidth;
@@ -59,7 +60,9 @@ export default class Draw {
     const { pixelRatio } = this.config;
     const { context } = this;
     const backgroundImage = node.attrs.backgroundImage;
-    const { width = defaultWidth, height = defaultHeight } = node.attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } =
+      node.attrs.size || {};
+
     if (backgroundImage) {
       context.save();
       context.beginPath();
@@ -84,11 +87,9 @@ export default class Draw {
     const { pixelRatio } = this.config;
     const { context } = this;
     const backgroundColor = node.attrs.backgroundColor;
-    const { width = defaultWidth, height = defaultHeight } = node.attrs.size || {};
+    const { width = defaultWidth, height = defaultHeight } =
+      node.attrs.size || {};
     if (backgroundColor) {
-      if (typeof backgroundColor !== "string") {
-        debugger;
-      }
       context.save();
       context.beginPath();
       context.fillStyle = backgroundColor;

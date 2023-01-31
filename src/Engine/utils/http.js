@@ -23,7 +23,6 @@ export const formatText = (text) => {
     })
     o[id] = item
   })
-
   return o
 }
 

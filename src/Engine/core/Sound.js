@@ -14,19 +14,6 @@ export default class Sound {
     });
   }
 
-  load(dataArray) {
-    this.total = dataArray.length;
-    return Promise.all(
-      dataArray.map((sound) =>
-        loadSound(`Sound/${sound}`, (src, el) => {
-          this.loaded++;
-          this.sounds[sound] = el;
-          // sounds.forEach((Sound, i) => (this.sounds[dataArray[i]] = Sound));
-        })
-      )
-    );
-  }
-
   play(type, name) {
     return this.control(type, name, "play");
   }

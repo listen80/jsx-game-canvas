@@ -5,7 +5,6 @@ import Title from "./game/scene/Title";
 import ScrollText from "./game/scene/ScrollText";
 import GameMap from "./game/scene/GameMap";
 
-
 import Message from "./game/helper/MessageBox";
 import Dialogue from "./game/helper/Dialogue";
 // import JumpFloor from "./game/helper/JumpFloor";
@@ -15,8 +14,6 @@ import Dialogue from "./game/helper/Dialogue";
 
 // import Battle from "./game/battle/Battle";
 // import EnemyInfo from "./game/battle/EnemyInfo";
-
-
 
 // import Config from "./game/tool/Config";
 // import Statistics from "./game/tool/Statistics";
@@ -91,17 +88,19 @@ export default {
   // },
 
   renderApp() {
-    const { $loader } = this;
+    const { $loader, $config } = this;
 
     if ($loader.loading) {
       return <Loading />;
     } else {
-      return <div>
-        {this.renderMap()}
-        {/* {this.renderDialog()} */}
-        <Message /> 
-        {/* <Talks /> */}
-      </div>
+      return (
+        <div>
+          {this.renderMap()}
+          {/* {this.renderDialog()} */}
+          <Message />
+          {/* <Talks /> */}
+        </div>
+      );
     }
   },
 
@@ -114,4 +113,3 @@ export default {
     );
   },
 };
-

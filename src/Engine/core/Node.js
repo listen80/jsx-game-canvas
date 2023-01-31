@@ -30,9 +30,9 @@ export function createNode(tag, props, ...children) {
 }
 
 function createInstance(next) {
-  const $instance = { ...next.tag };
+  const $instance = Object.create(null);
   const $parent = next.$parent;
-  const entries = Object.entries($instance);
+  const entries = Object.entries(next.tag);
 
   entries.forEach(([key, value]) => {
     if (value.bind) {
@@ -41,7 +41,6 @@ function createInstance(next) {
   });
 
   $instance.$createElement = createNode;
-
 
   $instance.$config = $parent.$config;
   $instance.$state = $parent.$state;
@@ -92,7 +91,7 @@ function updateInstance(pre, next) {
 }
 
 function renderNode(next) {
-  const $node = next.$instance.render()
+  const $node = next.$instance.render();
   next.$node = patchNode(next.$node, $node);
 }
 
@@ -118,7 +117,11 @@ export function patchNode(preNode, nextNode) {
       }
     }
   } else if (typeof nextNode.tag === "object") {
-    if (preNode && preNode.tag === nextNode.tag && preNode.props?.key === nextNode.props?.key) {
+    if (
+      preNode &&
+      preNode.tag === nextNode.tag &&
+      preNode.props?.key === nextNode.props?.key
+    ) {
       updateInstance(preNode, nextNode);
     } else {
       destoryInstance(preNode);
