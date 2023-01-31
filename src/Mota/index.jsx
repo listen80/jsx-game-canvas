@@ -3,6 +3,7 @@ import Loading from "./game/scene/Loading";
 import FPS from "./game/helper/FPS";
 import Title from "./game/scene/Title";
 import ScrollText from "./game/scene/ScrollText";
+import Movie from "./game/scene/Movie";
 import GameMap from "./game/scene/GameMap";
 
 import Message from "./game/helper/MessageBox";
@@ -41,7 +42,7 @@ export default {
         return <ScrollText key={mapKey} />;
       }
       if (movie) {
-        return <ScrollText key={mapKey} />;
+        return <Movie key={mapKey} />;
       }
       return <GameMap key={mapKey} />;
     } else {
