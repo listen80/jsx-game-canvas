@@ -5,7 +5,7 @@ import { toggleShowShopList, openShop } from "events/mota";
 export default {
   onClick({ shopid }, index) {
     this.$event.emit(toggleShowShopList);
-    this.$event.emit(openShop);
+    this.$event.emit(openShop, shopid);
   },
 
   render() {
