@@ -18,6 +18,7 @@ const plugins = [
   alias({
     entries: {
       "#": require("path").resolve("src/Game/components"),
+      "events": require("path").resolve("src/Game/events"),
     },
   }),
   commonjs(),

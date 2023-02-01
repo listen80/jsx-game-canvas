@@ -1,13 +1,11 @@
 import Text from "#/Base/Text";
 import Column from "#/Grid/Column";
+import { toggleShowShopList, openShop } from "events/mota";
 
 export default {
-  onConfirm(option, index) {
-    const { shopid } = option;
-    this.$state.showShopList = !this.$state.showShopList;
-    if (shopid) {
-      this.$state.shopid = shopid;
-    }
+  onClick({ shopid }, index) {
+    this.$event.emit(toggleShowShopList);
+    this.$event.emit(openShop);
   },
 
   render() {
@@ -31,6 +29,7 @@ export default {
             return (
               <Text
                 value={shop.title}
+                shop={shop}
                 size={{ width: 9 }}
                 onClick={this.onClick}
               ></Text>
