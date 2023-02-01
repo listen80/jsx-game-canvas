@@ -104,7 +104,7 @@ export default class Render extends Draw {
   drawNode(node, offsetX, offsetY) {
     const { context } = this;
     context.save();
-    const { children, attrs } = node;
+    const { children, props } = node;
     const {
       style,
       image,
@@ -113,7 +113,7 @@ export default class Render extends Draw {
       backgroundImage,
       backgroundColor,
       lineGradient,
-    } = attrs;
+    } = props;
     this.mergeStyle(style);
 
     if (backgroundColor) {
@@ -149,7 +149,7 @@ export default class Render extends Draw {
     // undefined null
     // string number
     // array
-    // new class component
+    // component
     // div node
     if (createdNode) {
       if (Array.isArray(createdNode)) {
@@ -168,7 +168,7 @@ export default class Render extends Draw {
   calcEvent(node, offsetX, offsetY) {
     // events of mouse
     const { width = defaultWidth, height = defaultHeight } =
-      node.attrs.size || {};
+      node.props.size || {};
     this.mouseEventsCollectionKeyframe.forEach((event) => {
       const { gameX, gameY, name } = event;
       if (
@@ -176,7 +176,7 @@ export default class Render extends Draw {
         gameX < width + offsetX &&
         gameY >= offsetY &&
         gameY < height + offsetY &&
-        node?.attrs[name]
+        node?.props[name]
       ) {
         event.$node = node;
       }
@@ -187,7 +187,7 @@ export default class Render extends Draw {
     this.mouseEventsCollectionKeyframe.forEach((event) => {
       const { $node, name } = event;
       if ($node) {
-        $node?.attrs[name]($node.attrs, event);
+        $node?.props[name]($node.props, event);
       }
       // run($node, event, name);
     });
@@ -201,18 +201,18 @@ export default class Render extends Draw {
   renderNode(node, offsetX, offsetY) {
     // 非class component
     // div node
-    // { attrs, children }
+    // { props, children }
     const { context } = this;
     context.save();
 
-    const { x = 0, y = 0 } = node.attrs.position || {};
-    const { align = "left", verticalAlign = "top" } = node.attrs;
+    const { x = 0, y = 0 } = node.props.position || {};
+    const { align = "left", verticalAlign = "top" } = node.props;
 
     const offsetAlign = { left: 0, center: -0.5, right: -1 };
     const offsetVerticalAlign = { top: 0, middle: -0.5, bottom: -1 };
 
     const { width = defaultWidth, height = defaultHeight } =
-      node.attrs.size || {};
+      node.props.size || {};
 
     const offsetAlignRate = offsetAlign[align];
     const offsetVerticalAlignRate = offsetVerticalAlign[verticalAlign];

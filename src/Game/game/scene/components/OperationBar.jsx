@@ -1,4 +1,4 @@
-import Text from "../../../components/Base/Text";
+import Text from "#/Base/Text";
 
 export default {
   onCreate() {
@@ -9,7 +9,7 @@ export default {
       },
     };
 
-    this.attrs = {
+    this.props = {
       wrap: {
         style: {
           font: "24px 楷体",
@@ -61,15 +61,15 @@ export default {
     ];
   },
 
-  onClick(attrs) {
-    this.$event.emit(attrs.event)
+  onClick(props) {
+    this.$event.emit(props.event)
   },
 
   render() {
-    const { attrs, rowProperty } = this;
+    const { props, rowProperty } = this;
 
     const node = (
-      <div {...attrs.wrap}>
+      <div {...props.wrap}>
         {rowProperty.map(({ sposition, text, event }, index) => {
           return (
             <div

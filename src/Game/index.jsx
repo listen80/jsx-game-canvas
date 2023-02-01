@@ -7,26 +7,35 @@ import Movie from "./game/scene/Movie";
 import GameMap from "./game/scene/GameMap";
 
 import Message from "./game/helper/MessageBox";
-import Dialogue from "./game/helper/Dialogue";
+import Modal from "#/Layout/Modal";
 
-
+// 楼层跳转
 import JumpFloor from "./game/modal/JumpFloor";
 
+// 商店
 import Shop from "./game/modal/Shop";
+
+// 商店列表
 import ShopList from "./game/modal/ShopList";
 
+// 战斗画面
 import Battle from "./game/modal/Battle";
+
+// 敌人信息
 import EnemyInfo from "./game/modal/EnemyInfo";
 
+// 配置信息
 import Config from "./game/modal/Config";
-import Statistics from "./game/modal/Statistics";
 
-// import Dialog from "./components/Dialog";
+// 统计信息
+import Statistics from "./game/modal/Statistics";
 
 // 全局事件
 import commonEvent from "./events/common";
+
 // 全局声音事件
 import soundEvent from "./events/sound";
+
 // 全局魔塔
 import motaEvent from "./events/mota";
 
@@ -52,43 +61,43 @@ export default {
     }
   },
 
-  // renderModal() {
-  //   const { $state } = this;
-  //   const {
-  //     shopid,
-  //     showShopList,
-  //     showEnemyInfo,
-  //     showJumpFloor,
-  //     showBattle,
-  //     showConfig,
-  //     showStatistics,
-  //   } = $state;
-  //   return (
-  //     <div>
-  //       <Dialog show={shopid}>
-  //         <Shop />
-  //       </Dialog>
-  //       <Dialog show={showShopList}>
-  //         <ShopList />
-  //       </Dialog>
-  //       <Dialog show={showEnemyInfo}>
-  //         <EnemyInfo />
-  //       </Dialog>
-  //       <Dialog show={showJumpFloor}>
-  //         <JumpFloor />
-  //       </Dialog>
-  //       <Dialog show={showBattle}>
-  //         <Battle />
-  //       </Dialog>
-  //       <Dialog show={showConfig}>
-  //         <Config />
-  //       </Dialog>
-  //       <Dialog show={showStatistics}>
-  //         <Statistics />
-  //       </Dialog>
-  //     </div>
-  //   );
-  // },
+  renderModal() {
+    const { $state } = this;
+    const {
+      shopid,
+      showShopList,
+      showEnemyInfo,
+      showJumpFloor,
+      showBattle,
+      showConfig,
+      showStatistics,
+    } = $state;
+    return (
+      <div>
+        <Modal show={shopid}>
+          <Shop />
+        </Modal>
+        <Modal show={showShopList}>
+          <ShopList />
+        </Modal>
+        <Modal show={showEnemyInfo}>
+          <EnemyInfo />
+        </Modal>
+        <Modal show={showJumpFloor}>
+          <JumpFloor />
+        </Modal>
+        <Modal show={showBattle}>
+          <Battle />
+        </Modal>
+        <Modal show={showConfig}>
+          <Config />
+        </Modal>
+        <Modal show={showStatistics}>
+          <Statistics />
+        </Modal>
+      </div>
+    );
+  },
 
   renderApp() {
     const { $loader, $config } = this;

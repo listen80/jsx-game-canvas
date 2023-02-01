@@ -1,8 +1,8 @@
-import Text from "../../../components/Base/Text";
+import Text from "#/Base/Text";
 
 export default {
   onCreate() {
-    this.attrs = {
+    this.props = {
       wrap: {
         style: {
           font: "24px 楷体",
@@ -13,7 +13,7 @@ export default {
   },
 
   render() {
-    const { attrs, $state } = this;
+    const { props, $state } = this;
     const { save } = $state;
 
     const rowProperty = [
@@ -29,7 +29,7 @@ export default {
     ];
 
     return (
-      <div {...attrs.wrap}>
+      <div {...props.wrap}>
         {rowProperty.map(({ sposition, data }, index) => {
           return (
             <div position={{ y: index * 1.2 + 0.2 }}>

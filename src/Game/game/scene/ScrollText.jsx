@@ -1,6 +1,6 @@
 
 
-import Text from "../../components/Base/Text"
+import Text from "#/Base/Text"
 
 export default {
   onCreate() {
@@ -17,7 +17,7 @@ export default {
 
     const continueMessageFontSize = 64;
 
-    this.attrs = {
+    this.props = {
       scrollText: {
         position: {
           x: 1,
@@ -66,7 +66,7 @@ export default {
 
   render() {
     const { lineHeight } = this;
-    const scrollTextStyle = this.attrs.scrollText.position;
+    const scrollTextStyle = this.props.scrollText.position;
 
     if (scrollTextStyle.y + this.max > 0) {
       scrollTextStyle.y -= this.scrollSpeed;
@@ -76,13 +76,13 @@ export default {
 
     return this.ready ?
       <Text
-        {...this.attrs.continueMessage}
+        {...this.props.continueMessage}
         onClick={this.onClick}
         value="点击继续"
       >
       </Text>
       :
-      <div {...this.attrs.scrollText}>
+      <div {...this.props.scrollText}>
         {
           this.textArr.map((text, index) => (
             <div position={{ y: index * lineHeight }} text={text}></div>

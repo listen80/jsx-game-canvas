@@ -43,13 +43,13 @@ export default {
   //   }
   // }
 
-  onClick(attrs) {
-    this.activeIndex = attrs.index;
+  onClick(props) {
+    this.activeIndex = props.index;
     this.onConfirm();
   },
 
-  onMouseMove(attrs) {
-    this.activeIndex = attrs.index;
+  onMouseMove(props) {
+    this.activeIndex = props.index;
     this.onChange();
   },
 

@@ -1,5 +1,5 @@
-import Table from "../../components/Data/Table";
-import Animate from "../../components/Base/Animate";
+import Table from "#/Data/Table";
+import Animate from "#/Base/Animate";
 
 const columns = [
   {

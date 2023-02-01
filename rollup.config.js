@@ -17,8 +17,7 @@ const __DEV__ = process.env.NODE_ENV === "development";
 const plugins = [
   alias({
     entries: {
-      Engine: require("path").resolve("src/Engine"),
-      Mota: require("path").resolve("src/Mota"),
+      "#": require("path").resolve("src/Game/components"),
     },
   }),
   commonjs(),

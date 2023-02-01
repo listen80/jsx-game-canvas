@@ -9,17 +9,8 @@ import {
 
 export function createNode(tag, props, ...children) {
   const $parent = this; // 创建的组件
-  const type = typeof tag;
-  if (type === "string") {
-    return {
-      tag,
-      attrs: props ?? {},
-      children,
-      $parent,
-    };
-  }
-
   return {
+    type: typeof tag,
     tag,
     props: props ?? {},
     children,

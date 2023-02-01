@@ -1,4 +1,4 @@
-import Select from "../../components/Base/Select";
+import Select from "#/Base/Select";
 import TitleText from "./components/TitleText";
 
 export default {

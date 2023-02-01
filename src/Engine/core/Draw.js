@@ -8,9 +8,9 @@ export default class Draw {
 
   drawImage(node, offsetX, offsetY) {
     const { pixelRatio } = this.config;
-    const { attrs } = node;
-    const { sposition = {}, spixelRatio = {}, image } = attrs;
-    const { width = defaultWidth, height = defaultHeight } = attrs.size || {};
+    const { props } = node;
+    const { sposition = {}, spixelRatio = {}, image } = props;
+    const { width = defaultWidth, height = defaultHeight } = props.size || {};
     const { context } = this;
 
     const { sx = 0, sy = 0 } = sposition;
@@ -29,16 +29,16 @@ export default class Draw {
         height * pixelRatio
       );
     } else {
-      console.warn(attrs);
+      console.warn(props);
     }
   }
 
   drawBorder(node, offsetX, offsetY) {
     const { pixelRatio } = this.config;
     const { context } = this;
-    const { width: borderWidth, color: borderColor } = node.attrs.border;
+    const { width: borderWidth, color: borderColor } = node.props.border;
     const { width = defaultWidth, height = defaultHeight } =
-      node.attrs.size || {};
+      node.props.size || {};
     if (borderWidth) {
       context.save();
       context.lineWidth = borderWidth;
@@ -59,9 +59,9 @@ export default class Draw {
   drawBackgroundImage(node, offsetX, offsetY) {
     const { pixelRatio } = this.config;
     const { context } = this;
-    const backgroundImage = node.attrs.backgroundImage;
+    const backgroundImage = node.props.backgroundImage;
     const { width = defaultWidth, height = defaultHeight } =
-      node.attrs.size || {};
+      node.props.size || {};
 
     if (backgroundImage) {
       context.save();
@@ -86,9 +86,9 @@ export default class Draw {
   drawBackgroundColor(node, offsetX, offsetY) {
     const { pixelRatio } = this.config;
     const { context } = this;
-    const backgroundColor = node.attrs.backgroundColor;
+    const backgroundColor = node.props.backgroundColor;
     const { width = defaultWidth, height = defaultHeight } =
-      node.attrs.size || {};
+      node.props.size || {};
     if (backgroundColor) {
       context.save();
       context.beginPath();
@@ -114,7 +114,7 @@ export default class Draw {
   }
 
   drawLineGradient(node, offsetX, offsetY) {
-    const { lineGradient } = node.attrs;
+    const { lineGradient } = node.props;
     const { pixelRatio } = this.config;
 
     if (lineGradient) {

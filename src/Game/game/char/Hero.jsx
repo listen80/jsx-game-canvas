@@ -1,5 +1,5 @@
 import { findPath } from "../../utils/physics";
-import Animate from "../../components/Animate";
+import Animate from "#/Base/Animate";
 
 export default {
   onCreate() {

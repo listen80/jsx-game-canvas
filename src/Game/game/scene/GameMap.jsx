@@ -25,7 +25,7 @@ export default {
       x: this.$config.screen.width / 2,
       y: 8,
     };
-    this.attrs = {
+    this.props = {
       wrap: {
         backgroundImage: "Background/ground.png",
         size: {
@@ -82,7 +82,7 @@ export default {
     // this.mapBgm.pause();
   },
 
-  onClick(attrs, e) {
+  onClick(props, e) {
     const { gameX: x, gameY: y } = e;
     console.log(e);
     const { height, width } = this.$state.map;
@@ -148,19 +148,19 @@ export default {
   },
 
   render() {
-    const { attrs } = this;
+    const { props } = this;
 
     return (
-      <div {...attrs.wrap}>
+      <div {...props.wrap}>
         {this.renderBlueWall()}
-        <div {...attrs.mapContainer} onClick={this.onClick}>
+        <div {...props.mapContainer} onClick={this.onClick}>
           {/* {this.renderMapTerrains()} */}
           {/* <Hero map={this.map} terrains={this.terrains} /> */}
         </div>
-        <div {...attrs.statusBar}>
+        <div {...props.statusBar}>
           <StatusBar />
         </div>
-        <div {...attrs.operationBar}>
+        <div {...props.operationBar}>
           <OperationBar />
         </div>
         {this.walls}
