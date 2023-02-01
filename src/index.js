@@ -1,5 +1,5 @@
 import Engine from './Engine'
-import Mota from './Mota'
+import Mota from './Game'
 
 const mota = new Engine(Mota)
 
