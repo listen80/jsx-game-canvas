@@ -3,13 +3,14 @@ import TitleText from "./components/TitleText";
 
 export default {
   onCreate() {
-
-    this.style = { font: "24px 楷体" }
+    this.style = { font: "24px 楷体" };
 
     this.position = {
       x: this.$config.screen.width / 2,
       y: 8,
     };
+
+    this.select = {};
 
     this.options = [
       {
@@ -19,13 +20,8 @@ export default {
       {
         text: "继续",
         event: "loadGame",
-        disabled: !localStorage.getItem("game"),
       },
-    ]
-
-    // if (__DEV__) {
-    //   this.$event.emit('loadGame')
-    // }
+    ];
   },
 
   onConfirm(option) {
