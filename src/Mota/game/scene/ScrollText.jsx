@@ -1,6 +1,6 @@
 
 
-import Text from "../components/Text"
+import Text from "../../components/Text"
 
 export default {
   onCreate() {

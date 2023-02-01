@@ -12,7 +12,6 @@ export function createNode(tag, props, ...children) {
   const type = typeof tag;
   if (type === "string") {
     return {
-      type,
       tag,
       attrs: props ?? {},
       children,
@@ -21,7 +20,6 @@ export function createNode(tag, props, ...children) {
   }
 
   return {
-    type,
     tag,
     props: props ?? {},
     children,

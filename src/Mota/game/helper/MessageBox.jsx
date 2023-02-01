@@ -1,5 +1,5 @@
 import { calcLength } from "../../utils/string";
-import Text from "../components/Text";
+import Text from "../../components/Text";
 
 export default {
   onMessage(data) {
