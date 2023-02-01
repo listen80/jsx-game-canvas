@@ -88,10 +88,3 @@ id,type,name
 247,enemys,blackMagician
 257,boss,magicDragon
 258,boss,octopus
-
-304,icons,exp
-305,icons,money
-306,icons,shield
-307,icons,sword
-309,icons,level
-308,icons,hp
