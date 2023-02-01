@@ -22,10 +22,13 @@ export default {
         event: "loadGame",
       },
     ];
+
+    if (__DEV__) {
+      this.$event.emit("loadGame");
+    }
   },
 
-  onConfirm(option) {
-    const { event } = option;
+  onConfirm({ event }) {
     if (event) {
       this.$event.emit(event);
     }

@@ -4,7 +4,7 @@ import FPS from "./game/helper/FPS";
 import Title from "./game/scene/Title";
 import ScrollText from "./game/scene/ScrollText";
 import Movie from "./game/scene/Movie";
-import GameMap from "./game/scene/GameMap";
+import Map from "./game/scene/Map";
 
 import Message from "./game/helper/MessageBox";
 import Modal from "#/Layout/Modal";
@@ -55,7 +55,7 @@ export default {
       if (movie) {
         return <Movie key={mapKey} />;
       }
-      return <GameMap key={mapKey} />;
+      return <Map key={mapKey} />;
     } else {
       return <Title />;
     }

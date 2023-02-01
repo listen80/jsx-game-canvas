@@ -1,25 +1,8 @@
 import StatusBar from "./components/StatusBar";
 import OperationBar from "./components/OperationBar";
-// import Hero from "../char/Hero";
-// import EventBlock from "../event/EventBlock";
+import BlueWall from "./components/BlueWall";
 
 export default {
-  createWall() {
-    this.walls = [];
-    for (let x = 0; x < this.$config.screen.width; x++) {
-      for (let y = 0; y < 13; y++) {
-        if (
-          x === 0 ||
-          x === this.$config.screen.width - 1 ||
-          y === 0 ||
-          y === this.$config.screen.height - 1
-        ) {
-          this.walls.push(<div image="terrains" style={{ sy: 2, x, y }}></div>);
-        }
-      }
-    }
-  },
-
   onCreate() {
     this.position = {
       x: this.$config.screen.width / 2,
@@ -77,6 +60,7 @@ export default {
   },
 
   onDestroy() {
+    debugger
     // const bgm = this.props.map.bgm;
     // this.$sound.pause('bgm', bgm)
     // this.mapBgm.pause();
@@ -120,49 +104,18 @@ export default {
     );
   },
 
-  renderBlueWall() {
-    return (
-      <div>
-        <div
-          size={{ width: this.$config.screen.width }}
-          backgroundImage="Background/blueWall.png"
-        ></div>
-        <div
-          position={{ y: this.$config.screen.height - 1 }}
-          size={{ width: this.$config.screen.width }}
-          backgroundImage="Background/blueWall.png"
-        ></div>
-        <div
-          position={{ y: 1 }}
-          size={{ height: 13 }}
-          backgroundImage="Background/blueWall.png"
-        ></div>
-        <div
-          position={{ x: this.$config.screen.width - 1, y: 1 }}
-          size={{ height: 13 }}
-          backgroundImage="Background/blueWall.png"
-        ></div>
-      </div>
-    );
-  },
-
   render() {
     const { props } = this;
 
     return (
       <div {...this.attrs.wrapProps}>
-        {this.renderBlueWall()}
         <div {...props.mapContainer} onClick={this.onClick}>
           {/* {this.renderMapTerrains()} */}
           {/* <Hero map={this.map} terrains={this.terrains} /> */}
         </div>
-        {/* <div {...props.statusBar}>
-          <StatusBar />
-        </div> */}
-        <div {...props.operationBar}>
-          <OperationBar />
-        </div>
-        {this.walls}
+        <BlueWall />
+        <StatusBar />
+        <OperationBar />
       </div>
     );
   },

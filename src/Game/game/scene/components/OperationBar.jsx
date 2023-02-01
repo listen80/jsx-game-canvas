@@ -3,16 +3,21 @@ import Text from "#/Base/Text";
 export default {
   onCreate() {
     this.wrapProps = {
-      position: { y: 1 },
+      position: { x: 18, y: 1 },
       style: { font: "24px 楷体" },
     };
+  },
 
-    const { $state, $config } = this;
-    const { map } = $state;
+  onClick({ event }) {
+    if (event) {
+      this.$event.emit(event);
+    }
+  },
 
-    this.rowProperty = [
-      { text: $config.title, sposition: { sy: 0 } },
-      { text: map.name, sposition: { sy: 1 } },
+  render() {
+    const rowProperty = [
+      { text: this.$config.title, sposition: { sy: 0 } },
+      { text: this.$state.map.name, sposition: { sy: 1 } },
       {
         text: "怪物",
         sposition: { sy: 11 },
@@ -49,39 +54,27 @@ export default {
         event: "gotoTitle",
       },
     ];
-  },
 
-  onClick({ event }) {
-    if (event) {
-      this.$event.emit(event);
-    }
-  },
-
-  render() {
-    const { rowProperty } = this;
-
-    const node = (
+    return (
       <div {...this.wrapProps}>
         {rowProperty.map(({ sposition, text, event }, index) => {
           return (
             <div
-              event={event}
               position={{ y: index * 1.2 + 0.2 }}
               size={{ width: 4 }}
+              event={event}
               onClick={this.onClick}
             >
               <div image="icons" sposition={sposition} />
               <Text
-                position={{ x: 1.5, y: 0 }}
-                size={{ height: 1, width: 2.5 }}
+                position={{ x: 1.5 }}
+                size={{ width: 2.5 }}
                 value={text}
-                backgroundColor={'red'}
               ></Text>
             </div>
           );
         })}
       </div>
     );
-    return node;
   },
 };

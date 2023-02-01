@@ -3,39 +3,37 @@ import Text from "#/Base/Text";
 export default {
   onCreate() {
     this.wrapProps = {
-      style: {
-        font: "24px 楷体",
-      },
-      position: { y: 1 },
+      position: { x: 1, y: 1 },
+      style: { font: "24px 楷体" },
     };
   },
 
   render() {
-    const { wrapProps, props, $state } = this;
+    const { wrapProps, $state } = this;
     const { save } = $state;
 
     const rowProperty = [
-      { data: save.hero.lv, sposition: { sy: 2 } },
-      { data: save.hero.hp, sposition: { sy: 3 } },
-      { data: save.hero.atk, sposition: { sy: 4 } },
-      { data: save.hero.def, sposition: { sy: 5 } },
-      { data: save.hero.exp, sposition: { sy: 6 } },
-      { data: save.money, sposition: { sy: 7 } },
-      { data: save.items.yellowKey, sposition: { sy: 8 } },
-      { data: save.items.blueKey, sposition: { sy: 9 } },
-      { data: save.items.redKey, sposition: { sy: 10 } },
+      { text: save.hero.lv, sposition: { sy: 2 } },
+      { text: save.hero.hp, sposition: { sy: 3 } },
+      { text: save.hero.atk, sposition: { sy: 4 } },
+      { text: save.hero.def, sposition: { sy: 5 } },
+      { text: save.hero.exp, sposition: { sy: 6 } },
+      { text: save.money, sposition: { sy: 7 } },
+      { text: save.items.yellowKey, sposition: { sy: 8 } },
+      { text: save.items.blueKey, sposition: { sy: 9 } },
+      { text: save.items.redKey, sposition: { sy: 10 } },
     ];
 
     return (
       <div {...wrapProps}>
-        {rowProperty.map(({ sposition, data }, index) => {
+        {rowProperty.map(({ sposition, text }, index) => {
           return (
             <div position={{ y: index * 1.2 + 0.2 }}>
               <div image="icons" sposition={sposition} />
               <Text
                 position={{ x: 1.5 }}
                 size={{ width: 2.5 }}
-                value={data + ""}
+                value={text}
               ></Text>
             </div>
           );
