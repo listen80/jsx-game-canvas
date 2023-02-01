@@ -1,7 +1,10 @@
 import Select from "#/Base/Select";
+import Text from "#/Base/Text"
 
 export default {
   onCreate() {
+    const { width: screenWidth } = this.$config.screen;
+
     const width = 7,
       height = 8;
 
@@ -21,7 +24,7 @@ export default {
       },
       title: { x: width / 2, y: 1, fontSize: 24 },
       text: { x: 0, y: 2, fontSize: 12 },
-      select: { x: 1, y: 1.75, width: 5, fontSize: 16 },
+      select: { x: 1, y: 1.75, width: 5 },
     };
 
     const floors = this.$state.save.floors;
@@ -51,14 +54,14 @@ export default {
   render() {
     const { styles } = this;
     return (
-      <div style={styles.jumpFloor}>
-        <div style={styles.title}>楼层选择</div>
-        <Select
+      <div position={{ x: this.$config.screen.width / 2 }} align="center" backgroundColor="red">
+        <Text value="楼层选择"></Text>
+        {/* <Select
           style={styles.select}
           options={this.options}
           optionSize={{ height: 0.8 }}
           onConfirm={this.onConfirm}
-        />
+        /> */}
       </div>
     );
   },

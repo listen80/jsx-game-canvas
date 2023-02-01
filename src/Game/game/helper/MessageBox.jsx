@@ -10,7 +10,7 @@ export default {
     const fontWidth = ((fontSize / 2) * (length + 1)) / pixelRatio;
     const msg = {
       message: data,
-      tick: 180,
+      tick: 60,
       messageStyle: {
         position: {
           x: width / 2,
@@ -45,7 +45,7 @@ export default {
     this.calc();
     return this.messages.map((config, index) => {
       const { message, messageStyle, tick } = config;
-      const style = { globalAlpha: tick / 180 };
+      const style = { globalAlpha: tick / 60 };
       return (
         <Text
           style={style}

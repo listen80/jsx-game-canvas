@@ -26,7 +26,7 @@ export default {
       {
         text: "楼层",
         sposition: { sy: 12 },
-        event: "toggleShowJumpFloor",
+        event: "toggleshowCompass",
       },
       {
         text: "商店",

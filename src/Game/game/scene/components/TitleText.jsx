@@ -1,12 +1,14 @@
+import Text from "#/Base/Text";
+
 export default {
   render() {
     const textProps = {
-      text: this.$config.title,
       position: { x: this.$config.screen.width / 2, y: 4 },
+      text: this.$config.title,
       style: {
         font: "128px 楷体",
       },
     };
-    return <div {...textProps}></div>;
+    return <Text {...textProps}></Text>
   },
 };
