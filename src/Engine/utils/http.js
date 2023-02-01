@@ -23,11 +23,22 @@ export const formatText = (text) => {
     })
     o[id] = item
   })
-
   return o
 }
 
 export const loadImage = (src, callback) => {
+  return new Promise(function (resolve, reject) {
+    const img = new Image();
+    img.addEventListener("load", () => {
+      callback && callback(src, img);
+      resolve(img);
+    });
+    img.addEventListener("error", () => reject(img));
+    img.src = src;
+  });
+};
+
+export const loadMovie = (src, callback) => {
   return new Promise(function (resolve, reject) {
     const img = new Image();
     img.addEventListener("load", () => {

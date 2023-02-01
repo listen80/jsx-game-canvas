@@ -47,6 +47,17 @@ export default class Loader {
     });
   }
 
+  loadMovie() {
+    this.config.images.forEach((name) => {
+      this.total++;
+      loadMovie(`Image/${name}`).then((data) => {
+        this.$resource.image[name] = data;
+        this.loaded++;
+        this.checkStatus();
+      });
+    });
+  }
+
   loadSprite() {
 
     this.config.sprites.forEach((name) => {

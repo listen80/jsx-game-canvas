@@ -3,8 +3,8 @@ import Loading from "./game/scene/Loading";
 import FPS from "./game/helper/FPS";
 import Title from "./game/scene/Title";
 import ScrollText from "./game/scene/ScrollText";
+import Movie from "./game/scene/Movie";
 import GameMap from "./game/scene/GameMap";
-
 
 import Message from "./game/helper/MessageBox";
 import Dialogue from "./game/helper/Dialogue";
@@ -15,8 +15,6 @@ import Dialogue from "./game/helper/Dialogue";
 
 // import Battle from "./game/battle/Battle";
 // import EnemyInfo from "./game/battle/EnemyInfo";
-
-
 
 // import Config from "./game/tool/Config";
 // import Statistics from "./game/tool/Statistics";
@@ -44,7 +42,7 @@ export default {
         return <ScrollText key={mapKey} />;
       }
       if (movie) {
-        return <ScrollText key={mapKey} />;
+        return <Movie key={mapKey} />;
       }
       return <GameMap key={mapKey} />;
     } else {
@@ -91,17 +89,19 @@ export default {
   // },
 
   renderApp() {
-    const { $loader } = this;
+    const { $loader, $config } = this;
 
     if ($loader.loading) {
       return <Loading />;
     } else {
-      return <div>
-        {this.renderMap()}
-        {/* {this.renderDialog()} */}
-        <Message /> 
-        {/* <Talks /> */}
-      </div>
+      return (
+        <div>
+          {this.renderMap()}
+          {/* {this.renderDialog()} */}
+          <Message />
+          {/* <Talks /> */}
+        </div>
+      );
     }
   },
 
@@ -114,4 +114,3 @@ export default {
     );
   },
 };
-
