@@ -10,7 +10,7 @@ import Message from "./game/helper/MessageBox";
 import Modal from "#/Layout/Modal";
 
 // 楼层跳转
-import JumpFloor from "./game/modal/JumpFloor";
+import Aircraft from "./game/modal/Aircraft";
 
 // 商店
 import Shop from "./game/modal/Shop";
@@ -84,7 +84,7 @@ export default {
           <EnemyInfo />
         </Modal>
         <Modal show={showJumpFloor}>
-          <JumpFloor />
+          <Aircraft />
         </Modal>
         <Modal show={showBattle}>
           <Battle />
