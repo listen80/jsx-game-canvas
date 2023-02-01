@@ -3,9 +3,9 @@ import Column from "#/Grid/Column";
 import { toggleShowShopList, openShop } from "events/mota";
 
 export default {
-  onClick({ shopid }, index) {
+  onClick({ shop }) {
     this.$event.emit(toggleShowShopList);
-    this.$event.emit(openShop, shopid);
+    this.$event.emit(openShop, shop.id);
   },
 
   render() {
