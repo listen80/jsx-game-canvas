@@ -1,36 +1,15 @@
 import Text from "#/Base/Text";
-import Column from "#/Grid/Column";
+import Grid from "#/Grid/Grid";
 
 export default {
   onClick({ value }) {
+    this.$event.emit("toggleshowCompass");
     this.$event.emit("loadMap", {
       map: value,
       x: 6,
       y: 11,
       sx: 0,
       sy: 0,
-    });
-  },
-
-  renderTable() {
-    const result = [];
-    const floors = this.$state.save.floors;
-    let current = [];
-    for (let i = 0; i < floors.length; i++) {
-      if (i % 9 === 0) {
-        current = [];
-        result.push(current);
-      }
-      current.push(floors[i]);
-    }
-
-    return result.map((item, index) => {
-      const a = item.map((floor) => {
-        return (
-          <Text value={floor} size={{ width: 3 }} onClick={this.onClick}></Text>
-        );
-      });
-      return <Column position={{ x: index * 3, y: 1.5 }} render={a}></Column>;
     });
   },
 
@@ -48,7 +27,20 @@ export default {
         border={{ width: 2, color: "white" }}
       >
         <Text value="楼层选择" size={{ width: 9 }}></Text>
-        {this.renderTable()}
+        <Grid
+          position={{ y: 1.5 }}
+          columns={3}
+          columnWidth={3}
+          render={this.$state.save.floors.map((floor) => {
+            return (
+              <Text
+                value={floor}
+                size={{ width: 3 }}
+                onClick={this.onClick}
+              ></Text>
+            );
+          })}
+        ></Grid>
       </div>
     );
   },

@@ -104,6 +104,11 @@ function transform($state, $loader, value, x, y) {
 
 export default {
   onCreate() {
+    const wrapWidth = 11;
+
+    const { width, height } = this.$config.screen;
+    const x = (width - wrapWidth) / 2;
+    const y = 1;
     this.styles = {
       enemyList: {
         x,
@@ -128,12 +133,9 @@ export default {
         fontSize: 24,
       },
     };
-    const { width, height } = this.$config.screen;
-    const x = (width - wrapWidth) / 2;
-    const y = 1;
+
     this.styles.enemyList.x = x;
     this.styles.enemyList.y = y;
-    const wrapWidth = 11;
 
     const set = new Set(
       this.$state.map.mapTerrains
@@ -141,12 +143,14 @@ export default {
         .flat()
     );
 
-    const values = Array.from(set)
-      .map((value) => (value ? transform(this.$state, value) : null))
-      .filter((v) => {
-        return v && v.type === "enemys";
-      });
-
+    const values =
+      [] ||
+      Array.from(set)
+        .map((value) => (value ? transform(this.$state, value) : null))
+        .filter((v) => {
+          return v && v.type === "enemys";
+        });
+    console.log(this.$state.map)
     this.dataSource = values.map(({ name, enemy }) => {
       this.$state.enemys[name].battleResult = checkBattle(
         enemy,
@@ -156,23 +160,25 @@ export default {
     });
   },
 
-  onClick() {
-    this.$state.showEnemyInfo = false;
-  },
-
   render() {
-    const { dataSource, styles } = this;
+    const { dataSource } = this;
     return (
-      <div style={styles.enemyList}>
+      <div
+        position={{
+          x: this.$config.screen.width / 2,
+          y: this.$config.screen.height / 2,
+        }}
+        size={{ width: 9, height: 11 }}
+        align="center"
+        verticalAlign="middle"
+        backgroundColor="black"
+        border={{ width: 2, color: "white" }}
+      >
         <Table
-          style={styles.table}
           dataSource={dataSource}
           columns={columns}
           dataExtra={this.$state.save.hero}
         />
-        <div style={styles.close} onClick={this.onClick}>
-          x
-        </div>
       </div>
     );
   },
