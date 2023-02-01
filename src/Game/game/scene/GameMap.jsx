@@ -1,5 +1,5 @@
-import StatusBar from "../helper/StatusBar";
-import OperationBar from "../helper/OperationBar";
+import StatusBar from "./components/StatusBar";
+import OperationBar from "./components/OperationBar";
 // import Hero from "../char/Hero";
 // import EventBlock from "../event/EventBlock";
 

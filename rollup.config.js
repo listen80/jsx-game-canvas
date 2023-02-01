@@ -40,7 +40,8 @@ if (__DEV__) {
 export default {
   plugins,
   input: {
-    game: "src/",
+    Engine: "src/Engine",
+    Game: "src/Game",
   },
   output: {
     dir: "public/Bundle",
