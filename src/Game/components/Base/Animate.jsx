@@ -1,9 +1,5 @@
 export default {
   onCreate() {
-    this.createAnimateConfig();
-  },
-
-  createAnimateConfig() {
     const defaultAnimateConfig = {
       start: 0,
       end: 3,

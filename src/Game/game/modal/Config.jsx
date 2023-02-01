@@ -1,5 +1,5 @@
 
-import Select from "../../components/Select";
+import Select from "../../components/Base/Select";
 
 export default {
   onCreate() {

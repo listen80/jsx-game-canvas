@@ -16,7 +16,6 @@ export default {
     } else if (this.scrollTop < 0) {
       this.scrollTop = 0;
     }
-    console.log(this.scrollTop);
   },
 
   render() {

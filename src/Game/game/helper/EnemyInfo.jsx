@@ -1,5 +1,7 @@
-import Table from "../../components/Data/Table";
-import Animate from "../../components/Base/Animate";
+
+import Table from "../../components/Base/Table";
+import Animate from "../../components/Animate";
+import { screenWidth } from "../../config";
 
 const columns = [
   {
@@ -102,37 +104,41 @@ function transform($state, $loader, value, x, y) {
   return data;
 }
 
-export default {
+
+
+
+export default class EnemyInfo extends Component {
+  styles = {
+    enemyList: {
+      x,
+      y,
+      // width: width,
+      // height: width,
+      borderWidth: 4,
+      borderColor: "white",
+      fontSize: 16,
+      backgroundColor: "black",
+    },
+    table: {
+      y: 0.5
+    },
+    close: {
+      x: 10,
+      y: 10,
+      height: 1,
+      width: 1,
+      textAlign: "center",
+      // backgroundColor: "red",
+      fontSize: 24,
+    },
+  };
+
   onCreate() {
-    this.styles = {
-      enemyList: {
-        x,
-        y,
-        // width: width,
-        // height: width,
-        borderWidth: 4,
-        borderColor: "white",
-        fontSize: 16,
-        backgroundColor: "black",
-      },
-      table: {
-        y: 0.5,
-      },
-      close: {
-        x: 10,
-        y: 10,
-        height: 1,
-        width: 1,
-        textAlign: "center",
-        // backgroundColor: "red",
-        fontSize: 24,
-      },
-    };
     const { width, height } = this.$config.screen;
     const x = (width - wrapWidth) / 2;
     const y = 1;
-    this.styles.enemyList.x = x;
-    this.styles.enemyList.y = y;
+    this.styles.enemyList.x = x
+    this.styles.enemyList.y = y
     const wrapWidth = 11;
 
     const set = new Set(
@@ -154,18 +160,17 @@ export default {
       );
       return this.$state.enemys[name];
     });
-  },
+  }
 
-  onClick() {
+  onClick = () => {
     this.$state.showEnemyInfo = false;
-  },
+  };
 
   render() {
     const { dataSource, styles } = this;
     return (
       <div style={styles.enemyList}>
-        <Table
-          style={styles.table}
+        <Table style={styles.table}
           dataSource={dataSource}
           columns={columns}
           dataExtra={this.$state.save.hero}
@@ -175,5 +180,5 @@ export default {
         </div>
       </div>
     );
-  },
-};
+  }
+}

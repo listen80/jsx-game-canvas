@@ -1,6 +1,6 @@
 
 import TitleText from "./components/TitleText";
-import ProgressBar from "../../components/ProgressBar";
+import Progress from "../../components/Data/Progress";
 
 export default {
   render() {
@@ -8,7 +8,7 @@ export default {
     return (
       <div>
         <TitleText />
-        <ProgressBar rate={$loader.loaded / $loader.total} />
+        <Progress rate={$loader.loaded / $loader.total} />
       </div>
     );
   }

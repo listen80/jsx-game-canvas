@@ -1,5 +1,4 @@
 import Text from "./Text";
-import LinearGradient from "./LinearGradient";
 
 export default {
   onCreate() {
@@ -8,21 +7,6 @@ export default {
     this.optionSize = this.props.optionSize || {};
     this.optionSize.width = this.optionSize.width || this.props?.style?.width;
     this.optionSize.height = this.optionSize.height || 1;
-  },
-  createLinearGradient(y = 0) {
-    const lineGradient = this.$render.context.createLinearGradient(
-      0,
-      y * 32,
-      0,
-      50 * 32 + 32
-    );
-    lineGradient.addColorStop(0, "rgba(0,0,0,1)");
-    lineGradient.addColorStop(0.1, "rgba(244,244,31,.1)");
-    lineGradient.addColorStop(0.9, "rgba(244,244,31,.1)");
-    lineGradient.addColorStop(1, "rgba(0,0,0,1)");
-    lineGradient.y = y;
-    // this.lineGradient = lineGradient;
-    return lineGradient;
   },
   onChange() {
     this.props.onChange?.(
