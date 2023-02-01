@@ -1,11 +1,19 @@
 export default {
   render() {
     let y = 0;
-    return this.$children.map((child) => {
-      const { height = 1 } = child.props?.size || {};
-      const rowEle = <div position={{ x }}>{child}</div>;
-      y += height;
-      return rowEle;
-    });
+    const { render, ...others } = this.props;
+    return (
+      <div {...others}>
+        {render.map((child) => {
+          if (!child) {
+            return null
+          }
+          const { height = 1 } = child.props.size || {};
+          const rowEle = <div position={{ y }}>{child}</div>;
+          y += height;
+          return rowEle;
+        })}
+      </div>
+    );
   },
 };

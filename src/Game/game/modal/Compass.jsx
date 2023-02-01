@@ -1,67 +1,54 @@
-import Select from "#/Base/Select";
-import Text from "#/Base/Text"
+import Text from "#/Base/Text";
+import Column from "#/Grid/Column";
 
 export default {
-  onCreate() {
-    const { width: screenWidth } = this.$config.screen;
-
-    const width = 7,
-      height = 8;
-
-    const x = (screenWidth - width) / 2;
-    const y = 2;
-
-    this.styles = {
-      jumpFloor: {
-        x,
-        y,
-        width,
-        height,
-        borderWidth: 4,
-        borderColor: "white",
-        backgroundColor: "black",
-        textAlign: "center",
-      },
-      title: { x: width / 2, y: 1, fontSize: 24 },
-      text: { x: 0, y: 2, fontSize: 12 },
-      select: { x: 1, y: 1.75, width: 5 },
-    };
-
-    const floors = this.$state.save.floors;
-    this.options = floors.map((text) => {
-      return { text, mapId: text.split(".")[0] };
-    });
-    this.options.push({
-      text: "离开",
+  onClick({ value }) {
+    this.$event.emit("loadMap", {
+      map: value,
+      x: 6,
+      y: 11,
+      sx: 0,
+      sy: 0,
     });
   },
 
-  onConfirm(option, index) {
-    const { mapId } = option;
-
-    this.$state.showJumpFloor = false;
-    if (mapId) {
-      this.$event.emit("loadMap", {
-        mapId,
-        position: {
-          x: 6,
-          y: 6,
-        },
-      });
+  renderTable() {
+    const result = [];
+    const floors = this.$state.save.floors;
+    let current = [];
+    for (let i = 0; i < floors.length; i++) {
+      if (i % 9 === 0) {
+        current = [];
+        result.push(current);
+      }
+      current.push(floors[i]);
     }
+
+    return result.map((item, index) => {
+      const a = item.map((floor) => {
+        return (
+          <Text value={floor} size={{ width: 3 }} onClick={this.onClick}></Text>
+        );
+      });
+      return <Column position={{ x: index * 3, y: 1.5 }} render={a}></Column>;
+    });
   },
 
   render() {
-    const { styles } = this;
     return (
-      <div position={{ x: this.$config.screen.width / 2 }} align="center" backgroundColor="red">
-        <Text value="楼层选择"></Text>
-        {/* <Select
-          style={styles.select}
-          options={this.options}
-          optionSize={{ height: 0.8 }}
-          onConfirm={this.onConfirm}
-        /> */}
+      <div
+        position={{
+          x: this.$config.screen.width / 2,
+          y: this.$config.screen.height / 2,
+        }}
+        size={{ width: 9, height: 11 }}
+        align="center"
+        verticalAlign="middle"
+        backgroundColor="black"
+        border={{ width: 2, color: "white" }}
+      >
+        <Text value="楼层选择" size={{ width: 9 }}></Text>
+        {this.renderTable()}
       </div>
     );
   },

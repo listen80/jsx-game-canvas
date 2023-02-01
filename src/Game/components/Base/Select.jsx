@@ -25,24 +25,6 @@ export default {
     }
   },
 
-  // onKeyDown({ $key }) {
-  //   if ($key === "down") {
-  //     this.activeIndex++;
-  //     if (this.activeIndex >= this.props.options.length) {
-  //       this.activeIndex = 0;
-  //     }
-  //     this.onChange();
-  //   } else if ($key === "up") {
-  //     this.activeIndex--;
-  //     if (this.activeIndex < 0) {
-  //       this.activeIndex += this.props.options.length;
-  //     }
-  //     this.onChange();
-  //   } else if ($key === "confirm") {
-  //     this.onConfirm();
-  //   }
-  // }
-
   onClick(props) {
     this.activeIndex = props.index;
     this.onConfirm();

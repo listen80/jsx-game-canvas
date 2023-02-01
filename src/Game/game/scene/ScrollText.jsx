@@ -66,6 +66,7 @@ export default {
 
   render() {
     const { lineHeight } = this;
+    return this.onClick()
     const scrollTextStyle = this.props.scrollText.position;
 
     if (scrollTextStyle.y + this.max > 0) {
