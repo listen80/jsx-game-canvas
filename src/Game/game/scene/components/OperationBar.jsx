@@ -2,21 +2,11 @@ import Text from "#/Base/Text";
 
 export default {
   onCreate() {
-    this.styles = {
-      wrap: {
-        position: { y: 1 },
-        style: { font: "24px 楷体" },
-      },
+    this.wrapProps = {
+      position: { y: 1 },
+      style: { font: "24px 楷体" },
     };
 
-    this.props = {
-      wrap: {
-        style: {
-          font: "24px 楷体",
-        },
-        position: { y: 1 },
-      },
-    };
     const { $state, $config } = this;
     const { map } = $state;
 
@@ -61,15 +51,17 @@ export default {
     ];
   },
 
-  onClick(props) {
-    this.$event.emit(props.event)
+  onClick({ event }) {
+    if (event) {
+      this.$event.emit(event);
+    }
   },
 
   render() {
-    const { props, rowProperty } = this;
+    const { rowProperty } = this;
 
     const node = (
-      <div {...props.wrap}>
+      <div {...this.wrapProps}>
         {rowProperty.map(({ sposition, text, event }, index) => {
           return (
             <div
@@ -83,6 +75,7 @@ export default {
                 position={{ x: 1.5, y: 0 }}
                 size={{ height: 1, width: 2.5 }}
                 value={text}
+                backgroundColor={'red'}
               ></Text>
             </div>
           );

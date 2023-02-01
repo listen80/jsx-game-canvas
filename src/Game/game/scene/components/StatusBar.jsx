@@ -2,18 +2,16 @@ import Text from "#/Base/Text";
 
 export default {
   onCreate() {
-    this.props = {
-      wrap: {
-        style: {
-          font: "24px 楷体",
-        },
-        position: { y: 1 },
+    this.wrapProps = {
+      style: {
+        font: "24px 楷体",
       },
+      position: { y: 1 },
     };
   },
 
   render() {
-    const { props, $state } = this;
+    const { wrapProps, props, $state } = this;
     const { save } = $state;
 
     const rowProperty = [
@@ -29,7 +27,7 @@ export default {
     ];
 
     return (
-      <div {...props.wrap}>
+      <div {...wrapProps}>
         {rowProperty.map(({ sposition, data }, index) => {
           return (
             <div position={{ y: index * 1.2 + 0.2 }}>

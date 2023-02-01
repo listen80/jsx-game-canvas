@@ -25,15 +25,15 @@ export default {
       x: this.$config.screen.width / 2,
       y: 8,
     };
-    this.props = {
-      wrap: {
+    this.attrs = {
+      wrapProps: {
         backgroundImage: "Background/ground.png",
         size: {
           width: this.$config.screen.width,
           height: 13,
         },
       },
-      mapContainer: {
+      mapContainerProps: {
         position: { x: 5 },
         size: {
           width: 13,
@@ -84,7 +84,6 @@ export default {
 
   onClick(props, e) {
     const { gameX: x, gameY: y } = e;
-    console.log(e);
     const { height, width } = this.$state.map;
     const { map } = this;
     this.$event.emit("setPath", {
@@ -151,15 +150,15 @@ export default {
     const { props } = this;
 
     return (
-      <div {...props.wrap}>
+      <div {...this.attrs.wrapProps}>
         {this.renderBlueWall()}
         <div {...props.mapContainer} onClick={this.onClick}>
           {/* {this.renderMapTerrains()} */}
           {/* <Hero map={this.map} terrains={this.terrains} /> */}
         </div>
-        <div {...props.statusBar}>
+        {/* <div {...props.statusBar}>
           <StatusBar />
-        </div>
+        </div> */}
         <div {...props.operationBar}>
           <OperationBar />
         </div>
