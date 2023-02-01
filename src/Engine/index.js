@@ -37,13 +37,14 @@ export default class Engine {
 
     this.$loader.init(config); // 资源加载器
 
-    this.$render = new Render(config, this.$loader); // 渲染器 + 事件控制器
     this.$sound = new Sound(config, this.$loader); // 音频控制器
+
+    this.$render = new Render(config, this.$loader); // 渲染器 + 事件控制器
 
     this.$event = new EventEmitter({
       $config: this.$config,
-      $loader: this.$loader,
       $state: this.$state,
+      $loader: this.$loader,
       $sound: this.$sound,
     });
 

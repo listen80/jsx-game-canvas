@@ -1,4 +1,3 @@
-
 import Animate from "../../components/Animate";
 
 function transform($state, $loader, value, x, y) {
@@ -32,12 +31,12 @@ function transform($state, $loader, value, x, y) {
   return data;
 }
 
-export default class Event extends Component {
+export default {
   onCreate() {
-    console.log(this.$loader)
+    console.log(this.$loader);
     this.data = transform(this.$state, this.$loader, this.props.value);
     this.event = this.props.event;
-  }
+  },
 
   runEvent(i = 0) {
     const e = this.event[i];
@@ -64,7 +63,7 @@ export default class Event extends Component {
     } else {
       this.$event.emit(type, data, () => this.runEvent(i + 1));
     }
-  }
+  },
 
   onZhuangji() {
     const { type, enemy, name } = this.data;
@@ -161,13 +160,13 @@ export default class Event extends Component {
         this.$event.emit("message", `你没有${i18n[terrains.indexOf(name)]}`);
       }
     }
-  }
+  },
 
-  onClick = () => {
+  onClick() {
     const { type, enemy, name } = this.data;
     this.props?.onClick(this);
     return true;
-  };
+  },
 
   render() {
     const { x, y } = this.props;
@@ -177,5 +176,5 @@ export default class Event extends Component {
         {this.enemy}
       </div>
     );
-  }
-}
+  },
+};

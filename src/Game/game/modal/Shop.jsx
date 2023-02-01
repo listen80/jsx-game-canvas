@@ -1,14 +1,12 @@
-import Select from "../components/Select";
-import { screenWidth } from "../../config";
+import Select from "../../components/Select";
 
-const width = 7,
-  height = 8;
-
-const x = (screenWidth - width) / 2;
-const y = 2;
-
-export default class Shop extends Component {
+export default {
   onCreate() {
+    const width = 7,
+      height = 8;
+
+    const x = (screenWidth - width) / 2;
+    const y = 2;
     this.styles = {
       shop: {
         x,
@@ -39,9 +37,9 @@ export default class Shop extends Component {
       text: "离开",
     });
     this.textArr = this.shop.text.split(/\n/);
-  }
+  },
 
-  onConfirm = (option, index) => {
+  onConfirm(option, index) {
     const { need, effect } = option;
     if (need) {
       if (this.$event.emit("checkSaveByStr", need)) {
@@ -53,13 +51,13 @@ export default class Shop extends Component {
     } else {
       this.$state.shopid = null;
     }
-  };
+  },
 
   renderText() {
     return this.textArr.map((text, index) => (
       <div style={{ x: width / 2, y: index / 2 }}>{text}</div>
     ));
-  }
+  },
 
   render() {
     const { styles } = this;
@@ -74,5 +72,5 @@ export default class Shop extends Component {
         />
       </div>
     );
-  }
-}
+  },
+};

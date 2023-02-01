@@ -1,50 +1,57 @@
-export default class Battle extends Component {
-  tick = 0;
-  styles = {
-    battle: {
-      x: 1,
-      y: 1,
-      width: 16,
-      height: 11,
-      fontSize: 20,
-      borderWidth: 3,
-      borderColor: "#deb887",
-      swidth: 640 / 32,
-      sheight: 320 / 32,
-    },
-    enemy: {
-      x: 1,
-      y: 1,
-    },
-    hero: {
-      x: 10,
-      y: 1,
-    },
-    heroImageStyle: {
-      x: 1,
-      y: 4.5,
-      swidth: 1,
-      sheight: 1,
-      width: 2,
-      height: 2,
-      sy: 0,
-    },
-    enemyImageStyle: {
-      x: 1,
-      y: 4.5,
-      swidth: 1,
-      sheight: 1,
-      width: 2,
-      height: 2,
-    },
-  };
-
+export default {
   onCreate() {
     this.enemy = JSON.parse(JSON.stringify(this.$state.enemy));
     this.callback = callback;
     this.turn = false;
     this.tick = 0;
     this.battleMsg = null;
+
+    this.styles = {
+      battle: {
+        x: 1,
+        y: 1,
+        width: 16,
+        height: 11,
+        fontSize: 20,
+        borderWidth: 3,
+        borderColor: "#deb887",
+        swidth: 640 / 32,
+        sheight: 320 / 32,
+      },
+      enemy: {
+        x: 1,
+        y: 1,
+      },
+      hero: {
+        x: 10,
+        y: 1,
+      },
+      heroImageStyle: {
+        x: 1,
+        y: 4.5,
+        swidth: 1,
+        sheight: 1,
+        width: 2,
+        height: 2,
+        sy: 0,
+      },
+      enemyImageStyle: {
+        x: 1,
+        y: 4.5,
+        swidth: 1,
+        sheight: 1,
+        width: 2,
+        height: 2,
+      },
+    };
+    this.loop = this.createLoop(1.5, 2, 2, 1 / 32, true);
+
+    this.proprety = [
+      { text: "名称", key: "name" },
+      { text: "生命", key: "hp" },
+      { text: "攻击", key: "atk" },
+      { text: "防御", key: "def" },
+    ];
     // this.$event.on("battle", ($state, enemy, callback) => {
     //   this.enemy = JSON.parse(JSON.stringify(enemy));
     //   this.callback = callback;
@@ -54,15 +61,15 @@ export default class Battle extends Component {
     // });
 
     // this.$event.on("enemy", ($state, id, callback) => {});
-  }
+  },
 
-  onClick = () => {
+  onClick() {
     if (this.battleMsg) {
       this.enemy = null;
       this.callback && this.callback();
     }
     return true;
-  };
+  },
 
   calc() {
     const enemy = this.enemy;
@@ -96,16 +103,7 @@ export default class Battle extends Component {
         this.tick = 0;
       }
     }
-  }
-
-  loop = this.createLoop(1.5, 2, 2, 1 / 32, true);
-
-  proprety = [
-    { text: "名称", key: "name" },
-    { text: "生命", key: "hp" },
-    { text: "攻击", key: "atk" },
-    { text: "防御", key: "def" },
-  ];
+  },
 
   render() {
     this.calc();
@@ -183,5 +181,5 @@ export default class Battle extends Component {
         </div>
       </div>
     );
-  }
-}
+  },
+};

@@ -1,20 +1,19 @@
-
 import { findPath } from "../../utils/physics";
 import Animate from "../../components/Animate";
 
-export default class Hero extends Component {
-  moving = false;
+export default {
   onCreate() {
+    this.moving = false;
     this.$event.on("setPath", ($state, data) => {
       this.setPath(data);
     });
-  }
+  },
 
-  setPath = ({ dist, map }) => {
+  setPath({ dist, map }) {
     this.map = map;
     this.dist = dist;
     this.needFind = true;
-  };
+  },
 
   // onKeyDown({ code, $key }) {
   //   const postion = this.$state.save.position;
@@ -92,7 +91,7 @@ export default class Hero extends Component {
         this.$state.save.position.sy = sy;
       }
     }
-  }
+  },
 
   runOneStep() {
     const a = this.loop();
@@ -101,11 +100,11 @@ export default class Hero extends Component {
     if (a === 1) {
       this.current = null;
     }
-  }
+  },
 
   render() {
     // this.runSteps();
-   
+
     return (
       <Animate
         image={"Characters/hero.png"}
@@ -124,5 +123,5 @@ export default class Hero extends Component {
         }}
       />
     );
-  }
-}
+  },
+};

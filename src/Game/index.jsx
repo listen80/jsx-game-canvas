@@ -8,16 +8,18 @@ import GameMap from "./game/scene/GameMap";
 
 import Message from "./game/helper/MessageBox";
 import Dialogue from "./game/helper/Dialogue";
-// import JumpFloor from "./game/helper/JumpFloor";
 
-// import Shop from "./game/shop/Shop";
-// import ShopList from "./game/shop/ShopList";
 
-// import Battle from "./game/battle/Battle";
-// import EnemyInfo from "./game/battle/EnemyInfo";
+import JumpFloor from "./game/modal/JumpFloor";
 
-// import Config from "./game/tool/Config";
-// import Statistics from "./game/tool/Statistics";
+import Shop from "./game/modal/Shop";
+import ShopList from "./game/modal/ShopList";
+
+import Battle from "./game/modal/Battle";
+import EnemyInfo from "./game/modal/EnemyInfo";
+
+import Config from "./game/modal/Config";
+import Statistics from "./game/modal/Statistics";
 
 // import Dialog from "./components/Dialog";
 
@@ -50,7 +52,7 @@ export default {
     }
   },
 
-  // renderDialog() {
+  // renderModal() {
   //   const { $state } = this;
   //   const {
   //     shopid,
@@ -97,7 +99,7 @@ export default {
       return (
         <div>
           {this.renderMap()}
-          {/* {this.renderDialog()} */}
+          {/* {this.renderModal()} */}
           <Message />
           {/* <Talks /> */}
         </div>

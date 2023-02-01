@@ -1,6 +1,4 @@
-
-export default class Statistics extends Component {
-
+export default {
   onCreate() {
     const screenWidth = this.$config.screen.width;
     const width = 7,
@@ -32,14 +30,13 @@ export default class Statistics extends Component {
     this.options.push({
       text: "离开",
     });
-  }
+  },
 
-  onConfirm = (option, index) => {
+  onConfirm(option, index) {
     this.$state.showConfig = false;
-  };
+  },
 
   render() {
     const { styles } = this;
-
-  }
-}
+  },
+};

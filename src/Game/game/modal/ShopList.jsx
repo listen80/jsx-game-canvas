@@ -1,31 +1,28 @@
+import Select from "../../components/Select";
 
-import Select from "../components/Select";
-import { screenWidth } from "../../config";
-
-const width = 7,
-  height = 8;
-
-const x = (screenWidth - width) / 2;
-const y = 2;
-
-export default class ShopList extends Component {
-  styles = {
-    shopList: {
-      x,
-      y,
-      width,
-      height,
-      borderWidth: 4,
-      borderColor: "white",
-      backgroundColor: "black",
-      textAlign: "center",
-    },
-    title: { x: width / 2, y: 1, fontSize: 24 },
-    text: { x: 0, y: 2, fontSize: 12 },
-    select: { x: 1, y: 1.75, width: 5, fontSize: 16 },
-  };
-
+export default {
   onCreate() {
+    const width = 7,
+      height = 8;
+
+    const x = (screenWidth - width) / 2;
+    const y = 2;
+
+    this.styles = {
+      shopList: {
+        x,
+        y,
+        width,
+        height,
+        borderWidth: 4,
+        borderColor: "white",
+        backgroundColor: "black",
+        textAlign: "center",
+      },
+      title: { x: width / 2, y: 1, fontSize: 24 },
+      text: { x: 0, y: 2, fontSize: 12 },
+      select: { x: 1, y: 1.75, width: 5, fontSize: 16 },
+    };
     const shops = this.$state.save.shops;
     this.options = shops.map((shopid) => {
       const shop = this.$state.config.shopList[shopid];
@@ -34,15 +31,15 @@ export default class ShopList extends Component {
     this.options.push({
       text: "离开",
     });
-  }
+  },
 
-  onConfirm = (option, index) => {
+  onConfirm(option, index) {
     const { shopid } = option;
     this.$state.showShopList = !this.$state.showShopList;
     if (shopid) {
       this.$state.shopid = shopid;
     }
-  };
+  },
 
   render() {
     const { styles } = this;
@@ -57,5 +54,5 @@ export default class ShopList extends Component {
         />
       </div>
     );
-  }
-}
+  },
+};

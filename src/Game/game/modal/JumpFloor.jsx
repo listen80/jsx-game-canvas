@@ -1,31 +1,29 @@
+import Select from "../../components/Select";
 
-import Select from "../components/Select";
-import { screenWidth } from "../../config";
-
-const width = 7,
-  height = 8;
-
-const x = (screenWidth - width) / 2;
-const y = 2;
-
-export default class JumpFloor extends Component {
-  styles = {
-    jumpFloor: {
-      x,
-      y,
-      width,
-      height,
-      borderWidth: 4,
-      borderColor: "white",
-      backgroundColor: "black",
-      textAlign: "center",
-    },
-    title: { x: width / 2, y: 1, fontSize: 24 },
-    text: { x: 0, y: 2, fontSize: 12 },
-    select: { x: 1, y: 1.75, width: 5, fontSize: 16 },
-  };
-
+export default {
   onCreate() {
+    const width = 7,
+      height = 8;
+
+    const x = (screenWidth - width) / 2;
+    const y = 2;
+
+    this.styles = {
+      jumpFloor: {
+        x,
+        y,
+        width,
+        height,
+        borderWidth: 4,
+        borderColor: "white",
+        backgroundColor: "black",
+        textAlign: "center",
+      },
+      title: { x: width / 2, y: 1, fontSize: 24 },
+      text: { x: 0, y: 2, fontSize: 12 },
+      select: { x: 1, y: 1.75, width: 5, fontSize: 16 },
+    };
+
     const floors = this.$state.save.floors;
     this.options = floors.map((text) => {
       return { text, mapId: text.split(".")[0] };
@@ -33,9 +31,9 @@ export default class JumpFloor extends Component {
     this.options.push({
       text: "离开",
     });
-  }
+  },
 
-  onConfirm = (option, index) => {
+  onConfirm(option, index) {
     const { mapId } = option;
 
     this.$state.showJumpFloor = false;
@@ -48,7 +46,7 @@ export default class JumpFloor extends Component {
         },
       });
     }
-  };
+  },
 
   render() {
     const { styles } = this;
@@ -63,5 +61,5 @@ export default class JumpFloor extends Component {
         />
       </div>
     );
-  }
-}
+  },
+};
