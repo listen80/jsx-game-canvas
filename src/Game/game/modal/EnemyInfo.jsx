@@ -146,7 +146,7 @@ export default {
     const values =
       [] ||
       Array.from(set)
-        .map((value) => (value ? transform(this.$state, value) : null))
+        .map((value) => (value ? transform(value, this) : null))
         .filter((v) => {
           return v && v.type === "enemys";
         });

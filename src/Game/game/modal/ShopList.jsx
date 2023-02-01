@@ -1,38 +1,7 @@
-import Select from "#/Base/Select";
+import Text from "#/Base/Text";
+import Column from "#/Grid/Column";
 
 export default {
-  onCreate() {
-    const width = 7,
-      height = 8;
-
-    const x = (screenWidth - width) / 2;
-    const y = 2;
-
-    this.styles = {
-      shopList: {
-        x,
-        y,
-        width,
-        height,
-        borderWidth: 4,
-        borderColor: "white",
-        backgroundColor: "black",
-        textAlign: "center",
-      },
-      title: { x: width / 2, y: 1, fontSize: 24 },
-      text: { x: 0, y: 2, fontSize: 12 },
-      select: { x: 1, y: 1.75, width: 5, fontSize: 16 },
-    };
-    const shops = this.$state.save.shops;
-    this.options = shops.map((shopid) => {
-      const shop = this.$state.config.shopList[shopid];
-      return { text: shop.title, shopid };
-    });
-    this.options.push({
-      text: "离开",
-    });
-  },
-
   onConfirm(option, index) {
     const { shopid } = option;
     this.$state.showShopList = !this.$state.showShopList;
@@ -42,16 +11,32 @@ export default {
   },
 
   render() {
-    const { styles } = this;
     return (
-      <div style={styles.shopList}>
-        <div style={styles.title}>商店选择</div>
-        <Select
-          style={styles.select}
-          options={this.options}
-          optionSize={{ height: 0.8 }}
-          onConfirm={this.onConfirm}
-        />
+      <div
+        position={{
+          x: this.$config.screen.width / 2,
+          y: this.$config.screen.height / 2,
+        }}
+        size={{ width: 9, height: 8 }}
+        align="center"
+        verticalAlign="middle"
+        backgroundColor="black"
+        border={{ width: 2, color: "white" }}
+      >
+        <Text value="选择商店" size={{ width: 9 }}></Text>
+        <Column
+          position={{ y: 1.5 }}
+          render={this.$state.save.shops.map((shopid) => {
+            const shop = this.$config.shopList[shopid];
+            return (
+              <Text
+                value={shop.title}
+                size={{ width: 9 }}
+                onClick={this.onClick}
+              ></Text>
+            );
+          })}
+        ></Column>
       </div>
     );
   },

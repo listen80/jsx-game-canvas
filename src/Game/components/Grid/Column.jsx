@@ -1,7 +1,7 @@
 export default {
   render() {
     let y = 0;
-    const { render, ...others } = this.props;
+    const { render = [], ...others } = this.props;
     return (
       <div {...others}>
         {render.map((child) => {

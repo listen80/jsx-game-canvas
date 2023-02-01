@@ -3,7 +3,7 @@ import Grid from "#/Grid/Grid";
 
 export default {
   onClick({ value }) {
-    this.$event.emit("toggleshowCompass");
+    this.$event.emit("toggleShowCompass");
     this.$event.emit("loadMap", {
       map: value,
       x: 6,

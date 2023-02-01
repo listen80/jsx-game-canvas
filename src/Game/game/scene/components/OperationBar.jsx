@@ -26,12 +26,12 @@ export default {
       {
         text: "楼层",
         sposition: { sy: 12 },
-        event: "toggleshowCompass",
+        event: "toggleShowCompass",
       },
       {
         text: "商店",
         sposition: { sy: 13 },
-        event: "showShopList",
+        event: "toggleShowShopList",
       },
       {
         text: "读档",
