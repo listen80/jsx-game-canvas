@@ -1,0 +1,61 @@
+{
+  "position": {
+    "map": "MT_START",
+    "x": 6,
+    "y": 11,
+    "sx": 0,
+    "sy": 0
+  },
+  "money": 0,
+  "hero": {
+    "lv": 1,
+    "atk": 10,
+    "def": 10,
+    "hp": 1000,
+    "exp": 0
+  },
+  "items": {
+    "yellowKey": 0,
+    "blueKey": 0,
+    "redKey": 0
+  },
+  "shops": [
+    "moneyShop1",
+    "moneyShop2",
+    "expShop1",
+    "expShop2",
+    "keyShop1",
+    "keyShop2"
+  ],
+  "floors": [
+    "MT0",
+    "MT1",
+    "MT2",
+    "MT3",
+    "MT4",
+    "MT5",
+    "MT6",
+    "MT7",
+    "MT8",
+    "MT9",
+    "MT10",
+    "MT11",
+    "MT12",
+    "MT13",
+    "MT14",
+    "MT15",
+    "MT16",
+    "MT17",
+    "MT18",
+    "MT19",
+    "MT20",
+    "MT21",
+    "MT22",
+    "MT23e",
+    "MT23s",
+    "MT23w",
+    "MT24"
+  ],
+  "flags": {},
+  "destroy": {}
+}

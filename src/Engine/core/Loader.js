@@ -14,10 +14,17 @@ export default class Loader {
 
   init(config) {
     this.loading = true;
-    this.config = config.resource;
-    this.loadMapping();
-    this.loadImage();
-    this.loadSprite();
+    this.config = config.init;
+    Promise.all(config.init.map((item) => this.loadJSON(item))).then(
+      (...all) => {
+        config.init.forEach((item, index) => {
+          config[item] = all[index];
+        });
+        this.loadMapping();
+        this.loadImage();
+        this.loadSprite();
+      }
+    );
   }
 
   checkStatus() {
@@ -59,7 +66,6 @@ export default class Loader {
   }
 
   loadSprite() {
-
     this.config.sprites.forEach((name) => {
       this.total++;
       loadImage(`Sprite/${name}.png`).then((data) => {
@@ -85,6 +91,19 @@ export default class Loader {
 
     this.total++;
     return loadJSON(`Maps/${id}.json`).then((data) => {
+      this.$resource.maps[id] = data;
+      this.loaded++;
+      this.checkStatus();
+      return data;
+    });
+  }
+
+  loadJSON(id) {
+    this.loaded = 0;
+    this.total = 0;
+
+    this.total++;
+    return loadJSON(`Data/${id}.json`).then((data) => {
       this.$resource.maps[id] = data;
       this.loaded++;
       this.checkStatus();

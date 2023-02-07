@@ -5,6 +5,9 @@
     "height": 13,
     "pixelRatio": 32
   },
+  "init": [
+    "save", "shops", "resource"
+  ],
   "save": {
     "position": {
       "map": "MT_START",
