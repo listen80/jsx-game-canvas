@@ -29,7 +29,7 @@ export default class Draw {
         height * pixelRatio
       );
     } else {
-      console.warn(props);
+      // console.warn(props);
     }
   }
 
@@ -73,13 +73,18 @@ export default class Draw {
         height * pixelRatio
       );
 
-      context.fillStyle = context.createPattern(
-        this.getImage(backgroundImage),
-        "repeat"
-      );
-      context.fill();
-      context.closePath();
-      context.restore();
+      const image = this.getImage(backgroundImage);
+      
+      if (image) {
+        context.fillStyle = context.createPattern(
+          image,
+          "repeat"
+        );
+        context.fill();
+        context.closePath();
+        context.restore();
+      }
+      
     }
   }
 

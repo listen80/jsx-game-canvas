@@ -1,5 +1,7 @@
 import { loadJSON, loadText, loadImage } from "../utils/http";
 
+const emptyImage = new Image()
+
 export default class Loader {
   constructor() {
     this.loaded = 0;
@@ -20,9 +22,10 @@ export default class Loader {
         config.init.forEach((item, index) => {
           config[item] = all[index];
         });
-        this.loadMapping();
-        this.loadImage();
-        this.loadSprite();
+        console.log(config)
+        // this.loadMapping();
+        // this.loadImage();
+        // this.loadSprite();
       }
     );
   }
