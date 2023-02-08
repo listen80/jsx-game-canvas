@@ -3,14 +3,13 @@ import Loader from "./core/Loader";
 import Sound from "./core/Sound";
 import EventEmitter from "./core/EventEmitter";
 
-
 import { createNode, patchNode } from "./core/Node";
 
 export default class Engine {
   constructor($app) {
     this.$app = $app;
-    this.$loader = new Loader();
     if (this.checkRunTime()) {
+      this.$loader = new Loader();
       this.$loader
         .loadConfig()
         .catch((error) => alert("config.json不存在" + error))
@@ -46,6 +45,7 @@ export default class Engine {
       $state: this.$state,
       $loader: this.$loader,
       $sound: this.$sound,
+      $render: this.$render,
     });
 
     this.$root = null;

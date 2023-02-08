@@ -1,5 +1,5 @@
 import { loadJSON, loadText, loadImage } from "../utils/http";
-
+const emptyImage = new Image();
 export default class Loader {
   constructor() {
     this.loaded = 0;
@@ -113,5 +113,15 @@ export default class Loader {
 
   loadConfig() {
     return loadJSON("config.json");
+  }
+
+  loadImage(url) {
+    this.$resource.image[url] = emptyImage;
+    this.total++;
+    loadImage(`Image/${url}`).then((data) => {
+      this.$resource.image[url] = data;
+      this.loaded++;
+      this.checkStatus();
+    });
   }
 }

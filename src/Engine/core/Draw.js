@@ -30,6 +30,7 @@ export default class Draw {
         height * pixelRatio
       );
     } else {
+      this.$loader.loadImage()
       console.warn(props);
     }
   }
