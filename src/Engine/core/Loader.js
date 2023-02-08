@@ -14,17 +14,16 @@ export default class Loader {
 
   init(config) {
     this.loading = true;
-    this.config = config.init;
-    Promise.all(config.init.map((item) => this.loadJSON(item))).then(
+    config.init.map((item) => this.loadJSON(item)).then(
       (...all) => {
         config.init.forEach((item, index) => {
           config[item] = all[index];
         });
-        this.loadMapping();
-        this.loadImage();
-        this.loadSprite();
+        // this.loadMapping();
+        // this.loadImage();
+        // this.loadSprite();
       }
-    );
+    )
   }
 
   checkStatus() {
@@ -118,7 +117,7 @@ export default class Loader {
   loadImage(url) {
     this.$resource.image[url] = emptyImage;
     this.total++;
-    loadImage(`Image/${url}`).then((data) => {
+    return loadImage(`Image/${url}`).then((data) => {
       this.$resource.image[url] = data;
       this.loaded++;
       this.checkStatus();
