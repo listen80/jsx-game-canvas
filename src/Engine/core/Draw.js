@@ -2,7 +2,8 @@ import { defaultHeight, defaultWidth } from "../const/box";
 
 export default class Draw {
   clearRect() {
-    const { context, canvas } = this;
+    const { context } = this;
+    const { canvas } = context;
     context.clearRect(0, 0, canvas.width, canvas.height);
   }
 
