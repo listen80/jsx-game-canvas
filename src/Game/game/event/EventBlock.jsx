@@ -33,7 +33,6 @@ function transform($state, $loader, value, x, y) {
 
 export default {
   onCreate() {
-    console.log(this.$loader);
     this.data = transform(this.$state, this.$loader, this.props.value);
     this.event = this.props.event;
   },

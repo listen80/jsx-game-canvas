@@ -150,7 +150,6 @@ export default {
         .filter((v) => {
           return v && v.type === "enemys";
         });
-    console.log(this.$state.map)
     this.dataSource = values.map(({ name, enemy }) => {
       this.$state.enemys[name].battleResult = checkBattle(
         enemy,

@@ -30,8 +30,7 @@ export default class Draw {
         height * pixelRatio
       );
     } else {
-      this.$loader.loadImage()
-      console.warn(props);
+      this.$loader.loadImage(image)
     }
   }
 
@@ -85,8 +84,9 @@ export default class Draw {
         context.fill();
         context.closePath();
         context.restore();
+      } else {
+        this.$loader.loadImage(backgroundImage)
       }
-      
     }
   }
 

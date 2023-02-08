@@ -65,7 +65,7 @@ export default {
               event={event}
               onClick={this.onClick}
             >
-              <div image="icons" sposition={sposition} />
+              <div image="icons.png" sposition={sposition} />
               <Text
                 position={{ x: 1.5 }}
                 size={{ width: 2.5 }}
