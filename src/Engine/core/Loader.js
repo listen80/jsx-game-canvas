@@ -1,6 +1,6 @@
 import { loadJSON, loadText, loadImage } from "../utils/http";
 
-const emptyImage = new Image()
+const emptyImage = new Image();
 
 export default class Loader {
   constructor() {
@@ -16,8 +16,7 @@ export default class Loader {
 
   init(config) {
     this.loading = true;
-    this.config = config.init;
-    Promise.all(config.init.map((item) => this.loadJSON(item))).then(
+    config.init.map((item) => this.loadJSON(item)).then(
       (...all) => {
         config.init.forEach((item, index) => {
           config[item] = all[index];
@@ -27,7 +26,7 @@ export default class Loader {
         // this.loadImage();
         // this.loadSprite();
       }
-    );
+    )
   }
 
   checkStatus() {
@@ -116,5 +115,15 @@ export default class Loader {
 
   loadConfig() {
     return loadJSON("config.json");
+  }
+
+  loadImage(url) {
+    this.$resource.image[url] = emptyImage;
+    this.total++;
+    return loadImage(`Image/${url}`).then((data) => {
+      this.$resource.image[url] = data;
+      this.loaded++;
+      this.checkStatus();
+    });
   }
 }

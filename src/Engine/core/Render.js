@@ -8,7 +8,7 @@ const mouseEvents = [
   // 'Wheel',
   // "MouseDown",
   // "MouseUp",
-  "MouseMove",
+  // "MouseMove",
 ];
 
 const keyEvents = ["KeyDown", "KeyUp"];
@@ -41,7 +41,6 @@ export default class Render extends Draw {
     dom && dom.appendChild(this.canvas);
 
     this.mergeStyle(baseStyle);
-    self.addEventListener("onrepixelRatio", this.getCanvasRenderRect);
     this.getCanvasRenderRect();
   }
 

@@ -2,7 +2,8 @@ import { defaultHeight, defaultWidth } from "../const/box";
 
 export default class Draw {
   clearRect() {
-    const { context, canvas } = this;
+    const { context } = this;
+    const { canvas } = context;
     context.clearRect(0, 0, canvas.width, canvas.height);
   }
 
@@ -29,7 +30,8 @@ export default class Draw {
         height * pixelRatio
       );
     } else {
-      // console.warn(props);
+      this.$loader.loadImage()
+      console.warn(props);
     }
   }
 
