@@ -127,7 +127,7 @@ export default class Render extends Draw {
       this.drawImage(node, offsetX, offsetY);
     }
 
-    if (text) {
+    if (text !== undefined) {
       this.drawText(text, offsetX, offsetY);
     }
 
