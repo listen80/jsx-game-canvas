@@ -1,4 +1,5 @@
 import dotenv from "dotenv"
+dotenv.config({ override: true })
 
 import commonjs from "@rollup/plugin-commonjs"; // 使用commonjs
 import resolve from "@rollup/plugin-node-resolve"; // 加载第三方库
@@ -9,8 +10,6 @@ import { terser } from "rollup-plugin-terser"; // 压缩代码
 import serve from "rollup-plugin-serve"; // 启动服务
 
 import replace from "rollup-plugin-replace"; // 注入环境变量
-
-dotenv.config()
 
 const __DEV__ = process.env.NODE_ENV === "development";
 
