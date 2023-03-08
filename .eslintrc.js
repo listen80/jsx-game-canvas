@@ -24,7 +24,8 @@ module.exports = {
     // allow debugger during development
     "no-debugger": process.env.NODE_ENV === "production" ? warn : off,
     "comma-dangle": [warn, "always-multiline"],
-    "no-extra-semi": error,
+    "quotes": 0,
+    "no-extra-semi": 0,
     // 'one-var': 'off',
     // 'no-constant-condition ': 'off',
     // 'space-before-function-paren': 'off',
@@ -37,6 +38,6 @@ module.exports = {
     "no-duplicate-imports": error,
   },
   globals: {
-    __DEV__: 1,
-  }
+    __DEV__: true,
+  },
 };
