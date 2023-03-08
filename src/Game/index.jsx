@@ -83,7 +83,7 @@ export default {
   renderApp() {
     const { $loader, $config } = this;
 
-    if ($loader.loading) {
+    if ($loader.loading) { 
       return <Loading />;
     } else {
       return (

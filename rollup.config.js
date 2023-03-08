@@ -1,5 +1,5 @@
-import dotenv from "dotenv"
-dotenv.config({ override: true })
+import dotenv from "dotenv";
+dotenv.config({ override: true });
 
 import commonjs from "@rollup/plugin-commonjs"; // 使用commonjs
 import resolve from "@rollup/plugin-node-resolve"; // 加载第三方库
@@ -17,7 +17,7 @@ const plugins = [
   alias({
     entries: {
       "#": require("path").resolve("src/Game/components"),
-      "events": require("path").resolve("src/Game/events"),
+      events: require("path").resolve("src/Game/events"),
     },
   }),
   commonjs(),
@@ -31,8 +31,8 @@ const plugins = [
 if (__DEV__) {
   plugins.push(
     serve({
-      // open: true,
-      port: 8010,
+      open: true,
+      port: process.env.PORT || "8080",
       contentBase: "public",
     })
   );

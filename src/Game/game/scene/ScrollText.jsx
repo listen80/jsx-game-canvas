@@ -14,10 +14,9 @@ export default {
     const screenHeight = this.$config.screen.height
     this.scrollSpeed = 1 / 16;
     this.lineHeight = 1.5;
-
     const continueMessageFontSize = 64;
 
-    this.props = {
+    this.attrs = {
       scrollText: {
         position: {
           x: 1,
@@ -66,8 +65,7 @@ export default {
 
   render() {
     const { lineHeight } = this;
-    return this.onClick()
-    const scrollTextStyle = this.props.scrollText.position;
+    const scrollTextStyle = this.attrs.scrollText.position;
 
     if (scrollTextStyle.y + this.max > 0) {
       scrollTextStyle.y -= this.scrollSpeed;
@@ -83,7 +81,7 @@ export default {
       >
       </Text>
       :
-      <div {...this.props.scrollText}>
+      <div {...this.attrs.scrollText}>
         {
           this.textArr.map((text, index) => (
             <div position={{ y: index * lineHeight }} text={text}></div>

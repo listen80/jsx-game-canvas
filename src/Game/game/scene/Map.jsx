@@ -106,7 +106,6 @@ export default {
 
   render() {
     const { props } = this;
-
     return (
       <div {...this.attrs.wrapProps}>
         <div {...props.mapContainer} onClick={this.onClick}>
