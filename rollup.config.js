@@ -1,6 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config({ override: true });
-
 import commonjs from "@rollup/plugin-commonjs"; // 使用commonjs
 import resolve from "@rollup/plugin-node-resolve"; // 加载第三方库
 import babel from "@rollup/plugin-babel"; // 转成es5
@@ -32,7 +29,7 @@ if (__DEV__) {
   plugins.push(
     serve({
       open: true,
-      port: process.env.PORT || "8080",
+      port: process.env.PORT || "8101",
       contentBase: "public",
     })
   );
