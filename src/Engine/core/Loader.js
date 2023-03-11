@@ -1,21 +1,21 @@
-import { loadJSON, loadText, loadImage } from "../utils/http";
+import { loadJSON, loadText, loadImage } from '../utils/http'
 
-const emptyImage = new Image();
+const emptyImage = new Image()
 
 export default class Loader {
-  constructor() {
-    this.loaded = 0;
-    this.total = 0;
-    this.loading = false;
+  constructor () {
+    this.loaded = 0
+    this.total = 0
+    this.loading = false
 
-    this.$resource = Object.create(null);
-    this.$resource.maps = Object.create(null);
-    this.$resource.image = Object.create(null);
-    this.$resource.sprites = Object.create(null);
+    this.$resource = Object.create(null)
+    this.$resource.maps = Object.create(null)
+    this.$resource.image = Object.create(null)
+    this.$resource.sprites = Object.create(null)
   }
 
-  init(config) {
-    this.loading = true;
+  init (config) {
+    this.loading = true
     config.init.map((item) => this.loadJSON(item))
 
     // .then(
@@ -31,104 +31,104 @@ export default class Loader {
     // )
   }
 
-  checkStatus() {
+  checkStatus () {
     if (this.loaded === this.total) {
-      this.loading = false;
+      this.loading = false
     }
   }
 
-  loadMapping() {
+  loadMapping () {
     this.config.mapping.forEach((name) => {
-      this.total++;
+      this.total++
       loadText(`Data/${name}`).then((data) => {
-        this.loaded++;
-        this.$resource.mapping = data;
-      });
-    });
+        this.loaded++
+        this.$resource.mapping = data
+      })
+    })
   }
 
-  loadImage() {
+  loadImage () {
     this.config.images.forEach((name) => {
-      this.total++;
+      this.total++
       loadImage(`Image/${name}`).then((data) => {
-        this.$resource.image[name] = data;
-        this.loaded++;
-        this.checkStatus();
-      });
-    });
+        this.$resource.image[name] = data
+        this.loaded++
+        this.checkStatus()
+      })
+    })
   }
 
-  loadMovie() {
+  loadMovie () {
     this.config.images.forEach((name) => {
-      this.total++;
+      this.total++
       loadMovie(`Image/${name}`).then((data) => {
-        this.$resource.image[name] = data;
-        this.loaded++;
-        this.checkStatus();
-      });
-    });
+        this.$resource.image[name] = data
+        this.loaded++
+        this.checkStatus()
+      })
+    })
   }
 
-  loadSprite() {
+  loadSprite () {
     this.config.sprites.forEach((name) => {
-      this.total++;
+      this.total++
       loadImage(`Sprite/${name}.png`).then((data) => {
-        this.$resource.image[name] = data;
-        this.loaded++;
-        this.checkStatus();
-      });
-      this.total++;
+        this.$resource.image[name] = data
+        this.loaded++
+        this.checkStatus()
+      })
+      this.total++
       loadText(`Sprite/${name}.dat`).then((data) => {
-        this.$resource.sprites[name] = data;
-        this.loaded++;
-        this.checkStatus();
-      });
-    });
+        this.$resource.sprites[name] = data
+        this.loaded++
+        this.checkStatus()
+      })
+    })
   }
 
-  loadMap(id) {
+  loadMap (id) {
     if (this.$resource.maps[id]) {
-      return Promise.resolve(this.$resource.maps[id]);
+      return Promise.resolve(this.$resource.maps[id])
     }
-    this.loaded = 0;
-    this.total = 0;
+    this.loaded = 0
+    this.total = 0
 
-    this.total++;
+    this.total++
     return loadJSON(`Maps/${id}.json`).then((data) => {
-      this.$resource.maps[id] = data;
-      this.loaded++;
-      this.checkStatus();
-      return data;
-    });
+      this.$resource.maps[id] = data
+      this.loaded++
+      this.checkStatus()
+      return data
+    })
   }
 
-  loadJSON(id) {
-    this.loaded = 0;
-    this.total = 0;
+  loadJSON (id) {
+    this.loaded = 0
+    this.total = 0
 
-    this.total++;
+    this.total++
     return loadJSON(`Data/${id}.json`).then((data) => {
-      this.$resource.maps[id] = data;
-      this.loaded++;
-      this.checkStatus();
-      return data;
-    });
+      this.$resource.maps[id] = data
+      this.loaded++
+      this.checkStatus()
+      return data
+    })
   }
 
-  loadConfig() {
-    return loadJSON("config.json");
+  loadConfig () {
+    return loadJSON('config.json')
   }
 
-  loadImage(url) {
-    this.$resource.image[url] = emptyImage;
-    this.total++;
+  loadImageNext (url) {
+    this.$resource.image[url] = emptyImage
+    this.total++
     if (!url) {
       return
     }
     return loadImage(`Image/${url}`).then((data) => {
-      this.$resource.image[url] = data;
-      this.loaded++;
-      this.checkStatus();
+      this.$resource.image[url] = data
+      this.loaded++
+      this.checkStatus()
     }).catch(e => {
 
     })

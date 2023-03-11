@@ -1,5 +1,5 @@
 export default {
-  render() {
+  render () {
     return (
       <div>
         <div
@@ -22,6 +22,6 @@ export default {
           backgroundImage="Background/blueWall.png"
         ></div>
       </div>
-    );
+    )
   },
-};
+}

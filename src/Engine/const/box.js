@@ -1,2 +1,2 @@
-export const defaultWidth = 1;
-export const defaultHeight = 1;
+export const defaultWidth = 1
+export const defaultHeight = 1

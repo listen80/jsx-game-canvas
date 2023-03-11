@@ -1,14 +1,14 @@
-import Text from "#/Base/Text";
-import Column from "#/Grid/Column";
-import { toggleShowShopList, openShop } from "events/mota";
+import Text from '#/Base/Text'
+import Column from '#/Grid/Column'
+import { toggleShowShopList, openShop } from 'events/mota'
 
 export default {
-  onClick({ shop }) {
-    this.$event.emit(toggleShowShopList);
-    this.$event.emit(openShop, shop.id);
+  onClick ({ shop }) {
+    this.$event.emit(toggleShowShopList)
+    this.$event.emit(openShop, shop.id)
   },
 
-  render() {
+  render () {
     return (
       <div
         position={{
@@ -19,13 +19,13 @@ export default {
         align="center"
         verticalAlign="middle"
         backgroundColor="black"
-        border={{ width: 2, color: "white" }}
+        border={{ width: 2, color: 'white' }}
       >
         <Text value="选择商店" size={{ width: 9 }}></Text>
         <Column
           position={{ y: 1.5 }}
           render={this.$state.save.shops.map((shopid) => {
-            const shop = this.$config.shopList[shopid];
+            const shop = this.$config.shopList[shopid]
             return (
               <Text
                 value={shop.title}
@@ -33,10 +33,10 @@ export default {
                 size={{ width: 9 }}
                 onClick={this.onClick}
               ></Text>
-            );
+            )
           })}
         ></Column>
       </div>
-    );
+    )
   },
-};
+}

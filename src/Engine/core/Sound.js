@@ -1,24 +1,24 @@
-import { loadSound } from "../utils/http";
+import { loadSound } from '../utils/http'
 
 export default class Sound {
-  constructor(config) {
-    this.config = config;
-    this.sounds = Object.create(null);
-    this.total = Infinity;
+  constructor (config) {
+    this.config = config
+    this.sounds = Object.create(null)
+    this.total = Infinity
   }
 
-  control(type, name, control) {
+  control (type, name, control) {
     return loadSound(`Sound/${type}/${name}`, (src, el) => {
-      el.loop = type === "bgm";
-      el[control]().catch((e) => e && console.log(e));
-    });
+      el.loop = type === 'bgm'
+      el[control]().catch((e) => e && console.log(e))
+    })
   }
 
-  play(type, name) {
-    return this.control(type, name, "play");
+  play (type, name) {
+    return this.control(type, name, 'play')
   }
 
-  pause(type, name) {
-    return this.control(type, name, "pause");
+  pause (type, name) {
+    return this.control(type, name, 'pause')
   }
 }

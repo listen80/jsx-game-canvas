@@ -1,87 +1,87 @@
-import { baseStyle } from "../const/style";
-import Draw from "./Draw";
-import { defaultHeight, defaultWidth } from "../const/box";
+import { baseStyle } from '../const/style'
+import Draw from './Draw'
+import { defaultHeight, defaultWidth } from '../const/box'
 
 const mouseEvents = [
-  "Click",
+  'Click',
   // "ContextMenu",
   // 'Wheel',
   // "MouseDown",
   // "MouseUp",
   // "MouseMove",
-];
+]
 
-const keyEvents = ["KeyDown", "KeyUp"];
+const keyEvents = ['KeyDown', 'KeyUp']
 
 export default class Render extends Draw {
-  constructor(config, $loader) {
-    super();
-    this.config = config.screen;
-    this.$loader = $loader;
-    this.initCanvas(config);
-    this.bindEvents();
+  constructor (config, $loader) {
+    super()
+    this.config = config.screen
+    this.$loader = $loader
+    this.initCanvas(config)
+    this.bindEvents()
   }
 
-  getImage(src) {
-    const image = this.$loader.$resource.image[src];
-    return image;
+  getImage (src) {
+    const image = this.$loader.$resource.image[src]
+    return image
   }
 
-  initCanvas() {
-    const { pixelRatio, el, width = 13, height = 13 } = this.config;
+  initCanvas () {
+    const { pixelRatio, el, width = 13, height = 13 } = this.config
 
-    const canvas = document.createElement("canvas");
-    this.canvas = canvas;
-    this.context = canvas.getContext("2d");
+    const canvas = document.createElement('canvas')
+    this.canvas = canvas
+    this.context = canvas.getContext('2d')
 
-    this.canvas.width = width * pixelRatio;
-    this.canvas.height = height * pixelRatio;
+    this.canvas.width = width * pixelRatio
+    this.canvas.height = height * pixelRatio
 
-    const dom = document.querySelector(el || "#game") || document.body;
-    dom && dom.appendChild(this.canvas);
+    const dom = document.querySelector(el || '#game') || document.body
+    dom && dom.appendChild(this.canvas)
 
-    this.mergeStyle(baseStyle);
-    this.getCanvasRenderRect();
+    this.mergeStyle(baseStyle)
+    this.getCanvasRenderRect()
   }
 
-  getCanvasRenderRect() {
-    const canvas = this.canvas;
+  getCanvasRenderRect () {
+    const canvas = this.canvas
 
-    this.canvas.$offsetWidth = canvas.offsetWidth;
-    this.canvas.$offsetHeight = canvas.offsetHeight;
+    this.canvas.$offsetWidth = canvas.offsetWidth
+    this.canvas.$offsetHeight = canvas.offsetHeight
   }
 
-  restoreEvents() {
+  restoreEvents () {
     // mosue
-    this.mouseEventsCollectionKeyframe = [];
+    this.mouseEventsCollectionKeyframe = []
 
     // key
-    this.keyEventsCollectionKeyframe = [];
+    this.keyEventsCollectionKeyframe = []
   }
 
-  bindEvents() {
-    const { pixelRatio } = this.config;
+  bindEvents () {
+    const { pixelRatio } = this.config
 
-    this.restoreEvents();
-    const canvas = this.canvas;
-    const { $offsetWidth, $offsetHeight, width, height } = canvas;
+    this.restoreEvents()
+    const canvas = this.canvas
+    const { $offsetWidth, $offsetHeight, width, height } = canvas
     mouseEvents.forEach((name) => {
       this.canvas.addEventListener(
         name.toLowerCase(),
         (e) => {
-          e.name = `on${name}`;
-          e.canvasX = (e.offsetX / $offsetWidth) * width;
-          e.canvasY = (e.offsetY / $offsetHeight) * height;
-          e.gameX = e.canvasX / pixelRatio;
-          e.gameY = e.canvasY / pixelRatio;
-          e.$node = null;
-          this.mouseEventsCollectionKeyframe.push(e);
+          e.name = `on${name}`
+          e.canvasX = (e.offsetX / $offsetWidth) * width
+          e.canvasY = (e.offsetY / $offsetHeight) * height
+          e.gameX = e.canvasX / pixelRatio
+          e.gameY = e.canvasY / pixelRatio
+          e.$node = null
+          this.mouseEventsCollectionKeyframe.push(e)
 
-          e.preventDefault();
+          e.preventDefault()
         },
-        { passive: false }
-      );
-    });
+        { passive: false },
+      )
+    })
 
     // keyEvents.forEach((name) => {
     //   document.addEventListener(name.toLowerCase(), (e) => {
@@ -92,18 +92,18 @@ export default class Render extends Draw {
     // })
   }
 
-  toDataURL() {
-    return this.canvas.toDataURL();
+  toDataURL () {
+    return this.canvas.toDataURL()
   }
 
-  mergeStyle(style) {
-    Object.assign(this.context, style);
+  mergeStyle (style) {
+    Object.assign(this.context, style)
   }
 
-  drawNode(node, offsetX, offsetY) {
-    const { context } = this;
-    context.save();
-    const { children, props } = node;
+  drawNode (node, offsetX, offsetY) {
+    const { context } = this
+    context.save()
+    const { children, props } = node
     const {
       style,
       image,
@@ -112,39 +112,39 @@ export default class Render extends Draw {
       backgroundImage,
       backgroundColor,
       lineGradient,
-    } = props;
-    this.mergeStyle(style);
+    } = props
+    this.mergeStyle(style)
 
     if (backgroundColor) {
-      this.drawBackgroundColor(node, offsetX, offsetY);
+      this.drawBackgroundColor(node, offsetX, offsetY)
     }
 
     if (backgroundImage) {
-      this.drawBackgroundImage(node, offsetX, offsetY);
+      this.drawBackgroundImage(node, offsetX, offsetY)
     }
 
     if (image) {
-      this.drawImage(node, offsetX, offsetY);
+      this.drawImage(node, offsetX, offsetY)
     }
 
     if (text !== undefined) {
-      this.drawText(text, offsetX, offsetY);
+      this.drawText(text, offsetX, offsetY)
     }
 
     if (border) {
-      this.drawBorder(node, offsetX, offsetY);
+      this.drawBorder(node, offsetX, offsetY)
     }
 
     if (lineGradient) {
-      this.drawLineGradient(node, offsetX, offsetY);
+      this.drawLineGradient(node, offsetX, offsetY)
     }
 
-    children.forEach((child) => this.renderAnything(child, offsetX, offsetY));
+    children.forEach((child) => this.renderAnything(child, offsetX, offsetY))
 
-    context.restore();
+    context.restore()
   }
 
-  renderAnything(createdNode, offsetX, offsetY) {
+  renderAnything (createdNode, offsetX, offsetY) {
     // undefined null
     // string number
     // array
@@ -153,23 +153,23 @@ export default class Render extends Draw {
     if (createdNode) {
       if (Array.isArray(createdNode)) {
         createdNode.forEach((child) =>
-          this.renderAnything(child, offsetX, offsetY)
-        );
-      } else if (createdNode.type === "object") {
-        this.renderAnything(createdNode.$node, offsetX, offsetY);
-      } else if (createdNode.type === "string") {
+          this.renderAnything(child, offsetX, offsetY),
+        )
+      } else if (createdNode.type === 'object') {
+        this.renderAnything(createdNode.$node, offsetX, offsetY)
+      } else if (createdNode.type === 'string') {
         // div node
-        this.renderNode(createdNode, offsetX, offsetY);
+        this.renderNode(createdNode, offsetX, offsetY)
       }
     }
   }
 
-  calcEvent(node, offsetX, offsetY) {
+  calcEvent (node, offsetX, offsetY) {
     // events of mouse
     const { width = defaultWidth, height = defaultHeight } =
-      node.props.size || {};
+      node.props.size || {}
     this.mouseEventsCollectionKeyframe.forEach((event) => {
-      const { gameX, gameY, name } = event;
+      const { gameX, gameY, name } = event
       if (
         gameX >= offsetX &&
         gameX < width + offsetX &&
@@ -177,57 +177,57 @@ export default class Render extends Draw {
         gameY < height + offsetY &&
         node?.props[name]
       ) {
-        event.$node = node;
+        event.$node = node
       }
-    });
+    })
   }
 
-  runEvents() {
+  runEvents () {
     this.mouseEventsCollectionKeyframe.forEach((event) => {
-      const { $node, name } = event;
+      const { $node, name } = event
       if ($node) {
-        $node?.props[name]($node.props, event);
+        $node?.props[name]($node.props, event)
       }
       // run($node, event, name);
-    });
+    })
     // this.keyEventsCollectionKeyframe.forEach((event) => {
     //   const { $context, name } = event;
     //   $context && $context[name] && $context[name](event);
     // });
-    this.restoreEvents();
+    this.restoreEvents()
   }
 
-  renderNode(node, offsetX, offsetY) {
+  renderNode (node, offsetX, offsetY) {
     // 非class component
     // div node
     // { props, children }
-    const { context } = this;
-    context.save();
+    const { context } = this
+    context.save()
 
-    const { x = 0, y = 0 } = node.props.position || {};
-    const { align = "left", verticalAlign = "top" } = node.props;
+    const { x = 0, y = 0 } = node.props.position || {}
+    const { align = 'left', verticalAlign = 'top' } = node.props
 
-    const offsetAlign = { left: 0, center: -0.5, right: -1 };
-    const offsetVerticalAlign = { top: 0, middle: -0.5, bottom: -1 };
+    const offsetAlign = { left: 0, center: -0.5, right: -1 }
+    const offsetVerticalAlign = { top: 0, middle: -0.5, bottom: -1 }
 
     const { width = defaultWidth, height = defaultHeight } =
-      node.props.size || {};
+      node.props.size || {}
 
-    const offsetAlignRate = offsetAlign[align];
-    const offsetVerticalAlignRate = offsetVerticalAlign[verticalAlign];
+    const offsetAlignRate = offsetAlign[align]
+    const offsetVerticalAlignRate = offsetVerticalAlign[verticalAlign]
 
-    offsetX += x + width * offsetAlignRate;
-    offsetY += y + height * offsetVerticalAlignRate;
+    offsetX += x + width * offsetAlignRate
+    offsetY += y + height * offsetVerticalAlignRate
 
-    this.calcEvent(node, offsetX, offsetY);
-    this.drawNode(node, offsetX, offsetY);
+    this.calcEvent(node, offsetX, offsetY)
+    this.drawNode(node, offsetX, offsetY)
 
-    context.restore();
+    context.restore()
   }
 
-  render(createdNode) {
-    this.clearRect();
-    this.renderAnything(createdNode, 0, 0, {});
-    this.runEvents();
+  render (createdNode) {
+    this.clearRect()
+    this.renderAnything(createdNode, 0, 0, {})
+    this.runEvents()
   }
 }

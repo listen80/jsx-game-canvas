@@ -1,10 +1,10 @@
-import Animate from "#/Base/Animate";
+import Animate from '#/Base/Animate'
 
-function transform($state, $loader, value, x, y) {
-  const info = $loader.$resource.mapping[value];
-  const { type, name } = info;
-  const detail = $state[type][name];
-  let maxTick = 1;
+function transform ($state, $loader, value, x, y) {
+  const info = $loader.$resource.mapping[value]
+  const { type, name } = info
+  const detail = $state[type][name]
+  let maxTick = 1
   const data = {
     image: type,
     sy: detail.sy,
@@ -14,106 +14,106 @@ function transform($state, $loader, value, x, y) {
     // x: x,
     // y: y,
     maxInterval: 10,
-  };
-  if (type === "animates") {
-    maxTick = 4;
-  } else if (type === "terrains" || type === "items") {
-    maxTick = 1;
-  } else if (type === "npcs" || type === "enemys") {
-    maxTick = 2;
   }
-  if (type === "enemys") {
-    const enemy = $state.enemys[name];
-    data.enemy = enemy;
-    maxTick = 2;
+  if (type === 'animates') {
+    maxTick = 4
+  } else if (type === 'terrains' || type === 'items') {
+    maxTick = 1
+  } else if (type === 'npcs' || type === 'enemys') {
+    maxTick = 2
   }
-  data.maxTick = maxTick;
-  return data;
+  if (type === 'enemys') {
+    const enemy = $state.enemys[name]
+    data.enemy = enemy
+    maxTick = 2
+  }
+  data.maxTick = maxTick
+  return data
 }
 
 export default {
-  onCreate() {
-    this.data = transform(this.$state, this.$loader, this.props.value);
-    this.event = this.props.event;
+  onCreate () {
+    this.data = transform(this.$state, this.$loader, this.props.value)
+    this.event = this.props.event
   },
 
-  runEvent(i = 0) {
-    const e = this.event[i];
+  runEvent (i = 0) {
+    const e = this.event[i]
     if (!e) {
-      return;
+      return
     }
-    const { data, type, next, condition, yes, no } = e;
-    if (type === "if") {
-      if (this.$event.emit("checkSaveByStr", condition)) {
-        this.event = yes;
-        this.runEvent();
+    const { data, type, next, condition, yes, no } = e
+    if (type === 'if') {
+      if (this.$event.emit('checkSaveByStr', condition)) {
+        this.event = yes
+        this.runEvent()
       } else {
         if (Array.isArray(no)) {
-          this.event = no;
-          this.runEvent();
+          this.event = no
+          this.runEvent()
         } else {
-          this.runEvent(i + 1);
+          this.runEvent(i + 1)
         }
       }
-    } else if (type === "removeSelf") {
-      this.$event.emit("removeMapEventByKey", this.props.id, () =>
-        this.runEvent(i + 1)
-      );
+    } else if (type === 'removeSelf') {
+      this.$event.emit('removeMapEventByKey', this.props.id, () =>
+        this.runEvent(i + 1),
+      )
     } else {
-      this.$event.emit(type, data, () => this.runEvent(i + 1));
+      this.$event.emit(type, data, () => this.runEvent(i + 1))
     }
   },
 
-  onZhuangji() {
-    const { type, enemy, name } = this.data;
+  onZhuangji () {
+    const { type, enemy, name } = this.data
     if (this.props.event) {
-      this.event = this.props.event;
-      this.runEvent();
-      return;
+      this.event = this.props.event
+      this.runEvent()
+      return
     }
 
-    if (type === "enemys") {
+    if (type === 'enemys') {
       this.event = [
         {
-          type: "battle",
+          type: 'battle',
           data: enemy,
         },
         {
-          type: "removeMapEventByKey",
+          type: 'removeMapEventByKey',
           data: this.props.id,
         },
-      ];
-      this.runEvent();
-    } else if (type === "items") {
-      const item = this.$state.items[name];
-      const { type, property } = item;
-      if (type === "normal" || type === "special") {
+      ]
+      this.runEvent()
+    } else if (type === 'items') {
+      const item = this.$state.items[name]
+      const { type, property } = item
+      if (type === 'normal' || type === 'special') {
         this.event = [
           {
-            type: "message",
+            type: 'message',
             data: `获得${item.name}`,
           },
           {
-            type: "getItem",
+            type: 'getItem',
             data: name,
           },
           {
-            type: "removeMapEventByKey",
+            type: 'removeMapEventByKey',
             data: this.props.id,
           },
-        ];
-        this.runEvent();
-      } else if (type === "update") {
+        ]
+        this.runEvent()
+      } else if (type === 'update') {
         this.event = [
           {
-            type: "setSaveByStr",
+            type: 'setSaveByStr',
             data: property,
           },
           {
-            type: "removeMapEventByKey",
+            type: 'removeMapEventByKey',
             data: this.props.id,
           },
-        ];
+        ]
         // "propertyNames": {
         //   "hero": "勇士",
         //   "lv": "等级",
@@ -139,41 +139,41 @@ export default {
         //   msg += ` ${propertyName}${value > 0 ? "+" : "-"}${value}`;
         //   this.$event.emit('message', msg);
         // });
-        this.runEvent();
+        this.runEvent()
 
-        this.$sound.play("se", "item.mp3");
+        this.$sound.play('se', 'item.mp3')
       }
-      return true;
-    } else if (type === "terrains") {
-      const terrains = ["yellowDoor", "redDoor", "blueDoor"];
+      return true
+    } else if (type === 'terrains') {
+      const terrains = ['yellowDoor', 'redDoor', 'blueDoor']
       if (terrains.includes(name)) {
-        const key = name.slice(0, -4) + "Key";
+        const key = name.slice(0, -4) + 'Key'
         if (this.$state.save.items[key]) {
-          this.$state.save.items[key]--;
-          this.$event.emit("removeMapEventByKey", this.props.id);
-          this.$sound.play("se", "door.mp3");
-          return true;
+          this.$state.save.items[key]--
+          this.$event.emit('removeMapEventByKey', this.props.id)
+          this.$sound.play('se', 'door.mp3')
+          return true
         }
-        const i18n = ["黄色钥匙", "红色钥匙", "蓝色钥匙"];
+        const i18n = ['黄色钥匙', '红色钥匙', '蓝色钥匙']
 
-        this.$event.emit("message", `你没有${i18n[terrains.indexOf(name)]}`);
+        this.$event.emit('message', `你没有${i18n[terrains.indexOf(name)]}`)
       }
     }
   },
 
-  onClick() {
-    const { type, enemy, name } = this.data;
-    this.props?.onClick(this);
-    return true;
+  onClick () {
+    const { type, enemy, name } = this.data
+    this.props?.onClick(this)
+    return true
   },
 
-  render() {
-    const { x, y } = this.props;
+  render () {
+    const { x, y } = this.props
     return (
       <div style={{ width: 1, height: 1, x, y }} onClick={this.onClick}>
         <Animate {...this.data}></Animate>
         {this.enemy}
       </div>
-    );
+    )
   },
-};
+}

@@ -1,59 +1,59 @@
-import Text from "#/Base/Text";
+import Text from '#/Base/Text'
 
 export default {
-  onCreate() {
+  onCreate () {
     this.wrapProps = {
       position: { x: 18, y: 1 },
-      style: { font: "24px 楷体" },
-    };
-  },
-
-  onClick({ event }) {
-    if (event) {
-      this.$event.emit(event);
+      style: { font: '24px 楷体' },
     }
   },
 
-  render() {
+  onClick ({ event }) {
+    if (event) {
+      this.$event.emit(event)
+    }
+  },
+
+  render () {
     const rowProperty = [
       { text: this.$config.title, sposition: { sy: 0 } },
       { text: this.$state.map.name, sposition: { sy: 1 } },
       {
-        text: "怪物",
+        text: '怪物',
         sposition: { sy: 11 },
-        event: "toggleShowEnemyInfo",
+        event: 'toggleShowEnemyInfo',
       },
       {
-        text: "楼层",
+        text: '楼层',
         sposition: { sy: 12 },
-        event: "toggleShowCompass",
+        event: 'toggleShowCompass',
       },
       {
-        text: "商店",
+        text: '商店',
         sposition: { sy: 13 },
-        event: "toggleShowShopList",
+        event: 'toggleShowShopList',
       },
       {
-        text: "读档",
+        text: '读档',
         sposition: { sy: 15 },
-        event: "loadGame",
+        event: 'loadGame',
       },
       {
-        text: "存档",
+        text: '存档',
         sposition: { sy: 14 },
-        event: "saveGame",
+        event: 'saveGame',
       },
       {
-        text: "设置",
+        text: '设置',
         sposition: { sy: 16 },
-        event: "toggleShowConfig",
+        event: 'toggleShowConfig',
       },
       {
-        text: "统计",
+        text: '统计',
         sposition: { sy: 17 },
-        event: "gotoTitle",
+        event: 'gotoTitle',
       },
-    ];
+    ]
 
     return (
       <div {...this.wrapProps}>
@@ -72,9 +72,9 @@ export default {
                 value={text}
               ></Text>
             </div>
-          );
+          )
         })}
       </div>
-    );
+    )
   },
-};
+}

@@ -1,10 +1,10 @@
 export default {
-  onCreate() {
-    this.enemy = JSON.parse(JSON.stringify(this.$state.enemy));
-    this.callback = callback;
-    this.turn = false;
-    this.tick = 0;
-    this.battleMsg = null;
+  onCreate () {
+    this.enemy = JSON.parse(JSON.stringify(this.$state.enemy))
+    this.callback = callback
+    this.turn = false
+    this.tick = 0
+    this.battleMsg = null
 
     this.styles = {
       battle: {
@@ -14,7 +14,7 @@ export default {
         height: 11,
         fontSize: 20,
         borderWidth: 3,
-        borderColor: "#deb887",
+        borderColor: '#deb887',
         swidth: 640 / 32,
         sheight: 320 / 32,
       },
@@ -43,15 +43,15 @@ export default {
         width: 2,
         height: 2,
       },
-    };
-    this.loop = this.createLoop(1.5, 2, 2, 1 / 32, true);
+    }
+    this.loop = this.createLoop(1.5, 2, 2, 1 / 32, true)
 
     this.proprety = [
-      { text: "名称", key: "name" },
-      { text: "生命", key: "hp" },
-      { text: "攻击", key: "atk" },
-      { text: "防御", key: "def" },
-    ];
+      { text: '名称', key: 'name' },
+      { text: '生命', key: 'hp' },
+      { text: '攻击', key: 'atk' },
+      { text: '防御', key: 'def' },
+    ]
     // this.$event.on("battle", ($state, enemy, callback) => {
     //   this.enemy = JSON.parse(JSON.stringify(enemy));
     //   this.callback = callback;
@@ -63,52 +63,52 @@ export default {
     // this.$event.on("enemy", ($state, id, callback) => {});
   },
 
-  onClick() {
+  onClick () {
     if (this.battleMsg) {
-      this.enemy = null;
-      this.callback && this.callback();
+      this.enemy = null
+      this.callback && this.callback()
     }
-    return true;
+    return true
   },
 
-  calc() {
-    const enemy = this.enemy;
-    const save = this.$state.save;
-    const hero = save.hero;
-    const tick = 3;
+  calc () {
+    const enemy = this.enemy
+    const save = this.$state.save
+    const hero = save.hero
+    const tick = 3
     if (enemy.hp > 0) {
-      this.tick++;
+      this.tick++
       if (this.tick === tick) {
         // isDev || this.$sound.play('se', 'attack.mp3')
 
         if (this.turn) {
-          const atk = enemy.atk - hero.def;
+          const atk = enemy.atk - hero.def
           if (atk > 0) {
-            hero.hp -= atk;
+            hero.hp -= atk
           }
         } else {
-          const atk = hero.atk - enemy.def;
+          const atk = hero.atk - enemy.def
           if (atk > 0) {
-            enemy.hp -= atk;
+            enemy.hp -= atk
           }
           if (enemy.hp <= 0) {
-            enemy.hp = 0;
-            const { exp, money } = enemy;
-            hero.exp += exp;
-            save.money += money;
-            this.battleMsg = `战斗胜利，获得${money}金币，${exp}经验`;
+            enemy.hp = 0
+            const { exp, money } = enemy
+            hero.exp += exp
+            save.money += money
+            this.battleMsg = `战斗胜利，获得${money}金币，${exp}经验`
           }
         }
-        this.turn = !this.turn;
-        this.tick = 0;
+        this.turn = !this.turn
+        this.tick = 0
       }
     }
   },
 
-  render() {
-    this.calc();
-    const enemy = this.enemy;
-    const hero = this.$state.save.hero;
+  render () {
+    this.calc()
+    const enemy = this.enemy
+    const hero = this.$state.save.hero
 
     const enemyImageStyle = {
       x: 1,
@@ -118,23 +118,23 @@ export default {
       width: 2,
       height: 2,
       sy: enemy.sy * 1,
-    };
-    const size64 = 64;
+    }
+    const size64 = 64
     const vsStyle = {
       x: 5 + 1.5,
       y: 2,
       height: size64,
       width: size64,
-    };
-    const y = this.loop();
+    }
+    const y = this.loop()
     const msgStyle = {
       fontSize: 24,
       height: 1,
       y: 8,
       width: 15,
-      textAlign: "center",
-    };
-    const { styles } = this;
+      textAlign: 'center',
+    }
+    const { styles } = this
     return (
       <div
         image="Battlebacks/mota.jpg"
@@ -153,14 +153,14 @@ export default {
           {this.proprety.map((item, index) => {
             return (
               <div style={{ x: 0 * 1, y: index * 1 }}>
-                <div style={{ width: 4, textAlign: "left", height: 1 }}>
+                <div style={{ width: 4, textAlign: 'left', height: 1 }}>
                   {item.text}
                 </div>
-                <div style={{ width: 4, textAlign: "right", height: 1 }}>
+                <div style={{ width: 4, textAlign: 'right', height: 1 }}>
                   {enemy[item.key]}
                 </div>
               </div>
-            );
+            )
           })}
         </div>
         <div style={vsStyle}>VS</div>
@@ -169,17 +169,17 @@ export default {
           {this.proprety.map((item, index) => {
             return (
               <div style={{ x: 0 * 1, y: index * 1 }}>
-                <div style={{ width: 4, textAlign: "left", height: 1 }}>
+                <div style={{ width: 4, textAlign: 'left', height: 1 }}>
                   {hero[item.key]}
                 </div>
-                <div style={{ width: 4, textAlign: "right", height: 1 }}>
+                <div style={{ width: 4, textAlign: 'right', height: 1 }}>
                   {item.text}
                 </div>
               </div>
-            );
+            )
           })}
         </div>
       </div>
-    );
+    )
   },
-};
+}
