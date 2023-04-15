@@ -8,7 +8,7 @@ export default {
       position: {
         x: this.$config.screen.width,
       },
-      text: '-fps',
+      text: '',
     }
   },
   getFps () {

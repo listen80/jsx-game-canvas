@@ -21,11 +21,11 @@ import soundEvent from './events/sound' // 全局声音事件
 import motaEvent from './events/mota' // 全局魔塔
 
 export default {
-  onCreate () {
+  onCreate() {
     this.$event.registry(commonEvent, motaEvent, soundEvent)
   },
 
-  renderMap () {
+  renderMap() {
     const { $state } = this
     const { map, mapKey } = $state
     if (map) {
@@ -42,7 +42,7 @@ export default {
     }
   },
 
-  renderModal () {
+  renderModal() {
     const { $state } = this
     const {
       shopid,
@@ -80,8 +80,8 @@ export default {
     )
   },
 
-  renderApp () {
-    const { $loader, $config } = this
+  renderApp() {
+    const { $loader } = this
 
     if ($loader.loading) {
       return <Loading />
@@ -97,11 +97,11 @@ export default {
     }
   },
 
-  render () {
+  render() {
+    // console.log(<FPS />)
     return (
       <div>
-        {this.renderApp()}
-        <FPS />
+        {/* <FPS /> */}
       </div>
     )
   },

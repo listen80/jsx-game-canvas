@@ -16,10 +16,10 @@ export default class Draw {
 
     const { sx = 0, sy = 0 } = sposition
     const { swidth = width, sheight = height } = spixelRatio
-    const img = this.getImage(image)
-    if (img) {
+    const imgElement = this.getImage(image)
+    if (imgElement) {
       context.drawImage(
-        img,
+        imgElement,
         sx * pixelRatio,
         sy * pixelRatio,
         swidth * pixelRatio,
@@ -29,8 +29,6 @@ export default class Draw {
         width * pixelRatio,
         height * pixelRatio,
       )
-    } else {
-      this.$loader.loadImage(image)
     }
   }
 
