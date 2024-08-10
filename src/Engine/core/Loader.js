@@ -87,9 +87,9 @@ export default class Loader {
   }
 
   loadMap(id) {
-    if (this.$resource.maps[id]) {
-      return Promise.resolve(this.$resource.maps[id]);
-    }
+    // if (this.$resource.maps[id]) {
+    //   return Promise.resolve(this.$resource.maps[id]);
+    // }
     this.loaded = 0;
     this.total = 0;
 

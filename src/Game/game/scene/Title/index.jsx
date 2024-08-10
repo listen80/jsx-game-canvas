@@ -1,5 +1,4 @@
 import Select from "#/Base/Select";
-import TitleText from "./TitleText";
 
 export default {
   onCreate() {

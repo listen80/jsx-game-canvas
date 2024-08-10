@@ -1,11 +1,10 @@
-import Text from "#/Base/Text";
 import Grid from "#/Grid/Grid";
 
 export default {
-  onClick({ value }) {
+  onClick({ text }) {
     this.$event.emit("toggleShowCompass");
     this.$event.emit("gotoMap", {
-      map: value,
+      map: text,
       x: 6,
       y: 11,
       sx: 0,
@@ -16,28 +15,35 @@ export default {
   render() {
     return (
       <div
+        align="center"
+        verticalAlign="middle"
         position={{
           x: this.$config.screen.width / 2,
           y: this.$config.screen.height / 2,
         }}
         size={{ width: 9, height: 11 }}
-        align="center"
-        verticalAlign="middle"
         backgroundColor="black"
         border={{ width: 2, color: "white" }}
       >
-        <Text value="楼层选择" size={{ width: 9 }}></Text>
+        <div
+          text="选择楼层"
+          position={{ x: 4.5, y: 0.8 }}
+          style={{ font: "25px 楷体" }}
+        ></div>
         <Grid
-          position={{ y: 1.5 }}
+          position={{ x: 0, y: 1.5 }}
           columns={3}
           columnWidth={3}
           render={this.$state.save.floors.map((floor) => {
             return (
-              <Text
-                value={floor}
-                size={{ width: 3 }}
+              <div
+                text={floor}
+                position={{ x: 0.2 }}
+                size={{ height: 0.9, width: 2.6 }}
+                // backgroundColor={"rgba(33,0,0,.9)"}
+                border={{ width: 0.2, color: "white" }}
                 onClick={this.onClick}
-              ></Text>
+              ></div>
             );
           })}
         ></Grid>

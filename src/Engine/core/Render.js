@@ -225,16 +225,20 @@ export default class Render extends Draw {
       const { x = 0, y = 0 } = position || {};
       const { width = 0, height = 0 } = size || {};
 
-      const { align = "left", verticalAlign = "top" } = node.props;
+      const { align, verticalAlign = "top" } = node.props;
       if (align) {
         const offsetAlign = { left: 0, center: -0.5, right: -1 };
         const offsetAlignRate = offsetAlign[align];
         offsetX += x + width * offsetAlignRate;
+      } else {
+        offsetX += x;
       }
       if (verticalAlign) {
         const offsetVerticalAlign = { top: 0, middle: -0.5, bottom: -1 };
         const offsetVerticalAlignRate = offsetVerticalAlign[verticalAlign];
         offsetY += y + height * offsetVerticalAlignRate;
+      } else {
+        offsetY += y;
       }
       this.calcEvent(node, offsetX, offsetY);
     }

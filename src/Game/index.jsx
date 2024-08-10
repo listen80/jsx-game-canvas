@@ -11,7 +11,7 @@ import Talk from "./game/helper/Talk"; // 人物对话
 
 import Modal from "#/Layout/Modal";
 import ShopList from "./game/modal/ShopList"; // 商店列表
-import Aircraft from "./game/modal/Compass"; // 楼层跳转
+import Compass from "./game/modal/Compass"; // 楼层跳转
 import Shop from "./game/modal/Shop"; // 商店
 import Battle from "./game/modal/Battle"; // 战斗画面
 import EnemyInfo from "./game/modal/EnemyInfo"; // 敌人信息
@@ -62,7 +62,7 @@ export default {
         </Modal>
 
         <Modal show={showCompass}>
-          <Aircraft />
+          <Compass />
         </Modal>
 
         <Modal show={showShopList}>
@@ -102,5 +102,4 @@ export default {
       );
     }
   },
-
 };

@@ -18,15 +18,17 @@ export default {
   loadGame(data, { $state, $config }) {
     $state.save = Object.assign(clone($config.save), loadGame());
     this.emit("gotoMap", $state.save.position);
+    this.emit("message", "读档成功");
   },
 
   saveGame(data, { $state }) {
     saveGame($state.save);
-    this.emit("message", "ok");
+    this.emit("message", "存档成功");
   },
 
   gotoMap(data, { $state, $loader }) {
-    $loader.loadMap($state.save.position.map).then((map) => {
+    return $loader.loadMap(data.map).then((map) => {
+      console.log(map);
       $state.save.position = data;
       $state.mapKey = `${data.map} ${new Date()}`;
       $state.map = map;

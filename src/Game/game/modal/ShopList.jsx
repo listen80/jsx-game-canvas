@@ -1,14 +1,14 @@
-import Text from '#/Base/Text'
-import Column from '#/Grid/Column'
-import { toggleShowShopList, openShop } from 'events/mota'
+import Text from "#/Base/Text";
+import Column from "#/Grid/Column";
+import { toggleShowShopList, openShop } from "events/mota";
 
 export default {
-  onClick ({ shop }) {
-    this.$event.emit(toggleShowShopList)
-    this.$event.emit(openShop, shop.id)
+  onClick({ shop }) {
+    this.$event.emit(toggleShowShopList);
+    this.$event.emit(openShop, shop.id);
   },
 
-  render () {
+  render() {
     return (
       <div
         position={{
@@ -19,24 +19,30 @@ export default {
         align="center"
         verticalAlign="middle"
         backgroundColor="black"
-        border={{ width: 2, color: 'white' }}
+        border={{ width: 2, color: "white" }}
       >
-        <Text value="选择商店" size={{ width: 9 }}></Text>
+        <div
+          text="选择商店"
+          position={{ x: 4.5, y: 0.8 }}
+          style={{ font: "25px 楷体" }}
+        ></div>
         <Column
-          position={{ y: 1.5 }}
+          position={{ x: 1, y: 1.5 }}
           render={this.$state.save.shops.map((shopid) => {
-            const shop = this.$config.shopList[shopid]
+            const shop = this.$config.shopList[shopid];
             return (
-              <Text
-                value={shop.title}
+              <div
+                text={shop.title}
                 shop={shop}
-                size={{ width: 9 }}
+                size={{ height: 0.7, width: 7 }}
+                backgroundColor={"rgba(0,0,0,.5)"}
+                border={{ width: 0.2, color: "white" }}
                 onClick={this.onClick}
-              ></Text>
-            )
+              ></div>
+            );
           })}
         ></Column>
       </div>
-    )
+    );
   },
-}
+};

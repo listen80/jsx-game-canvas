@@ -8,23 +8,33 @@ export default {
     };
   },
 
-  onClick({ event }) {
+  onClick({ event, data }) {
     if (event) {
-      this.$event.emit(event);
+      this.$event.emit(event, data);
     }
   },
 
   render() {
     const rowProperty = [
-      { text: this.$config.title, sposition: { sy: 0 } },
-      { text: this.$state.map.name, sposition: { sy: 1 } },
+      {
+        text: this.$config.title,
+        sposition: { sy: 0 },
+        event: "message",
+        data: "啦啦啦",
+      },
+      {
+        text: this.$state.map.name,
+        sposition: { sy: 1 },
+        event: "message",
+        data: "啦啦啦",
+      },
       {
         text: "怪物",
         sposition: { sy: 11 },
         event: "toggleShowEnemyInfo",
       },
       {
-        text: "楼层",
+        text: "罗盘",
         sposition: { sy: 12 },
         event: "toggleShowCompass",
       },
@@ -32,6 +42,11 @@ export default {
         text: "商店",
         sposition: { sy: 13 },
         event: "toggleShowShopList",
+      },
+      {
+        text: "统计",
+        sposition: { sy: 17 },
+        event: "toggleStaticList",
       },
       {
         text: "读档",
@@ -48,30 +63,27 @@ export default {
         sposition: { sy: 16 },
         event: "toggleShowConfig",
       },
-      {
-        text: "统计",
-        sposition: { sy: 17 },
-        event: "gotoTitle",
-      },
     ];
     const size = { width: 1, height: 1 };
 
     return (
       <div {...this.wrapProps}>
-        {rowProperty.map(({ sposition, text, event }, index) => {
+        {rowProperty.map(({ sposition, text, event, data }, index) => {
           return (
             <div
               position={{ y: index * 1.2 + 0.2 }}
               size={{ width: 4 }}
               event={event}
+              data={data}
               onClick={this.onClick}
             >
               <div image="icons" size={size} sposition={sposition} />
-              <Text
+              <div
                 position={{ x: 1.5 }}
-                size={{ width: 2.5 }}
-                value={text}
-              ></Text>
+                size={{ height: 1, width: 2.5 }}
+                text={text}
+                backgroundColor={"rgba(0,0,0,.5)"}
+              ></div>
             </div>
           );
         })}
