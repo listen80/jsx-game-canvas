@@ -106,7 +106,6 @@ function transform ($state, $loader, value, x, y) {
 
 export default {
   onCreate () {
-    debugger
     const wrapWidth = 11
 
     const { width, height } = this.$config.screen
@@ -161,7 +160,9 @@ export default {
       return this.$state.enemys[name]
     })
   },
-
+  onDestroy() {
+    console.log('onDestroyonDestroyonDestroyonDestroy')
+  },
   render () {
     const { dataSource } = this
     return (

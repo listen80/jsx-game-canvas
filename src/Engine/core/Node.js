@@ -6,6 +6,8 @@ import {
   isString,
   isBoolean,
   isObject,
+  isComponent,
+  isDisalbedElement,
 } from "../utils/type";
 
 export function createNode(createtor, props, ...children) {
@@ -61,15 +63,16 @@ function createInstance(next) {
 
 function destoryInstance(pre) {
   // && isBoolean(pre)
-  if (!isPrimitive(pre) && !isUndefined(pre) && !isBoolean(pre)) {
+  if (!isDisalbedElement(pre)) {
     if (isObject(pre.createtor)) {
       // 组件
-      destoryInstance(pre.$instance.$node);
+      destoryInstance(pre.$node);
+
       pre.$instance.onDestroy?.();
     } else if (isArray(pre)) {
-      while (pre.length) {
-        destoryInstance(pre.pop());
-      }
+      pre.forEach((item) => {
+        destoryInstance(item);
+      });
     } else if (isString(pre.createtor)) {
       // div
       destoryInstance(pre.children);
@@ -102,25 +105,15 @@ export function patchNode(preNode, nextNode) {
   // array
   // class component
   // div node
-  // if (nextNode.createtor !== preNode.createtor) {
-  //   return;
-  // }
 
-  // debugger
-
-  if (isUndefined(nextNode) || isPrimitive(nextNode) || isBoolean(nextNode)) {
+  if (isDisalbedElement(nextNode)) {
     destoryInstance(preNode);
-  } else if (isArray(nextNode)) {
-    if (isArray(preNode)) {
-      for (let i = 0; i < nextNode.length; i++) {
-        // diff array
-        patchNode(preNode[i], nextNode[i]);
-      }
+  } else if (isString(nextNode.createtor)) {
+    if (isString(preNode?.createtor)) {
+      patchNode(preNode?.children, nextNode.children);
     } else {
       destoryInstance(preNode);
-      for (let i = 0; i < nextNode.length; i++) {
-        patchNode(null, nextNode[i]);
-      }
+      patchNode(null, nextNode.children);
     }
   } else if (isObject(nextNode.createtor)) {
     if (
@@ -133,12 +126,17 @@ export function patchNode(preNode, nextNode) {
       destoryInstance(preNode);
       createInstance(nextNode);
     }
-  } else if (isString(nextNode.createtor)) {
-    if (isString(preNode?.createtor)) {
-      patchNode(preNode?.children, nextNode.children);
+  } else if (isArray(nextNode)) {
+    if (isArray(preNode)) {
+      for (let i = 0; i < nextNode.length; i++) {
+        // diff array
+        patchNode(preNode[i], nextNode[i]);
+      }
     } else {
       destoryInstance(preNode);
-      patchNode(null, nextNode.children);
+      for (let i = 0; i < nextNode.length; i++) {
+        patchNode(null, nextNode[i]);
+      }
     }
   }
   return nextNode;

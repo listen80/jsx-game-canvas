@@ -37,7 +37,7 @@ export default {
       } else if (movie) {
         return <Movie key={mapKey} />;
       } else {
-        return <Window />;
+        return <Window key={mapKey} />;
       }
     } else {
       return <Title />;
@@ -57,26 +57,30 @@ export default {
     } = $state;
     return (
       <div>
-        <Modal show={shopid}>
-          <Shop />
-        </Modal>
-        <Modal show={showShopList}>
-          <ShopList />
-        </Modal>
         <Modal show={showEnemyInfo}>
           <EnemyInfo />
         </Modal>
+
         <Modal show={showCompass}>
           <Aircraft />
         </Modal>
-        <Modal show={showBattle}>
-          <Battle />
+
+        <Modal show={showShopList}>
+          <ShopList />
         </Modal>
+        <Modal show={shopid}>
+          <Shop />
+        </Modal>
+
         <Modal show={showConfig}>
           <Config />
         </Modal>
         <Modal show={showStatistics}>
           <Statistics />
+        </Modal>
+
+        <Modal show={showBattle}>
+          <Battle />
         </Modal>
       </div>
     );
@@ -91,16 +95,22 @@ export default {
       return (
         <div>
           {this.renderWindow()}
-          {/* {this.renderModal()}
+          {this.renderModal()}
           <Message />
-          <Talk /> */}
+          <Talk />
         </div>
       );
     }
   },
 
   // render() {
-  //   return this.$state.f ? <Fuck> Fuck</Fuck> : <div text="asdsasdasdasdsdasdasd">div</div>;
+  //   return this.$state.f ? (
+  //     <Fuck>
+  //       <FuckX></FuckX>
+  //     </Fuck>
+  //   ) : (
+  //     <div text="asdsasdasdasdsdasdasd">div</div>
+  //   );
   // },
 };
 
@@ -111,7 +121,26 @@ const Fuck = {
   onDestroy() {
     console.log("onDestroy");
   },
-  // render() {
-  //   return 123
-  // }
+  render() {
+    return <div>{this.$children}</div>;
+  },
+};
+
+const FuckX = {
+  onCreate() {
+    console.log("onCreateFuckX");
+  },
+  onDestroy() {
+    console.log("onDestroyFuckX");
+  },
+  render() {
+    return (
+      <div
+        text="FuckXFuckX"
+        position={{ x: 3, y: 3 }}
+        size={{ height: 3, width: 3 }}
+        backgroundColor="red"
+      ></div>
+    );
+  },
 };

@@ -1,19 +1,19 @@
-import Text from '#/Base/Text'
-import Grid from '#/Grid/Grid'
+import Text from "#/Base/Text";
+import Grid from "#/Grid/Grid";
 
 export default {
-  onClick ({ value }) {
-    this.$event.emit('toggleShowCompass')
-    this.$event.emit('loadMap', {
+  onClick({ value }) {
+    this.$event.emit("toggleShowCompass");
+    this.$event.emit("gotoMap", {
       map: value,
       x: 6,
       y: 11,
       sx: 0,
       sy: 0,
-    })
+    });
   },
 
-  render () {
+  render() {
     return (
       <div
         position={{
@@ -24,7 +24,7 @@ export default {
         align="center"
         verticalAlign="middle"
         backgroundColor="black"
-        border={{ width: 2, color: 'white' }}
+        border={{ width: 2, color: "white" }}
       >
         <Text value="楼层选择" size={{ width: 9 }}></Text>
         <Grid
@@ -38,10 +38,10 @@ export default {
                 size={{ width: 3 }}
                 onClick={this.onClick}
               ></Text>
-            )
+            );
           })}
         ></Grid>
       </div>
-    )
+    );
   },
-}
+};

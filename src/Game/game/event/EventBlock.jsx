@@ -23,7 +23,7 @@ function transform($state, $loader, value, x, y) {
     maxTick = 2;
   }
   if (type === "enemys") {
-    const enemy = $state.enemys[name];
+    const enemy = $loader.$resource.sprites.enemys[name];
     data.enemy = enemy;
     maxTick = 2;
   }
@@ -177,7 +177,7 @@ export default {
         onClick={this.onClick}
       >
         {/* <Animate {...this.data}></Animate> */}
-        <div image={this.data.image}></div>
+        <div image={this.data.image} sposition={{sy: this.data.sy}}></div>
 
         {this.enemy}
       </div>

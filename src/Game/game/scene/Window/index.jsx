@@ -38,6 +38,7 @@ export default {
   },
 
   createMap() {
+
     const map = this.$state.map.mapTerrains.map((line, y) => {
       return line.map((value, x) => {
         if (value && !this.$state.save.destroy[this.getKey(x, y)]) {
@@ -57,10 +58,9 @@ export default {
   },
 
   onDestroy() {
-    debugger;
     // const bgm = this.props.map.bgm;
     // this.$sound.pause('bgm', bgm)
-    // this.mapBgm.pause();
+    this.mapBgm.pause();
   },
 
   onClick(props, e) {

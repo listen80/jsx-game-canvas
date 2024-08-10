@@ -64,10 +64,12 @@ export default class Engine {
       });
     };
     next();
-    document.addEventListener('contextmenu', () => {
-      this.$state.f = !this.$state.f
-      next()
-    })
+    document.addEventListener("contextmenu", (e) => {
+      this.$state.f = !this.$state.f;
+      next();
+      e.preventDefault();
+      return false;
+    });
   }
 
   keyFrame() {

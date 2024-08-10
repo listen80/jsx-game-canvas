@@ -1,5 +1,5 @@
 import { defaultHeight, defaultWidth } from '../const/box'
-
+import { isUndefined } from '../utils/type'
 export default class Draw {
   clearRect() {
     const { context } = this

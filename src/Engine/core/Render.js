@@ -1,6 +1,18 @@
 import { baseStyle } from "../const/style";
 import Draw from "./Draw";
 import { defaultHeight, defaultWidth } from "../const/box";
+import {
+  isFunc,
+  isPrimitive,
+  isArray,
+  isUndefined,
+  isString,
+  isBoolean,
+  isObject,
+  isDisalbedElement,
+  isComponent,
+  isElement,
+} from "../utils/type";
 
 const mouseEvents = [
   "Click",
@@ -155,19 +167,15 @@ export default class Render extends Draw {
     // div node
     // debugger
     if (createdNode) {
-      if (Array.isArray(createdNode)) {
+      if (isArray(createdNode)) {
         createdNode.forEach((child) =>
           this.renderAnything(child, offsetX, offsetY)
         );
-      } else if (createdNode.type === "object") {
+      } else if (isComponent(createdNode)) {
         this.renderAnything(createdNode.$node, offsetX, offsetY);
-      } else if (createdNode.type === "string") {
+      } else if (isElement(createdNode)) {
         // div node
         this.renderNode(createdNode, offsetX, offsetY);
-      } else if (createdNode.type === "function") {
-        // createdNode.children.forEach((child) => {
-        //   this.renderAnything(child, offsetX, offsetY);
-        // });
       }
     }
   }
@@ -211,7 +219,6 @@ export default class Render extends Draw {
     // { props, children }
     const { context } = this;
     context.save();
-
     if (node.props) {
       const { position, size } = node.props;
 

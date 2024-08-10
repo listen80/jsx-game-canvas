@@ -87,7 +87,6 @@ export default class Loader {
   }
 
   loadMap(id) {
-    console.log("inin");
     if (this.$resource.maps[id]) {
       return Promise.resolve(this.$resource.maps[id]);
     }
