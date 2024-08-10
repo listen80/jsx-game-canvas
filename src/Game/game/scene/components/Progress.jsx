@@ -1,5 +1,5 @@
 export default {
-  getProgressOn () {
+  onCreate() {
     const { $loader, $config } = this
 
     const x = $config.screen.width / 2
@@ -9,28 +9,34 @@ export default {
     const height = 0.2
 
     this.progressBar = {
-      align: 'center',
+      // align: 'center',
       position: {
-        x,
+        x: ($config.screen.width - width) / 2,
         y: y - height / 2,
       },
       size: {
         width,
         height,
-        backgroundColor: '#fff',
       },
+      backgroundColor: '#fff',
     }
 
     this.progress = {
       size: {
-        width: (width * $loader.loaded) / $loader.total,
         height,
       },
       backgroundColor: '#666',
     }
   },
 
-  render () {
+  getProgressOn() {
+    const { $loader } = this
+    const rate = $loader.loaded / $loader.total
+    const width = 7
+    this.progress.size.width = width * (rate > 1 ? 1 : rate)
+  },
+
+  render() {
     this.getProgressOn()
     const { progressBar, progress } = this
 

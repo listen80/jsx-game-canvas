@@ -14,7 +14,7 @@ const mouseEvents = [
 const keyEvents = ['KeyDown', 'KeyUp']
 
 export default class Render extends Draw {
-  constructor (config, $loader) {
+  constructor(config, $loader) {
     super()
     this.config = config.screen
     this.$loader = $loader
@@ -22,12 +22,12 @@ export default class Render extends Draw {
     this.bindEvents()
   }
 
-  getImage (src) {
+  getImage(src) {
     const image = this.$loader.$resource.image[src]
     return image
   }
 
-  initCanvas () {
+  initCanvas() {
     const { pixelRatio, el, width = 13, height = 13 } = this.config
 
     const canvas = document.createElement('canvas')
@@ -44,14 +44,14 @@ export default class Render extends Draw {
     this.getCanvasRenderRect()
   }
 
-  getCanvasRenderRect () {
+  getCanvasRenderRect() {
     const canvas = this.canvas
 
     this.canvas.$offsetWidth = canvas.offsetWidth
     this.canvas.$offsetHeight = canvas.offsetHeight
   }
 
-  restoreEvents () {
+  restoreEvents() {
     // mosue
     this.mouseEventsCollectionKeyframe = []
 
@@ -59,7 +59,7 @@ export default class Render extends Draw {
     this.keyEventsCollectionKeyframe = []
   }
 
-  bindEvents () {
+  bindEvents() {
     const { pixelRatio } = this.config
 
     this.restoreEvents()
@@ -92,51 +92,54 @@ export default class Render extends Draw {
     // })
   }
 
-  toDataURL () {
+  toDataURL() {
     return this.canvas.toDataURL()
   }
 
-  mergeStyle (style) {
+  mergeStyle(style) {
     Object.assign(this.context, style)
   }
 
-  drawNode (node, offsetX, offsetY) {
+  drawNode(node, offsetX, offsetY) {
     const { context } = this
     context.save()
     const { children, props } = node
-    const {
-      style,
-      image,
-      text,
-      border,
-      backgroundImage,
-      backgroundColor,
-      lineGradient,
-    } = props
-    this.mergeStyle(style)
 
-    if (backgroundColor) {
-      this.drawBackgroundColor(node, offsetX, offsetY)
-    }
+    if (props) {
+      const {
+        style,
+        image,
+        text,
+        border,
+        backgroundImage,
+        backgroundColor,
+        lineGradient,
+      } = props
+      this.mergeStyle(style)
 
-    if (backgroundImage) {
-      this.drawBackgroundImage(node, offsetX, offsetY)
-    }
+      if (backgroundColor) {
+        this.drawBackgroundColor(node, offsetX, offsetY)
+      }
 
-    if (image) {
-      this.drawImage(node, offsetX, offsetY)
-    }
+      if (backgroundImage) {
+        this.drawBackgroundImage(node, offsetX, offsetY)
+      }
 
-    if (text !== undefined) {
-      this.drawText(text, offsetX, offsetY)
-    }
+      if (image) {
+        this.drawImage(node, offsetX, offsetY)
+      }
 
-    if (border) {
-      this.drawBorder(node, offsetX, offsetY)
-    }
+      if (text !== undefined) {
+        this.drawText(text, offsetX, offsetY)
+      }
 
-    if (lineGradient) {
-      this.drawLineGradient(node, offsetX, offsetY)
+      if (border) {
+        this.drawBorder(node, offsetX, offsetY)
+      }
+
+      if (lineGradient) {
+        this.drawLineGradient(node, offsetX, offsetY)
+      }
     }
 
     children.forEach((child) => this.renderAnything(child, offsetX, offsetY))
@@ -144,7 +147,7 @@ export default class Render extends Draw {
     context.restore()
   }
 
-  renderAnything (createdNode, offsetX, offsetY) {
+  renderAnything(createdNode, offsetX, offsetY) {
     // undefined null
     // string number
     // array
@@ -164,7 +167,7 @@ export default class Render extends Draw {
     }
   }
 
-  calcEvent (node, offsetX, offsetY) {
+  calcEvent(node, offsetX, offsetY) {
     // events of mouse
     const { width = defaultWidth, height = defaultHeight } =
       node.props.size || {}
@@ -182,7 +185,7 @@ export default class Render extends Draw {
     })
   }
 
-  runEvents () {
+  runEvents() {
     this.mouseEventsCollectionKeyframe.forEach((event) => {
       const { $node, name } = event
       if ($node) {
@@ -197,35 +200,40 @@ export default class Render extends Draw {
     this.restoreEvents()
   }
 
-  renderNode (node, offsetX, offsetY) {
+  renderNode(node, offsetX, offsetY) {
     // 非class component
     // div node
     // { props, children }
     const { context } = this
     context.save()
 
-    const { x = 0, y = 0 } = node.props.position || {}
-    const { align = 'left', verticalAlign = 'top' } = node.props
+    if (node.props) {
+      const { position, size } = node.props
 
-    const offsetAlign = { left: 0, center: -0.5, right: -1 }
-    const offsetVerticalAlign = { top: 0, middle: -0.5, bottom: -1 }
+      const { x = 0, y = 0 } = position || {}
+      const { width = 0, height = 0 } = size || {}
 
-    const { width = defaultWidth, height = defaultHeight } =
-      node.props.size || {}
+      const { align = 'left', verticalAlign = 'top' } = node.props
+      if (align) {
 
-    const offsetAlignRate = offsetAlign[align]
-    const offsetVerticalAlignRate = offsetVerticalAlign[verticalAlign]
+        const offsetAlign = { left: 0, center: -0.5, right: -1 }
+        const offsetAlignRate = offsetAlign[align]
+        offsetX += x + width * offsetAlignRate
+      }
+      if (verticalAlign) {
+        const offsetVerticalAlign = { top: 0, middle: -0.5, bottom: -1 }
+        const offsetVerticalAlignRate = offsetVerticalAlign[verticalAlign]
+        offsetY += y + height * offsetVerticalAlignRate
+      }
+      this.calcEvent(node, offsetX, offsetY)
+    }
 
-    offsetX += x + width * offsetAlignRate
-    offsetY += y + height * offsetVerticalAlignRate
-
-    this.calcEvent(node, offsetX, offsetY)
     this.drawNode(node, offsetX, offsetY)
 
     context.restore()
   }
 
-  render (createdNode) {
+  render(createdNode) {
     this.clearRect()
     this.renderAnything(createdNode, 0, 0, {})
     this.runEvents()

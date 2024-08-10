@@ -3,7 +3,7 @@ import { fontFamily } from './fonts'
 export const baseStyle = {
   direction: 'ltr',
   fillStyle: 'black',
-  // fillStyle: '#fff',
+  fillStyle: '#fff',
   // filter: 'grayscale(.9)',
   filter: 'none',
   font: '16px ' + fontFamily,

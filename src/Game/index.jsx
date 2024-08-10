@@ -98,10 +98,10 @@ export default {
   },
 
   render() {
-    // console.log(<FPS />)
+    return this.renderApp()
     return (
-      <div>
-        {/* <FPS /> */}
+      <div style={{ backgroundColor: 'red' }} backgroundColor={'red'} size={{ height: 100, width: 100 }}>
+        <FPS />
       </div>
     )
   },

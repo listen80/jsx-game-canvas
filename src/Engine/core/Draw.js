@@ -1,13 +1,13 @@
 import { defaultHeight, defaultWidth } from '../const/box'
 
 export default class Draw {
-  clearRect () {
+  clearRect() {
     const { context } = this
     const { canvas } = context
     context.clearRect(0, 0, canvas.width, canvas.height)
   }
 
-  drawImage (node, offsetX, offsetY) {
+  drawImage(node, offsetX, offsetY) {
     const { pixelRatio } = this.config
     const { props } = node
     const { sposition = {}, spixelRatio = {}, image } = props
@@ -32,7 +32,7 @@ export default class Draw {
     }
   }
 
-  drawBorder (node, offsetX, offsetY) {
+  drawBorder(node, offsetX, offsetY) {
     const { pixelRatio } = this.config
     const { context } = this
     const { width: borderWidth, color: borderColor } = node.props.border
@@ -55,7 +55,7 @@ export default class Draw {
     }
   }
 
-  drawBackgroundImage (node, offsetX, offsetY) {
+  drawBackgroundImage(node, offsetX, offsetY) {
     const { pixelRatio } = this.config
     const { context } = this
     const backgroundImage = node.props.backgroundImage
@@ -88,13 +88,13 @@ export default class Draw {
     }
   }
 
-  drawBackgroundColor (node, offsetX, offsetY) {
-    const { pixelRatio } = this.config
-    const { context } = this
+  drawBackgroundColor(node, offsetX, offsetY) {
     const backgroundColor = node.props.backgroundColor
-    const { width = defaultWidth, height = defaultHeight } =
-      node.props.size || {}
     if (backgroundColor) {
+      const { pixelRatio } = this.config
+      const { context } = this
+      const { width = defaultWidth, height = defaultHeight } =
+        node.props.size || {}
       context.save()
       context.beginPath()
       context.fillStyle = backgroundColor
@@ -111,14 +111,14 @@ export default class Draw {
     }
   }
 
-  drawText (text, offsetX, offsetY) {
+  drawText(text, offsetX, offsetY) {
     const { context } = this
     const { pixelRatio } = this.config
 
     context.fillText(text, offsetX * pixelRatio, offsetY * pixelRatio)
   }
 
-  drawLineGradient (node, offsetX, offsetY) {
+  drawLineGradient(node, offsetX, offsetY) {
     const { lineGradient } = node.props
     const { pixelRatio } = this.config
 

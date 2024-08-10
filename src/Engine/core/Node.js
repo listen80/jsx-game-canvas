@@ -12,7 +12,7 @@ export function createNode (tag, props, ...children) {
   return {
     type: typeof tag,
     tag,
-    props: props ?? {},
+    props: props,
     children,
     $parent,
   }

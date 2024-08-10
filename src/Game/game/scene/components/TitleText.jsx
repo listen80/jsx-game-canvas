@@ -1,5 +1,3 @@
-import Text from '#/Base/Text'
-
 export default {
   render () {
     const textProps = {
@@ -9,6 +7,6 @@ export default {
         font: '128px 楷体',
       },
     }
-    return <Text {...textProps}></Text>
+    return <div {...textProps}></div>
   },
 }
