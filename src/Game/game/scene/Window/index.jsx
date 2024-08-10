@@ -1,13 +1,10 @@
 import StatusBar from "./components/StatusBar";
 import OperationBar from "./components/OperationBar";
 import BlueWall from "./components/BlueWall";
-import EventBlock from "../event/EventBlock";
+import EventBlock from "../../event/EventBlock";
 export default {
+  name: "window",
   onCreate() {
-    this.position = {
-      x: this.$config.screen.width / 2,
-      y: 8,
-    };
     this.attrs = {
       wrapProps: {
         backgroundImage: "Background/ground.png",
@@ -77,6 +74,7 @@ export default {
   },
 
   onEventClick(block) {
+    console.log(this, block);
     const { x, y } = block.props;
     const { height, width } = this.$state.map;
     const { map } = this;
@@ -104,10 +102,9 @@ export default {
   },
 
   render() {
-    const { props } = this;
     return (
       <div {...this.attrs.wrapProps}>
-        <div {...props.mapContainer} onClick={this.onClick}>
+        <div {...this.attrs.mapContainerProps} onClick={this.onClick}>
           {this.renderMapTerrains()}
           {/* <Hero map={this.map} terrains={this.terrains} /> */}
         </div>

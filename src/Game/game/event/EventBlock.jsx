@@ -32,6 +32,7 @@ function transform($state, $loader, value, x, y) {
 }
 
 export default {
+  name: 'EventBlock',
   onCreate() {
     this.data = transform(this.$state, this.$loader, this.props.value);
     console.log(this.data);
@@ -171,8 +172,14 @@ export default {
   render() {
     const { x, y } = this.props;
     return (
-      <div style={{ width: 1, height: 1, x, y }} onClick={this.onClick}>
-        <Animate {...this.data}></Animate>
+      <div
+        position={{ x, y }}
+        style={{ width: 1, height: 1, x, y }}
+        onClick={this.onClick}
+      >
+        {/* <Animate {...this.data}></Animate> */}
+        <div image={this.data.image}></div>
+
         {this.enemy}
       </div>
     );

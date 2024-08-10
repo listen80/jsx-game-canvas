@@ -1,5 +1,5 @@
 import Select from '#/Base/Select'
-import TitleText from './components/TitleText'
+import TitleText from './TitleText'
 
 export default {
   onCreate () {

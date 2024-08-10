@@ -1,14 +1,15 @@
-import Modal from "#/Layout/Modal";
 import FPS from "./game/helper/FPS"; // Fps显示
 
 import Loading from "./game/scene/Loading"; // Loading界面
 import Title from "./game/scene/Title"; // 游戏选择界面
 import ScrollText from "./game/scene/ScrollText"; // 滚动文字 过场界面
 import Movie from "./game/scene/Movie"; // 过场电影
-import Map from "./game/scene/Map"; // Map 游戏地图
-import Message from "./game/helper/MessageBox"; // 全局信息
-import Talk from "./game/helper/Talk";
+import Window from "./game/scene/Window"; // Map 游戏地图
 
+import Message from "./game/helper/MessageBox"; // 全局弹出消息
+import Talk from "./game/helper/Talk"; // 人物对话
+
+import Modal from "#/Layout/Modal";
 import ShopList from "./game/modal/ShopList"; // 商店列表
 import Aircraft from "./game/modal/Compass"; // 楼层跳转
 import Shop from "./game/modal/Shop"; // 商店
@@ -26,18 +27,18 @@ export default {
     this.$event.registry(commonEvent, motaEvent, soundEvent);
   },
 
-  renderMap() {
+  renderWindow() {
     const { $state } = this;
     const { map, mapKey } = $state;
     if (map) {
       const { text, movie } = map;
       if (text) {
         return <ScrollText key={mapKey} />;
-      }
-      if (movie) {
+      } else if (movie) {
         return <Movie key={mapKey} />;
+      } else {
+        return <Window/>;
       }
-      return <Map key={mapKey} />;
     } else {
       return <Title />;
     }
@@ -89,7 +90,7 @@ export default {
     } else {
       return (
         <div>
-          {this.renderMap()}
+          {this.renderWindow()}
           {this.renderModal()}
           <Message />
           <Talk />

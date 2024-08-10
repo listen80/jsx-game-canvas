@@ -29,7 +29,7 @@ export default {
         {rowProperty.map(({ sposition, text }, index) => {
           return (
             <div position={{ y: index * 1.2 + 0.2 }}>
-              <div image="icons.png" sposition={sposition} />
+              <div image="icons" sposition={sposition} />
               <Text
                 position={{ x: 1.5 }}
                 size={{ width: 2.5 }}

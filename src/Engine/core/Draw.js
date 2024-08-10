@@ -17,6 +17,7 @@ export default class Draw {
     const { sx = 0, sy = 0 } = sposition
     const { swidth = width, sheight = height } = spixelRatio
     const imgElement = this.getImage(image)
+    
     if (imgElement) {
       context.drawImage(
         imgElement,
