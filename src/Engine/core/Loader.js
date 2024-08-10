@@ -6,7 +6,7 @@ export default class Loader {
   constructor() {
     this.loaded = 0;
     this.total = 0;
-    this.loading = false;
+    this.loading = true;
 
     this.$resource = Object.create(null);
     this.$resource.maps = Object.create(null);

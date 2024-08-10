@@ -1,56 +1,55 @@
-import Text from './Text'
+import Text from "./Text";
 
 export default {
-  onCreate () {
-    const { activeIndex = 0 } = this.props
-    this.activeIndex = activeIndex
-    this.optionSize = this.props.optionSize || {}
-    this.optionSize.width = this.optionSize.width || this.props?.style?.width
-    this.optionSize.height = this.optionSize.height || 1
+  onCreate() {
+    const { activeIndex = 0 } = this.props;
+    this.activeIndex = activeIndex;
+    this.optionSize = this.props.optionSize || {};
+    this.optionSize.width = this.optionSize.width || this.props?.style?.width;
+    this.optionSize.height = this.optionSize.height || 1;
   },
-  onChange () {
+  onChange() {
     this.props.onChange?.(
       this.props.options[this.activeIndex],
-      this.activeIndex,
-    )
+      this.activeIndex
+    );
   },
 
-  onConfirm () {
-    const option = this.props.options[this.activeIndex]
+  onConfirm() {
+    const option = this.props.options[this.activeIndex];
     if (option) {
       this.props.onConfirm?.(
         this.props.options[this.activeIndex],
-        this.activeIndex,
-      )
+        this.activeIndex
+      );
     }
   },
 
-  onClick (props) {
-    this.activeIndex = props.index
-    this.onConfirm()
+  onClick(props) {
+    this.activeIndex = props.index;
+    this.onConfirm();
   },
 
-  onMouseMove (props) {
-    this.activeIndex = props.index
-    this.onChange()
+  onMouseMove(props) {
+    this.activeIndex = props.index;
+    this.onChange();
   },
 
-  render () {
+  render() {
     const selects = this.props.options.map(({ text }, y) => {
       const select = (
-        <Text
-          index={y}
-          align="center"
-          value={text}
+        <div
+          text={text}
           position={{ y: y }}
-          size={{ width: 3 }}
-          // border={{ width: 3 }}
+          size={{ height: 1, width: 3 }}
+          // border={{ width: 3, height: 5 }}
           // backgroundColor={`rgba(244,244,31,.5)`}
+          index={y}
           onClick={this.onClick}
-        ></Text>
-      )
-      return select
-    })
-    return <div {...this.props}>{selects}</div>
+        ></div>
+      );
+      return select;
+    });
+    return <div {...this.props}>{selects}</div>;
   },
-}
+};

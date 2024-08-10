@@ -112,11 +112,15 @@ export default class Draw {
     const { text, size } = node.props;
     const { context } = this;
     const { pixelRatio } = this.config;
-    const { textAlign } = context;
+    const { textAlign, textBaseline } = context;
     const { width = 0, height = 0 } = size || {};
 
     if (textAlign === 'center') {
       offsetX += width / 2
+    }
+
+    if (textBaseline === 'middle') {
+      offsetY += height / 2
     }
     context.fillText(text, offsetX * pixelRatio, offsetY * pixelRatio);
   }

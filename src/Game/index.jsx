@@ -103,44 +103,4 @@ export default {
     }
   },
 
-  // render() {
-  //   return this.$state.f ? (
-  //     <Fuck>
-  //       <FuckX></FuckX>
-  //     </Fuck>
-  //   ) : (
-  //     <div text="asdsasdasdasdsdasdasd">div</div>
-  //   );
-  // },
-};
-
-const Fuck = {
-  onCreate() {
-    console.log("onCreate");
-  },
-  onDestroy() {
-    console.log("onDestroy");
-  },
-  render() {
-    return <div>{this.children}</div>;
-  },
-};
-
-const FuckX = {
-  onCreate() {
-    console.log("onCreateFuckX");
-  },
-  onDestroy() {
-    console.log("onDestroyFuckX");
-  },
-  render() {
-    return (
-      <div
-        text="FuckXFuckX"
-        position={{ x: 3, y: 3 }}
-        size={{ height: 3, width: 3 }}
-        backgroundColor="red"
-      ></div>
-    );
-  },
 };
