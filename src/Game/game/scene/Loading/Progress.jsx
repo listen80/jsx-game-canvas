@@ -1,12 +1,12 @@
 export default {
   onCreate() {
-    const { $loader, $config } = this
+    const { $loader, $config } = this;
 
-    const x = $config.screen.width / 2
-    const y = 9
+    const x = $config.screen.width / 2;
+    const y = 9;
 
-    const width = 7
-    const height = 0.2
+    const width = 7;
+    const height = 0.2;
 
     this.progressBar = {
       // align: 'center',
@@ -18,32 +18,32 @@ export default {
         width,
         height,
       },
-      backgroundColor: '#fff',
-    }
+      backgroundColor: "#fff",
+    };
 
     this.progress = {
       size: {
         height,
       },
-      backgroundColor: '#666',
-    }
+      backgroundColor: "#666",
+    };
   },
 
   getProgressOn() {
-    const { $loader } = this
-    const rate = $loader.loaded / $loader.total
-    const width = 7
-    this.progress.size.width = width * (rate > 1 ? 1 : rate)
+    const { $loader } = this;
+    const rate = $loader.loaded / $loader.total;
+    const width = 7;
+    this.progress.size.width = width * rate;
   },
 
   render() {
-    this.getProgressOn()
-    const { progressBar, progress } = this
+    this.getProgressOn();
+    const { progressBar, progress } = this;
 
     return (
       <div {...progressBar}>
         <div {...progress}></div>
       </div>
-    )
+    );
   },
-}
+};

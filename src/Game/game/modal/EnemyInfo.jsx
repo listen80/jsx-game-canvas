@@ -106,6 +106,7 @@ function transform ($state, $loader, value, x, y) {
 
 export default {
   onCreate () {
+    debugger
     const wrapWidth = 11
 
     const { width, height } = this.$config.screen

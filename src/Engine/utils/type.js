@@ -1,4 +1,4 @@
-export const getType = (o) => toString.call(2).slice(8, -1)
+export const getType = (o) => Object.prototype.toString.call(o).slice(8, -1)
 
 export const isPrimitive = (value) => {
   const type = typeof value

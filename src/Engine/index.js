@@ -64,10 +64,16 @@ export default class Engine {
       });
     };
     next();
+    document.addEventListener('contextmenu', () => {
+      this.$state.f = !this.$state.f
+      next()
+    })
   }
 
   keyFrame() {
-    this.$root = patchNode(this.$root, createNode.call(this, this.$app));
+    // console.log('pre__', this.$root);
+    this.$root = patchNode(this.$root, createNode.call(this, this.$app, null));
+    // console.log('after', this.$root);
     this.$render.render(this.$root); // 渲染开始
   }
 }

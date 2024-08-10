@@ -35,7 +35,6 @@ export default {
   name: 'EventBlock',
   onCreate() {
     this.data = transform(this.$state, this.$loader, this.props.value);
-    console.log(this.data);
     this.event = this.props.event;
   },
 

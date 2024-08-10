@@ -31,6 +31,9 @@ export default {
       this.$state.shopid = null
     }
   },
+  onDestroy() {
+    
+  },
 
   renderText () {
     return this.textArr.map((text, index) => (

@@ -37,7 +37,7 @@ export default {
       } else if (movie) {
         return <Movie key={mapKey} />;
       } else {
-        return <Window/>;
+        return <Window />;
       }
     } else {
       return <Title />;
@@ -82,7 +82,7 @@ export default {
     );
   },
 
-  renderApp() {
+  render() {
     const { $loader } = this;
 
     if ($loader.loading) {
@@ -91,20 +91,27 @@ export default {
       return (
         <div>
           {this.renderWindow()}
-          {this.renderModal()}
+          {/* {this.renderModal()}
           <Message />
-          <Talk />
+          <Talk /> */}
         </div>
       );
     }
   },
 
-  render() {
-    return (
-      <div>
-        {this.renderApp()}
-        <FPS />
-      </div>
-    );
+  // render() {
+  //   return this.$state.f ? <Fuck> Fuck</Fuck> : <div text="asdsasdasdasdsdasdasd">div</div>;
+  // },
+};
+
+const Fuck = {
+  onCreate() {
+    console.log("onCreate");
   },
+  onDestroy() {
+    console.log("onDestroy");
+  },
+  // render() {
+  //   return 123
+  // }
 };
