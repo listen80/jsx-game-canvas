@@ -32,6 +32,7 @@ export default {
       { text: save.items.redKey, sposition: { sy: 10 } },
     ];
 
+    const size = {width: 1,height: 1}
     return (
       <div {...wrapProps}>
         {rowProperty.map(({ sposition, text, event }, index) => {
@@ -42,7 +43,7 @@ export default {
               event={event}
               onClick={this.onClick}
             >
-              <div image="icons" sposition={sposition} />
+              <div image="icons" size={size} sposition={sposition} />
               <Text
                 position={{ x: 1.5 }}
                 size={{ width: 2.5 }}

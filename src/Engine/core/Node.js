@@ -8,19 +8,14 @@ import {
   isObject,
   isComponent,
   isDisalbedElement,
+  isElement,
 } from "../utils/type";
 
 export function createNode(createtor, props, ...children) {
   const $parent = this; // 创建的组件
   // class component
   // div node
-  let type = typeof createtor;
-  if (type === "function") {
-    // <></>
-    type = "string";
-  }
   return {
-    type: type,
     createtor,
     props,
     children,
@@ -50,30 +45,28 @@ function createInstance(next) {
   $instance.$render = $parent.$render;
 
   $instance.props = next.props;
-  $instance.$children = next.children;
+  $instance.children = next.children;
 
   $instance.onCreate?.();
 
   // createNode上面生成实例
   next.$instance = $instance;
   next.$node = null;
-
   renderNode(next);
 }
 
 function destoryInstance(pre) {
   // && isBoolean(pre)
   if (!isDisalbedElement(pre)) {
-    if (isObject(pre.createtor)) {
+    if (isComponent(pre)) {
       // 组件
       destoryInstance(pre.$node);
-
       pre.$instance.onDestroy?.();
     } else if (isArray(pre)) {
       pre.forEach((item) => {
         destoryInstance(item);
       });
-    } else if (isString(pre.createtor)) {
+    } else if (isElement(pre)) {
       // div
       destoryInstance(pre.children);
     }

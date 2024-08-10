@@ -54,6 +54,7 @@ export default {
         event: "gotoTitle",
       },
     ];
+    const size = { width: 1, height: 1 };
 
     return (
       <div {...this.wrapProps}>
@@ -65,7 +66,7 @@ export default {
               event={event}
               onClick={this.onClick}
             >
-              <div image="icons" sposition={sposition} />
+              <div image="icons" size={size} sposition={sposition} />
               <Text
                 position={{ x: 1.5 }}
                 size={{ width: 2.5 }}

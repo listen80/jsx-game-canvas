@@ -6,6 +6,7 @@ export default {
       style: {
         font: '128px 楷体',
       },
+      backgroundColor: 'red'
     }
     return <div {...textProps}></div>
   },

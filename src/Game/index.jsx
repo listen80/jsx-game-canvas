@@ -122,7 +122,7 @@ const Fuck = {
     console.log("onDestroy");
   },
   render() {
-    return <div>{this.$children}</div>;
+    return <div>{this.children}</div>;
   },
 };
 

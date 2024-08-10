@@ -28,7 +28,7 @@ export default {
   gotoMap(data, { $state, $loader }) {
     $loader.loadMap($state.save.position.map).then((map) => {
       $state.save.position = data;
-      $state.mapKey = data.map + new Date();
+      $state.mapKey = `${data.map} ${new Date()}`;
       $state.map = map;
     });
   },

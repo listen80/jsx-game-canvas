@@ -9,7 +9,7 @@ export default {
   },
   render() {
     if (this.props.show) {
-      return <div {...this.wrapProps}>{this.$children}</div>;
+      return <div {...this.wrapProps}>{this.children}</div>;
     }
   },
 };

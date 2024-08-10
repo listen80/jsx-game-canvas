@@ -29,7 +29,7 @@ export default {
         }}
         onWheel={this.onWheel}
       >
-        <div style={{ y: -this.scrollTop }}>{this.$children}</div>
+        <div style={{ y: -this.scrollTop }}>{this.children}</div>
       </div>
     )
   },
