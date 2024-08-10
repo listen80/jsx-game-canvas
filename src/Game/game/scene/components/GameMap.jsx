@@ -73,7 +73,7 @@ export default {
     return (
       <div {...this.attrs.wrapProps}>
         <div {...props.mapContainer} onClick={this.onClick}>
-          {/* {this.renderMapTerrains()} */}
+          {this.renderMapTerrains()}
           {/* <Hero map={this.map} terrains={this.terrains} /> */}
         </div>
       </div>

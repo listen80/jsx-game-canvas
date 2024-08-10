@@ -7,6 +7,7 @@ import ScrollText from "./game/scene/ScrollText"; // 滚动文字 过场界面
 import Movie from "./game/scene/Movie"; // 过场电影
 import Map from "./game/scene/Map"; // Map 游戏地图
 import Message from "./game/helper/MessageBox"; // 全局信息
+import Talk from "./game/helper/Talk";
 
 import ShopList from "./game/modal/ShopList"; // 商店列表
 import Aircraft from "./game/modal/Compass"; // 楼层跳转
@@ -91,7 +92,7 @@ export default {
           {this.renderMap()}
           {this.renderModal()}
           <Message />
-          {/* <Talks /> */}
+          <Talk />
         </div>
       );
     }
