@@ -40,8 +40,7 @@ export default {
                 text={floor}
                 position={{ x: 0.2 }}
                 size={{ height: 0.9, width: 2.6 }}
-                // bgColor={"rgba(33,0,0,.9)"}
-                border={{ width: 0.2, color: "white" }}
+                border={{ width: 1, color: "white" }}
                 onClick={this.onClick}
               ></div>
             );

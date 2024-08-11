@@ -57,7 +57,7 @@ export default {
       showStatistics,
     } = $state;
     return (
-      <div>
+      <>
         <Modal show={showEnemyInfo}>
           <EnemyInfo />
         </Modal>
@@ -83,7 +83,7 @@ export default {
         <Modal show={showBattle}>
           <Battle />
         </Modal>
-      </div>
+      </>
     );
   },
 
