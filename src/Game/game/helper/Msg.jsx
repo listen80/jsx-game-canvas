@@ -1,5 +1,4 @@
 import { calcLength } from "../../utils/string";
-import Text from "#/Base/Text";
 
 export default {
   onMessage(data) {
@@ -35,12 +34,14 @@ export default {
   onDestroy() {
     this.$event.off("message", this.onMessage);
   },
+
   calc() {
     this.messages = this.messages.filter((config) => {
       config.tick--;
       return config.tick > 0;
     });
   },
+
   render() {
     this.calc();
     return this.messages.map((config, index) => {

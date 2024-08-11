@@ -1,5 +1,3 @@
-import Text from "#/Base/Text";
-
 export default {
   onCreate() {
     this.wrapProps = {

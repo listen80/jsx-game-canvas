@@ -1,5 +1,3 @@
-import Text from "./Text";
-
 export default {
   onCreate() {
     const { activeIndex = 0 } = this.props;

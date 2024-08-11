@@ -1,4 +1,3 @@
-import Text from "#/Base/Text";
 import Column from "#/Grid/Column";
 import { toggleShowShopList, openShop } from "events/mota";
 
