@@ -1,7 +1,8 @@
 import StatusBar from "./components/StatusBar";
 import OperationBar from "./components/OperationBar";
 import BlueWall from "./components/BlueWall";
-import Map from "./components/Map";
+import Map from './components/Map';
+
 export default {
   name: "window",
   onCreate() {
