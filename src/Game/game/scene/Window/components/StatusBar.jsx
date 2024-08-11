@@ -8,12 +8,10 @@ export default {
     };
   },
 
-  onClick({ event }) {
-    // if (event) {
-    //   this.$event.emit(event);
-    // }
-    const { save } = this.$state;
-    save.hero.atk += 10;
+  onClick({ event, data }) {
+    if (event) {
+      this.$event.emit(event, data);
+    }
   },
 
   render() {
@@ -21,26 +19,72 @@ export default {
     const { save } = $state;
 
     const rowProperty = [
-      { text: save.hero.lv, sposition: { sy: 2 } },
-      { text: save.hero.hp, sposition: { sy: 3 } },
-      { text: save.hero.atk, sposition: { sy: 4 } },
-      { text: save.hero.def, sposition: { sy: 5 } },
-      { text: save.hero.exp, sposition: { sy: 6 } },
-      { text: save.money, sposition: { sy: 7 } },
-      { text: save.items.yellowKey, sposition: { sy: 8 } },
-      { text: save.items.blueKey, sposition: { sy: 9 } },
-      { text: save.items.redKey, sposition: { sy: 10 } },
+      {
+        text: save.hero.lv,
+        sposition: { sy: 2 },
+        event: "message",
+        data: "属性",
+      },
+      {
+        text: save.hero.hp,
+        sposition: { sy: 3 },
+        event: "message",
+        data: "属性",
+      },
+      {
+        text: save.hero.atk,
+        sposition: { sy: 4 },
+        event: "message",
+        data: "属性",
+      },
+      {
+        text: save.hero.def,
+        sposition: { sy: 5 },
+        event: "message",
+        data: "属性",
+      },
+      {
+        text: save.hero.exp,
+        sposition: { sy: 6 },
+        event: "message",
+        data: "属性",
+      },
+      {
+        text: save.money,
+        sposition: { sy: 7 },
+        event: "message",
+        data: "属性",
+      },
+      {
+        text: save.items.yellowKey,
+        sposition: { sy: 8 },
+        event: "message",
+        data: "属性",
+      },
+      {
+        text: save.items.blueKey,
+        sposition: { sy: 9 },
+        event: "message",
+        data: "属性",
+      },
+      {
+        text: save.items.redKey,
+        sposition: { sy: 10 },
+        event: "message",
+        data: "属性",
+      },
     ];
 
     const size = { width: 1, height: 1 };
     return (
       <div {...wrapProps}>
-        {rowProperty.map(({ sposition, text, event }, index) => {
+        {rowProperty.map(({ sposition, text, event, data }, index) => {
           return (
             <div
               position={{ y: index * 1.2 + 0.2 }}
               size={{ width: 4 }}
               event={event}
+              data={data}
               onClick={this.onClick}
             >
               <div image="icons" size={size} sposition={sposition} />
