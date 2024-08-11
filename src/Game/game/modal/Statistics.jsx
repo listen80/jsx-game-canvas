@@ -15,7 +15,7 @@ export default {
         height,
         borderWidth: 4,
         borderColor: 'white',
-        backgroundColor: 'black',
+        bgColor: 'black',
         textAlign: 'center',
       },
       title: { x: width / 2, y: 1, fontSize: 24 },

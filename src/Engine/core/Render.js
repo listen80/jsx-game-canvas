@@ -124,12 +124,12 @@ export default class Render extends Draw {
         text,
         border,
         backgroundImage,
-        backgroundColor,
+        bgColor,
         lineGradient,
       } = props;
       this.mergeStyle(style);
 
-      if (backgroundColor) {
+      if (bgColor) {
         this.drawBackgroundColor(node, offsetX, offsetY);
       }
 
@@ -166,17 +166,18 @@ export default class Render extends Draw {
     // component
     // div node
     // debugger
-    if (createdNode) {
-      if (isArray(createdNode)) {
-        createdNode.forEach((child) =>
-          this.renderAnything(child, offsetX, offsetY)
-        );
-      } else if (isComponent(createdNode)) {
-        this.renderAnything(createdNode.$node, offsetX, offsetY);
-      } else if (isElement(createdNode)) {
-        // div node
-        this.renderNode(createdNode, offsetX, offsetY);
-      }
+    if (isDisalbedElement(createdNode)) {
+      return;
+    }
+    if (isArray(createdNode)) {
+      createdNode.forEach((child) =>
+        this.renderAnything(child, offsetX, offsetY)
+      );
+    } else if (isComponent(createdNode)) {
+      this.renderAnything(createdNode.$node, offsetX, offsetY);
+    } else if (isElement(createdNode)) {
+      // div node
+      this.renderNode(createdNode, offsetX, offsetY);
     }
   }
 

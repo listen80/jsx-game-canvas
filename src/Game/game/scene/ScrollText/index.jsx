@@ -43,7 +43,7 @@ export default {
         x: screenWidth / 2,
         y: screenHeight / 2,
       },
-      backgroundColor: "red",
+      bgColor: "red",
       // border: { width: 3 }
     };
 

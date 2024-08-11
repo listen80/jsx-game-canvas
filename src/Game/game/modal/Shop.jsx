@@ -46,7 +46,7 @@ export default {
         size={{ width: 9, height: 8 }}
         align="center"
         verticalAlign="middle"
-        backgroundColor="black"
+        bgColor="black"
         border={{ width: 2, color: "white" }}
       >
         <div

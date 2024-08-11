@@ -82,7 +82,7 @@ export default {
                 position={{ x: 1.5 }}
                 size={{ height: 1, width: 2.5 }}
                 text={text}
-                backgroundColor={"rgba(0,0,0,.5)"}
+                bgColor={"rgba(0,0,0,.5)"}
               ></div>
             </div>
           );

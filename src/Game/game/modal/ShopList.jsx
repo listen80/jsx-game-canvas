@@ -18,7 +18,7 @@ export default {
         size={{ width: 9, height: 8 }}
         align="center"
         verticalAlign="middle"
-        backgroundColor="black"
+        bgColor="black"
         border={{ width: 2, color: "white" }}
       >
         <div
@@ -33,10 +33,10 @@ export default {
             return (
               <div
                 text={shop.title}
-                shop={shop}
                 size={{ height: 0.7, width: 7 }}
-                backgroundColor={"rgba(0,0,0,.5)"}
+                bgColor={"rgba(0,0,0,.5)"}
                 border={{ width: 0.2, color: "white" }}
+                shop={shop}
                 onClick={this.onClick}
               ></div>
             );

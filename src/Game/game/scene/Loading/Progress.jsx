@@ -15,14 +15,14 @@ export default {
         width,
         height,
       },
-      backgroundColor: "#fff",
+      bgColor: "#fff",
     };
 
     this.progress = {
       size: {
         height,
       },
-      backgroundColor: "#666",
+      bgColor: "#666",
     };
   },
 

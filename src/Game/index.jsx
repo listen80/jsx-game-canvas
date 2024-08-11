@@ -1,15 +1,16 @@
 import FPS from "./game/helper/FPS"; // Fps显示
 
+import Msg from "./game/helper/Msg"; // 全局弹出消息
+import Talk from "./game/helper/Talk"; // 人物对话
+
 import Loading from "./game/scene/Loading"; // Loading界面
 import Title from "./game/scene/Title"; // 游戏选择界面
 import ScrollText from "./game/scene/ScrollText"; // 滚动文字 过场界面
 import Movie from "./game/scene/Movie"; // 过场电影
 import Window from "./game/scene/Window"; // Map 游戏地图
 
-import Message from "./game/helper/MessageBox"; // 全局弹出消息
-import Talk from "./game/helper/Talk"; // 人物对话
+import Modal from "#/Layout/Modal"; // Modal
 
-import Modal from "#/Layout/Modal";
 import ShopList from "./game/modal/ShopList"; // 商店列表
 import Compass from "./game/modal/Compass"; // 楼层跳转
 import Shop from "./game/modal/Shop"; // 商店
@@ -93,12 +94,13 @@ export default {
       return <Loading />;
     } else {
       return (
-        <div>
+        <>
           {this.renderWindow()}
           {this.renderModal()}
-          <Message />
+          <Msg />
           <Talk />
-        </div>
+          <FPS />
+        </>
       );
     }
   },

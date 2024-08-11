@@ -118,7 +118,7 @@ export default {
         borderWidth: 4,
         borderColor: "white",
         fontSize: 16,
-        backgroundColor: "black",
+        bgColor: "black",
       },
       table: {
         y: 0.5,
@@ -129,7 +129,7 @@ export default {
         height: 1,
         width: 1,
         textAlign: "center",
-        // backgroundColor: "red",
+        // bgColor: "red",
         fontSize: 24,
       },
     };
@@ -172,7 +172,7 @@ export default {
         size={{ width: 9, height: 11 }}
         align="center"
         verticalAlign="middle"
-        backgroundColor="black"
+        bgColor="black"
         border={{ width: 2, color: "white" }}
       >
         <Table

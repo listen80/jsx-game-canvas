@@ -25,7 +25,7 @@ export default {
           height: this.height,
           width: this.width,
           overflow: 'hidden',
-          backgroundColor: 'white',
+          bgColor: 'white',
         }}
         onWheel={this.onWheel}
       >

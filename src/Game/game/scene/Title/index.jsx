@@ -8,7 +8,7 @@ export default {
       style: {
         font: "128px 楷体",
       },
-      backgroundColor: "red",
+      bgColor: "red",
     };
 
     this.style = { font: "24px 楷体" };
@@ -29,9 +29,9 @@ export default {
       },
     ];
 
-    // if (__DEV__) {
-    //   this.$event.emit("loadGame");
-    // }
+    if (__DEV__) {
+      this.$event.emit("loadGame");
+    }
   },
 
   onConfirm({ event }) {
@@ -42,7 +42,7 @@ export default {
 
   render() {
     return (
-      <div>
+      <>
         <div {...this.textProps}></div>
         <Select
           align="center"
@@ -52,7 +52,7 @@ export default {
           options={this.options}
           onConfirm={this.onConfirm}
         ></Select>
-      </div>
+      </>
     );
   },
 };

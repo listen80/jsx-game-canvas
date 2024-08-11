@@ -18,7 +18,7 @@ export const isBoolean = (o) => typeof o === "boolean";
 export const isObject = (o) => getType(o) === "Object";
 
 export const isComponent = (createNode) =>
-  createNode && isObject(createNode.createtor);
+  createNode && (isObject(createNode.createtor));
 
 export const isElement = (createNode) =>
   createNode &&

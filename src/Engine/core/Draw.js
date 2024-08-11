@@ -86,15 +86,15 @@ export default class Draw {
   }
 
   drawBackgroundColor(node, offsetX, offsetY) {
-    const backgroundColor = node.props.backgroundColor;
-    if (backgroundColor) {
+    const bgColor = node.props.bgColor;
+    if (bgColor) {
       const { pixelRatio } = this.config;
       const { context } = this;
       const { width = 0, height = 0 } =
         node.props.size || {};
       context.save();
       context.beginPath();
-      context.fillStyle = backgroundColor;
+      context.fillStyle = bgColor;
       context.rect(
         offsetX * pixelRatio,
         offsetY * pixelRatio,

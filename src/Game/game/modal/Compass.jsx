@@ -22,7 +22,7 @@ export default {
           y: this.$config.screen.height / 2,
         }}
         size={{ width: 9, height: 11 }}
-        backgroundColor="black"
+        bgColor="black"
         border={{ width: 2, color: "white" }}
       >
         <div
@@ -40,7 +40,7 @@ export default {
                 text={floor}
                 position={{ x: 0.2 }}
                 size={{ height: 0.9, width: 2.6 }}
-                // backgroundColor={"rgba(33,0,0,.9)"}
+                // bgColor={"rgba(33,0,0,.9)"}
                 border={{ width: 0.2, color: "white" }}
                 onClick={this.onClick}
               ></div>

@@ -53,7 +53,7 @@ export default {
           value={message}
           position={messageStyle.position}
           size={{ height: 1, width: 5 }}
-          backgroundColor="rgba(0,0,0,.7)"
+          bgColor="rgba(0,0,0,.7)"
         ></Text>
       );
     });

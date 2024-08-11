@@ -1,19 +1,21 @@
 import Progress from "./Progress";
 
 export default {
-  render() {
-    const textProps = {
+  onCreate() {
+    this.textProps = {
       position: { x: this.$config.screen.width / 2, y: 4 },
-      text: this.$config.title,
+      text: "Loading",
       style: {
         font: "128px 楷体",
       },
     };
+  },
+  render() {
     return (
-      <div>
-        <div {...textProps}></div>
+      <>
+        <div {...this.textProps}></div>
         <Progress />
-      </div>
+      </>
     );
   },
 };

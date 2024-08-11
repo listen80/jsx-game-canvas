@@ -98,17 +98,16 @@ export function patchNode(preNode, nextNode) {
   // array
   // class component
   // div node
-
   if (isDisalbedElement(nextNode)) {
     destoryInstance(preNode);
-  } else if (isString(nextNode.createtor)) {
-    if (isString(preNode?.createtor)) {
+  } else if (isElement(nextNode)) {
+    if (isElement(preNode)) {
       patchNode(preNode?.children, nextNode.children);
     } else {
       destoryInstance(preNode);
       patchNode(null, nextNode.children);
     }
-  } else if (isObject(nextNode.createtor)) {
+  } else if (isComponent(nextNode)) {
     if (
       preNode &&
       preNode.createtor === nextNode.createtor &&
