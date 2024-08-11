@@ -1,7 +1,7 @@
 import StatusBar from "./components/StatusBar";
 import OperationBar from "./components/OperationBar";
 import BlueWall from "./components/BlueWall";
-import Map from './components/Map';
+import Floor from './components/Floor';
 
 export default {
   name: "window",
@@ -18,7 +18,7 @@ export default {
   render() {
     return (
       <div {...this.wrapProps}>
-        <Map />
+        <Floor />
         <BlueWall />
         <StatusBar />
         <OperationBar />
