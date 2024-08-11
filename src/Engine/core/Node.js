@@ -119,14 +119,21 @@ export function patchNode(preNode, nextNode) {
       createInstance(nextNode);
     }
   } else if (isArray(nextNode)) {
+    nextNode.nodeMap = new Map();
     if (isArray(preNode)) {
       for (let i = 0; i < nextNode.length; i++) {
         // diff array
-        patchNode(preNode[i], nextNode[i]);
+        const nextChildNode = nextNode[i];
+        const key = nextChildNode?.props?.key || i;
+        nextNode.nodeMap.set(key, nextChildNode);
+        patchNode(preNode.nodeMap.get(key), nextChildNode);
       }
     } else {
       destoryInstance(preNode);
       for (let i = 0; i < nextNode.length; i++) {
+        const nextChildNode = nextNode[i];
+        const key = nextChildNode?.props?.key || i;
+        nextNode.nodeMap.set(key, nextChildNode);
         patchNode(null, nextNode[i]);
       }
     }
