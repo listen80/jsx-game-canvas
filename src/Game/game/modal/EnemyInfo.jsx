@@ -1,24 +1,22 @@
 import Table from "#/Data/Table";
-import Animate from "#/Base/Animate";
+import { transform } from "@/transform";
 
 const columns = [
   {
     title: null,
     width: 1,
     height: 0.7,
-    render(rowData) {
+    render({ rowIndex }) {
       return (
-        <Animate
-          data={{
-            image: "enemys.png",
-            maxTick: 2,
-            width: 1,
-            height: 1,
-            maxInterval: 10,
-            sy: rowData.sy,
-          }}
-        />
+        <div
+          image={"enemys"}
+          // position={{ x, y }}
+          sposition={{ sx: 0, sy: rowIndex }}
+          size={{ width: 1, height: 1 }}
+          bgColor={"red"}
+        ></div>
       );
+      return <div image="enemys" size={{ width: 1, height: 1 }}></div>;
     },
   },
   {
@@ -71,98 +69,13 @@ function checkBattle(enemy, hero) {
   }
 }
 
-function transform($state, $loader, value, x, y) {
-  const info = $loader.$resource.mapping[value];
-  const { type, name } = info;
-  const detail = $state[type][name];
-  let maxTick = 1;
-  const data = {
-    image: type,
-    sy: detail.sy,
-    type,
-    name,
-    // ...info,
-    // x: x,
-    // y: y,
-    maxInterval: 10,
-  };
-  if (type === "animates") {
-    maxTick = 4;
-  } else if (type === "terrains" || type === "items") {
-    maxTick = 1;
-  } else if (type === "npcs" || type === "enemys") {
-    maxTick = 2;
-  }
-  if (type === "enemys") {
-    const enemy = $state.enemys[name];
-    data.enemy = enemy;
-    maxTick = 2;
-  }
-  data.maxTick = maxTick;
-  return data;
-}
-
 export default {
   onCreate() {
-    const wrapWidth = 11;
-
-    const { width, height } = this.$config.screen;
-    const x = (width - wrapWidth) / 2;
-    const y = 1;
-    this.styles = {
-      enemyList: {
-        x,
-        y,
-        // width: width,
-        // height: width,
-        borderWidth: 4,
-        borderColor: "white",
-        fontSize: 16,
-        bgColor: "black",
-      },
-      table: {
-        y: 0.5,
-      },
-      close: {
-        x: 10,
-        y: 10,
-        height: 1,
-        width: 1,
-        textAlign: "center",
-        // bgColor: "red",
-        fontSize: 24,
-      },
-    };
-
-    this.styles.enemyList.x = x;
-    this.styles.enemyList.y = y;
-
-    const set = new Set(
-      this.$state.map.mapTerrains
-        .map((line, y) => line.map((value, x) => value))
-        .flat()
-    );
-
-    const values =
-      [] ||
-      Array.from(set)
-        .map((value) => (value ? transform(value, this) : null))
-        .filter((v) => {
-          return v && v.type === "enemys";
-        });
-    this.dataSource = values.map(({ name, enemy }) => {
-      this.$state.enemys[name].battleResult = checkBattle(
-        enemy,
-        this.$state.save.hero
-      );
-      return this.$state.enemys[name];
-    });
-  },
-  onDestroy() {
-    console.log("onDestroyonDestroyonDestroyonDestroy");
+    this.dataSource = Object.values(this.$loader.$resource.sprites.enemys);
   },
   render() {
     const { dataSource } = this;
+
     return (
       <div
         position={{
@@ -175,11 +88,7 @@ export default {
         bgColor="black"
         border={{ width: 2, color: "white" }}
       >
-        <Table
-          dataSource={dataSource}
-          columns={columns}
-          dataExtra={this.$state.save.hero}
-        />
+        <Table dataSource={dataSource} columns={columns} />
       </div>
     );
   },

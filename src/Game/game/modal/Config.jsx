@@ -1,61 +1,58 @@
+import Grid from "#/Grid/Grid";
+import { font25 } from "@/constant/font";
 
-import Select from '#/Base/Select'
+const width = 10;
+const height = 11;
 
 export default {
-  onCreate () {
-    const screenWidth = this.$config.screen.width
-
-    const width = 7
-    const height = 8
-
-    const x = (screenWidth - width) / 2
-    const y = 2
-
-    this.styles = {
-      shop: {
-        x,
-        y,
-        width,
-        height,
-        borderWidth: 4,
-        borderColor: 'white',
-        bgColor: 'black',
-        textAlign: 'center',
-      },
-      title: { x: width / 2, y: 1, fontSize: 24 },
-      text: { x: 0, y: 2, fontSize: 12 },
-      select: { x: 1, y: 7 / 2, width: 5, fontSize: 16 },
-    }
-    this.options = [
-      {
-        text: 'fontFamily',
-      },
-    ]
-    this.options.push({
-      text: '离开',
-    })
+  onClick({ text }) {
+    this.$event.emit("toggleShowCompass");
+    this.$event.emit("gotoMap", {
+      map: text,
+      x: 6,
+      y: 11,
+      sx: 0,
+      sy: 0,
+    });
   },
 
-  onConfirm (option, index) {
-    this.$state.showConfig = false
-  },
-
-  renderText () {
-    return this.textArr.map((text, index) => (
-      <div style={{ x: width / 2, y: index / 2 }}>{text}</div>
-    ))
-  },
-
-  render () {
-    const { styles } = this
+  render() {
     return (
-      <div style={styles.shop}>
-        <Select
-          style={styles.select}
-          options={this.options}
-          onConfirm={this.onConfirm}
-        />
+      <div
+        align="center"
+        verticalAlign="middle"
+        position={{
+          x: this.$config.screen.width / 2,
+          y: this.$config.screen.height / 2,
+        }}
+        size={{ width, height }}
+        bgColor="black"
+        border={{ width: 2, color: "white" }}
+      >
+        <div
+          text="选择楼层"
+          position={{ x: width / 2, y: 0.8 }}
+          style={{ font: font25 }}
+        ></div>
+        <Grid
+          align="center"
+          position={{ x: width / 2, y: 1.5 }}
+          size={{ width: width - 1, height }}
+          columns={3}
+          columnWidth={3}
+          render={this.$state.save.floors.map((floor) => {
+            return (
+              <div
+                text={floor}
+                position={{ x: 0.2 }}
+                size={{ height: 0.9, width: 2.6 }}
+                border={{ width: 1, color: "white" }}
+                onClick={this.onClick}
+              ></div>
+            );
+          })}
+        ></Grid>
       </div>
-    )
+    );
   },
-}
+};

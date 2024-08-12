@@ -1,19 +1,21 @@
 import Select from "#/Base/Select";
 
+import { mediumWhiteBorder } from "@/constant/border";
+import { font25 } from "@/constant/font";
+
+const width = 8;
+const height = 9;
+
 export default {
   onCreate() {
-    const width = 7;
-    const height = 8;
+    const { shopId } = this.$state;
+    this.shopJSON = this.$loader.$resource.shops[shopId];
 
-    const shopid = this.$state.shopid;
-
-    if (!this.$state.save.shops.includes(shopid)) {
-      this.$state.save.shops.push(shopid);
+    if (!this.$state.save.shops.includes(shopId)) {
+      this.$state.save.shops.push(shopId);
     }
 
-    this.shop = this.$config.shopList[shopid];
-
-    this.textArr = this.shop.text.split(/\n/);
+    this.textArr = this.shopJSON.text.split(/\n/);
   },
 
   onConfirm(option, index) {
@@ -26,40 +28,35 @@ export default {
         this.$event.emit("message", "不行");
       }
     } else {
-      this.$state.shopid = null;
+      this.$state.shopId = null;
     }
   },
   renderText() {
     return this.textArr.map((text, index) => (
-      <div style={{ x: width / 2, y: index / 2 }}>{text}</div>
+      <div position={{ y: index / 2 }} text={text}></div>
     ));
   },
 
   render() {
-    const { styles = {} } = this;
     return (
       <div
         position={{
           x: this.$config.screen.width / 2,
           y: this.$config.screen.height / 2,
         }}
-        size={{ width: 9, height: 8 }}
+        size={{ width, height }}
         align="center"
         verticalAlign="middle"
         bgColor="black"
-        border={{ width: 2, color: "white" }}
+        border={mediumWhiteBorder}
       >
         <div
-          text={this.shop.title}
-          position={{ x: 4.5, y: 0.8 }}
-          style={{ font: "25px 楷体" }}
+          text={this.shopJSON.title}
+          position={{ x: width / 2, y: 0.8 }}
+          style={{ font: font25 }}
         ></div>
-        {/* <div style={styles.text}>{this.renderText()}</div> */}
-        {/* <Select
-          style={styles.select}
-          options={this.options}
-          onConfirm={this.onConfirm}
-        /> */}
+        <div position={{ x: width / 2, y: 2 }}>{this.renderText()}</div>
+        <Select position={{ x: width / 2, y: 5 }} options={this.shopJSON.choices} onConfirm={this.onConfirm} />
       </div>
     );
   },

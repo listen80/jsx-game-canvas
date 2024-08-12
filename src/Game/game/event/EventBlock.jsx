@@ -1,33 +1,28 @@
 import Animate from "#/Base/Animate";
 
-function transform($state, $loader, value, x, y) {
-  const info = $loader.$resource.mapping[value];
-  const { type, name } = info;
-  const detail = $loader.$resource.sprites[type][name];
-  let maxTick = 1;
+function transform($loader, value) {
+  const mapInfo = $loader.$resource.mapping[value];
+  const { type, name } = mapInfo;
+  const spritesInfo = $loader.$resource.sprites[type][name];
+
+  const typeToMaxTick = {
+    animates: 4,
+    terrains: 1,
+    items: 1,
+    npcs: 2,
+    enemy: 2,
+  };
+  const maxTick = typeToMaxTick[type];
+
   const data = {
     image: type,
-    sy: detail.sy,
+    sy: spritesInfo.sy,
     type,
     name,
-    // ...info,
-    // x: x,
-    // y: y,
     maxInterval: 10,
+    maxTick,
   };
-  if (type === "animates") {
-    maxTick = 4;
-  } else if (type === "terrains" || type === "items") {
-    maxTick = 1;
-  } else if (type === "npcs" || type === "enemys") {
-    maxTick = 2;
-  }
-  if (type === "enemys") {
-    const enemy = $loader.$resource.sprites.enemys[name];
-    data.enemy = enemy;
-    maxTick = 2;
-  }
-  data.maxTick = maxTick;
+
   return data;
 }
 

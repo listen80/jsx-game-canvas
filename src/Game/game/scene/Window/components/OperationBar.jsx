@@ -13,6 +13,8 @@ export default {
   },
 
   render() {
+    const { mapId, mapKey } = this.$state;
+    const map = this.$loader.$resource.maps[mapId];
     const rowProperty = [
       {
         text: this.$config.title,
@@ -21,7 +23,7 @@ export default {
         data: "啦啦啦",
       },
       {
-        text: this.$state.map.name,
+        text: map.name,
         sposition: { sy: 1 },
         event: "message",
         data: "啦啦啦",

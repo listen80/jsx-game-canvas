@@ -1,10 +1,13 @@
 import Column from "#/Grid/Column";
-import { toggleShowShopList, openShop } from "events/mota";
+import { toggleShowShopList } from "events/mota";
+import { openShop } from "events/common";
+import { mediumWhiteBorder, thinWhiteBorder } from "@/constant/border";
+import { font25 } from "@/constant/font";
 
 export default {
-  onClick({ shop }) {
+  onClick({ text }) {
     this.$event.emit(toggleShowShopList);
-    this.$event.emit(openShop, shop.id);
+    this.$event.emit(openShop, text);
   },
 
   render() {
@@ -18,24 +21,24 @@ export default {
         align="center"
         verticalAlign="middle"
         bgColor="black"
-        border={{ width: 2, color: "white" }}
+        border={mediumWhiteBorder}
       >
         <div
           text="选择商店"
           position={{ x: 4.5, y: 0.8 }}
-          style={{ font: "25px 楷体" }}
+          style={{ font: font25 }}
         ></div>
         <Column
           position={{ x: 1, y: 1.5 }}
-          render={this.$state.save.shops.map((shopid) => {
-            const shop = this.$config.shopList[shopid];
+          render={this.$state.save.shops.map((shopId) => {
+            // const shop = this.$config.shopList[shopId];
             return (
               <div
-                text={shop.title}
+                text={shopId}
                 size={{ height: 0.7, width: 7 }}
                 bgColor={"rgba(0,0,0,.5)"}
-                border={{ width: 0.2, color: "white" }}
-                shop={shop}
+                border={thinWhiteBorder}
+                // shop={shop}
                 onClick={this.onClick}
               ></div>
             );

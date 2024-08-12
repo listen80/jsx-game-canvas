@@ -1,0 +1,22 @@
+{
+  "id": "expShop1",
+  "title": "5楼老人",
+  "text": "你好，英雄的人类\n只要你有经验\n我就可以让你变得更强大",
+  "choices": [
+    {
+      "text": "提升一级(100)",
+      "need": "hero.exp:-100",
+      "effect": "hero.lv:1;hp:1000;atk:7;def:7"
+    },
+    {
+      "text": "增加攻击5(30)",
+      "need": "hero.exp:-30",
+      "effect": "hero.atk:5"
+    },
+    {
+      "text": "增加防御5(30)",
+      "need": "hero.exp:-30",
+      "effect": "hero.def:5"
+    }
+  ]
+}

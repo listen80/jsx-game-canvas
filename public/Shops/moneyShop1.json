@@ -1,0 +1,22 @@
+{
+  "id": "moneyShop1",
+  "title": "3楼商店",
+  "text": "想要增加你的能力吗？\n如果你有25个金币,\n你可以任意选择一项",
+  "choices": [
+    {
+      "text": "增加800点生命",
+      "need": "money:-25",
+      "effect": "hero.hp:800"
+    },
+    {
+      "text": "增加4点攻击",
+      "need": "money:-25",
+      "effect": "hero.atk:4"
+    },
+    {
+      "text": "增加4点防御",
+      "need": "money:-25",
+      "effect": "hero.def:4"
+    }
+  ]
+}

@@ -1,4 +1,8 @@
 import Grid from "#/Grid/Grid";
+import { font25 } from "@/constant/font";
+
+const width = 10;
+const height = 11;
 
 export default {
   onClick({ text }) {
@@ -21,17 +25,19 @@ export default {
           x: this.$config.screen.width / 2,
           y: this.$config.screen.height / 2,
         }}
-        size={{ width: 9, height: 11 }}
+        size={{ width, height }}
         bgColor="black"
         border={{ width: 2, color: "white" }}
       >
         <div
           text="选择楼层"
-          position={{ x: 4.5, y: 0.8 }}
-          style={{ font: "25px 楷体" }}
+          position={{ x: width / 2, y: 0.8 }}
+          style={{ font: font25 }}
         ></div>
         <Grid
-          position={{ x: 0, y: 1.5 }}
+          align="center"
+          position={{ x: width / 2, y: 1.5 }}
+          size={{ width: width - 1, height }}
           columns={3}
           columnWidth={3}
           render={this.$state.save.floors.map((floor) => {

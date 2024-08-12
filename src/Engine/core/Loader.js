@@ -10,6 +10,7 @@ export default class Loader {
 
     this.$resource = Object.create(null);
     this.$resource.maps = Object.create(null);
+    this.$resource.shops = Object.create(null);
     this.$resource.image = Object.create(null);
     this.$resource.sprites = Object.create(null);
   }
@@ -96,6 +97,22 @@ export default class Loader {
     this.total++;
     return loadJSON(`Maps/${id}.json`).then((data) => {
       this.$resource.maps[id] = data;
+      this.loaded++;
+      this.checkStatus();
+      return data;
+    });
+  }
+
+  loadShop(id) {
+    // if (this.$resource.maps[id]) {
+    //   return Promise.resolve(this.$resource.maps[id]);
+    // }
+    this.loaded = 0;
+    this.total = 0;
+
+    this.total++;
+    return loadJSON(`Shops/${id}.json`).then((data) => {
+      this.$resource.shops[id] = data;
       this.loaded++;
       this.checkStatus();
       return data;

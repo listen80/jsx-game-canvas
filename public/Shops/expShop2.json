@@ -1,0 +1,22 @@
+{
+  "id": "expShop2",
+  "title": "13楼老人",
+  "text": "你好，英雄的人类\n只要你有经验\n我就可以让你变得更强大",
+  "choices": [
+    {
+      "text": "提升三级(270)",
+      "need": "hero.exp:-270",
+      "effect": "hero.lv:3;hp:3000;atk:20;def:20"
+    },
+    {
+      "text": "增加攻击17(95)",
+      "need": "hero.exp:-95",
+      "effect": "hero.atk:17"
+    },
+    {
+      "text": "增加防御17(95)",
+      "need": "hero.exp:-95",
+      "effect": "hero.def:17"
+    }
+  ]
+}

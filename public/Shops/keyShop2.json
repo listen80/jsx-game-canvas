@@ -1,0 +1,22 @@
+{
+  "id": "keyShop2",
+  "title": "12楼钥匙商人",
+  "text": "相信你一定有特殊的需要\n只要你有钥匙，我就可以帮你",
+  "choices": [
+    {
+      "text": "卖出1把黄钥匙(7)",
+      "need": "items.yellowKey:-1",
+      "effect": "money:7"
+    },
+    {
+      "text": "卖出1把蓝钥匙(35)",
+      "need": "items.blueKey:-1",
+      "effect": "money:35"
+    },
+    {
+      "text": "卖出1把红钥匙(70)",
+      "need": "items.redKey:-1",
+      "effect": "money:70"
+    }
+  ]
+}

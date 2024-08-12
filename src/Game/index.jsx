@@ -30,7 +30,8 @@ export default {
 
   renderWindow() {
     const { $state } = this;
-    const { map, mapKey } = $state;
+    const { mapId, mapKey } = $state;
+    const map = this.$loader.$resource.maps[mapId];
     if (map) {
       const { text, movie } = map;
       if (text) {
@@ -48,14 +49,14 @@ export default {
   renderModal() {
     const { $state } = this;
     const {
-      shopid,
+      shopId,
       showShopList,
       showEnemyInfo,
       showCompass,
       showBattle,
       showConfig,
       showStatistics,
-    } = $state;
+    } = $state || {};
     return (
       <>
         <Modal show={showEnemyInfo}>
@@ -69,7 +70,7 @@ export default {
         <Modal show={showShopList}>
           <ShopList />
         </Modal>
-        <Modal show={shopid}>
+        <Modal show={shopId}>
           <Shop />
         </Modal>
 

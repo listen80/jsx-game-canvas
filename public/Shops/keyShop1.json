@@ -1,0 +1,22 @@
+{
+  "id": "keyShop1",
+  "title": "5楼钥匙商人",
+  "text": "相信你一定有特殊的需要\n只要你有金币，我就可以帮你",
+  "choices": [
+    {
+      "text": "购买1把黄钥匙(10)",
+      "need": "money:-10",
+      "effect": "items.yellowKey:1"
+    },
+    {
+      "text": "购买1把蓝钥匙(50)",
+      "need": "money:-50",
+      "effect": "items.blueKey:1"
+    },
+    {
+      "text": "购买1把红钥匙(100)",
+      "need": "money:-100",
+      "effect": "items.redKey:1"
+    }
+  ]
+}

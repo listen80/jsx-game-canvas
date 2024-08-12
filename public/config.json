@@ -5,18 +5,12 @@
     "height": 13,
     "pixelRatio": 32
   },
-  "init": [
-    "save", "shops", "resource"
-  ],
   "save": {
+    "mapId": "MT0",
     "position": {
-      "map": "MT0",
       "x": 6,
-      "y": 11,
-      "sx": 0,
-      "sy": 0
+      "y": 11
     },
-    "money": 0,
     "hero": {
       "lv": 1,
       "atk": 10,
@@ -24,6 +18,7 @@
       "hp": 1000,
       "exp": 0
     },
+    "money": 0,
     "items": {
       "yellowKey": 0,
       "blueKey": 0,
@@ -66,144 +61,14 @@
       "MT23w",
       "MT24"
     ],
+    "showModalFlags": {
+      "showCompass": true
+    },
     "flags": {},
-    "destroy": {}
-  },
-  "shopList": {
-    "moneyShop1": {
-      "id": "moneyShop1",
-      "title": "3楼商店",
-      "text": "想要增加你的能力吗？\n如果你有25个金币,\n你可以任意选择一项",
-      "choices": [
-        {
-          "text": "增加800点生命",
-          "need": "money:-25",
-          "effect": "hero.hp:800"
-        },
-        {
-          "text": "增加4点攻击",
-          "need": "money:-25",
-          "effect": "hero.atk:4"
-        },
-        {
-          "text": "增加4点防御",
-          "need": "money:-25",
-          "effect": "hero.def:4"
-        }
-      ]
-    },
-    "moneyShop2": {
-      "id": "moneyShop2",
-      "title": "11楼商店",
-      "text": "想要增加你的能力吗？\n如果你有100个金币,\n你可以任意选择一项",
-      "choices": [
-        {
-          "text": "增加4000点生命",
-          "need": "money:-100",
-          "effect": "hero.hp:4000"
-        },
-        {
-          "text": "增加20点攻击",
-          "need": "money:-100",
-          "effect": "hero.atk:20"
-        },
-        {
-          "text": "增加20点防御",
-          "need": "money:-100",
-          "effect": "hero.def:20"
-        }
-      ]
-    },
-    "expShop1": {
-      "id": "expShop1",
-      "title": "5楼老人",
-      "text": "你好，英雄的人类\n只要你有经验\n我就可以让你变得更强大",
-      "choices": [
-        {
-          "text": "提升一级(100)",
-          "need": "hero.exp:-100",
-          "effect": "hero.lv:1;hp:1000;atk:7;def:7"
-        },
-        {
-          "text": "增加攻击5(30)",
-          "need": "hero.exp:-30",
-          "effect": "hero.atk:5"
-        },
-        {
-          "text": "增加防御5(30)",
-          "need": "hero.exp:-30",
-          "effect": "hero.def:5"
-        }
-      ]
-    },
-    "expShop2": {
-      "id": "expShop2",
-      "title": "13楼老人",
-      "text": "你好，英雄的人类\n只要你有经验\n我就可以让你变得更强大",
-      "choices": [
-        {
-          "text": "提升三级(270)",
-          "need": "hero.exp:-270",
-          "effect": "hero.lv:3;hp:3000;atk:20;def:20"
-        },
-        {
-          "text": "增加攻击17(95)",
-          "need": "hero.exp:-95",
-          "effect": "hero.atk:17"
-        },
-        {
-          "text": "增加防御17(95)",
-          "need": "hero.exp:-95",
-          "effect": "hero.def:17"
-        }
-      ]
-    },
-    "keyShop1": {
-      "id": "keyShop1",
-      "title": "5楼钥匙商人",
-      "text": "相信你一定有特殊的需要\n只要你有金币，我就可以帮你",
-      "choices": [
-        {
-          "text": "购买1把黄钥匙(10)",
-          "need": "money:-10",
-          "effect": "items.yellowKey:1"
-        },
-        {
-          "text": "购买1把蓝钥匙(50)",
-          "need": "money:-50",
-          "effect": "items.blueKey:1"
-        },
-        {
-          "text": "购买1把红钥匙(100)",
-          "need": "money:-100",
-          "effect": "items.redKey:1"
-        }
-      ]
-    },
-    "keyShop2": {
-      "id": "keyShop2",
-      "title": "12楼钥匙商人",
-      "text": "相信你一定有特殊的需要\n只要你有钥匙，我就可以帮你",
-      "choices": [
-        {
-          "text": "卖出1把黄钥匙(7)",
-          "need": "items.yellowKey:-1",
-          "effect": "money:7"
-        },
-        {
-          "text": "卖出1把蓝钥匙(35)",
-          "need": "items.blueKey:-1",
-          "effect": "money:35"
-        },
-        {
-          "text": "卖出1把红钥匙(70)",
-          "need": "items.redKey:-1",
-          "effect": "money:70"
-        }
-      ]
-    }
+    "mapsDestroyTerrains": {}
   },
   "resource": {
+    "init": ["save", "shops", "resource"],
     "fonts": {
       "name": "华文行楷",
       "url": "华文行楷.ttf",

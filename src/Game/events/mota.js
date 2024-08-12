@@ -1,4 +1,3 @@
-export const openShop = "openShop";
 export const toggleShowEnemyInfo = "toggleShowEnemyInfo";
 export const toggleShowCompass = "toggleShowCompass";
 export const toggleShowShopList = "toggleShowShopList";
@@ -21,7 +20,5 @@ export default {
   [toggleShowShopList](data, { $state }) {
     $state.showShopList = !$state.showShopList;
   },
-  [openShop](data, { $state }) {
-    $state.shopid = data;
-  },
+
 };
