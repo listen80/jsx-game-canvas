@@ -40,6 +40,7 @@ function createInstance(next) {
   $instance.$config = $parent.$config;
   $instance.$state = $parent.$state;
   $instance.$loader = $parent.$loader;
+  $instance.$resource = $parent.$loader.$resource;
   $instance.$event = $parent.$event;
   $instance.$sound = $parent.$sound;
   $instance.$render = $parent.$render;

@@ -15,8 +15,14 @@ export default {
                 {render ? (
                   render.call(
                     this,
-                    { rowData, rowIndex, columnIndex, column },
-                    dataExtra
+                    {
+                      rowData,
+                      rowIndex,
+                      columnIndex,
+                      column,
+                      // data: rowData[dataIndex],
+                      dataExtra,
+                    },
                   )
                 ) : (
                   <div text={rowData[dataIndex]}></div>

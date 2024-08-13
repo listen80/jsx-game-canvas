@@ -112,7 +112,7 @@ export default class Render extends Draw {
     Object.assign(this.context, style);
   }
 
-  drawNode(node, offsetX, offsetY) {
+  drawNode(node, offsetX, offsetY, offsetParent) {
     const { context } = this;
     context.save();
     const { children, props } = node;
@@ -142,7 +142,7 @@ export default class Render extends Draw {
       }
 
       if (text != null) {
-        this.drawText(node, offsetX, offsetY);
+        this.drawText(node, offsetX, offsetY, offsetParent);
       }
 
       if (border) {
@@ -159,7 +159,7 @@ export default class Render extends Draw {
     context.restore();
   }
 
-  renderAnything(createdNode, offsetX, offsetY) {
+  renderAnything(createdNode, offsetX, offsetY, offsetParent) {
     // undefined null
     // string number
     // array
@@ -167,17 +167,27 @@ export default class Render extends Draw {
     // div node
     // debugger
     if (isDisalbedElement(createdNode)) {
+      // const props = offsetParent.props;
+      // this.drawText(
+      //   {
+      //     props,
+      //     text: createdNode,
+      //   },
+      //   offsetX,
+      //   offsetY,
+      //   offsetParent
+      // );
       return;
     }
     if (isArray(createdNode)) {
       createdNode.forEach((child) =>
-        this.renderAnything(child, offsetX, offsetY)
+        this.renderAnything(child, offsetX, offsetY, offsetParent)
       );
     } else if (isComponent(createdNode)) {
-      this.renderAnything(createdNode.$node, offsetX, offsetY);
+      this.renderAnything(createdNode.$node, offsetX, offsetY, offsetParent);
     } else if (isElement(createdNode)) {
       // div node
-      this.renderNode(createdNode, offsetX, offsetY);
+      this.renderNode(createdNode, offsetX, offsetY, offsetParent);
     }
   }
 
@@ -214,7 +224,7 @@ export default class Render extends Draw {
     this.restoreEvents();
   }
 
-  renderNode(node, offsetX, offsetY) {
+  renderNode(node, offsetX, offsetY, offsetParent) {
     // 非class component
     // div node
     // { props, children }
@@ -244,7 +254,7 @@ export default class Render extends Draw {
       this.calcEvent(node, offsetX, offsetY);
     }
 
-    this.drawNode(node, offsetX, offsetY);
+    this.drawNode(node, offsetX, offsetY, offsetParent);
 
     context.restore();
   }

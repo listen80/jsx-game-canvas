@@ -1,11 +1,10 @@
 import Table from "#/Data/Table";
 import { transform } from "@/transform";
-
 const columns = [
   {
     title: null,
     width: 1,
-    height: 0.7,
+    height: 1.2,
     render({ rowIndex }) {
       return (
         <div
@@ -13,7 +12,8 @@ const columns = [
           // position={{ x, y }}
           sposition={{ sx: 0, sy: rowIndex }}
           size={{ width: 1, height: 1 }}
-          bgColor={"red"}
+          bgColor={"yellow"}
+          border={{ width: 3 }}
         ></div>
       );
       return <div image="enemys" size={{ width: 1, height: 1 }}></div>;
@@ -24,30 +24,74 @@ const columns = [
     width: 2.5,
     height: 0.7,
     dataIndex: "name",
+    render({ rowData, dataIndex, column }) {
+      return (
+        <div
+          text={rowData[dataIndex]}
+          size={{ width: column.width, height: column.height }}
+          bgColor={"red"}
+        ></div>
+      );
+    },
   },
   {
     title: "生命",
     width: 1.5,
     height: 0.7,
     dataIndex: "hp",
+    render({ rowData, dataIndex, column }) {
+      return (
+        <div
+          text={rowData[dataIndex]}
+          size={{ width: column.width, height: column.height }}
+          bgColor={"#ccc"}
+        ></div>
+      );
+    },
   },
   {
     title: "攻击",
     width: 2,
     height: 0.7,
     dataIndex: "atk",
+    render({ rowData, dataIndex, column }) {
+      return (
+        <div
+          text={rowData[dataIndex]}
+          size={{ width: column.width, height: column.height }}
+          bgColor={"#abc"}
+        ></div>
+      );
+    },
   },
   {
     title: "防御",
     width: 2,
     height: 0.7,
     dataIndex: "def",
+    render({ rowData, dataIndex, column }) {
+      return (
+        <div
+          text={rowData[dataIndex]}
+          size={{ width: column.width, height: column.height }}
+          bgColor={"#67a"}
+        ></div>
+      );
+    },
   },
   {
     title: "损失",
     width: 2,
     height: 0.7,
     dataIndex: "battleResult",
+    render({ rowData, dataIndex, column }) {
+      return (
+        <div
+          text={rowData[dataIndex]}
+          size={{ width: column.width, height: column.height }}
+        ></div>
+      );
+    },
   },
 ];
 
