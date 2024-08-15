@@ -116,7 +116,6 @@ export default class Render extends Draw {
     const { context } = this;
     context.save();
     const { children, props } = node;
-    // debugger
     if (props) {
       const {
         style,
@@ -154,7 +153,7 @@ export default class Render extends Draw {
       }
     }
 
-    children.forEach((child) => this.renderAnything(child, offsetX, offsetY));
+    children.forEach((child) => this.renderAnything(child, offsetX, offsetY, node));
 
     context.restore();
   }
@@ -165,7 +164,6 @@ export default class Render extends Draw {
     // array
     // component
     // div node
-    // debugger
     if (isDisalbedElement(createdNode)) {
       // const props = offsetParent.props;
       // this.drawText(
@@ -236,7 +234,7 @@ export default class Render extends Draw {
       const { x = 0, y = 0 } = position || {};
       const { width = 0, height = 0 } = size || {};
 
-      const { align, verticalAlign = "top" } = node.props;
+      const { align, verticalAlign } = node.props;
       if (align) {
         const offsetAlign = { left: 0, center: -0.5, right: -1 };
         const offsetAlignRate = offsetAlign[align];
@@ -253,7 +251,6 @@ export default class Render extends Draw {
       }
       this.calcEvent(node, offsetX, offsetY);
     }
-
     this.drawNode(node, offsetX, offsetY, offsetParent);
 
     context.restore();

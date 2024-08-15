@@ -12,24 +12,23 @@ const columns = [
           // position={{ x, y }}
           sposition={{ sx: 0, sy: rowIndex }}
           size={{ width: 1, height: 1 }}
-          bgColor={"yellow"}
-          border={{ width: 3 }}
+          // bgColor={"yellow"}
+          // border={{ width: 3 }}
         ></div>
       );
-      return <div image="enemys" size={{ width: 1, height: 1 }}></div>;
     },
   },
   {
     title: "名字",
     width: 2.5,
-    height: 0.7,
+    height: 1,
     dataIndex: "name",
-    render({ rowData, dataIndex, column }) {
+    render({ rowData, column }) {
       return (
         <div
-          text={rowData[dataIndex]}
+          text={rowData[column.dataIndex]}
           size={{ width: column.width, height: column.height }}
-          bgColor={"red"}
+          // bgColor={"red"}
         ></div>
       );
     },
@@ -37,14 +36,14 @@ const columns = [
   {
     title: "生命",
     width: 1.5,
-    height: 0.7,
+    height: 1,
     dataIndex: "hp",
-    render({ rowData, dataIndex, column }) {
+    render({ rowData, column }) {
       return (
         <div
-          text={rowData[dataIndex]}
+          text={rowData[column.dataIndex]}
           size={{ width: column.width, height: column.height }}
-          bgColor={"#ccc"}
+          // bgColor={"#ccc"}
         ></div>
       );
     },
@@ -52,14 +51,14 @@ const columns = [
   {
     title: "攻击",
     width: 2,
-    height: 0.7,
+    height: 1,
     dataIndex: "atk",
-    render({ rowData, dataIndex, column }) {
+    render({ rowData, column }) {
       return (
         <div
-          text={rowData[dataIndex]}
+          text={rowData[column.dataIndex]}
           size={{ width: column.width, height: column.height }}
-          bgColor={"#abc"}
+          // bgColor={"#abc"}
         ></div>
       );
     },
@@ -67,14 +66,14 @@ const columns = [
   {
     title: "防御",
     width: 2,
-    height: 0.7,
+    height: 1,
     dataIndex: "def",
-    render({ rowData, dataIndex, column }) {
+    render({ rowData, column }) {
       return (
         <div
-          text={rowData[dataIndex]}
+          text={rowData[column.dataIndex]}
           size={{ width: column.width, height: column.height }}
-          bgColor={"#67a"}
+          // bgColor={"#eee"}
         ></div>
       );
     },
@@ -84,10 +83,10 @@ const columns = [
     width: 2,
     height: 0.7,
     dataIndex: "battleResult",
-    render({ rowData, dataIndex, column }) {
+    render({ rowData, column }) {
       return (
         <div
-          text={rowData[dataIndex]}
+          text={rowData[column.dataIndex]}
           size={{ width: column.width, height: column.height }}
         ></div>
       );
@@ -115,7 +114,9 @@ function checkBattle(enemy, hero) {
 
 export default {
   onCreate() {
-    this.dataSource = Object.values(this.$loader.$resource.sprites.enemys);
+    this.dataSource = Object.values(
+      this.$loader.$resource.sprites.enemys
+    ).slice(0, 5);
   },
   render() {
     const { dataSource } = this;

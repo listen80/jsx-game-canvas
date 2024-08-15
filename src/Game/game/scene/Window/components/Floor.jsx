@@ -1,4 +1,6 @@
 import EventBlock from "../../../event/EventBlock";
+import Hero from "../../../event/Hero";
+
 import { transform } from "@/transform";
 export default {
   name: "Floor",
@@ -50,7 +52,7 @@ export default {
           return null;
         }
 
-        /*       {
+        /* {
           image: "animates";
           maxInterval: 10;
           maxTick: 4;
@@ -84,19 +86,10 @@ export default {
         }
       });
     });
-
-    // this.$state.map.mapEvents.forEach((element) => {
-    //   const { x, y, value, events } = element;
-    //   map[y][x] = value;
-    //   map[y + "," + x] = events;
-    //   console.log(y + "," + x, events)
-    // });
     return map;
   },
 
   onDestroy() {
-    // const bgm = this.props.map.bgm;
-    // this.$sound.pause('bgm', bgm)
     this.mapBgm.pause();
   },
 
@@ -141,7 +134,7 @@ export default {
     return (
       <div {...this.mapContainerProps} onClick={this.onClickx}>
         {this.renderMapTerrains()}
-        {/* <Hero map={this.map} terrains={this.terrains} /> */}
+        <Hero />
       </div>
     );
   },

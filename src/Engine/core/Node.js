@@ -19,12 +19,13 @@ export function createNode(createtor, props, ...children) {
     createtor,
     props,
     children,
-    $parent,
+    get $parent() {
+      return $parent
+    },
   };
 }
 
 function createInstance(next) {
-  // debugger;
   const $instance = Object.create(null);
   const $parent = next.$parent;
   const entries = Object.entries(next.createtor);
