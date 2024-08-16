@@ -1,13 +1,13 @@
 export default {
   render() {
     const { dataSource, columns, dataExtra } = this.props;
+    let y = 1;
     return (
       <div {...this.props}>
         {dataSource.map((rowData, rowIndex) => {
           let x = 0;
           return columns.map((column, columnIndex) => {
             const { title, dataIndex, width = 1, height = 1, render } = column;
-            let y = 0;
             return (
               <div
                 position={{ x: x, y: rowIndex }}
