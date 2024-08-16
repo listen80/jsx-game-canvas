@@ -13,7 +13,7 @@ export default {
       },
     };
     const { mapId } = this.$state;
-    this.mapJSON = this.$loader.$resource.maps[mapId];
+    this.mapJSON = this.$resource.maps[mapId];
     this.mapsDestroyTerrains = this.$state.save.mapsDestroyTerrains;
 
     // const bgm = this.$state.map.bgm;
@@ -22,6 +22,7 @@ export default {
     // this.map = this.createMap();
     // this.createWall();
     // this.$event.emit("message", this.$state.map.name);
+    this.mapTerrainsData = this.getMapTerrainsData();
   },
 
   getKey(mapId, x, y) {
@@ -31,10 +32,10 @@ export default {
     const { mapId } = this.$state;
     const { x, y } = position;
     const key = this.getKey(mapId, x, y);
-
     this.mapsDestroyTerrains[key] = true;
+    this.mapTerrainsData[y][x] = null;
   },
-  renderMapTerrains() {
+  getMapTerrainsData() {
     const { mapId } = this.$state;
     // 障碍物 不可以穿过
     // 物品 不可以穿过 可以捡取
@@ -60,13 +61,23 @@ export default {
           sy: 0;
           type: "animates";
         } */
-        const props = transform(this.$loader, mapIndexValue);
+        const data = transform(this.$loader, mapIndexValue);
         // console.log(transform(this.$loader, mapIndexValue))
+
+        const props = {
+          image: data.image,
+          position: { x, y },
+          sposition: { sx: 0, sy: data.sy },
+          size: { width: 1, height: 1 },
+          bgColor: "red",
+          onClick: this.ff,
+        };
+        return props;
         return (
           <div
-            image={props.image}
+            image={data.image}
             position={{ x, y }}
-            sposition={{ sx: 0, sy: props.sy }}
+            sposition={{ sx: 0, sy: data.sy }}
             size={{ width: 1, height: 1 }}
             bgColor={"red"}
             onClick={this.ff}
@@ -113,20 +124,10 @@ export default {
     });
   },
 
-  renderMapTerrainsxx() {
-    return this.map.map((line, y) =>
-      line.map((value, x) =>
-        value ? (
-          <EventBlock
-            value={value}
-            x={x}
-            y={y}
-            id={this.getKey(x, y)}
-            onClick={this.onEventClick}
-            event={this.map[y + "," + x]}
-          />
-        ) : null
-      )
+  renderMapTerrains() {
+    // console.log(this.mapTerrainsData)
+    return this.mapTerrainsData.map((row, y) =>
+      row.map((props) => (props ? <div {...props} /> : null))
     );
   },
 
