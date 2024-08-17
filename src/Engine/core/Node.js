@@ -1,6 +1,4 @@
 import {
-  isFunc,
-  isPrimitive,
   isArray,
   isComponent,
   isDisalbedElement,
@@ -16,7 +14,7 @@ export function createNode(createtor, props, ...children) {
     props,
     children,
     get $parent() {
-      return $parent
+      return $parent;
     },
   };
 }

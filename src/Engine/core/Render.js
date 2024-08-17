@@ -2,13 +2,7 @@ import { baseStyle } from "../const/style";
 import Draw from "./Draw";
 import { defaultHeight, defaultWidth } from "../const/box";
 import {
-  isFunc,
-  isPrimitive,
   isArray,
-  isUndefined,
-  isString,
-  isBoolean,
-  isObject,
   isDisalbedElement,
   isComponent,
   isElement,
@@ -16,11 +10,11 @@ import {
 
 const mouseEvents = [
   "Click",
-  // "ContextMenu",
-  // 'Wheel',
-  // "MouseDown",
-  // "MouseUp",
-  // "MouseMove",
+  "ContextMenu",
+  "Wheel",
+  "MouseDown",
+  "MouseUp",
+  "MouseMove",
 ];
 
 const keyEvents = ["KeyDown", "KeyUp"];
@@ -71,28 +65,30 @@ export default class Render extends Draw {
     this.keyEventsCollectionKeyframe = [];
   }
 
+  callbackFns() {}
   bindEvents() {
+    const fn = (e) => {
+      e.name = `on${e.type}`;
+      e.canvasX = (e.offsetX / $offsetWidth) * width;
+      e.canvasY = (e.offsetY / $offsetHeight) * height;
+      e.gameX = e.canvasX / pixelRatio;
+      e.gameY = e.canvasY / pixelRatio;
+      e.$node = null;
+      this.mouseEventsCollectionKeyframe.push(e);
+
+      e.preventDefault();
+    };
     const { pixelRatio } = this.config;
 
     this.restoreEvents();
     const canvas = this.canvas;
     const { $offsetWidth, $offsetHeight, width, height } = canvas;
     mouseEvents.forEach((name) => {
-      this.canvas.addEventListener(
-        name.toLowerCase(),
-        (e) => {
-          e.name = `on${name}`;
-          e.canvasX = (e.offsetX / $offsetWidth) * width;
-          e.canvasY = (e.offsetY / $offsetHeight) * height;
-          e.gameX = e.canvasX / pixelRatio;
-          e.gameY = e.canvasY / pixelRatio;
-          e.$node = null;
-          this.mouseEventsCollectionKeyframe.push(e);
+      this.canvas.addEventListener(name.toLowerCase(), fn, { passive: false });
+    });
 
-          e.preventDefault();
-        },
-        { passive: false }
-      );
+    keyEvents.forEach((name) => {
+      this.canvas.addEventListener(name.toLowerCase(), fn, { passive: false });
     });
 
     // keyEvents.forEach((name) => {
