@@ -1,20 +1,23 @@
 module.exports = {
   presets: [
     [
-      '@babel/preset-env', {
+      "@babel/preset-env",
+      {
         targets: {
-          browsers: 'chrome >= 120',
+          browsers: "chrome >= 120",
         },
-      }],
+      },
+    ],
     [
-      '@babel/preset-react', {
-        pragma: 'this.$createElement',
-        pragmaFrag: 'this.$createElement',
+      "@babel/preset-react",
+      {
+        pragma: "this.$createElement",
+        pragmaFrag: JSON.stringify("view"),
       },
     ],
   ],
   plugins: [
-    '@babel/plugin-syntax-jsx',
+    "@babel/plugin-syntax-jsx",
     // '@babel/plugin-transform-runtime'
   ],
-}
+};

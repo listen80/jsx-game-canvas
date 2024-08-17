@@ -1,5 +1,6 @@
 import Table from "#/Data/Table";
 import { transform } from "@/transform";
+
 const columns = [
   {
     title: null,

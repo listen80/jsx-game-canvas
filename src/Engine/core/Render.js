@@ -126,7 +126,9 @@ export default class Render extends Draw {
         bgColor,
         lineGradient,
       } = props;
-      this.mergeStyle(style);
+      if (style) {
+        this.mergeStyle(style);
+      }
 
       if (bgColor) {
         this.drawBackgroundColor(node, offsetX, offsetY);
@@ -153,7 +155,9 @@ export default class Render extends Draw {
       }
     }
 
-    children.forEach((child) => this.renderAnything(child, offsetX, offsetY, node));
+    children.forEach((child) =>
+      this.renderAnything(child, offsetX, offsetY, node)
+    );
 
     context.restore();
   }
