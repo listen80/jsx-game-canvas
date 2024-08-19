@@ -1,32 +1,18 @@
-import {
-  setSave,
-  checkSave,
-  setSaveByStr,
-  checkSaveByStr,
-} from '../utils/game'
+const getItems = "getItems";
+const getItem = "getItem";
 
 export default {
-  getItems (data, { $state }) {
-    setSave($state, { items: data }, next)
+  [getItems](dataList, { $state }) {
+    // setSave($state, { items: data }, next);
+    dataList.array.forEach((item) => {
+      this.emit(getItem, item);
+    });
   },
 
-  getItem (data, { $state }) {
-    setSave($state, { items: { [data]: 1 } }, next)
+  [getItem](data, { $state }) {
+    if (!$state.save.item[data]) {
+      $state.save.item[data] = 0;
+    }
+    $state.save.item[data]++;
   },
-
-  setSave (data, { $state }) {
-    setSave($state, data, next)
-  },
-
-  checkSave (data, { $state }) {
-    return checkSave($state, data, next)
-  },
-
-  setSaveByStr (data, { $state }) {
-    setSaveByStr($state, data, next)
-  },
-
-  checkSaveByStr (data, { $state }) {
-    return checkSaveByStr($state, data, next)
-  },
-}
+};
