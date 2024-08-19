@@ -70,9 +70,8 @@ export default class Engine {
   }
 
   keyFrame() {
-    // console.log('pre__', this.$root);
+    this.$eventStream.render(this.$root);
     this.$root = patchNode(this.$root, createNode.call(this, this.$app, null));
-    // console.log('after', this.$root);
     this.$render.render(this.$root); // 渲染开始
   }
 }
