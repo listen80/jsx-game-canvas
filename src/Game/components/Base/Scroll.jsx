@@ -20,7 +20,7 @@ export default {
 
   render () {
     return (
-      <div
+      <view
         style={{
           height: this.height,
           width: this.width,
@@ -29,8 +29,8 @@ export default {
         }}
         onWheel={this.onWheel}
       >
-        <div style={{ y: -this.scrollTop }}>{this.children}</div>
-      </div>
+        <view style={{ y: -this.scrollTop }}>{this.children}</view>
+      </view>
     )
   },
 }

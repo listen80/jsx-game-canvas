@@ -56,7 +56,7 @@ export default {
   render() {
     // this.runSteps();
     return (
-      <div
+      <view
         image={"Characters/hero.png"}
         position={{
           x: 5,
@@ -66,7 +66,7 @@ export default {
           width: 1,
           height: 1,
         }}
-      ></div>
+      ></view>
     );
   },
 };

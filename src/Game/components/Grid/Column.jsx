@@ -3,17 +3,17 @@ export default {
     let y = 0;
     const { render = [], ...others } = this.props;
     return (
-      <div {...others}>
+      <view {...others}>
         {render.map((child) => {
           if (!child) {
             return null;
           }
           const { height = 1 } = {};
-          const rowEle = <div position={{ y }}>{child}</div>;
+          const rowEle = <view position={{ y }}>{child}</view>;
           y += height;
           return rowEle;
         })}
-      </div>
+      </view>
     );
   },
 };

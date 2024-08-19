@@ -21,10 +21,10 @@ export default {
   render() {
     if (this.props.show) {
       return (
-        <div {...this.wrapProps}>
-          <div {...this.closeButtonProps}></div>
+        <view {...this.wrapProps}>
+          <view {...this.closeButtonProps}></view>
           {this.children}
-        </div>
+        </view>
       );
     }
   },

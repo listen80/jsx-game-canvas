@@ -75,27 +75,27 @@ export default {
 
     const size = { width: 1, height: 1 };
     return (
-      <div {...wrapProps}>
+      <view {...wrapProps}>
         {rowProperty.map(({ sposition, text, event, data }, index) => {
           return (
-            <div
+            <view
               position={{ y: index * 1.2 + 0.2 }}
               size={{ width: 4 }}
               event={event}
               data={data}
               onClick={this.onClick}
             >
-              <div image="icons" size={size} sposition={sposition} />
-              <div
+              <view image="icons" size={size} sposition={sposition} />
+              <view
                 position={{ x: 1.5 }}
                 size={{ height: 1, width: 2.5 }}
                 bgColor={"rgba(0,0,0,.5)"}
                 text={text}
-              ></div>
-            </div>
+              ></view>
+            </view>
           );
         })}
-      </div>
+      </view>
     );
   },
 };

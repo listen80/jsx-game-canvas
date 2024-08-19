@@ -8,14 +8,14 @@ const columns = [
     height: 1.2,
     render({ rowIndex }) {
       return (
-        <div
+        <view
           image={"enemys"}
           // position={{ x, y }}
           sposition={{ sx: 0, sy: rowIndex }}
           size={{ width: 1, height: 1 }}
           // bgColor={"yellow"}
           // border={{ width: 3 }}
-        ></div>
+        ></view>
       );
     },
   },
@@ -26,11 +26,11 @@ const columns = [
     dataIndex: "name",
     render({ rowData, column }) {
       return (
-        <div
+        <view
           text={rowData[column.dataIndex]}
           size={{ width: column.width, height: column.height }}
           // bgColor={"red"}
-        ></div>
+        ></view>
       );
     },
   },
@@ -41,11 +41,11 @@ const columns = [
     dataIndex: "hp",
     render({ rowData, column }) {
       return (
-        <div
+        <view
           text={rowData[column.dataIndex]}
           size={{ width: column.width, height: column.height }}
           // bgColor={"#ccc"}
-        ></div>
+        ></view>
       );
     },
   },
@@ -56,11 +56,11 @@ const columns = [
     dataIndex: "atk",
     render({ rowData, column }) {
       return (
-        <div
+        <view
           text={rowData[column.dataIndex]}
           size={{ width: column.width, height: column.height }}
           // bgColor={"#abc"}
-        ></div>
+        ></view>
       );
     },
   },
@@ -71,11 +71,11 @@ const columns = [
     dataIndex: "def",
     render({ rowData, column }) {
       return (
-        <div
+        <view
           text={rowData[column.dataIndex]}
           size={{ width: column.width, height: column.height }}
           // bgColor={"#eee"}
-        ></div>
+        ></view>
       );
     },
   },
@@ -86,10 +86,10 @@ const columns = [
     dataIndex: "battleResult",
     render({ rowData, column }) {
       return (
-        <div
+        <view
           text={rowData[column.dataIndex]}
           size={{ width: column.width, height: column.height }}
-        ></div>
+        ></view>
       );
     },
   },
@@ -105,7 +105,7 @@ function checkBattle(enemy, hero) {
       return hero.hp > needHp ? (
         needHp
       ) : (
-        <div style={{ fillStyle: "red", height: 1 }}>{needHp}</div>
+        <view style={{ fillStyle: "red", height: 1 }}>{needHp}</view>
       );
     }
   } else {
@@ -123,7 +123,7 @@ export default {
     const { dataSource } = this;
 
     return (
-      <div
+      <view
         position={{
           x: this.$config.screen.width / 2,
           y: this.$config.screen.height / 2,
@@ -135,7 +135,7 @@ export default {
         border={{ width: 2, color: "white" }}
       >
         <Table dataSource={dataSource} columns={columns} />
-      </div>
+      </view>
     );
   },
 };

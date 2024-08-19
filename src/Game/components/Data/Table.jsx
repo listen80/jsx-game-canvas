@@ -3,13 +3,13 @@ export default {
     const { dataSource, columns, dataExtra } = this.props;
     let y = 1;
     return (
-      <div {...this.props}>
+      <view {...this.props}>
         {dataSource.map((rowData, rowIndex) => {
           let x = 0;
           return columns.map((column, columnIndex) => {
             const { title, dataIndex, width = 1, height = 1, render } = column;
             return (
-              <div
+              <view
                 position={{ x: x, y: rowIndex }}
                 // size={{ width, height }}
                 right={(x = x + width)}
@@ -25,13 +25,13 @@ export default {
                     dataExtra,
                   })
                 ) : (
-                  <div text={rowData[dataIndex]}></div>
+                  <view text={rowData[dataIndex]}></view>
                 )}
-              </div>
+              </view>
             );
           });
         })}
-      </div>
+      </view>
     );
   },
 };

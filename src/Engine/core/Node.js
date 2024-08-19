@@ -8,7 +8,7 @@ import {
 export function createNode(createtor, props, ...children) {
   const $parent = this; // 创建的组件
   // class component
-  // div node
+  // view node
   return {
     createtor,
     props,
@@ -63,7 +63,7 @@ function destoryInstance(pre) {
         destoryInstance(item);
       });
     } else if (isElement(pre)) {
-      // div
+      // view
       destoryInstance(pre.children);
     }
   }
@@ -93,7 +93,7 @@ export function patchNode(preNode, nextNode) {
   // string number
   // array
   // class component
-  // div node
+  // view node
   if (isDisalbedElement(nextNode)) {
     destoryInstance(preNode);
   } else if (isElement(nextNode)) {

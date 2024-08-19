@@ -163,7 +163,7 @@ export default class Render extends Draw {
     // string number
     // array
     // component
-    // div node
+    // view node
     if (isDisalbedElement(createdNode)) {
       // const props = offsetParent.props;
       // this.drawText(
@@ -184,7 +184,7 @@ export default class Render extends Draw {
     } else if (isComponent(createdNode)) {
       this.renderAnything(createdNode.$node, offsetX, offsetY, offsetParent);
     } else if (isElement(createdNode)) {
-      // div node
+      // view node
       this.renderNode(createdNode, offsetX, offsetY, offsetParent);
     }
   }
@@ -224,7 +224,7 @@ export default class Render extends Draw {
 
   renderNode(node, offsetX, offsetY, offsetParent) {
     // 非class component
-    // div node
+    // view node
     // { props, children }
     const { context } = this;
     context.save();

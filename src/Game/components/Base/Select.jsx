@@ -36,7 +36,7 @@ export default {
   render() {
     const selects = this.props.options.map(({ text }, y) => {
       const select = (
-        <div
+        <view
           text={text}
           position={{ y: y }}
           size={{ height: 1, width: 3 }}
@@ -45,10 +45,10 @@ export default {
           // bgColor={`rgba(244,244,31,.5)`}
           index={y}
           onClick={this.onClick}
-        ></div>
+        ></view>
       );
       return select;
     });
-    return <div {...this.props}>{selects}</div>;
+    return <view {...this.props}>{selects}</view>;
   },
 };

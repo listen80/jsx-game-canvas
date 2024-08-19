@@ -18,7 +18,7 @@ export default {
 
   render() {
     return (
-      <div
+      <view
         align="center"
         verticalAlign="middle"
         position={{
@@ -29,11 +29,11 @@ export default {
         bgColor="black"
         border={{ width: 2, color: "white" }}
       >
-        <div
+        <view
           text="选择楼层"
           position={{ x: width / 2, y: 0.8 }}
           style={{ font: font25 }}
-        ></div>
+        ></view>
         <Grid
           align="center"
           position={{ x: width / 2, y: 1.5 }}
@@ -42,17 +42,17 @@ export default {
           columnWidth={3}
           render={this.$state.save.floors.map((floor) => {
             return (
-              <div
+              <view
                 text={floor}
                 position={{ x: 0.2 }}
                 size={{ height: 0.9, width: 2.6 }}
                 border={{ width: 1, color: "white" }}
                 onClick={this.onClick}
-              ></div>
+              ></view>
             );
           })}
         ></Grid>
-      </div>
+      </view>
     );
   },
 };

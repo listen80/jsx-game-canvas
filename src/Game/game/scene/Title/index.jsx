@@ -43,7 +43,7 @@ export default {
   render() {
     return (
       <>
-        <div {...this.textProps}></div>
+        <view {...this.textProps}></view>
         <Select
           align="center"
           style={this.style}

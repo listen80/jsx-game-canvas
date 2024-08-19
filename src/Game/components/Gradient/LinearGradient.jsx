@@ -8,6 +8,6 @@ export default {
     this.lineGradient = lineGradient
   },
   render () {
-    return <div size={{ width: 3, height: 3 }} style={{ fillStyle: this.lineGradient }} bgColor={this.lineGradient} lineGradient2={this.lineGradient}></div>
+    return <view size={{ width: 3, height: 3 }} style={{ fillStyle: this.lineGradient }} bgColor={this.lineGradient} lineGradient2={this.lineGradient}></view>
   },
 }

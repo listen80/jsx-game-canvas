@@ -33,13 +33,13 @@ export default {
   },
   renderText() {
     return this.textArr.map((text, index) => (
-      <div position={{ y: index / 2 }} text={text}></div>
+      <view position={{ y: index / 2 }} text={text}></view>
     ));
   },
 
   render() {
     return (
-      <div
+      <view
         position={{
           x: this.$config.screen.width / 2,
           y: this.$config.screen.height / 2,
@@ -50,14 +50,14 @@ export default {
         bgColor="black"
         border={mediumWhiteBorder}
       >
-        <div
+        <view
           text={this.shopJSON.title}
           position={{ x: width / 2, y: 0.8 }}
           style={{ font: font25 }}
-        ></div>
-        <div position={{ x: width / 2, y: 2 }}>{this.renderText()}</div>
+        ></view>
+        <view position={{ x: width / 2, y: 2 }}>{this.renderText()}</view>
         <Select position={{ x: width / 2, y: 5 }} options={this.shopJSON.choices} onConfirm={this.onConfirm} />
-      </div>
+      </view>
     );
   },
 };

@@ -66,22 +66,22 @@ export default {
 
   renderContinue() {
     return (
-      <div
+      <view
         {...this.continueMessage}
         onClick={this.onClick}
         text="点击继续"
-      ></div>
+      ></view>
     );
   },
 
   renderScrollText() {
     const { lineHeight } = this;
     return (
-      <div {...this.scrollText}>
+      <view {...this.scrollText}>
         {this.textArr.map((text, index) => (
-          <div position={{ y: index * lineHeight }} text={text}></div>
+          <view position={{ y: index * lineHeight }} text={text}></view>
         ))}
-      </div>
+      </view>
     );
   },
 

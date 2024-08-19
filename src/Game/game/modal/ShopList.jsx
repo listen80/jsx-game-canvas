@@ -12,7 +12,7 @@ export default {
 
   render() {
     return (
-      <div
+      <view
         position={{
           x: this.$config.screen.width / 2,
           y: this.$config.screen.height / 2,
@@ -23,28 +23,28 @@ export default {
         bgColor="black"
         border={mediumWhiteBorder}
       >
-        <div
+        <view
           text="选择商店"
           position={{ x: 4.5, y: 0.8 }}
           style={{ font: font25 }}
-        ></div>
+        ></view>
         <Column
           position={{ x: 1, y: 1.5 }}
           render={this.$state.save.shops.map((shopId) => {
             // const shop = this.$config.shopList[shopId];
             return (
-              <div
+              <view
                 text={shopId}
                 size={{ height: 0.7, width: 7 }}
                 bgColor={"rgba(0,0,0,.5)"}
                 border={thinWhiteBorder}
                 // shop={shop}
                 onClick={this.onClick}
-              ></div>
+              ></view>
             );
           })}
         ></Column>
-      </div>
+      </view>
     );
   },
 };

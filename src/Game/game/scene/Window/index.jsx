@@ -17,12 +17,12 @@ export default {
 
   render() {
     return (
-      <div {...this.wrapProps}>
+      <view {...this.wrapProps}>
         <Floor />
         <BlueWall />
         <StatusBar />
         <OperationBar />
-      </div>
+      </view>
     );
   },
 };

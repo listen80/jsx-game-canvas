@@ -1,6 +1,8 @@
 import Render from "./core/Render";
 import Loader from "./core/Loader";
 import Sound from "./core/Sound";
+import EventStream from "./core/EventStream";
+
 import EventEmitter from "./core/EventEmitter";
 
 import { createNode, patchNode } from "./core/Node";
@@ -39,6 +41,7 @@ export default class Engine {
     this.$sound = new Sound(config, this.$loader); // 音频控制器
 
     this.$render = new Render(config, this.$loader); // 渲染器 + 事件控制器
+    this.$eventStream = new EventStream(this);
 
     this.$event = new EventEmitter({
       $config: this.$config,
@@ -64,12 +67,6 @@ export default class Engine {
       });
     };
     next();
-    document.addEventListener("contextmenu", (e) => {
-      this.$state.f = !this.$state.f;
-      next();
-      e.preventDefault();
-      return false;
-    });
   }
 
   keyFrame() {

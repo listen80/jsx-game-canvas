@@ -13,7 +13,7 @@ export default {
   render() {
     return (
       <>
-        <div {...this.textProps}></div>
+        <view {...this.textProps}></view>
         <Progress />
       </>
     );

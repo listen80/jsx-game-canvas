@@ -74,14 +74,14 @@ export default {
         };
         return props;
         return (
-          <div
+          <view
             image={data.image}
             position={{ x, y }}
             sposition={{ sx: 0, sy: data.sy }}
             size={{ width: 1, height: 1 }}
             bgColor={"red"}
             onClick={this.ff}
-          ></div>
+          ></view>
         );
         // return <EventBlock value={mapIndexValue} x={x} y={y} />;
       });
@@ -127,16 +127,16 @@ export default {
   renderMapTerrains() {
     // console.log(this.mapTerrainsData)
     return this.mapTerrainsData.map((row, y) =>
-      row.map((props) => (props ? <div {...props} /> : null))
+      row.map((props) => (props ? <view {...props} /> : null))
     );
   },
 
   render() {
     return (
-      <div {...this.mapContainerProps} onClick={this.onClickx}>
+      <view {...this.mapContainerProps} onClick={this.onClickx}>
         {this.renderMapTerrains()}
         <Hero />
-      </div>
+      </view>
     );
   },
 };

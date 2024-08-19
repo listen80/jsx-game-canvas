@@ -32,10 +32,10 @@ export default {
     this.runAnimateNext()
     const { sx, sy } = this.animateConfig
     return (
-      <div
+      <view
         image={this.props.image}
         style={{ ...this.props.style, sx, sy }}
-      ></div>
+      ></view>
     )
   },
 }

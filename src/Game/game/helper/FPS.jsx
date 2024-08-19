@@ -21,7 +21,7 @@ export default {
   render () {
     this.getFps()
     return (
-      <div {...this.attr}></div>
+      <view {...this.attr}></view>
     )
   },
 }

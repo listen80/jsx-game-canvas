@@ -167,20 +167,20 @@ export default {
     const { x, y } = this.props;
     const size = { height: 1, width: 1 };
     return (
-      <div
+      <view
         position={{ x, y }}
         style={{ width: 1, height: 1, x, y }}
         onClick={this.onClick}
       >
         {/* <Animate {...this.data}></Animate> */}
-        <div
+        <view
           size={size}
           image={this.data.image}
           sposition={{ sy: this.data.sy }}
-        ></div>
+        ></view>
 
         {this.enemy}
-      </div>
+      </view>
     );
   },
 };

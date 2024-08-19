@@ -37,9 +37,9 @@ export default {
     const { progressBar, progress } = this;
 
     return (
-      <div {...progressBar}>
-        <div {...progress}></div>
-      </div>
+      <view {...progressBar}>
+        <view {...progress}></view>
+      </view>
     );
   },
 };

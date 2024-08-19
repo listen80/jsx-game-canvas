@@ -48,14 +48,14 @@ export default {
       const { message, messageStyle, tick } = config;
       const style = { globalAlpha: tick / 60 };
       return (
-        <div
+        <view
           style={style}
           align="center"
           text={message}
           position={messageStyle.position}
           size={{ height: 1, width: 5 }}
           bgColor="rgba(0,0,0,.7)"
-        ></div>
+        ></view>
       );
     });
   },

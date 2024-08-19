@@ -136,50 +136,50 @@ export default {
     }
     const { styles } = this
     return (
-      <div
+      <view
         image="Battlebacks/mota.jpg"
         style={this.styles.battle}
         onClick={this.onClick}
       >
         {this.battleMsg && (
-          <div style={msgStyle}>
+          <view style={msgStyle}>
             {this.battleMsg}
-            <div style={{ x: 8, y, height: 1 }}>↓</div>
-          </div>
+            <view style={{ x: 8, y, height: 1 }}>↓</view>
+          </view>
         )}
 
-        <div style={this.styles.enemy}>
-          <div image="enemys" style={styles.enemyImageStyle} />
+        <view style={this.styles.enemy}>
+          <view image="enemys" style={styles.enemyImageStyle} />
           {this.proprety.map((item, index) => {
             return (
-              <div style={{ x: 0 * 1, y: index * 1 }}>
-                <div style={{ width: 4, textAlign: 'left', height: 1 }}>
+              <view style={{ x: 0 * 1, y: index * 1 }}>
+                <view style={{ width: 4, textAlign: 'left', height: 1 }}>
                   {item.text}
-                </div>
-                <div style={{ width: 4, textAlign: 'right', height: 1 }}>
+                </view>
+                <view style={{ width: 4, textAlign: 'right', height: 1 }}>
                   {enemy[item.key]}
-                </div>
-              </div>
+                </view>
+              </view>
             )
           })}
-        </div>
-        <div style={vsStyle}>VS</div>
-        <div style={this.styles.hero}>
-          <div image="Characters/hero.png" style={styles.heroImageStyle} />
+        </view>
+        <view style={vsStyle}>VS</view>
+        <view style={this.styles.hero}>
+          <view image="Characters/hero.png" style={styles.heroImageStyle} />
           {this.proprety.map((item, index) => {
             return (
-              <div style={{ x: 0 * 1, y: index * 1 }}>
-                <div style={{ width: 4, textAlign: 'left', height: 1 }}>
+              <view style={{ x: 0 * 1, y: index * 1 }}>
+                <view style={{ width: 4, textAlign: 'left', height: 1 }}>
                   {hero[item.key]}
-                </div>
-                <div style={{ width: 4, textAlign: 'right', height: 1 }}>
+                </view>
+                <view style={{ width: 4, textAlign: 'right', height: 1 }}>
                   {item.text}
-                </div>
-              </div>
+                </view>
+              </view>
             )
           })}
-        </div>
-      </div>
+        </view>
+      </view>
     )
   },
 }
