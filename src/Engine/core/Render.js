@@ -67,6 +67,9 @@ export default class Render extends Draw {
 
   callbackFns() {}
   bindEvents() {
+    const canvas = this.canvas;
+    const { $offsetWidth, $offsetHeight, width, height } = canvas;
+
     const fn = (e) => {
       e.name = `on${e.type}`;
       e.canvasX = (e.offsetX / $offsetWidth) * width;
@@ -81,8 +84,6 @@ export default class Render extends Draw {
     const { pixelRatio } = this.config;
 
     this.restoreEvents();
-    const canvas = this.canvas;
-    const { $offsetWidth, $offsetHeight, width, height } = canvas;
     mouseEvents.forEach((name) => {
       this.canvas.addEventListener(name.toLowerCase(), fn, { passive: false });
     });

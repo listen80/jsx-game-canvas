@@ -1,3 +1,12 @@
+import { baseStyle } from "../const/style";
+import Draw from "./Draw";
+import { defaultHeight, defaultWidth } from "../const/box";
+import {
+  isArray,
+  isDisalbedElement,
+  isComponent,
+  isElement,
+} from "../utils/type";
 const mouseEvents = [
   "Click",
   "ContextMenu",
@@ -16,10 +25,18 @@ export default class EventStream {
     this.$render = engine.$render;
     this.canvas = this.$render.canvas;
     this.$engine = engine;
+    this.mouseEventsCollectionKeyframe = [];
     this.bindEvents();
+
+    const canvas = this.canvas;
+    this.canvas.$offsetWidth = canvas.offsetWidth;
+    this.canvas.$offsetHeight = canvas.offsetHeight;
   }
   callback(e) {
-    const { pixelRatio } = this.$engine.config;
+    const canvas = this.canvas;
+    const { pixelRatio } = this.$engine.$config;
+    const { $offsetWidth, $offsetHeight, width, height } = canvas;
+
     e.canvasX = (e.offsetX / $offsetWidth) * width;
     e.canvasY = (e.offsetY / $offsetHeight) * height;
     e.gameX = e.canvasX / pixelRatio;
@@ -96,6 +113,25 @@ export default class EventStream {
     }
     this.drawNode(node, offsetX, offsetY, offsetParent);
   }
+
+  calcEvent(node, offsetX, offsetY) {
+    // events of mouse
+    const { width = defaultWidth, height = defaultHeight } =
+      node.props.size || {};
+    this.mouseEventsCollectionKeyframe.forEach((event) => {
+      const { gameX, gameY, name } = event;
+      if (
+        gameX >= offsetX &&
+        gameX < width + offsetX &&
+        gameY >= offsetY &&
+        gameY < height + offsetY &&
+        node?.props[name]
+      ) {
+        event.$node = node;
+      }
+    });
+  }
+
   renderAnything(createdNode, offsetX, offsetY, offsetParent) {
     // undefined null
     // string number

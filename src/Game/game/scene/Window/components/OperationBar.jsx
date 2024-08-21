@@ -13,7 +13,7 @@ export default {
   },
 
   render() {
-    const { mapId, mapKey } = this.$state;
+    const { mapId } = this.$state;
     const map = this.$loader.$resource.maps[mapId];
     const rowProperty = [
       {

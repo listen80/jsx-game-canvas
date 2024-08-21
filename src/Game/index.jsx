@@ -30,16 +30,16 @@ export default {
 
   renderWindow() {
     const { $state } = this;
-    const { mapId, mapKey } = $state;
+    const { mapId } = $state;
     const map = this.$loader.$resource.maps[mapId];
     if (map) {
       const { text, movie } = map;
       if (text) {
-        return <ScrollText key={mapKey} />;
+        return <ScrollText />;
       } else if (movie) {
-        return <Movie key={mapKey} />;
+        return <Movie />;
       } else {
-        return <Window key={mapKey} />;
+        return <Window />;
       }
     } else {
       return <Title />;

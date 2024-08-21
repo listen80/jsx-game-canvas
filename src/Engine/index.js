@@ -70,7 +70,7 @@ export default class Engine {
   }
 
   keyFrame() {
-    this.$eventStream.render(this.$root);
+    this.$eventStream.calc(this.$root);
     this.$root = patchNode(this.$root, createNode.call(this, this.$app, null));
     this.$render.render(this.$root); // 渲染开始
   }

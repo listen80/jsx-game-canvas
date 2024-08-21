@@ -33,11 +33,12 @@ export default {
   },
 
   [gotoMap](mapId, { $state, $loader }) {
+    $state.mapId = null;
     return $loader.loadMap(mapId).then((map) => {
-      $state.mapId = mapId;
-      // $state.save.position = data;
-      $state.mapKey = `${mapId} ${new Date()}`;
-      // $state.map = map;
+      const timer = setTimeout(() => {
+        $state.mapId = mapId;
+        clearTimeout(timer);
+      });
     });
   },
 
