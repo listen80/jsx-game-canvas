@@ -8,18 +8,6 @@ import {
   isElement,
   isUndefined,
 } from "../utils/type";
-
-const mouseEvents = [
-  "Click",
-  "ContextMenu",
-  "Wheel",
-  "MouseDown",
-  "MouseUp",
-  "MouseMove",
-];
-
-const keyEvents = ["KeyDown", "KeyUp"];
-
 export default class Render extends Draw {
   constructor(config, $loader) {
     super();
@@ -75,6 +63,7 @@ export default class Render extends Draw {
         bgColor,
         lineGradient,
       } = props;
+
       if (style) {
         this.mergeStyle(style);
       }
@@ -120,67 +109,51 @@ export default class Render extends Draw {
     if (isUndefined(createdNode)) {
       return;
     }
+    if (isElement(createdNode)) {
+      // view node
+      this.renderElementNode(createdNode, offsetX, offsetY, offsetParent);
+      return;
+    }
     if (isDisalbedElement(createdNode, offsetParent)) {
       this.drawTextPrimitiv(createdNode, offsetX, offsetY, offsetParent);
-      // const props = offsetParent.props;
-      // this.drawText(
-      //   {
-      //     props,
-      //     text: createdNode,
-      //   },
-      //   offsetX,
-      //   offsetY,
-      //   offsetParent
-      // );
       return;
     }
     if (isArray(createdNode)) {
       createdNode.forEach((child) =>
         this.renderAnything(child, offsetX, offsetY, offsetParent)
       );
-    } else if (isComponent(createdNode)) {
+      return;
+    }
+    if (isComponent(createdNode)) {
       this.renderAnything(createdNode.$node, offsetX, offsetY, offsetParent);
-    } else if (isElement(createdNode)) {
-      // view node
-      this.renderNode(createdNode, offsetX, offsetY, offsetParent);
+      return;
     }
   }
 
-  renderNode(node, offsetX, offsetY, offsetParent) {
+  renderElementNode(node, offsetX, offsetY, offsetParent) {
     // 非class component
     // view node
     // { props, children }
-    const { context } = this;
-    context.save();
     if (node.props) {
       const { position, size } = node.props;
 
       const { x = 0, y = 0 } = position || {};
       const { width = 0, height = 0 } = size || {};
 
-      const { align, verticalAlign } = node.props;
-      if (align) {
-        const offsetAlign = { left: 0, center: -0.5, right: -1 };
-        const offsetAlignRate = offsetAlign[align];
-        offsetX += x + width * offsetAlignRate;
-      } else {
-        offsetX += x;
-      }
-      if (verticalAlign) {
-        const offsetVerticalAlign = { top: 0, middle: -0.5, bottom: -1 };
-        const offsetVerticalAlignRate = offsetVerticalAlign[verticalAlign];
-        offsetY += y + height * offsetVerticalAlignRate;
-      } else {
-        offsetY += y;
-      }
+      const { align = "left", verticalAlign = "top" } = node.props;
+      const offsetAlign = { left: 0, center: -0.5, right: -1 };
+      const offsetAlignRate = offsetAlign[align];
+      offsetX += x + width * offsetAlignRate;
+
+      const offsetVerticalAlign = { top: 0, middle: -0.5, bottom: -1 };
+      const offsetVerticalAlignRate = offsetVerticalAlign[verticalAlign];
+      offsetY += y + height * offsetVerticalAlignRate;
     }
     this.drawNode(node, offsetX, offsetY, offsetParent);
-
-    context.restore();
   }
 
   render(createdNode) {
     this.clearRect();
-    this.renderAnything(createdNode, 0, 0, {});
+    this.renderAnything(createdNode, 0, 0, null);
   }
 }

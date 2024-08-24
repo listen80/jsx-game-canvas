@@ -59,7 +59,7 @@ export default {
     } = $state || {};
     return (
       <>
-        <Modal show={showEnemyInfo}>
+        <Modal show={showEnemyInfo} >
           <EnemyInfo />
         </Modal>
 
