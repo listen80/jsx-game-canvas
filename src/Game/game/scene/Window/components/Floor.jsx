@@ -101,7 +101,7 @@ export default {
   },
 
   onDestroy() {
-    this.mapBgm.pause();
+    // this.mapBgm.pause();
   },
 
   onClick(props, e) {

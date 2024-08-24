@@ -3,10 +3,13 @@ export default {
     this.wrapProps = {
       position: { x: 18, y: 1 },
       style: { font: "24px 楷体" },
+      onClick: function () {
+        console.log(this);
+      },
     };
   },
 
-  onClick({ event, data }) {
+  onClick({ event, data }, e) {
     if (event) {
       this.$event.emit(event, data);
     }
@@ -67,27 +70,28 @@ export default {
     const size = { width: 1, height: 1 };
 
     return (
-      <view {...this.wrapProps}>
-        {rowProperty.map(({ sposition, text, event, data }, index) => {
+      <operation {...this.wrapProps}>
+        {rowProperty.map(({ sposition, text, event }, index) => {
           return (
-            <view
+            <wrap
               position={{ y: index * 1.2 + 0.2 }}
               size={{ width: 4 }}
               event={event}
-              data={data}
               onClick={this.onClick}
             >
-              <view image="icons" size={size} sposition={sposition} />
-              <view
+              <icon image="icons" size={size} sposition={sposition} />
+              <text
                 position={{ x: 1.5 }}
                 size={{ height: 1, width: 2.5 }}
-                text={text}
+                // text={text}
                 bgColor={"rgba(0,0,0,.5)"}
-              ></view>
-            </view>
+              >
+                {text}
+              </text>
+            </wrap>
           );
         })}
-      </view>
+      </operation>
     );
   },
 };

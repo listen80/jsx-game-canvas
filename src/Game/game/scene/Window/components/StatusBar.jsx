@@ -6,7 +6,7 @@ export default {
     };
   },
 
-  onClick({ event, data }) {
+  onClick({ event, data }, e) {
     if (event) {
       this.$event.emit(event, data);
     }

@@ -55,9 +55,16 @@ export default class EventStream {
   colletEvent(e) {
     this.currentFramesList.push(e);
   }
+  runEvent(element, name, e) {
+    const { props, offsetParent } = element;
+    // console.log(props?.[name], name)
+    props?.[name]?.(props, e);
+    !e.cancelBubble && offsetParent && this.runEvent(offsetParent, name, e);
+  }
   runEvents() {
     this.currentFramesList.forEach((e) => {
-      console.log(e);
+      const { name, $node } = e;
+      this.runEvent($node, name, e);
     });
     // const length = this.currentFramesList.length;
     // this.currentFramesList.splice(0, length);
@@ -113,6 +120,7 @@ export default class EventStream {
         offsetY += y;
       }
     }
+    node.offsetParent = offsetParent;
     this.calcEvent(node, offsetX, offsetY, offsetParent);
     this.drawNode(node, offsetX, offsetY, offsetParent);
   }
