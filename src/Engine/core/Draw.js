@@ -35,8 +35,7 @@ export default class Draw {
     const { pixelRatio } = this.config;
     const { context } = this;
     const { width: borderWidth, color: borderColor } = node.props.border;
-    const { width = 0, height = 0 } =
-      node.props.size || {};
+    const { width = 0, height = 0 } = node.props.size || {};
     if (borderWidth) {
       context.save();
       context.lineWidth = borderWidth;
@@ -58,8 +57,7 @@ export default class Draw {
     const { pixelRatio } = this.config;
     const { context } = this;
     const backgroundImage = node.props.backgroundImage;
-    const { width = 0, height = 0 } =
-      node.props.size || {};
+    const { width = 0, height = 0 } = node.props.size || {};
 
     if (backgroundImage) {
       context.save();
@@ -89,8 +87,7 @@ export default class Draw {
     if (bgColor) {
       const { pixelRatio } = this.config;
       const { context } = this;
-      const { width = 0, height = 0 } =
-        node.props.size || {};
+      const { width = 0, height = 0 } = node.props.size || {};
       context.save();
       context.beginPath();
       context.fillStyle = bgColor;
@@ -114,12 +111,29 @@ export default class Draw {
     const { textAlign, textBaseline } = context;
     const { width = 0, height = 0 } = size || {};
 
-    if (textAlign === 'center') {
-      offsetX += width / 2
+    if (textAlign === "center") {
+      offsetX += width / 2;
     }
 
-    if (textBaseline === 'middle') {
-      offsetY += height / 2
+    if (textBaseline === "middle") {
+      offsetY += height / 2;
+    }
+    context.fillText(text, offsetX * pixelRatio, offsetY * pixelRatio);
+  }
+
+  drawTextPrimitiv(text, offsetX, offsetY, node) {
+    const { size } = node.props;
+    const { context } = this;
+    const { pixelRatio } = this.config;
+    const { textAlign, textBaseline } = context;
+    const { width = 0, height = 0 } = size || {};
+
+    if (textAlign === "center") {
+      offsetX += width / 2;
+    }
+
+    if (textBaseline === "middle") {
+      offsetY += height / 2;
     }
     context.fillText(text, offsetX * pixelRatio, offsetY * pixelRatio);
   }

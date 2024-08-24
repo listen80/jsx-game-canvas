@@ -6,6 +6,7 @@ import {
   isDisalbedElement,
   isComponent,
   isElement,
+  isUndefined,
 } from "../utils/type";
 
 const mouseEvents = [
@@ -116,7 +117,11 @@ export default class Render extends Draw {
     // array
     // component
     // view node
-    if (isDisalbedElement(createdNode)) {
+    if (isUndefined(createdNode)) {
+      return;
+    }
+    if (isDisalbedElement(createdNode, offsetParent)) {
+      this.drawTextPrimitiv(createdNode, offsetX, offsetY, offsetParent);
       // const props = offsetParent.props;
       // this.drawText(
       //   {

@@ -9,92 +9,95 @@ import {
 } from "../utils/type";
 const mouseEvents = [
   "Click",
-  "ContextMenu",
-  "Wheel",
-  "MouseDown",
-  "MouseUp",
-  "MouseMove",
+  // "ContextMenu",
+  // "Wheel",
+  // "MouseDown",
+  // "MouseUp",
+  // "MouseMove",
 ];
 
 const keyEvents = ["KeyDown", "KeyUp"];
 
 const figureEvents = ["TouchStart", "TouchUp", "TouchMove"];
 
+const listEvents = [...mouseEvents, ...keyEvents, ...figureEvents];
+
+const map = Object.create(null);
+
+listEvents.forEach((name) => {
+  map[name.toLocaleLowerCase()] = `on${name}`;
+});
 export default class EventStream {
   constructor(engine) {
     this.$render = engine.$render;
     this.canvas = this.$render.canvas;
     this.$engine = engine;
-    this.mouseEventsCollectionKeyframe = [];
+    this.currentFramesList = [];
     this.bindEvents();
 
     const canvas = this.canvas;
     this.canvas.$offsetWidth = canvas.offsetWidth;
     this.canvas.$offsetHeight = canvas.offsetHeight;
   }
-  callback(e) {
+  callback = (e) => {
     const canvas = this.canvas;
-    const { pixelRatio } = this.$engine.$config;
+    const { pixelRatio = 32 } = this.$engine.$config;
     const { $offsetWidth, $offsetHeight, width, height } = canvas;
 
     e.canvasX = (e.offsetX / $offsetWidth) * width;
     e.canvasY = (e.offsetY / $offsetHeight) * height;
     e.gameX = e.canvasX / pixelRatio;
     e.gameY = e.canvasY / pixelRatio;
-    e.$node = null;
-
+    e.name = map[e.type];
     e.preventDefault();
+    this.colletEvent(e);
+  };
+  colletEvent(e) {
+    this.currentFramesList.push(e);
   }
-  colletEvent() {
-    this.mouseEventsCollectionKeyframe.push(e);
-  }
-  resetEvent() {
-    this.mouseEventsCollectionKeyframe.splice(
-      0,
-      this.mouseEventsCollectionKeyframe.length
-    );
+  runEvents() {
+    this.currentFramesList.forEach((e) => {
+      console.log(e);
+    });
+    // const length = this.currentFramesList.length;
+    // this.currentFramesList.splice(0, length);
+    this.currentFramesList = [];
   }
   bindEvents() {
     const canvas = this.canvas;
-
-    mouseEvents.forEach((name) => {
-      canvas.addEventListener(name.toLowerCase(), this.callback.bind(this), {
-        passive: false,
-      });
-    });
-
-    keyEvents.forEach((name) => {
-      canvas.addEventListener(name.toLowerCase(), this.callback.bind(this), {
-        passive: false,
-      });
-    });
-
-    figureEvents.forEach((name) => {
-      canvas.addEventListener(name.toLowerCase(), this.callback.bind(this), {
+    listEvents.forEach((name) => {
+      canvas.addEventListener(name.toLowerCase(), this.callback, {
         passive: false,
       });
     });
   }
-  unbindEvents() {}
+  unbindEvents() {
+    const canvas = this.canvas;
+    listEvents.forEach((name) => {
+      canvas.addEventListener(name.toLowerCase(), this.callback, {
+        passive: false,
+      });
+    });
+  }
 
   drawNode(node, offsetX, offsetY, offsetParent) {
     const { children } = node;
     children.forEach((child) =>
-      this.renderAnything(child, offsetX, offsetY, node)
+      this.calcAnything(child, offsetX, offsetY, node)
     );
   }
   calcNode(node, offsetX, offsetY, offsetParent) {
     // 非class component
     // view node
     // { props, children }
-    const { context } = this;
-    if (node.props) {
-      const { position, size } = node.props;
+    const { props } = node;
+    if (props) {
+      const { position, size } = props;
 
       const { x = 0, y = 0 } = position || {};
       const { width = 0, height = 0 } = size || {};
 
-      const { align, verticalAlign } = node.props;
+      const { align, verticalAlign } = props;
       if (align) {
         const offsetAlign = { left: 0, center: -0.5, right: -1 };
         const offsetAlignRate = offsetAlign[align];
@@ -109,61 +112,59 @@ export default class EventStream {
       } else {
         offsetY += y;
       }
-      this.calcEvent(node, offsetX, offsetY);
     }
+    this.calcEvent(node, offsetX, offsetY, offsetParent);
     this.drawNode(node, offsetX, offsetY, offsetParent);
   }
 
   calcEvent(node, offsetX, offsetY) {
     // events of mouse
-    const { width = defaultWidth, height = defaultHeight } =
-      node.props.size || {};
-    this.mouseEventsCollectionKeyframe.forEach((event) => {
-      const { gameX, gameY, name } = event;
-      if (
-        gameX >= offsetX &&
-        gameX < width + offsetX &&
-        gameY >= offsetY &&
-        gameY < height + offsetY &&
-        node?.props[name]
-      ) {
-        event.$node = node;
-      }
-    });
+    const { props } = node;
+    if (props) {
+      const { size = {} } = props;
+      const { width = 0, height = 0 } = size;
+      this.currentFramesList.forEach((e) => {
+        const { gameX, gameY } = e;
+        if (
+          gameX >= offsetX &&
+          gameX < width + offsetX &&
+          gameY >= offsetY &&
+          gameY < height + offsetY
+        ) {
+          // props[name]?.();
+          e.$node = node;
+        }
+      });
+    }
   }
 
-  renderAnything(createdNode, offsetX, offsetY, offsetParent) {
+  calcAnything(createdNode, offsetX, offsetY, offsetParent) {
     // undefined null
     // string number
     // array
     // component
     // view node
+    if (isElement(createdNode)) {
+      // view node
+      this.calcNode(createdNode, offsetX, offsetY, offsetParent);
+      return;
+    }
     if (isDisalbedElement(createdNode)) {
-      // const props = offsetParent.props;
-      // this.drawText(
-      //   {
-      //     props,
-      //     text: createdNode,
-      //   },
-      //   offsetX,
-      //   offsetY,
-      //   offsetParent
-      // );
       return;
     }
     if (isArray(createdNode)) {
       createdNode.forEach((child) =>
-        this.renderAnything(child, offsetX, offsetY, offsetParent)
+        this.calcAnything(child, offsetX, offsetY, offsetParent)
       );
-    } else if (isComponent(createdNode)) {
-      this.renderAnything(createdNode.$node, offsetX, offsetY, offsetParent);
-    } else if (isElement(createdNode)) {
-      // view node
-      this.calcNode(createdNode, offsetX, offsetY, offsetParent);
+      return;
+    }
+    if (isComponent(createdNode)) {
+      this.calcAnything(createdNode.$node, offsetX, offsetY, offsetParent);
+      return;
     }
   }
   calc(node) {
-    this.renderAnything(node, 0, 0);
-    this.resetEvent();
+    this.calcAnything(node, 0, 0, null);
+    this.runEvents();
   }
 }

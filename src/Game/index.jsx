@@ -88,7 +88,26 @@ export default {
     );
   },
 
+  renderDemo() {
+    return (
+      <view
+        // onClick={() => alert(1)}
+        style={{ font: "18px 楷体" }}
+        position={{ x: 4, y: 5 }}
+        textAlign="center"
+        size={{ width: 5, height: 5 }}
+        bgColor="red"
+      >
+        <view position={{ x: 1, y: 1 }} style={{ font: "22px 楷体" }} bgColor="blue" size={{ width: 2, height: 2 }}>
+          lijiabin
+        </view>
+      </view>
+    );
+  },
+
   render() {
+    // return this.renderDemo();
+
     const { $loader } = this;
 
     if ($loader.loading) {
