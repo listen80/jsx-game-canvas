@@ -1,4 +1,4 @@
-import Grid from "#/Grid/Grid";
+import Grid from "@/components/Grid/Grid";
 import { font25 } from "@/constant/font";
 
 const width = 10;

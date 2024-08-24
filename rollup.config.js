@@ -14,8 +14,8 @@ const path = require("path");
 const plugins = [
   alias({
     entries: {
-      "#": path.resolve("src/Game/components"),
-      events: path.resolve("src/Game/events"),
+      // "#": path.resolve("src/Game/components"),
+      // events: path.resolve("src/Game/events"),
       "@": path.resolve("src/Game"),
     },
   }),

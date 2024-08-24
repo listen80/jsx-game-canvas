@@ -1,27 +1,27 @@
-import FPS from "./game/helper/FPS"; // Fps显示
+import FPS from "@/ui/helper/FPS"; // Fps显示
 
-import Msg from "./game/helper/Msg"; // 全局弹出消息
-import Talk from "./game/helper/Talk"; // 人物对话
+import Msg from "@/ui/helper/Msg"; // 全局弹出消息
+import Talk from "@/ui/helper/Talk"; // 人物对话
 
-import Loading from "./game/scene/Loading"; // Loading界面
-import Title from "./game/scene/Title"; // 游戏选择界面
-import ScrollText from "./game/scene/ScrollText"; // 滚动文字 过场界面
-import Movie from "./game/scene/Movie"; // 过场电影
-import Window from "./game/scene/Window"; // Map 游戏地图
+import Loading from "@/ui/scene/Loading"; // Loading界面
+import Title from "@/ui/scene/Title"; // 游戏选择界面
+import ScrollText from "@/ui/scene/ScrollText"; // 滚动文字 过场界面
+import Movie from "@/ui/scene/Movie"; // 过场电影
+import Window from "@/ui/scene/Window"; // Map 游戏地图
 
-import Modal from "#/Layout/Modal"; // Modal
+import Modal from "@/components/Layout/Modal"; // Modal
 
-import ShopList from "./game/modal/ShopList"; // 商店列表
-import Compass from "./game/modal/Compass"; // 楼层跳转
-import Shop from "./game/modal/Shop"; // 商店
-import Battle from "./game/modal/Battle"; // 战斗画面
-import EnemyInfo from "./game/modal/EnemyInfo"; // 敌人信息
-import Config from "./game/modal/Config"; // 配置信息
-import Statistics from "./game/modal/Statistics"; // 统计信息
+import ShopList from "@/ui/modal/ShopList"; // 商店列表
+import Compass from "@/ui/modal/Compass"; // 楼层跳转
+import Shop from "@/ui/modal/Shop"; // 商店
+import Battle from "@/ui/modal/Battle"; // 战斗画面
+import EnemyInfo from "@/ui/modal/EnemyInfo"; // 敌人信息
+import Config from "@/ui/modal/Config"; // 配置信息
+import Statistics from "@/ui/modal/Statistics"; // 统计信息
 
-import commonEvent from "./events/common"; // 全局事件
-import soundEvent from "./events/sound"; // 全局声音事件
-import motaEvent from "./events/mota"; // 全局魔塔
+import commonEvent from "@/events/common"; // 全局事件
+import soundEvent from "@/events/sound"; // 全局声音事件
+import motaEvent from "@/events/mota"; // 全局魔塔
 
 export default {
   onCreate() {

@@ -1,6 +1,6 @@
-import Table from "#/Data/Table";
+import Table from "@/components/Data/Table";
 import { transform } from "@/transform";
-
+// import { toggleShowEnemyInfo } from '@/events/mota'
 const columns = [
   {
     title: null,
@@ -119,6 +119,9 @@ export default {
       this.$loader.$resource.sprites.enemys
     ).slice(0, 5);
   },
+  onClick() {
+    this.$event.emit(toggleShowEnemyInfo)
+  },
   render() {
     const { dataSource } = this;
 
@@ -133,6 +136,7 @@ export default {
         verticalAlign="middle"
         bgColor="black"
         border={{ width: 2, color: "white" }}
+        onClick={this.onClick}
       >
         <Table dataSource={dataSource} columns={columns} />
       </view>

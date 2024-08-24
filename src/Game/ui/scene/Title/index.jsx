@@ -1,4 +1,4 @@
-import Select from "#/Base/Select";
+import Select from "@/components/Base/Select";
 
 export default {
   onCreate() {

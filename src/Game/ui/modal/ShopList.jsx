@@ -1,6 +1,6 @@
-import Column from "#/Grid/Column";
-import { toggleShowShopList } from "events/mota";
-import { openShop } from "events/common";
+import Column from "@/components/Grid/Column";
+import { toggleShowShopList } from "@/events/mota";
+import { openShop } from "@/events/common";
 import { mediumWhiteBorder, thinWhiteBorder } from "@/constant/border";
 import { font25 } from "@/constant/font";
 

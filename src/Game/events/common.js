@@ -1,4 +1,4 @@
-import * as game from "../utils/game";
+import * as save from "../utils/save";
 
 import { clone } from "../utils/object.js";
 
@@ -22,13 +22,13 @@ export default {
   },
 
   [loadGame](data, { $state, $config }) {
-    $state.save = Object.assign(clone($config.save), game.loadGame());
+    $state.save = Object.assign(clone($config.save), save.loadGame());
     this.emit("gotoMap", $state.save.mapId);
     this.emit("message", "读档成功");
   },
 
   [saveGame](data, { $state }) {
-    game.saveGame($state.save);
+    save.saveGame($state.save);
     this.emit("message", "存档成功");
   },
 

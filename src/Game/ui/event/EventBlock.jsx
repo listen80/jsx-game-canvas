@@ -1,4 +1,4 @@
-import Animate from "#/Base/Animate";
+import Animate from "@/components/Base/Animate";
 
 function transform($loader, value) {
   const mapInfo = $loader.$resource.mapping[value];

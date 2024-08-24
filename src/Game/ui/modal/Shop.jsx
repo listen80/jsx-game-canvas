@@ -1,4 +1,4 @@
-import Select from "#/Base/Select";
+import Select from "@/components/Base/Select";
 
 import { mediumWhiteBorder } from "@/constant/border";
 import { font25 } from "@/constant/font";
