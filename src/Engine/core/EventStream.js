@@ -83,7 +83,7 @@ export default class EventStream {
       this.renderAnything(child, offsetX, offsetY, node)
     );
   }
-  renderNode(node, offsetX, offsetY, offsetParent) {
+  calcNode(node, offsetX, offsetY, offsetParent) {
     // 非class component
     // view node
     // { props, children }
@@ -159,7 +159,7 @@ export default class EventStream {
       this.renderAnything(createdNode.$node, offsetX, offsetY, offsetParent);
     } else if (isElement(createdNode)) {
       // view node
-      this.renderNode(createdNode, offsetX, offsetY, offsetParent);
+      this.calcNode(createdNode, offsetX, offsetY, offsetParent);
     }
   }
   calc(node) {

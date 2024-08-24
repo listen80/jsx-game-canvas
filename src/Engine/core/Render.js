@@ -25,7 +25,6 @@ export default class Render extends Draw {
     this.config = config.screen;
     this.$loader = $loader;
     this.initCanvas(config);
-    this.bindEvents();
   }
 
   getImage(src) {
@@ -55,54 +54,6 @@ export default class Render extends Draw {
 
     this.canvas.$offsetWidth = canvas.offsetWidth;
     this.canvas.$offsetHeight = canvas.offsetHeight;
-  }
-
-  restoreEvents() {
-    // mosue
-    this.mouseEventsCollectionKeyframe = [];
-
-    // key
-    this.keyEventsCollectionKeyframe = [];
-  }
-
-  callbackFns() {}
-  bindEvents() {
-    const canvas = this.canvas;
-    const { $offsetWidth, $offsetHeight, width, height } = canvas;
-
-    const fn = (e) => {
-      e.name = `on${e.type}`;
-      e.canvasX = (e.offsetX / $offsetWidth) * width;
-      e.canvasY = (e.offsetY / $offsetHeight) * height;
-      e.gameX = e.canvasX / pixelRatio;
-      e.gameY = e.canvasY / pixelRatio;
-      e.$node = null;
-      this.mouseEventsCollectionKeyframe.push(e);
-
-      e.preventDefault();
-    };
-    const { pixelRatio } = this.config;
-
-    this.restoreEvents();
-    mouseEvents.forEach((name) => {
-      this.canvas.addEventListener(name.toLowerCase(), fn, { passive: false });
-    });
-
-    keyEvents.forEach((name) => {
-      this.canvas.addEventListener(name.toLowerCase(), fn, { passive: false });
-    });
-
-    // keyEvents.forEach((name) => {
-    //   document.addEventListener(name.toLowerCase(), (e) => {
-    //     e.name = `on${name}`
-    //     e.$key = this.$state.config.control[e.code]
-    //     this.keyEventsCollectionKeyframe.push(e)
-    //   })
-    // })
-  }
-
-  toDataURL() {
-    return this.canvas.toDataURL();
   }
 
   mergeStyle(style) {
@@ -190,39 +141,6 @@ export default class Render extends Draw {
     }
   }
 
-  calcEvent(node, offsetX, offsetY) {
-    // events of mouse
-    const { width = defaultWidth, height = defaultHeight } =
-      node.props.size || {};
-    this.mouseEventsCollectionKeyframe.forEach((event) => {
-      const { gameX, gameY, name } = event;
-      if (
-        gameX >= offsetX &&
-        gameX < width + offsetX &&
-        gameY >= offsetY &&
-        gameY < height + offsetY &&
-        node?.props[name]
-      ) {
-        event.$node = node;
-      }
-    });
-  }
-
-  runEvents() {
-    this.mouseEventsCollectionKeyframe.forEach((event) => {
-      const { $node, name } = event;
-      if ($node) {
-        $node?.props[name]($node.props, event);
-      }
-      // run($node, event, name);
-    });
-    // this.keyEventsCollectionKeyframe.forEach((event) => {
-    //   const { $context, name } = event;
-    //   $context && $context[name] && $context[name](event);
-    // });
-    this.restoreEvents();
-  }
-
   renderNode(node, offsetX, offsetY, offsetParent) {
     // 非class component
     // view node
@@ -250,7 +168,6 @@ export default class Render extends Draw {
       } else {
         offsetY += y;
       }
-      this.calcEvent(node, offsetX, offsetY);
     }
     this.drawNode(node, offsetX, offsetY, offsetParent);
 
@@ -260,6 +177,5 @@ export default class Render extends Draw {
   render(createdNode) {
     this.clearRect();
     this.renderAnything(createdNode, 0, 0, {});
-    this.runEvents();
   }
 }
