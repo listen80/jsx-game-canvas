@@ -113,13 +113,20 @@ export default {
   },
 
   renderMapTerrains() {
-    // console.log(this.mapTerrainsData)
-    return this.mapTerrainsData.map((row, y) =>
+    return this.mapTerrainsData.map((row) =>
       row.map((props) => (props ? <view {...props} /> : null))
     );
   },
 
+  onClickx(props, e) {
+    const gameX = Math.floor(e.gameX)
+    const gameY = Math.floor(e.gameY)
+    this.$state.save.position.x = gameX
+    this.$state.save.position.y = gameY
+  },
+
   render() {
+    
     return (
       <view {...this.mapContainerProps} onClick={this.onClickx}>
         {this.renderMapTerrains()}

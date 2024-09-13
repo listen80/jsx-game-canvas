@@ -58,10 +58,7 @@ export default {
     return (
       <view
         image={"Characters/hero.png"}
-        position={{
-          x: 5,
-          y: 11,
-        }}
+        position={this.$state.save.position}
         size={{
           width: 1,
           height: 1,
