@@ -62,7 +62,6 @@ export default {
           type: "animates";
         } */
         const data = transform(this.$loader, mapIndexValue);
-        // console.log(transform(this.$loader, mapIndexValue))
 
         const props = {
           image: data.image,
@@ -73,17 +72,6 @@ export default {
           onClick: this.ff,
         };
         return props;
-        return (
-          <view
-            image={data.image}
-            position={{ x, y }}
-            sposition={{ sx: 0, sy: data.sy }}
-            size={{ width: 1, height: 1 }}
-            bgColor={"red"}
-            onClick={this.ff}
-          ></view>
-        );
-        // return <EventBlock value={mapIndexValue} x={x} y={y} />;
       });
     });
   },

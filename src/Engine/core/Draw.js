@@ -56,10 +56,10 @@ export default class Draw {
   drawBackgroundImage(node, offsetX, offsetY) {
     const { pixelRatio } = this.config;
     const { context } = this;
-    const backgroundImage = node.props.backgroundImage;
+    const bgImage = node.props.bgImage;
     const { width = 0, height = 0 } = node.props.size || {};
 
-    if (backgroundImage) {
+    if (bgImage) {
       context.save();
       context.beginPath();
       context.rect(
@@ -69,7 +69,7 @@ export default class Draw {
         height * pixelRatio
       );
 
-      const image = this.getImage(backgroundImage);
+      const image = this.getImage(bgImage);
 
       if (image) {
         context.fillStyle = context.createPattern(image, "repeat");
@@ -77,7 +77,7 @@ export default class Draw {
         context.closePath();
         context.restore();
       } else {
-        this.$loader.loadImage(backgroundImage);
+        this.$loader.loadImage(bgImage);
       }
     }
   }

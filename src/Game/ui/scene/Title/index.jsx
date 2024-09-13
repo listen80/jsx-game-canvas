@@ -4,6 +4,7 @@ export default {
   onCreate() {
     this.textProps = {
       position: { x: this.$config.screen.width / 2, y: 4 },
+
       text: this.$config.title,
       style: {
         font: "128px 楷体",
@@ -30,7 +31,7 @@ export default {
     ];
 
     if (__DEV__) {
-      this.$event.emit("loadGame");
+      // this.$event.emit("loadGame");
     }
   },
 

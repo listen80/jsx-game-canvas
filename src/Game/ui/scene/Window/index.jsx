@@ -7,7 +7,7 @@ export default {
   name: "window",
   onCreate() {
     this.wrapProps = {
-      backgroundImage: "Background/ground.png",
+      bgImage: "Background/ground.png",
       size: {
         width: this.$config.screen.width,
         height: this.$config.screen.height,

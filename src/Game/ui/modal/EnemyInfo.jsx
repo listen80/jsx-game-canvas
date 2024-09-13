@@ -1,6 +1,7 @@
 import Table from "@/components/Data/Table";
 import { transform } from "@/transform";
-// import { toggleShowEnemyInfo } from '@/events/mota'
+import { toggleShowEnemyInfo } from '@/events/mota'
+
 const columns = [
   {
     title: null,

@@ -59,7 +59,10 @@ export default {
     } = $state || {};
     return (
       <>
-        <Modal show={showEnemyInfo} >
+        <Modal
+          show={showEnemyInfo}
+          onClose={() => ($state.showEnemyInfo = false)}
+        >
           <EnemyInfo />
         </Modal>
 
@@ -98,7 +101,12 @@ export default {
         size={{ width: 5, height: 5 }}
         bgColor="red"
       >
-        <view position={{ x: 1, y: 1 }} style={{ font: "22px 楷体" }} bgColor="blue" size={{ width: 2, height: 2 }}>
+        <view
+          position={{ x: 1, y: 1 }}
+          style={{ font: "22px 楷体" }}
+          bgColor="blue"
+          size={{ width: 2, height: 2 }}
+        >
           lijiabin
         </view>
       </view>
@@ -109,7 +117,6 @@ export default {
     // return this.renderDemo();
 
     const { $loader } = this;
-
     if ($loader.loading) {
       return <Loading />;
     } else {

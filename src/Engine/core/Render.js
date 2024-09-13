@@ -59,7 +59,7 @@ export default class Render extends Draw {
         image,
         text,
         border,
-        backgroundImage,
+        bgImage,
         bgColor,
         lineGradient,
       } = props;
@@ -72,7 +72,7 @@ export default class Render extends Draw {
         this.drawBackgroundColor(node, offsetX, offsetY);
       }
 
-      if (backgroundImage) {
+      if (bgImage) {
         this.drawBackgroundImage(node, offsetX, offsetY);
       }
 

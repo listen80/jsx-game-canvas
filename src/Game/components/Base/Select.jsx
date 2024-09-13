@@ -41,8 +41,8 @@ export default {
           position={{ y: y }}
           size={{ height: 1, width: 3 }}
           align={"center"}
-          // border={{ width: 3, height: 5 }}
-          // bgColor={`rgba(244,244,31,.5)`}
+          border={{ width: 3, height: 5 }}
+          bgColor={`rgba(244,244,31,.5)`}
           index={y}
           onClick={this.onClick}
         ></view>

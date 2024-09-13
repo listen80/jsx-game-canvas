@@ -5,6 +5,9 @@ export default {
     this.wrapProps = {
       size: { width, height },
       bgColor: "rgba(0,0,0,0.4)",
+      onClick() {
+        this.props.onClick?.();
+      },
     };
     this.closeButtonProps = {
       text: "X",
