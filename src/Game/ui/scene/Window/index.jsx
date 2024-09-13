@@ -18,10 +18,10 @@ export default {
   render() {
     return (
       <view {...this.wrapProps}>
-        <Floor />
         <BlueWall />
         <StatusBar />
         <OperationBar />
+        <Floor />
       </view>
     );
   },
