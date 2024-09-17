@@ -15,16 +15,15 @@ const mouseEvents = [
   // "MouseUp",
   // "MouseMove",
 ];
+const figureEvents = ["TouchStart", "TouchUp", "TouchMove"];
 
 const keyEvents = ["KeyDown", "KeyUp"];
 
-const figureEvents = ["TouchStart", "TouchUp", "TouchMove"];
-
-const listEvents = [...mouseEvents, ...keyEvents, ...figureEvents];
+const listEvents = [...mouseEvents, ...figureEvents];
 
 const map = Object.create(null);
 
-listEvents.forEach((name) => {
+[...listEvents, ...keyEvents].forEach((name) => {
   map[name.toLocaleLowerCase()] = `on${name}`;
 });
 export default class EventStream {
@@ -75,18 +74,22 @@ export default class EventStream {
     // this.currentFramesList.splice(0, length);
     this.currentFramesList = [];
   }
-  bindEvents() {
-    const canvas = this.canvas;
-    listEvents.forEach((name) => {
-      canvas.addEventListener(name.toLowerCase(), this.callback, {
+  bind(events, dom) {
+    events.forEach((name) => {
+      dom.addEventListener(name.toLowerCase(), this.callback, {
         passive: false,
       });
     });
   }
+  bindEvents() {
+    const canvas = this.canvas;
+    this.bind(listEvents, canvas);
+    this.bind(keyEvents, window);
+  }
   unbindEvents() {
     const canvas = this.canvas;
     listEvents.forEach((name) => {
-      canvas.addEventListener(name.toLowerCase(), this.callback, {
+      document.addEventListener(name.toLowerCase(), this.callback, {
         passive: false,
       });
     });
@@ -135,25 +138,22 @@ export default class EventStream {
     const { props } = node;
     if (props) {
       const { size } = props;
-      if (size) {
-        const { width = 0, height = 0 } = size;
-        this.currentFramesList.forEach((e) => {
-          const { gameX, gameY } = e;
-          if (
-            gameX >= offsetX &&
-            gameX < width + offsetX &&
-            gameY >= offsetY &&
-            gameY < height + offsetY
-          ) {
-            // props[name]?.();
-            // console.log(node);
-            if (!node) {
-              debugger;
-            }
-            e.$node = node;
-          }
-        });
-      }
+      const { width = 0, height = 0 } = size || {};
+      this.currentFramesList.forEach((e) => {
+        if (e.code) {
+          e.$node = node
+          return;
+        }
+        const { gameX, gameY } = e;
+        if (
+          gameX >= offsetX &&
+          gameX < width + offsetX &&
+          gameY >= offsetY &&
+          gameY < height + offsetY
+        ) {
+          e.$node = node;
+        }
+      });
     }
   }
 

@@ -39,7 +39,7 @@ export default {
       const select = (
         <view
           text={text}
-          position={{ y: y * 1.2 }}
+          position={{ x: 0, y: y * 1.2 }}
           size={{ height: 1, width: 3 }}
           border={{ width: 3, height: 5 }}
           index={y}

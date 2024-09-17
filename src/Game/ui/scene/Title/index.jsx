@@ -31,7 +31,7 @@ export default {
     ];
 
     if (__DEV__) {
-      // this.$event.emit("loadGame");
+      this.$event.emit("loadGame");
     }
   },
 

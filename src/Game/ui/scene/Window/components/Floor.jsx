@@ -28,7 +28,8 @@ export default {
   getKey(mapId, x, y) {
     return String([mapId, x, y]);
   },
-  ff({ position }) {
+  ff({ props }) {
+    const { position } = props;
     const { mapId } = this.$state;
     const { x, y } = position;
     const key = this.getKey(mapId, x, y);
@@ -119,14 +120,13 @@ export default {
   },
 
   onClickx(props, e) {
-    const gameX = Math.floor(e.gameX)
-    const gameY = Math.floor(e.gameY)
-    this.$state.save.position.x = gameX
-    this.$state.save.position.y = gameY
+    const gameX = Math.floor(e.gameX);
+    const gameY = Math.floor(e.gameY);
+    this.$state.save.position.x = gameX;
+    this.$state.save.position.y = gameY;
   },
 
   render() {
-    
     return (
       <view {...this.mapContainerProps} onClick={this.onClickx}>
         {this.renderMapTerrains()}

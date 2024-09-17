@@ -53,6 +53,10 @@ export default {
     }
   },
 
+  onKeyDown(e) {
+    console.log(e)
+  },
+
   render() {
     // this.runSteps();
     return (
