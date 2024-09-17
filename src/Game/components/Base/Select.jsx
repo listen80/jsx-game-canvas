@@ -15,7 +15,6 @@ export default {
 
   onConfirm() {
     const option = this.props.options[this.activeIndex];
-    debugger;
     if (option) {
       this.props.onConfirm?.(
         this.props.options[this.activeIndex],
@@ -25,6 +24,7 @@ export default {
   },
 
   onClick({ props }) {
+    debugger
     this.activeIndex = props.index;
     this.onConfirm();
   },
@@ -39,11 +39,11 @@ export default {
       const select = (
         <view
           text={text}
-          position={{ y: y }}
+          position={{ y: y * 1.2 }}
           size={{ height: 1, width: 3 }}
           border={{ width: 3, height: 5 }}
           index={y}
-          bgColor={`rgba(244,244,31,.5)`}
+          // bgColor={`rgba(244,244,31,.5)`}
           onClick={this.onClick}
         ></view>
       );

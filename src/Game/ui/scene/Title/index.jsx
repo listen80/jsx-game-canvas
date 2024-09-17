@@ -36,6 +36,7 @@ export default {
   },
 
   onConfirm({ event }) {
+    debugger;
     if (event) {
       this.$event.emit(event);
     }
@@ -50,8 +51,6 @@ export default {
           position={this.position}
           size={{ height: 5, width: 3 }}
           align='center'
-          bgColor='red'
-          onClick={(e) => console.log(e)}
           options={this.options}
           onConfirm={this.onConfirm}
         ></Select>
