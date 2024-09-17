@@ -94,20 +94,32 @@ export default {
   renderDemo() {
     return (
       <view
-        // onClick={() => alert(1)}
+        onClick={() => alert(1)}
         style={{ font: "18px 楷体" }}
         position={{ x: 4, y: 5 }}
-        textAlign="center"
+        textAlign='center'
         size={{ width: 5, height: 5 }}
-        bgColor="red"
+        bgColor='red'
       >
         <view
           position={{ x: 1, y: 1 }}
           style={{ font: "22px 楷体" }}
-          bgColor="blue"
+          bgColor='blue'
           size={{ width: 2, height: 2 }}
+          onClick={() => alert(2)}
         >
-          lijiabin
+          textProps
+          <view
+            position={{ x: 1, y: 1 }}
+            size={{ width: 2, height: 2 }}
+            bgColor='yellow'
+            onClick={(e) => {
+              e.stopPropagation();
+              alert(3);
+            }}
+          >
+            222
+          </view>
         </view>
       </view>
     );

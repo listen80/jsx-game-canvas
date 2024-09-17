@@ -15,6 +15,7 @@ export default {
 
   onConfirm() {
     const option = this.props.options[this.activeIndex];
+    debugger;
     if (option) {
       this.props.onConfirm?.(
         this.props.options[this.activeIndex],
@@ -23,12 +24,12 @@ export default {
     }
   },
 
-  onClick(props) {
+  onClick({ props }) {
     this.activeIndex = props.index;
     this.onConfirm();
   },
 
-  onMouseMove(props) {
+  onMouseMove({ props }) {
     this.activeIndex = props.index;
     this.onChange();
   },
@@ -40,10 +41,9 @@ export default {
           text={text}
           position={{ y: y }}
           size={{ height: 1, width: 3 }}
-          align={"center"}
           border={{ width: 3, height: 5 }}
-          bgColor={`rgba(244,244,31,.5)`}
           index={y}
+          bgColor={`rgba(244,244,31,.5)`}
           onClick={this.onClick}
         ></view>
       );

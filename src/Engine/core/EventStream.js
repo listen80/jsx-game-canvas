@@ -56,10 +56,15 @@ export default class EventStream {
     this.currentFramesList.push(e);
   }
   runEvent(element, name, e) {
+    if (!element) {
+      return;
+    }
     const { props, offsetParent } = element;
-    // console.log(props?.[name], name)
-    props?.[name]?.(props, e);
-    !e.cancelBubble && offsetParent && this.runEvent(offsetParent, name, e);
+
+    e.props = props;
+    props?.[name]?.(e, props);
+
+    !e.cancelBubble && this.runEvent(offsetParent, name, e);
   }
   runEvents() {
     this.currentFramesList.forEach((e) => {
@@ -87,7 +92,7 @@ export default class EventStream {
     });
   }
 
-  drawNode(node, offsetX, offsetY, offsetParent) {
+  calcChildren(node, offsetX, offsetY, offsetParent) {
     const { children } = node;
     children.forEach((child) =>
       this.calcAnything(child, offsetX, offsetY, node)
@@ -122,27 +127,33 @@ export default class EventStream {
     }
     node.offsetParent = offsetParent;
     this.calcEvent(node, offsetX, offsetY, offsetParent);
-    this.drawNode(node, offsetX, offsetY, offsetParent);
+    this.calcChildren(node, offsetX, offsetY, offsetParent);
   }
 
   calcEvent(node, offsetX, offsetY) {
     // events of mouse
     const { props } = node;
     if (props) {
-      const { size = {} } = props;
-      const { width = 0, height = 0 } = size;
-      this.currentFramesList.forEach((e) => {
-        const { gameX, gameY } = e;
-        if (
-          gameX >= offsetX &&
-          gameX < width + offsetX &&
-          gameY >= offsetY &&
-          gameY < height + offsetY
-        ) {
-          // props[name]?.();
-          e.$node = node;
-        }
-      });
+      const { size } = props;
+      if (size) {
+        const { width = 0, height = 0 } = size;
+        this.currentFramesList.forEach((e) => {
+          const { gameX, gameY } = e;
+          if (
+            gameX >= offsetX &&
+            gameX < width + offsetX &&
+            gameY >= offsetY &&
+            gameY < height + offsetY
+          ) {
+            // props[name]?.();
+            // console.log(node);
+            if (!node) {
+              debugger;
+            }
+            e.$node = node;
+          }
+        });
+      }
     }
   }
 

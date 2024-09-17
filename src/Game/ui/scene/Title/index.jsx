@@ -46,10 +46,12 @@ export default {
       <>
         <view {...this.textProps}></view>
         <Select
-          align="center"
           style={this.style}
-          size={{ height: 5, width: 3 }}
           position={this.position}
+          size={{ height: 5, width: 3 }}
+          align='center'
+          bgColor='red'
+          onClick={(e) => console.log(e)}
           options={this.options}
           onConfirm={this.onConfirm}
         ></Select>
