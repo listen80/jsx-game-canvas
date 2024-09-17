@@ -24,7 +24,7 @@ export default {
   },
 
   onClick({ props }) {
-    debugger
+    debugger;
     this.activeIndex = props.index;
     this.onConfirm();
   },
