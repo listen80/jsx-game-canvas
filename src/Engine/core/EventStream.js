@@ -48,7 +48,7 @@ export default class EventStream {
     e.gameX = Math.floor(e.canvasX / pixelRatio);
     e.gameY = Math.floor(e.canvasY / pixelRatio);
     e.name = map[e.type];
-    e.preventDefault();
+    // e.preventDefault();
     this.colletEvent(e);
   };
   colletEvent(e) {

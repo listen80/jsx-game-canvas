@@ -94,13 +94,13 @@ export default {
   },
 
   onClick(props, e) {
-    const { gameX: x, gameY: y } = e;
-    const { height, width } = this.$state.map;
-    const { map } = this;
-    this.$event.emit("setPath", {
-      map: { height, width, map },
-      dist: { x, y },
-    });
+    // const { gameX: x, gameY: y } = e;
+    // const { height, width } = this.$state.map;
+    // const { map } = this;
+    // this.$event.emit("setPath", {
+    //   map: { height, width, map },
+    //   dist: { x, y },
+    // });
   },
 
   onEventClick(block) {
@@ -119,7 +119,7 @@ export default {
     );
   },
 
-  onClickx(props, e) {
+  onClickx(e) {
     const gameX = Math.floor(e.gameX);
     const gameY = Math.floor(e.gameY);
     this.$state.save.position.x = gameX;

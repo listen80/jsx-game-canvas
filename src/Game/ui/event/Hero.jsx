@@ -45,20 +45,43 @@ export default {
   },
 
   runOneStep() {
-    const a = this.loop();
-    this.$state.save.position.x += (1 / 4) * Math.cos(this.current.rad);
-    this.$state.save.position.y += (1 / 4) * Math.sin(this.current.rad);
-    if (a === 1) {
-      this.current = null;
-    }
+    // const a = this.loop();
+    // this.$state.save.position.x += (1 / 4) * Math.cos(this.current.rad);
+    // this.$state.save.position.y += (1 / 4) * Math.sin(this.current.rad);
+    // if (a === 1) {
+    //   this.current = null;
+    // }
+    // if (this.isWalking) {
+    //   if (this.count === 20) {
+    //     this.count = 0;
+    //     this.step++;
+    //     this.$state.save.position.x += 1 / 8;
+    //     console.log(this.$state.save.position);
+    //     if (this.step === this.stepMax) {
+    //       this.isWalking = false;
+    //     }
+    //   } else {
+    //     this.count++;
+    //   }
+    // }
   },
 
   onKeyDown(e) {
-    console.log(e)
+    console.log(e);
+    // e.st
+  },
+
+  onClick(e) {
+    e.stopPropagation();
+    this.step = 1;
+    this.stepMax = 8;
+    this.count = 0;
+    this.isWalking = true;
+    debugger;
   },
 
   render() {
-    // this.runSteps();
+    this.runOneStep();
     return (
       <view
         image={"Characters/hero.png"}
