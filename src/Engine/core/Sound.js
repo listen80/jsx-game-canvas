@@ -8,6 +8,7 @@ export default class Sound {
   }
 
   control (type, name, control) {
+    return null
     return loadSound(`Sound/${type}/${name}`, (src, el) => {
       el.loop = type === 'bgm'
       el[control]().catch((e) => e && console.log(e))

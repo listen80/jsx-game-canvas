@@ -1,9 +1,9 @@
 import Animate from "@/components/Base/Animate";
 
-function transform($loader, value) {
-  const mapInfo = $loader.$resource.mapping[value];
+function transform(value, $resource) {
+  const mapInfo = $resource.mapping[value];
   const { type, name } = mapInfo;
-  const spritesInfo = $loader.$resource.sprites[type][name];
+  const spritesInfo = $resource.sprites[type][name];
 
   const typeToMaxTick = {
     animates: 4,
@@ -29,8 +29,11 @@ function transform($loader, value) {
 export default {
   name: "EventBlock",
   onCreate() {
-    this.data = transform(this.$state, this.$loader, this.props.value);
-    this.event = this.props.event;
+    this.value = this.props.value;
+    if (this.value) {
+      this.data = transform(this.props.value, this.$resource);
+      this.event = this.props.event;
+    }
   },
 
   runEvent(i = 0) {
@@ -159,11 +162,14 @@ export default {
 
   onClick() {
     const { type, enemy, name } = this.data;
-    this.props?.onClick(this);
+    this.props?.onClick?.(this);
     return true;
   },
 
   render() {
+    if (!this.value) {
+      return null
+    }
     const { x, y } = this.props;
     const size = { height: 1, width: 1 };
     return (
