@@ -36,7 +36,6 @@ export default {
   },
 
   onConfirm({ event }) {
-    debugger;
     if (event) {
       this.$event.emit(event);
     }

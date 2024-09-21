@@ -120,8 +120,8 @@ export default {
   },
 
   onClickx(e) {
-    const gameX = Math.floor(e.gameX);
-    const gameY = Math.floor(e.gameY);
+    const gameX = e.gameX;
+    const gameY = e.gameY;
     this.$state.save.position.x = gameX;
     this.$state.save.position.y = gameY;
   },
