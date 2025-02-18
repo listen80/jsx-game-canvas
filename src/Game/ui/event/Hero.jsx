@@ -77,7 +77,6 @@ export default {
     this.stepMax = 8;
     this.count = 0;
     this.isWalking = true;
-    debugger;
   },
 
   render() {
