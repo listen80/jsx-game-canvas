@@ -3,12 +3,12 @@
 ## install
 
 `bash
-npm i
+yarn
 `
 
 ## start
 `bash
-npm start
+yarn start
 `
 
 控制器
