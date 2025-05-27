@@ -10,6 +10,7 @@ export default {
   },
 
   onClick({ event, data }, e) {
+    debugger
     if (event) {
       this.$event.emit(event, data);
     }

@@ -32,6 +32,7 @@ export default {
     const { $state } = this;
     const { mapId } = $state;
     const map = this.$loader.$resource.maps[mapId];
+    // const map = null;
     if (map) {
       const { text, movie } = map;
       if (text) {

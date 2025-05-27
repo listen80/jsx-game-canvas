@@ -41,6 +41,7 @@ export default class Engine {
     this.$sound = new Sound(config, this.$loader); // 音频控制器
 
     this.$render = new Render(config, this.$loader); // 渲染器 + 事件控制器
+
     this.$eventStream = new EventStream(this);
 
     this.$event = new EventEmitter({
@@ -62,14 +63,14 @@ export default class Engine {
   gameStart() {
     const next = () => {
       this.$requestAnimationId = requestAnimationFrame(() => {
-        this.keyFrame();
+        this.gameKeyFrame();
         next();
       });
     };
     next();
   }
 
-  keyFrame() {
+  gameKeyFrame() {
     this.$eventStream.calc(this.$root);
     this.$root = patchNode(this.$root, createNode.call(this, this.$app, null));
     this.$render.render(this.$root); // 渲染开始
