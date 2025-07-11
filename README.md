@@ -1,4 +1,5 @@
-# 魔塔
+# jsx-game-canvas
+
 
 ## demo
 [demo](public/)
