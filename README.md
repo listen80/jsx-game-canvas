@@ -1,5 +1,7 @@
 # 魔塔
 
+## demo
+[demo](public/)
 ## install
 
 `bash

@@ -31,7 +31,7 @@ if (__DEV__) {
   plugins.push(
     serve({
       open: true,
-      port: process.env.PORT || "8090",
+      port: process.env.PORT || "9008",
       contentBase: "public",
     })
   );
